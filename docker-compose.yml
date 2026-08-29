@@ -1,0 +1,84 @@
+services:
+  redis:
+    image: redis:7-alpine
+    networks:
+      - local
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build: .
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CLIMAPREV_ENVIRONMENT: ${CLIMAPREV_ENVIRONMENT:-development}
+      CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_RATE_LIMIT:-60}
+      CLIMAPREV_RATE_LIMIT_BURST: ${CLIMAPREV_RATE_LIMIT_BURST:-10}
+      CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS: ${CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS:-60}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - local
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  load:
+    build: .
+    profiles: ["load"]
+    environment:
+      CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
+      CLIMAPREV_LOAD_REQUESTS_PER_SECOND_PER_USER: ${CLIMAPREV_LOAD_REQUESTS_PER_SECOND_PER_USER:-1}
+    depends_on:
+      app-load:
+        condition: service_healthy
+    networks:
+      - local
+    command: ["locust", "-f", "tests/load/locustfile.py", "--host", "http://app-load:8000"]
+
+  provider-mock:
+    build: .
+    profiles: ["load"]
+    networks:
+      - local
+    environment:
+      CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
+      CLIMAPREV_PROVIDER_MOCK_DELAY_MS: ${CLIMAPREV_PROVIDER_MOCK_DELAY_MS:-150}
+    command: ["uvicorn", "tests.load.mock_provider:app", "--host", "0.0.0.0", "--port", "8080"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/openapi.json')"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  app-load:
+    build: .
+    profiles: ["load"]
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CLIMAPREV_ENVIRONMENT: load
+      CLIMAPREV_GEOCODING_BASE_URL: http://provider-mock:8080
+      CLIMAPREV_FORECAST_BASE_URL: http://provider-mock:8080
+      CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_LOAD_RATE_LIMIT:-100000}
+      CLIMAPREV_RATE_LIMIT_BURST: ${CLIMAPREV_LOAD_RATE_LIMIT_BURST:-100000}
+      CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS: 60
+      CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
+      CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS: ${CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS:-50}
+    depends_on:
+      redis:
+        condition: service_healthy
+      provider-mock:
+        condition: service_healthy
+    networks:
+      - local
+    command: ["uvicorn", "climaprev.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-proxy-headers"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live')"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+networks:
+  local:

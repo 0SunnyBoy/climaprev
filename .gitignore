@@ -1,0 +1,25 @@
+# Planning and specification material must never be staged or uploaded.
+.specs/
+specs/
+
+# Local configuration and generated artifacts.
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Local IDE and OS files.
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+Desktop.ini

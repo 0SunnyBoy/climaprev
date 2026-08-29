@@ -1,0 +1,2 @@
+class DependencyUnavailable(Exception):
+    pass
