@@ -50,6 +50,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         resources.push_async_callback(http_client.aclose)
         raw_redis = Redis.from_url(
             settings.redis_url,
+            password=settings.redis_password,
             decode_responses=True,
             socket_connect_timeout=settings.redis_socket_timeout_seconds,
             socket_timeout=settings.redis_socket_timeout_seconds,

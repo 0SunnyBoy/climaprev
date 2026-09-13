@@ -1,0 +1,54 @@
+name: climaprev-homolog
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ./docker/homolog/redis.conf:/etc/redis/redis.conf:ro
+    secrets:
+      - redis_acl
+    networks:
+      - cache
+    healthcheck:
+      test: ["CMD-SHELL", "test \"$$(redis-cli ping 2>&1)\" = 'NOAUTH Authentication required.'"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  app:
+    build:
+      context: .
+      target: runtime
+    image: climaprev-homolog-app:local
+    read_only: true
+    environment:
+      CLIMAPREV_ENVIRONMENT: production
+      REDIS_URL: redis://climaprev@redis:6379/0
+      CLIMAPREV_REDIS_PASSWORD_FILE: /run/secrets/redis_password
+      CLIMAPREV_PROVIDER_BUDGET_CAPACITY: ${CLIMAPREV_PROVIDER_BUDGET_CAPACITY:?Set local budget capacity}
+      CLIMAPREV_PROVIDER_BUDGET_REFILL: ${CLIMAPREV_PROVIDER_BUDGET_REFILL:?Set local budget refill}
+      CLIMAPREV_PROVIDER_BUDGET_WINDOW_SECONDS: ${CLIMAPREV_PROVIDER_BUDGET_WINDOW_SECONDS:?Set local budget window}
+    secrets:
+      - redis_password
+    networks:
+      - cache
+      - egress
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-m", "climaprev.healthcheck"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+networks:
+  cache:
+    internal: true
+  egress:
+
+secrets:
+  redis_password:
+    file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.password
+  redis_acl:
+    file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.acl

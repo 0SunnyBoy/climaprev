@@ -1,9 +1,10 @@
 import ipaddress
 import json
+from pathlib import Path
 from typing import Annotated
 from urllib.parse import urlsplit
 
-from pydantic import AliasChoices, Field, field_validator, model_validator
+from pydantic import AliasChoices, Field, PrivateAttr, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
@@ -19,6 +20,8 @@ class Settings(BaseSettings):
         default="redis://localhost:6379/0",
         validation_alias=AliasChoices("CLIMAPREV_REDIS_URL", "REDIS_URL"),
     )
+    redis_password_file: Path | None = None
+    _redis_password: SecretStr | None = PrivateAttr(default=None)
     environment: str = "development"
     rate_limit: int = Field(default=60, gt=0)
     rate_limit_window_seconds: int = Field(default=60, gt=0)
@@ -124,3 +127,19 @@ class Settings(BaseSettings):
             if not valid:
                 raise ValueError("invalid production provider destination")
         return self
+
+    @model_validator(mode="after")
+    def load_redis_password(self) -> "Settings":
+        if self.redis_password_file is not None:
+            try:
+                value = self.redis_password_file.read_text().strip()
+                if not value:
+                    raise ValueError("empty secret")
+            except (OSError, ValueError):
+                raise ValueError("Redis secret file is missing, unreadable or empty") from None
+            self._redis_password = SecretStr(value)
+        return self
+
+    @property
+    def redis_password(self) -> str | None:
+        return None if self._redis_password is None else self._redis_password.get_secret_value()

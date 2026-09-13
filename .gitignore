@@ -23,3 +23,6 @@ build/
 *.swp
 Thumbs.db
 Desktop.ini
+
+# Generated local homologation credentials and certificates.
+.homolog/
