@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import AsyncExitStack, asynccontextmanager
+from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, Request
@@ -10,7 +11,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
-from starlette.responses import JSONResponse
+from starlette.responses import FileResponse, JSONResponse
+from starlette.staticfiles import StaticFiles
 
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
 from climaprev.api.observability import RequestMetrics, observe_request
@@ -110,6 +112,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(metrics_router)
     _register_error_handlers(app)
     _register_health_routes(app)
+    web = Path(__file__).parent / "web"
+    app.mount("/assets", StaticFiles(directory=web), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    async def index() -> FileResponse:
+        return FileResponse(web / "index.html")
+
     return app
 
 
