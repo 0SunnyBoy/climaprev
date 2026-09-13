@@ -1,85 +1,48 @@
 # STATE — Clima Prev
 
-**Atualização:** 2026-09-13. [Índice](PROJECT.md).
+**Atualização:** 2026-09-13. **Branch:** `atualizaçao-geral`.
+[Índice](PROJECT.md) · [Tarefas](docs/planejamento/evolucao-climaprev/tasks.md).
 
-## Estado observado
+## Execução atual
 
-Backend de consulta meteorológica implementado em FastAPI, com Open-Meteo,
-Redis, avaliação heurística, logs e testes no repositório. Esta revisão
-entrega documentação; não altera código de aplicação, testes ou implantação.
+O usuário autorizou implementação local e coordenação de agentes para concluir
+as 25 tarefas. T1–T10 estão concluídas; T11–T20 são o próximo bloco, seguidas
+por T21–T25 e verificação independente. Push e publicação não integram o pedido.
 
-| Capacidade                                          | Estado                                                           |
-| --------------------------------------------------- | ---------------------------------------------------------------- |
-| Consulta por texto/coordenadas e até sete dias      | Implementada.                                                    |
-| Política `reference-v1` e conversão de temperaturas | Implementadas.                                                   |
-| Cache, lock distribuído e rate limit                | Implementados, com limites descritos nos documentos.             |
-| Health e métricas                                   | Health implementado; métricas em memória, sem exporter entregue. |
-| Alertas oficiais                                    | Porta existente; provider instalado retorna `not_configured`.    |
-| Frontend, autenticação, histórico, notificações     | Ausentes nesta base.                                             |
-| Produção                                            | Topologia, controles e capacidade não verificados nesta revisão. |
+Entregues: fuso efetivo, validação de dados, completude, média de temperatura,
+identidade v2 do cache, expiração na entrega, tratamento de corrupção/erros,
+controle de perda de lock e validação numérica da configuração.
 
-## Decisões desta revisão
+## Evidência
 
-1. Usar `.md`, conforme confirmação do solicitante.
-2. Aproveitar o padrão documental SIGFAS de visão, desenho, contrato,
-   restrições, roadmap e estado; adaptar todo o conteúdo ao Clima Prev.
-3. Manter evidência de implementação separada de propostas e resultados históricos.
-4. Usar a raiz do projeto e `docs/`; não criar documentação em `specs/` ou
-   `.specs/`, diretórios excluídos pelo [gitignore](.gitignore).
-5. Preservar o [handoff histórico](handoff.md) como registro anterior.
+- Baseline executado nesta sessão: 148 testes aprovados.
+- Fechamento T10: 267 testes aprovados, 82 no gate unitário, build e Ruff
+  aprovados; mypy aprovou 34 arquivos.
+- Commits do bloco: `b906b92`, `b766d45`, `626439a`, `58374de`, `c4731f8`,
+  `1e6f101`, `2e1d364`, `2888517`, `a64bdfd`, `9d2993c`.
+- Evidências por tarefa em [evidence](docs/planejamento/evolucao-climaprev/evidence/t10.md).
+- A validação independente final ainda não ocorreu. Esses resultados não
+  representam capacidade ou disponibilidade do provedor público.
 
-## Pendências principais
+## Continuidade
 
-- Fuso por coordenadas pode divergir do fuso dos dados solicitados ao provedor.
-- Stale não tem idade revalidada ao final de esperas e retries.
-- 4xx do provedor e perda de lock têm tratamento genérico 500.
-- Dados faltantes não geram estado de risco indeterminado.
-- Configuração, logs de acesso, imagem e Redis exigem decisões para produção.
+- Agente do bloco concluído: `backend_dados_resiliencia`.
+- Próximo: `preflight_operacao`, T11–T20; depois novo agente para T21–T25.
+- Docker usa Podman rootless. Redis do projeto `climaprev`, criado nesta sessão,
+  deve permanecer até a verificação final. Testes usam imagem atualizada ou
+  source/tests atuais montados somente leitura.
+- Chrome `/usr/bin/google-chrome` e Playwright da skill `playwright-skill`
+  estão disponíveis; lançamento visível já validado.
+- O preflight confirmou TLS com CA, montagem readonly e rede interna; o
+  Podman ignora uid/gid/mode de file secrets e traduz o IP de origem do host.
+  A implementação deve usar permissões verificadas e documentar a limitação.
+- Preservar `.harness-eval/`, `.notebook/` e a formatação preexistente do Compose
+  (diff inicial em `/tmp/climaprev-preexisting-compose.diff`).
 
-Detalhamento: [restrições](docs/restricoes.md), [segurança](docs/seguranca.md)
-e [roadmap](ROADMAP.md).
+## Escopo condicionado
 
-## Evidências e continuidade
-
-O handoff de 2026-08-29 relata 148 testes aprovados e baseline de carga com
-mock. Os artefatos externos citados nele não estão presentes neste checkout.
-Esses números são históricos, não testes executados em 2026-09-13.
-
-A verificação desta entrega está descrita em
-[validação documental](docs/validacao-documentacao.md). Para retomar, ler
-PROJECT, restrições e roadmap; selecionar a etapa e registrar seu contrato
-antes de alterar comportamento. Não há commit, push ou publicação nesta entrega.
-
-## Retomada — branch e planejamento de evolução
-
-**Data:** 2026-09-13. **Branch ativa:** `docs/plano-evolucao-climaprev`.
-**Base:** `main`, commit `a010c3b`. Branch criada no repositório existente,
-preservando documentos e outras alterações locais. Não houve commit ou push.
-
-Entregues [context](docs/planejamento/evolucao-climaprev/context.md),
-[spec](docs/planejamento/evolucao-climaprev/spec.md),
-[design](docs/planejamento/evolucao-climaprev/design.md) e
-[tasks](docs/planejamento/evolucao-climaprev/tasks.md).
-São 23 requisitos mapeados a 25 tarefas, todas pendentes de implementação.
-
-O planejamento cobre confiabilidade, segurança, homologação local e interface
-de consulta. Frontend nativo na mesma origem, contrato aditivo de qualidade,
-consulta anônima e retenção operacional são premissas propostas, não decisões
-de produto confirmadas. Alertas oficiais, contas e notificações permanecem
-como backlog condicionado.
-
-O pedido atual é de elaboração dos documentos. Não houve mudança em código
-de aplicação, testes ou configuração de execução nesta etapa.
-`validate_spec.py --strict` e `validate_tasks.py --strict` passaram com zero
-erros e zero avisos. Isso valida o planejamento, não os requisitos executáveis.
-O próximo passo técnico do plano é T1, após revisão das premissas aplicáveis.
-
-## Handoff
-
-- Execução solicitada em 2026-09-13: 25 tarefas, branch `atualizaçao-geral`.
-- Blocos de agentes: T1–T10, T11–T20, T21–T25; revisão independente ao final.
-- Documentação de origem preservada em commit de preparação.
-- Alterações preexistentes em `docker-compose.yml`, `.harness-eval/` e
-  `.notebook/` preservadas; não incluí-las por engano nos commits das tarefas.
-- Docker local usa backend Podman; acesso disponível com permissão de ferramenta.
-- Próximo passo: baseline e T1. Nenhuma tarefa concluída até esta preparação.
+Frontend e stack protegida aguardam seus blocos de implementação. Alertas
+oficiais permanecem `not_configured`. Contas, histórico, notificações,
+validação científica da política e implantação pública exigem escopo próprio.
+A documentação SIGFAS foi usada como modelo; não há integração entre sistemas.
+O [handoff histórico](handoff.md) permanece como registro anterior.

@@ -63,7 +63,7 @@ GET /api/v1/risk?latitude=-1.4558&longitude=-48.4902&start_date=2026-09-13
 | `days`             | Lista de dias com os campos da tabela seguinte.                       |
 | `forecast_risk`    | `level`, `method`, `policy_version` e `conditions`.                   |
 | `official_alerts`  | `status` e `items`, separados do risco calculado.                     |
-| `data_quality`     | `is_stale` e `missing_fields`.                                        |
+| `data_quality`     | `is_stale`, `missing_fields` e `completeness`.                        |
 | `source`           | `provider` e `fetched_at`, horário de coleta pelo backend.            |
 | `disclaimer`       | Aviso de que a estimativa não substitui alertas oficiais.             |
 
@@ -74,7 +74,7 @@ GET /api/v1/risk?latitude=-1.4558&longitude=-48.4902&start_date=2026-09-13
 | ------------------------------------ | ----------------------- | ----------------------------------------------------------------------- |
 | `date`                               | Data ISO                | Série diária do provedor.                                               |
 | `temperature_min`, `temperature_max` | Celsius ou Fahrenheit   | Mínima/máxima diária; conversão somente na saída.                       |
-| `temperature_mean`                   | Celsius ou Fahrenheit   | Sempre `null` no adaptador atual.                                       |
+| `temperature_mean`                   | Celsius ou Fahrenheit   | Média das amostras horárias não nulas; `null` sem amostras.             |
 | `humidity_mean_pct`                  | %                       | Média das amostras horárias não nulas do dia.                           |
 | `precipitation_sum_mm`               | mm                      | Acumulado diário.                                                       |
 | `precipitation_probability_max_pct`  | %                       | Máxima das probabilidades horárias; não usa o campo diário equivalente. |
@@ -83,10 +83,13 @@ GET /api/v1/risk?latitude=-1.4558&longitude=-48.4902&start_date=2026-09-13
 | `wind_gust_max_kmh`                  | km/h                    | Máxima diária de rajada.                                                |
 | `weather_code`                       | Inteiro                 | Código diário recebido do provedor.                                     |
 
-Os campos meteorológicos aceitam `null`. Séries opcionais ausentes entram em
-`missing_fields` com nomes como `hourly.relative_humidity_2m`; valores nulos
-dentro de uma série existente não geram necessariamente esse indicador.
-Não interpretar `missing_fields=[]` como prova de completude.
+Os campos meteorológicos aceitam `null`; zero continua sendo um valor válido.
+`missing_fields` identifica ausências por campo/dia e lacunas de cobertura.
+`completeness=complete` exige todas as entradas de risco e cobertura horária
+de chuva completa no período civil; dias de 23/25 horas são considerados.
+`partial` indica entradas ou cobertura incompletas; `unavailable` significa
+que nenhuma entrada de risco é utilizável. O nível `low` nesse último caso
+não deve ser apresentado como avaliação conclusiva.
 
 Cada condição de risco contém `type`, `severity`, `value`, `unit` e `reason`.
 O nível global é `low`, `moderate` ou `high`; o método é `forecast_heuristic`
@@ -113,19 +116,25 @@ Exemplo realista do formato de erro, com valores ilustrativos:
 
 ## Armazenamento, retenção e acesso
 
-| Informação                         | Local / chave                                                             | Retenção observada                                                        | Quem acessa no desenho atual            |
-| ---------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
-| Texto consultado e local resolvido | Redis: `climaprev:{environment}:geo:v1:{texto-codificado}`                | 24 h após gravação.                                                       | Backend e quem tiver acesso ao Redis.   |
-| Previsão canônica                  | Redis: `climaprev:{environment}:forecast:v1:{lat4}:{lon4}:{inicio}:{fim}` | Fresca 10 min; expiração total 15 min.                                    | Backend e acesso ao Redis.              |
-| Token de atualização               | Redis: `climaprev:{environment}:lock:{chave-previsao}`                    | 10 s, renovado enquanto a operação mantém propriedade.                    | Backend e acesso ao Redis.              |
-| IP e estado do limite              | Redis: `climaprev:{environment}:rate-limit:v1:{identidade}`               | TTL de `burst × janela / limite`, renovado a cada tentativa; padrão 10 s. | Backend e acesso ao Redis.              |
-| Metadados do app                   | Logger `climaprev.request`                                                | Sem política de retenção implementada.                                    | Operação, conforme destino configurado. |
-| Contadores                         | Memória de cada processo                                                  | Até reiniciar o processo.                                                 | Código e futura integração de métricas. |
+| Informação                         | Local / chave                                               | Retenção observada                                                        | Quem acessa no desenho atual            |
+| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
+| Texto consultado e local resolvido | Redis: `climaprev:{environment}:geo:v1:{texto-codificado}`  | 24 h após gravação.                                                       | Backend e quem tiver acesso ao Redis.   |
+| Previsão canônica                  | Redis: `climaprev:{environment}:forecast:v2:{digest}`       | Fresca 10 min; expiração total 15 min.                                    | Backend e acesso ao Redis.              |
+| Token de atualização               | Redis: `climaprev:{environment}:lock:{chave-previsao}`      | 10 s, renovado enquanto a operação mantém propriedade.                    | Backend e acesso ao Redis.              |
+| IP e estado do limite              | Redis: `climaprev:{environment}:rate-limit:v1:{identidade}` | TTL de `burst × janela / limite`, renovado a cada tentativa; padrão 10 s. | Backend e acesso ao Redis.              |
+| Metadados do app                   | Logger `climaprev.request`                                  | Sem política de retenção implementada.                                    | Operação, conforme destino configurado. |
+| Contadores                         | Memória de cada processo                                    | Até reiniciar o processo.                                                 | Código e futura integração de métricas. |
 
 O texto da chave de geocodificação usa `casefold` e codificação de URL; isso
 não é criptografia nem anonimização. O IP é armazenado diretamente na chave
 do rate limit. Não existe histórico persistente de consultas nem isolamento
 por usuário/tenant. TTL de cache não define retenção de logs, cópias ou backups.
+
+O digest da previsão incorpora coordenadas sem arredondamento, período,
+versão de normalização e destino do provedor. Nome de exibição e unidade de
+saída não alteram a identidade. O local é recomposto para a consulta atual e
+recebe o fuso efetivo do payload, inclusive no cache hit. Chaves v1 antigas
+expiram naturalmente; a migração não faz limpeza global do Redis.
 
 ## Contrato proposto para consumidores futuros
 

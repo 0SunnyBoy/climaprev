@@ -1,8 +1,9 @@
 # Contexto — evolução do Clima Prev
 
-**Data:** 2026-09-13. **Estado:** planejamento proposto; implementação não iniciada.
-**Branch:** `docs/plano-evolucao-climaprev`, criada a partir de `main`, commit
-`a010c3b`. As alterações locais anteriores foram preservadas.
+**Data:** 2026-09-13. **Estado:** execução local autorizada, em andamento.
+**Branch:** `atualizaçao-geral`. O planejamento começou em
+`docs/plano-evolucao-climaprev`, a partir de `main`, commit `a010c3b`.
+As alterações locais anteriores foram preservadas.
 
 ## Objetivo solicitado
 
@@ -29,7 +30,7 @@ para evolução do sistema. A extensão confirmada pelo usuário é `.md`.
 | [ROADMAP](../../../ROADMAP.md)            | R1/R2 como base, R3 de preparação e R4 de interface.    |
 | [STATE](../../../STATE.md)                | Separar histórico de resultados atuais.                 |
 
-## Base confirmada no repositório
+## Base inicial confirmada no repositório
 
 - Python 3.12, FastAPI, HTTPX e Redis; testes pytest, respx, Ruff e mypy.
 - `GET /api/v1/risk`, consulta anônima, período máximo de sete dias.
@@ -46,13 +47,14 @@ Preparar o pacote técnico de implantação sem escolher um fornecedor cloud ou
 publicar um ambiente. Contas, notificações e alertas oficiais permanecem no
 backlog condicionado a contratos e decisões próprias.
 
-O pedido autoriza produzir estes quatro documentos e a branch. As tarefas
-descrevem trabalho futuro: nenhuma caixa de implementação está concluída.
+O pedido inicial de documentação foi ampliado para implementação local e
+coordenação de agentes. O progresso real e os gates estão em [tasks.md](tasks.md).
 
 ## Decisões confirmadas e premissas
 
 **Confirmado pelo usuário:** branch no próprio projeto; usar os documentos
-anteriores; entregar contexto, spec, design e tasks em Markdown.
+anteriores; entregar contexto, spec, design e tasks em Markdown; executar
+as tarefas com agentes na branch `atualizaçao-geral`.
 
 **Premissas escolhidas para tornar o plano concreto, ainda revisáveis:**
 
@@ -67,9 +69,9 @@ anteriores; entregar contexto, spec, design e tasks em Markdown.
 | Segurança de implantação | Perfil local de homologação com entrada TLS e Redis protegido.                      | Testar o desenho sem contratar/publicar infraestrutura.                      |
 | Dados operacionais       | Não guardar query/IP em logs; retenção proposta de sete dias para logs sanitizados. | Minimizar exposição; duração é escolha de planejamento, não obrigação legal. |
 
-As premissas acima não foram apresentadas como escolhas aprovadas pelo usuário.
-Revisá-las antes de implementar o respectivo bloco; a revisão do planejamento
-pode ocorrer sem interromper a elaboração dos demais documentos.
+As premissas acima integram o plano cuja execução foi solicitada. Revisá-las
+tecnicamente antes do respectivo bloco e registrar desvios necessários,
+preservando o escopo do sistema e os critérios de aceite.
 
 ## Dimensões cobertas
 

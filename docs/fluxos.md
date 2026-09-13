@@ -62,44 +62,48 @@ sequenceDiagram
 
 ## Cache e concorrência
 
-| Estado                               | Ação atual                                   | Resultado                                   |
-| ------------------------------------ | -------------------------------------------- | ------------------------------------------- |
-| Previsão com idade menor que 10 min  | Usar cache.                                  | `hit`, `is_stale=false`.                    |
-| Previsão entre 10 e 15 min           | Tentar atualização.                          | Resultado novo ou fallback permitido.       |
-| Sem previsão ou com 15 min completos | Tentar atualização.                          | Não há fallback válido dessa entrada.       |
-| Outro worker detém o lock            | Consultar lock/cache a cada 10 ms, até 30 s. | Usar cache fresco que surgir ou obter lock. |
-| Espera de lock encerrada             | Usar stale previamente lido, se houver.      | `stale` ou 503.                             |
-| Atualização bem-sucedida             | Salvar previsão com TTL total de 15 min.     | `miss`, `is_stale=false`.                   |
-| Falha transitória do forecast        | Usar stale previamente lido, se houver.      | `stale` ou 503.                             |
+| Estado                               | Ação atual                                    | Resultado                                   |
+| ------------------------------------ | --------------------------------------------- | ------------------------------------------- |
+| Previsão com idade menor que 10 min  | Usar cache.                                   | `hit`, `is_stale=false`.                    |
+| Previsão entre 10 e 15 min           | Tentar atualização.                           | Resultado novo ou fallback permitido.       |
+| Sem previsão ou com 15 min completos | Tentar atualização.                           | Não há fallback válido dessa entrada.       |
+| Outro worker detém o lock            | Consultar lock/cache a cada 10 ms, até 30 s.  | Usar cache fresco que surgir ou obter lock. |
+| Espera de lock encerrada             | Revalidar a expiração do stale antes de usar. | `stale` ou 503.                             |
+| Atualização bem-sucedida             | Salvar previsão com TTL total de 15 min.      | `miss`, `is_stale=false`.                   |
+| Falha transitória do forecast        | Revalidar a expiração do stale antes de usar. | `stale` ou 503.                             |
 
 O lock dura 10 s e recebe renovação a cada 5 s, com token de propriedade.
 A geocodificação não usa esse lock; textos distintos podem gerar consultas
 externas concorrentes.
 
-**Lacuna observada:** a validade do stale é checada na leitura do Redis, mas
-não novamente no instante do fallback. Uma espera longa pode ultrapassar os
-15 min desde a gravação. O requisito proposto é revalidar a idade antes de
-responder. Perda de propriedade do lock levanta `LockOwnershipLost`, hoje
-tratada pelo handler genérico como 500.
+A validade do stale é reavaliada após espera, retries e consulta opcional de
+alertas, imediatamente antes da entrega. Em 900 segundos completos, a entrada
+não pode ser usada. Leituras não renovam seu TTL. Corrupção do envelope de
+cache produz miss e um contador fixo; indisponibilidade do Redis produz 503.
+Perda de propriedade do lock cancela e aguarda a consulta externa, impede a
+gravação e retorna 503, sem fallback. A liberação só remove o token próprio;
+falha de limpeza não substitui um erro principal já identificado.
 
 ## Falhas e resposta ao consumidor
 
-| HTTP / código                        | Significado                                                | Tratamento esperado no futuro cliente    |
-| ------------------------------------ | ---------------------------------------------------------- | ---------------------------------------- |
-| 422 / `INVALID_LOCATION_INPUT`       | Local ausente, conflitante ou inválido.                    | Corrigir entrada.                        |
-| 422 / `INVALID_PERIOD`               | Data inválida, ordem incorreta ou mais de sete dias.       | Corrigir período.                        |
-| 422 / `INVALID_TEMPERATURE_UNIT`     | Unidade não aceita.                                        | Selecionar unidade contratada.           |
-| 404 / `LOCATION_NOT_FOUND`           | Geocodificação sem local utilizável.                       | Refinar busca.                           |
-| 429 / `RATE_LIMIT_EXCEEDED`          | Limite excedido.                                           | Respeitar `Retry-After`.                 |
-| 502 / `WEATHER_DATA_INVALID`         | Estrutura meteorológica inválida.                          | Exibir indisponibilidade dos dados.      |
-| 503 / `WEATHER_PROVIDER_UNAVAILABLE` | Falha transitória sem fallback ou espera de lock sem dado. | Permitir nova tentativa com espera.      |
-| 503 / `DEPENDENCY_UNAVAILABLE`       | Redis indisponível.                                        | Exibir indisponibilidade do serviço.     |
-| 500 / `INTERNAL_ERROR`               | Falha não mapeada.                                         | Mostrar erro e identificador de suporte. |
+| HTTP / código                        | Significado                                                | Tratamento esperado no futuro cliente           |
+| ------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------- |
+| 422 / `INVALID_LOCATION_INPUT`       | Local ausente, conflitante ou inválido.                    | Corrigir entrada.                               |
+| 422 / `INVALID_PERIOD`               | Data inválida, ordem incorreta ou mais de sete dias.       | Corrigir período.                               |
+| 422 / `INVALID_TEMPERATURE_UNIT`     | Unidade não aceita.                                        | Selecionar unidade contratada.                  |
+| 404 / `LOCATION_NOT_FOUND`           | Geocodificação sem local utilizável.                       | Refinar busca.                                  |
+| 429 / `RATE_LIMIT_EXCEEDED`          | Limite excedido.                                           | Respeitar `Retry-After`.                        |
+| 502 / `WEATHER_DATA_INVALID`         | Estrutura meteorológica inválida.                          | Exibir indisponibilidade dos dados.             |
+| 502 / `WEATHER_PROVIDER_REJECTED`    | Provedor rejeitou a consulta com 4xx diferente de 429.     | Exibir falha da consulta, sem retry automático. |
+| 503 / `WEATHER_PROVIDER_UNAVAILABLE` | Falha transitória sem fallback ou espera de lock sem dado. | Permitir nova tentativa com espera.             |
+| 503 / `DEPENDENCY_UNAVAILABLE`       | Redis indisponível.                                        | Exibir indisponibilidade do serviço.            |
+| 500 / `INTERNAL_ERROR`               | Falha não mapeada.                                         | Mostrar erro e identificador de suporte.        |
 
-Os [handlers](../src/climaprev/main.py) usam mensagens sanitizadas. Respostas
-4xx do provedor, inclusive 429, levantam `ProviderPermanentError`, sem retry e
-sem handler dedicado: hoje terminam em 500. Não confundir com o 429 do limite
-local. Dado meteorológico inválido não aciona fallback stale.
+Os [handlers](../src/climaprev/main.py) usam mensagens sanitizadas. Um 429 do
+provedor produz 503, sem retry; forecast pode usar stale ainda válido. Outros
+4xx produzem 502, sem retry nem fallback. Timeout, rede e 5xx permitem até
+três tentativas. Dado meteorológico inválido não aciona retry nem stale.
+O 429 público permanece reservado ao limite individual do cliente.
 
 O provedor opcional de alertas, quando implementado, pode falhar sem bloquear a
 previsão: o serviço retorna `official_alerts.status=unavailable`. Atualmente

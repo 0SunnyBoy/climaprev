@@ -50,15 +50,15 @@ Sempre apresentar qualidade, fonte, período e aviso junto ao nível.
 
 ## Qualidade e interpretação
 
-| ID     | Comportamento encontrado                                                                                          | Limite ou pendência                                                                                      |
-| ------ | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| RES-09 | O adaptador retorna `temperature_mean=None`.                                                                      | Não preencher média com zero nem inventar cálculo no frontend.                                           |
-| RES-10 | `missing_fields` registra séries opcionais ausentes.                                                              | Não cobre todo valor nulo nem garante cobertura horária completa.                                        |
-| RES-11 | Datas diárias devem coincidir exatamente com o período. Datas horárias devem cobrir seus dias.                    | Não há exigência de 24 amostras únicas e ordenadas por dia.                                              |
-| RES-12 | Consulta por coordenadas cria local com `timezone=UTC`, enquanto o provedor recebe `timezone=auto`.               | Fuso retornado pode não descrever os dias do provedor; corrigir antes de prometer consistência temporal. |
-| RES-13 | Chave de previsão arredonda coordenadas para quatro casas. O conteúdo cacheado exige igualdade do local completo. | Colisões e locais com metadados distintos podem causar novas consultas e disputa de cache.               |
-| RES-14 | Séries numéricas são verificadas por tipo, mas não por todas as faixas físicas.                                   | Não há garantia de rejeição de NaN/infinito, umidade fora de 0–100 ou precipitação negativa.             |
-| RES-15 | Risco consolida condições por tipo no período, sem data em cada condição.                                         | Não oferece linha do tempo de risco diário.                                                              |
+| ID     | Comportamento encontrado                                                                          | Limite ou pendência                                                                                   |
+| ------ | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| RES-09 | Média de temperatura calculada das amostras horárias não nulas.                                   | Sem amostras, permanece `null`; amostragem parcial é sinalizada.                                      |
+| RES-10 | `completeness` distingue complete, partial e unavailable; ausências aparecem em `missing_fields`. | Nenhuma entrada utilizável impede uma classificação conclusiva na interface.                          |
+| RES-11 | Cobertura segue dias civis no fuso efetivo, incluindo 23/25 horas.                                | Lacunas são incompletude; excesso, ordem incompatível e horários fora do período são inválidos.       |
+| RES-12 | Resposta projeta o fuso validado do provedor, também no cache hit.                                | Fuso inválido produz `WEATHER_DATA_INVALID`.                                                          |
+| RES-13 | Chave v2 usa coordenadas sem arredondamento, período, normalização e destino do provedor.         | Nome e unidade de saída não fragmentam o cache canônico.                                              |
+| RES-14 | Números devem ser finitos, percentuais de 0–100, chuva/vento não negativos e mínima ≤ máxima.     | Valores fora do contrato produzem 502 antes da avaliação/cache. Não é validação científica dos dados. |
+| RES-15 | Risco consolida condições por tipo no período, sem data em cada condição.                         | Não oferece linha do tempo de risco diário.                                                           |
 
 Base: [adaptador](../src/climaprev/infrastructure/providers/open_meteo.py) e
 [serviço](../src/climaprev/application/services/forecast_query.py).
@@ -84,8 +84,8 @@ Evidências: [serviço](../src/climaprev/application/services/forecast_query.py)
 [HTTP](../src/climaprev/infrastructure/http/client.py) e
 [limiter](../src/climaprev/infrastructure/rate_limit/redis_rate_limiter.py).
 
-O fallback stale é limitado na leitura do cache, mas não revalidado após
-espera/retries. Redis indisponível interrompe a consulta com 503; não existe
+O fallback stale é revalidado após espera/retries e imediatamente antes da
+entrega, inclusive após alertas opcionais. Redis indisponível interrompe a consulta com 503; não existe
 modo implementado que ignore cache, lock e rate limit para seguir sem Redis.
 Também não há um circuit breaker ativo: o registro `dependency_circuit_state`
 é telemetria de readiness e não bloqueia chamadas de forma autônoma.
@@ -94,9 +94,9 @@ Também não há um circuit breaker ativo: o registro `dependency_circuit_state`
 
 - `CLIMAPREV_ENVIRONMENT=production` impede wildcard de CORS, mas não ativa
   automaticamente HTTPS, autenticação, ACL ou configurações de produção.
-- Os campos de limite/janela/burst não têm validação geral de valor positivo.
-  `additional_retries` limita o máximo em dois, mas não rejeita negativos.
-  Validar esses intervalos é pendência, não garantia atual.
+- Limites/janela/burst são positivos; timeouts também devem ser finitos.
+  `additional_retries` rejeita negativos e limita o máximo em dois. O atraso
+  sintético do perfil load pode ser zero.
 - O Compose passa apenas parte das configurações ao serviço `app`.
   Adicionar uma variável ao `.env` não a injeta automaticamente no contêiner;
   ela precisa estar no `environment`/`env_file` do serviço.

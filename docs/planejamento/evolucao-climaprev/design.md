@@ -273,9 +273,9 @@ Os números de linha referem-se à leitura desta base, não são âncoras imutá
 
 ## Tech Decisions
 
-As decisões definitivas deste pedido são criar a branch e produzir o plano.
-As escolhas técnicas propostas estão no contexto e nesta especificação;
-mudá-las exige reconciliar os quatro arquivos antes da implementação.
+O pedido atual inclui executar localmente o plano com agentes. As escolhas
+técnicas estão no contexto e nesta especificação; mudá-las exige reconciliar
+os documentos e preservar os critérios de aceite antes da implementação afetada.
 
 Este desenho não cria banco relacional, novo serviço de identidade ou ligação
 com SIGFAS. Alertas oficiais e personalização terão design próprio quando
