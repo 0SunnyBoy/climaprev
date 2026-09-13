@@ -1,0 +1,143 @@
+# Fluxos de informação e contrato de integração
+
+**Base:** código local em 2026-09-13. [Índice](../PROJECT.md).
+
+## Inventário de transferências
+
+| ID     | Origem → destino      | Informações transmitidas                                                                       | Finalidade                              |
+| ------ | --------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------- |
+| INF-01 | Cliente → API         | Texto de local ou coordenadas, datas, unidade e `X-Request-ID` opcional.                       | Solicitar previsão e risco.             |
+| INF-02 | Conexão/proxy → API   | IP do peer e, somente se confiável, cadeia `X-Forwarded-For`.                                  | Identificar cliente para limite de uso. |
+| INF-03 | API → Geocoding       | `name` com texto do local e `language=pt`.                                                     | Resolver local.                         |
+| INF-04 | Geocoding → API       | Resultados com nome, latitude, longitude e fuso.                                               | Selecionar primeiro local utilizável.   |
+| INF-05 | API → Forecast        | Coordenadas, datas, `timezone=auto`, unidades e variáveis diárias/horárias.                    | Obter previsão meteorológica.           |
+| INF-06 | Forecast → API        | JSON com fuso, datas e séries meteorológicas.                                                  | Validar e normalizar.                   |
+| INF-07 | API ↔ Redis           | Local canônico, previsão normalizada, timestamps de cache, tokens de lock e contadores por IP. | Cache e coordenação.                    |
+| INF-08 | Aplicação → domínio   | Previsão normalizada e política de risco.                                                      | Calcular estimativa sem rede.           |
+| INF-09 | API → cliente         | Local, período, dias, risco, alertas, qualidade, fonte, aviso e ID.                            | Apresentar resultado rastreável.        |
+| INF-10 | API → observabilidade | Rota, status, duração, cache, provider, retries, erro e ID.                                    | Diagnóstico operacional.                |
+
+O código não repassa `X-Forwarded-For`, identidade do usuário ou request ID nas
+chamadas Open-Meteo. O serviço externo recebe os parâmetros meteorológicos e
+observa a conexão de saída do servidor. Por usar query string, a entrada do
+cliente também pode aparecer em histórico do navegador e logs de acesso de
+servidores/proxies, conforme sua configuração.
+
+## Entrada HTTP implementada
+
+`GET /api/v1/risk`, sem body e sem autenticação implementada.
+
+| Campo              | Tipo     | Regra                                                                           |
+| ------------------ | -------- | ------------------------------------------------------------------------------- |
+| `location_text`    | string   | Alternativa às coordenadas; 1–200 caracteres, sem texto vazio após trim.        |
+| `latitude`         | número   | De -90 a 90, exige longitude.                                                   |
+| `longitude`        | número   | De -180 a 180, exige latitude.                                                  |
+| `start_date`       | data ISO | Obrigatória, `YYYY-MM-DD`.                                                      |
+| `end_date`         | data ISO | Opcional; assume início, deve ser igual ou posterior, até sete dias inclusivos. |
+| `temperature_unit` | enum     | `celsius` padrão ou `fahrenheit`.                                               |
+
+`location_text` e coordenadas são mutuamente exclusivos. Não enviar CPF,
+nome de pessoa, e-mail, token ou endereço residencial no texto do local.
+Esta última orientação é uma restrição de uso proposta: não existe filtro
+de dados pessoais no campo livre.
+
+Exemplos de formato; as datas não garantem disponibilidade no provedor:
+
+```http
+GET /api/v1/risk?location_text=Belem&start_date=2026-09-13&end_date=2026-09-15&temperature_unit=celsius
+X-Request-ID: consulta-exemplo-001
+```
+
+```http
+GET /api/v1/risk?latitude=-1.4558&longitude=-48.4902&start_date=2026-09-13
+```
+
+## Saída HTTP implementada
+
+| Campo              | Conteúdo e uso                                                        |
+| ------------------ | --------------------------------------------------------------------- |
+| `request_id`       | Correlação da consulta; não é autenticação nem identidade de usuário. |
+| `location`         | `name`, `latitude`, `longitude`, `timezone`, `source`.                |
+| `period`           | `start_date` e `end_date` efetivos.                                   |
+| `temperature_unit` | Unidade das temperaturas devolvidas.                                  |
+| `days`             | Lista de dias com os campos da tabela seguinte.                       |
+| `forecast_risk`    | `level`, `method`, `policy_version` e `conditions`.                   |
+| `official_alerts`  | `status` e `items`, separados do risco calculado.                     |
+| `data_quality`     | `is_stale` e `missing_fields`.                                        |
+| `source`           | `provider` e `fetched_at`, horário de coleta pelo backend.            |
+| `disclaimer`       | Aviso de que a estimativa não substitui alertas oficiais.             |
+
+`cache_status` é interno ao serviço/log e não faz parte do JSON público.
+`fetched_at` não é a data de emissão do modelo meteorológico.
+
+| Campo de cada dia                    | Unidade                 | Origem / transformação atual                                            |
+| ------------------------------------ | ----------------------- | ----------------------------------------------------------------------- |
+| `date`                               | Data ISO                | Série diária do provedor.                                               |
+| `temperature_min`, `temperature_max` | Celsius ou Fahrenheit   | Mínima/máxima diária; conversão somente na saída.                       |
+| `temperature_mean`                   | Celsius ou Fahrenheit   | Sempre `null` no adaptador atual.                                       |
+| `humidity_mean_pct`                  | %                       | Média das amostras horárias não nulas do dia.                           |
+| `precipitation_sum_mm`               | mm                      | Acumulado diário.                                                       |
+| `precipitation_probability_max_pct`  | %                       | Máxima das probabilidades horárias; não usa o campo diário equivalente. |
+| `precipitation_max_hourly_mm`        | mm no intervalo horário | Máxima das amostras horárias de precipitação.                           |
+| `wind_max_kmh`                       | km/h                    | Máxima diária de velocidade.                                            |
+| `wind_gust_max_kmh`                  | km/h                    | Máxima diária de rajada.                                                |
+| `weather_code`                       | Inteiro                 | Código diário recebido do provedor.                                     |
+
+Os campos meteorológicos aceitam `null`. Séries opcionais ausentes entram em
+`missing_fields` com nomes como `hourly.relative_humidity_2m`; valores nulos
+dentro de uma série existente não geram necessariamente esse indicador.
+Não interpretar `missing_fields=[]` como prova de completude.
+
+Cada condição de risco contém `type`, `severity`, `value`, `unit` e `reason`.
+O nível global é `low`, `moderate` ou `high`; o método é `forecast_heuristic`
+e a versão atual é `reference-v1`. O risco é agregado por período, sem data
+individual em cada condição. Veja [restrições](restricoes.md).
+
+Alertas oficiais têm os estados `available`, `not_configured` e `unavailable`.
+Cada item previsto no contrato contém `source`, `event`, `severity`,
+`effective_at`, `expires_at`, `geographic_scope` e `source_url`.
+`expires_at` e `source_url` aceitam `null`. No app atual, `items=[]` e
+`status=not_configured`; não há tráfego para um serviço oficial de alertas.
+
+Exemplo realista do formato de erro, com valores ilustrativos:
+
+```json
+{
+  "error": {
+    "code": "INVALID_PERIOD",
+    "message": "date period is invalid",
+    "request_id": "consulta-exemplo-001"
+  }
+}
+```
+
+## Armazenamento, retenção e acesso
+
+| Informação                         | Local / chave                                                             | Retenção observada                                                        | Quem acessa no desenho atual            |
+| ---------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
+| Texto consultado e local resolvido | Redis: `climaprev:{environment}:geo:v1:{texto-codificado}`                | 24 h após gravação.                                                       | Backend e quem tiver acesso ao Redis.   |
+| Previsão canônica                  | Redis: `climaprev:{environment}:forecast:v1:{lat4}:{lon4}:{inicio}:{fim}` | Fresca 10 min; expiração total 15 min.                                    | Backend e acesso ao Redis.              |
+| Token de atualização               | Redis: `climaprev:{environment}:lock:{chave-previsao}`                    | 10 s, renovado enquanto a operação mantém propriedade.                    | Backend e acesso ao Redis.              |
+| IP e estado do limite              | Redis: `climaprev:{environment}:rate-limit:v1:{identidade}`               | TTL de `burst × janela / limite`, renovado a cada tentativa; padrão 10 s. | Backend e acesso ao Redis.              |
+| Metadados do app                   | Logger `climaprev.request`                                                | Sem política de retenção implementada.                                    | Operação, conforme destino configurado. |
+| Contadores                         | Memória de cada processo                                                  | Até reiniciar o processo.                                                 | Código e futura integração de métricas. |
+
+O texto da chave de geocodificação usa `casefold` e codificação de URL; isso
+não é criptografia nem anonimização. O IP é armazenado diretamente na chave
+do rate limit. Não existe histórico persistente de consultas nem isolamento
+por usuário/tenant. TTL de cache não define retenção de logs, cópias ou backups.
+
+## Contrato proposto para consumidores futuros
+
+- Enviar somente os campos de entrada descritos e renderizar a projeção pública.
+- Preservar unidades, fonte, qualidade e aviso; não recalcular risco no cliente.
+- Mostrar indisponibilidade e dados desatualizados como estados distintos.
+- Não tratar `low` como garantia de segurança nem lista vazia como alerta inexistente.
+- Validar links de fontes antes de torná-los navegáveis quando a integração
+  oficial for implementada; atualmente não há itens oficiais retornados.
+
+Evidências: [schema](../src/climaprev/api/schemas/risk.py),
+[resposta](../src/climaprev/api/routes/risk.py),
+[adaptador](../src/climaprev/infrastructure/providers/open_meteo.py),
+[cache](../src/climaprev/infrastructure/cache/redis_cache.py) e
+[observabilidade](../src/climaprev/api/observability.py).

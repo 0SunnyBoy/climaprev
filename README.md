@@ -4,6 +4,14 @@ Backend FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais
 nem instruções de Defesa Civil, INMET ou autoridades locais.
 
+## Documentação do projeto
+
+Comece por [PROJECT — visão geral e índice](PROJECT.md). Os documentos
+detalham [arquitetura](docs/arquitetura.md), [fluxos](docs/fluxos.md),
+[informações transmitidas](docs/fluxos-informacao.md),
+[segurança](docs/seguranca.md) e [restrições](docs/restricoes.md).
+Consulte também o [estado atual](STATE.md) e a [evolução proposta](ROADMAP.md).
+
 ## Executar com Docker
 
 ```bash

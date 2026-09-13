@@ -1,0 +1,70 @@
+# PROJECT — Clima Prev
+
+**Data da análise:** 2026-09-13.  
+**Estado:** documentação da implementação local e propostas de evolução.
+
+## Visão
+
+O Clima Prev consulta previsões meteorológicas de curto prazo e calcula uma
+estimativa de risco para um local e um período de até sete dias. A resposta
+informa a fonte, a qualidade dos dados, a política usada e a disponibilidade
+de alertas oficiais. A estimativa não substitui alertas das autoridades.
+
+O código disponível contém um backend Python/FastAPI, Redis e adaptadores
+Open-Meteo. Frontend, contas de usuário, notificações e integração real de
+alertas oficiais ainda não estão implementados.
+
+## Documentação do projeto
+
+| Arquivo                                                          | Conteúdo                                                    |
+| ---------------------------------------------------------------- | ----------------------------------------------------------- |
+| [Arquitetura](docs/arquitetura.md)                               | Componentes, camadas, dependências e implantação.           |
+| [Fluxos](docs/fluxos.md)                                         | Consulta, cache, concorrência, falhas e jornada futura.     |
+| [Fluxos de informação](docs/fluxos-informacao.md)                | Dados enviados, recebidos, transformados e armazenados.     |
+| [Segurança](docs/seguranca.md)                                   | Fronteiras de confiança, controles existentes e lacunas.    |
+| [Restrições](docs/restricoes.md)                                 | Regras de entrada, limites operacionais e de interpretação. |
+| [Análise dos modelos SIGFAS](docs/analise-referencias-sigfas.md) | Estrutura aproveitada e diferenças entre projetos.          |
+| [Validação](docs/validacao-documentacao.md)                      | Evidências, rastreabilidade e limites da verificação.       |
+| [ROADMAP](ROADMAP.md)                                            | Evolução proposta com critérios de conclusão.               |
+| [STATE](STATE.md)                                                | Estado observado, decisões e pendências.                    |
+| [Operações](docs/operations.md)                                  | Comandos e configuração já documentados.                    |
+
+## Como interpretar os documentos
+
+- **Implementado:** comportamento encontrado nos arquivos de código citados.
+- **Proposto:** desenho ou requisito para uma próxima implementação.
+- **Pendente:** decisão ou verificação ainda necessária.
+- **Histórico:** resultado relatado anteriormente, sem nova execução aqui.
+
+Esses estados não representam homologação em produção. O código atual é a
+referência para comportamento existente; propostas descrevem mudanças futuras.
+
+## Mapa do workspace
+
+| Local                           | Papel                                                   |
+| ------------------------------- | ------------------------------------------------------- |
+| `src/climaprev/api/`            | Contrato HTTP, validação, rate limit e observabilidade. |
+| `src/climaprev/application/`    | Orquestração de consulta e portas de integração.        |
+| `src/climaprev/domain/`         | Modelos, unidades e política de risco.                  |
+| `src/climaprev/infrastructure/` | Clientes HTTP e adaptadores Redis/Open-Meteo.           |
+| `src/climaprev/main.py`         | Composição de dependências e ciclo de vida.             |
+| `tests/`                        | Testes unitários, integração, contrato, Docker e carga. |
+| `docker-compose.yml`            | Execução local e perfil separado de carga.              |
+
+## Escopo da documentação
+
+Esta revisão cria documentação para arquitetura, integração e continuidade
+do Clima Prev. A estrutura foi adaptada dos documentos do SIGFAS; não existe
+integração de dados entre os dois sistemas identificada neste projeto.
+
+Os diagramas Mermaid são editáveis como texto nos próprios arquivos `.md`.
+
+## Planejamento de implementação
+
+O [contexto da evolução](docs/planejamento/evolucao-climaprev/context.md)
+consolida as premissas do próximo ciclo. A
+[spec](docs/planejamento/evolucao-climaprev/spec.md) contém 23 requisitos,
+o [design](docs/planejamento/evolucao-climaprev/design.md) define os contratos
+propostos e as [tasks](docs/planejamento/evolucao-climaprev/tasks.md)
+organizam 25 tarefas em cinco fases. A branch local de planejamento é
+`docs/plano-evolucao-climaprev`; as tarefas de implementação ainda não começaram.
