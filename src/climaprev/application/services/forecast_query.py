@@ -33,7 +33,7 @@ from climaprev.domain.models import (
 )
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit, convert_temperature
-from climaprev.application.errors import ProviderTransientError
+from climaprev.application.errors import DependencyUnavailable, ProviderTransientError
 
 if TYPE_CHECKING:
     from climaprev.domain.models import RiskCondition
@@ -55,7 +55,7 @@ class WeatherProviderUnavailable(Exception):
     """The weather provider could not produce a forecast and no valid stale value exists."""
 
 
-class LockOwnershipLost(Exception):
+class LockOwnershipLost(WeatherProviderUnavailable):
     """The service lost the refresh lock while an upstream request was in progress."""
 
 
@@ -233,6 +233,7 @@ class ForecastQueryService:
                 return stale_forecast.forecast, "stale", stale_forecast.expires_at
             raise WeatherProviderUnavailable("forecast refresh lock timed out")
 
+        primary_error: BaseException | None = None
         try:
             cached_after_lock = await self._read_forecast(key, location, period)
             if cached_after_lock is not None and not cached_after_lock.is_stale:
@@ -268,8 +269,15 @@ class ForecastQueryService:
             )
             self._metrics_record_cache("miss")
             return canonical_forecast, "miss", None
+        except BaseException as error:
+            primary_error = error
+            raise
         finally:
-            await self._lock.release(key, token)
+            try:
+                await self._lock.release(key, token)
+            except DependencyUnavailable:
+                if primary_error is None:
+                    raise
 
     async def _wait_for_lock(
         self,
@@ -651,5 +659,6 @@ def _strings(value: object) -> tuple[str, ...] | None:
 async def _cancel_and_await(task: asyncio.Task[object]) -> None:
     if not task.done():
         task.cancel()
-    with suppress(asyncio.CancelledError):
+    # Cleanup consumes task failures; the selected result above owns error propagation.
+    with suppress(asyncio.CancelledError, Exception):
         await task

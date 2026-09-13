@@ -2,7 +2,7 @@
 
 **Estado:** In Progress. **Branch:** `atualizaçao-geral`.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
-**Progresso de implementação:** 0/25 tarefas concluídas.
+**Progresso de implementação:** 9/25 tarefas concluídas.
 
 ## Execution Protocol
 
@@ -275,9 +275,9 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Done when**:
 
-- [ ] Parte atribuída nesta tarefa aos requisitos RES-04 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
-- [ ] Casos acima verificados com evidência e gate Full aprovado.
-- [ ] Status, testes executados e desvios registrados antes de encerrar a tarefa.
+- [x] Parte atribuída nesta tarefa aos requisitos RES-04 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
+- [x] Casos acima verificados com evidência e gate Full aprovado.
+- [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `fix(lock): stop refresh after ownership loss`.
 
