@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
+from math import isfinite
 from typing import Final
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -169,6 +170,9 @@ def _normalize_forecast(
         for field in _HOURLY_FIELDS
     }
 
+    for field, series in (*daily_series.items(), *hourly_series.items()):
+        _validate_weather_series(field, series)
+
     days = tuple(
         DailyForecast(
             date=day,
@@ -197,6 +201,10 @@ def _normalize_forecast(
         )
         for index, day in enumerate(dates)
     )
+    for day in days:
+        if (day.temperature_min_c is not None and day.temperature_max_c is not None
+                and day.temperature_min_c > day.temperature_max_c):
+            raise WeatherDataInvalid("minimum temperature exceeds maximum")
     return days, tuple(missing_fields)
 
 
@@ -340,4 +348,20 @@ def _number_or_none(value: object) -> float | None:
         return None
     if isinstance(value, bool) or not isinstance(value, int | float):
         raise WeatherDataInvalid("weather series must contain numbers or null")
-    return float(value)
+    number = float(value)
+    if not isfinite(number):
+        raise WeatherDataInvalid("weather values must be finite")
+    return number
+
+
+def _validate_weather_series(field: str, series: Sequence[object] | None) -> None:
+    if series is None:
+        return
+    for raw in series:
+        value = _number_or_none(raw)
+        if value is None:
+            continue
+        if ("probability" in field or "humidity" in field) and not 0 <= value <= 100:
+            raise WeatherDataInvalid("percentage must be between zero and one hundred")
+        if field.startswith(("precipitation", "wind_")) and value < 0:
+            raise WeatherDataInvalid("precipitation and wind must not be negative")
