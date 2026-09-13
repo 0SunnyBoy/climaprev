@@ -3,22 +3,31 @@
 from __future__ import annotations
 
 import logging.config
+import os
 
 import uvicorn
 
 
 def configure_logging() -> None:
+    logging.raiseExceptions = False
+    request_handler: dict[str, object] = {
+        "class": "logging.StreamHandler",
+        "stream": "ext://sys.stdout",
+        "formatter": "json",
+    }
+    if socket_path := os.environ.get("CLIMAPREV_LOG_SOCKET"):
+        request_handler = {
+            "class": "logging.handlers.SysLogHandler",
+            "address": socket_path,
+            "formatter": "json",
+        }
     logging.config.dictConfig(
         {
             "version": 1,
             "disable_existing_loggers": False,
             "formatters": {"json": {"format": "%(message)s"}},
             "handlers": {
-                "requests": {
-                    "class": "logging.StreamHandler",
-                    "stream": "ext://sys.stdout",
-                    "formatter": "json",
-                },
+                "requests": request_handler,
                 "discard": {"class": "logging.NullHandler"},
             },
             "root": {"handlers": ["discard"], "level": "WARNING"},

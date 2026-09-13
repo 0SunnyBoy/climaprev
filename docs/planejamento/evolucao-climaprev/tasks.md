@@ -2,7 +2,7 @@
 
 **Estado:** In Progress. **Branch:** `atualizaçao-geral`.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
-**Progresso de implementação:** 19/25 tarefas concluídas.
+**Progresso de implementação:** 20/25 tarefas concluídas.
 
 ## Execution Protocol
 
@@ -520,13 +520,16 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Done when**:
 
-- [ ] Parte atribuída nesta tarefa aos requisitos OPS-01, OBS-02, SEC-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
-- [ ] Casos acima verificados com evidência e gate Homolog aprovado.
-- [ ] Status, testes executados e desvios registrados antes de encerrar a tarefa.
+- [x] Parte atribuída nesta tarefa aos requisitos OPS-01, OBS-02, SEC-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
+- [x] Casos acima verificados com evidência e gate Homolog aprovado.
+- [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `build(homolog): protect traffic entry and operational logs`.
 
 ### Phase 5: Interface de consulta
+
+
+**Evidência:** [T20](evidence/t20.md).
 
 #### T21: Entregar formulário e rota da interface
 

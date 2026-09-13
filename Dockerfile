@@ -32,6 +32,8 @@ COPY .env.example .
 CMD ["python", "-m", "climaprev.runtime"]
 
 FROM base AS runtime
+RUN mkdir -p /run/climaprev-logs /var/log/climaprev \
+    && chown -R 10001:10001 /run/climaprev-logs /var/log/climaprev
 ENV PATH=/opt/venv/bin:$PATH
 COPY --from=package /opt/venv /opt/venv
 USER 10001:10001

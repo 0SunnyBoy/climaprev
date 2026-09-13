@@ -12,7 +12,9 @@ from time import perf_counter
 from uuid import uuid4
 
 from fastapi import Request
-from starlette.responses import Response
+from starlette.responses import JSONResponse, Response
+
+from climaprev.api.errors import ErrorBody, ErrorEnvelope
 
 _REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 _LOGGER = logging.getLogger("climaprev.request")
@@ -200,7 +202,17 @@ async def observe_request(
     metric_token = request.app.state.metrics.begin_request()
     started_at = perf_counter()
     try:
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception:  # noqa: BLE001 -- HTTP boundary must sanitize unexpected failures.
+            # Cancellation derives from BaseException and must still propagate.
+            request.state.error_code = "INTERNAL_ERROR"
+            envelope = ErrorEnvelope(
+                error=ErrorBody(
+                    request_id=request_id, code="INTERNAL_ERROR", message="internal server error"
+                )
+            )
+            response = JSONResponse(status_code=500, content=envelope.model_dump(mode="json"))
         response.headers["X-Request-ID"] = request_id
         latency_ms = round((perf_counter() - started_at) * 1000, 2)
         cache = getattr(request.state, "cache", None)

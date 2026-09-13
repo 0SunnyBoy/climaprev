@@ -118,3 +118,11 @@ entram no wheel. `.dockerignore` envia somente arquivos necessários ao build.
 docker build --load --target runtime -t climaprev-runtime:local .
 docker run --rm -v "$PWD/tests/docker/check_runtime_image.py:/check.py:ro" climaprev-runtime:local python /check.py
 ```
+
+
+O perfil `app-load` conserva o token bucket global, com fixture de capacidade
+e reposição 100000 por 60 s, exclusiva do provider mock. Os overrides são
+`CLIMAPREV_LOAD_PROVIDER_BUDGET_CAPACITY`, `CLIMAPREV_LOAD_PROVIDER_BUDGET_REFILL`
+e `CLIMAPREV_LOAD_PROVIDER_BUDGET_WINDOW_SECONDS`. Essa configuração não muda
+a cota do app público. Separar recusas 503 por orçamento de medições de
+processamento; não interpretar o limite como capacidade do Open-Meteo.

@@ -74,9 +74,24 @@ perfil: `warm_cache` usa e prima uma chave fixa, `cold_cache` usa uma chave de
 localização única por requisição, `lock_contention` reutiliza uma chave entre
 usuários concorrentes, `slow_upstream` atrasa o provider mock e `redis_latency`
 atrasa operações Redis apenas no `app-load`. O status 429 é
-sempre contado como falha.
+sempre contado como falha. O mock de carga usa orçamento externo alto, ainda
+ativo: capacidade/reposição de 100000 por 60 s. Ajuste com
+`CLIMAPREV_LOAD_PROVIDER_BUDGET_CAPACITY`, `CLIMAPREV_LOAD_PROVIDER_BUDGET_REFILL`
+e `CLIMAPREV_LOAD_PROVIDER_BUDGET_WINDOW_SECONDS`. Isso se aplica somente ao
+`app-load` apontado ao mock; não amplia a cota do Open-Meteo público. Um 503
+causado por orçamento esgotado não mede a capacidade de processamento do backend.
 
 O cenário adicional `lock_contention` reutiliza uma chave única entre usuários
 concorrentes para medir a contenção do lock distribuído.
 
 Veja [operações](docs/operations.md) para configuração, métricas e baseline.
+
+
+## Homologação com TLS
+
+O perfil separado usa runtime não root, Redis autenticado, entrada TLS local
+e coleta sanitizada com retenção máxima de sete dias. Veja o procedimento e
+as limitações de rede em [homologação local](docs/homologacao.md). A CA é
+confiada explicitamente; não há publicação externa. Nesse perfil os logs ficam
+no volume do coletor, sem stdout persistido pelo engine; o documento mostra
+como lê-los e diagnosticar os serviços.

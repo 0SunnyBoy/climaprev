@@ -3,6 +3,8 @@ services:
   redis:
     image: redis:7-alpine
     command: ["redis-server", "/etc/redis/redis.conf"]
+    logging:
+      driver: none
     volumes:
       - ./docker/homolog/redis.conf:/etc/redis/redis.conf:ro
     secrets:
@@ -21,8 +23,14 @@ services:
       target: runtime
     image: climaprev-homolog-app:local
     read_only: true
+    logging:
+      driver: none
+    volumes:
+      - log-socket:/run/climaprev-logs:ro
     environment:
       CLIMAPREV_ENVIRONMENT: production
+      CLIMAPREV_LOG_SOCKET: /run/climaprev-logs/request.sock
+      CLIMAPREV_TRUSTED_PROXY_IPS: ${CLIMAPREV_PROXY_IP:-10.253.248.2}
       REDIS_URL: redis://climaprev@redis:6379/0
       CLIMAPREV_REDIS_PASSWORD_FILE: /run/secrets/redis_password
       CLIMAPREV_PROVIDER_BUDGET_CAPACITY: ${CLIMAPREV_PROVIDER_BUDGET_CAPACITY:?Set local budget capacity}
@@ -31,9 +39,13 @@ services:
     secrets:
       - redis_password
     networks:
-      - cache
-      - egress
+      cache:
+      egress:
+      ingress:
+        ipv4_address: ${CLIMAPREV_APP_IP:-10.253.248.3}
     depends_on:
+      collector:
+        condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
@@ -42,13 +54,66 @@ services:
       timeout: 2s
       retries: 15
 
+  collector:
+    image: climaprev-homolog-app:local
+    command: ["python", "-m", "climaprev.log_collector"]
+    network_mode: none
+    read_only: true
+    logging:
+      driver: none
+    volumes:
+      - log-socket:/run/climaprev-logs
+      - sanitized-logs:/var/log/climaprev
+    healthcheck:
+      test: ["CMD", "python", "-m", "climaprev.log_collector", "--check"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  entrada:
+    image: nginx:alpine
+    entrypoint: ["nginx", "-g", "daemon off;"]
+    logging:
+      driver: none
+    ports:
+      - "127.0.0.1:${CLIMAPREV_HOMOLOG_PORT:-18443}:8443"
+    volumes:
+      - ./docker/homolog/entrada/nginx.conf:/etc/nginx/nginx.conf:ro
+      - log-socket:/run/climaprev-logs:ro
+    secrets:
+      - tls_certificate
+      - tls_key
+    depends_on:
+      app:
+        condition: service_healthy
+      collector:
+        condition: service_healthy
+    networks:
+      edge:
+      ingress:
+        ipv4_address: ${CLIMAPREV_PROXY_IP:-10.253.248.2}
+
 networks:
   cache:
     internal: true
   egress:
+  edge:
+  ingress:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${CLIMAPREV_INGRESS_SUBNET:-10.253.248.0/24}
 
 secrets:
   redis_password:
     file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.password
   redis_acl:
     file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.acl
+  tls_certificate:
+    file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/server.crt
+  tls_key:
+    file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/server.key
+
+volumes:
+  log-socket:
+  sanitized-logs:

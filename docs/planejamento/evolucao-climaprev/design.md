@@ -169,6 +169,14 @@ app registra somente metadados sanitizados; a entrada TLS também omite query,
 IP e credenciais. A rotação da homologação usa retenção proposta de sete
 dias, com teste de expiração; isso não altera políticas de serviços externos.
 
+Decisão operacional de T20: coletor Python sem rede, recebendo JSON pelo
+socket Unix compartilhado, com schema restrito e escritor único. Arquivos
+horários de até 1 MiB conservam eventos recentes e expiram com teto de sete
+dias; limpeza a cada 60 s começa um intervalo antes do prazo. O descarte pode
+ser antecipado por hora/tamanho; startup também limpa expirados. Driver de
+logs do engine fica `none` somente na homologação. Limites e diagnóstico:
+[homologação local](../../homologacao.md).
+
 Separar alvos `runtime` e `dev` no Dockerfile. `runtime` copia somente pacote
 e assets, usa usuário sem privilégios e instala dependências de produção
 registradas em lock. `dev` preserva pytest, Ruff, mypy, Locust e fixtures; o
