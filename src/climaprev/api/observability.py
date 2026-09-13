@@ -54,6 +54,9 @@ class RequestMetrics:
     def record_rate_limit_rejection(self) -> None:
         self._counters["rate_limit_rejections_total"] += 1
 
+    def record_cache_corruption(self) -> None:
+        self._counters["cache_corruptions_total"] += 1
+
     def record_cache_status(self, status: str) -> None:
         if not self._record_once(f"cache:{status}"):
             return
@@ -150,6 +153,7 @@ class RequestMetrics:
             },
             "requests_total": self._counters["requests_total"],
             "request_latency_ms_count": self._request_duration_count,
+            "cache_corruptions_total": self._counters["cache_corruptions_total"],
             "cache_hits_total": self._counters["cache_hits_total"],
             "cache_misses_total": self._counters["cache_misses_total"],
             "cache_stale_total": self._counters["cache_stale_total"],
