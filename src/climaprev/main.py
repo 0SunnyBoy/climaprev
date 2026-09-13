@@ -15,6 +15,7 @@ from starlette.responses import JSONResponse
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
 from climaprev.api.observability import RequestMetrics, observe_request
 from climaprev.api.routes import risk_router
+from climaprev.api.routes.metrics import router as metrics_router
 from climaprev.application.errors import (
     DependencyUnavailable,
     LocationNotFound,
@@ -105,6 +106,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
     app.middleware("http")(observe_request)
     app.include_router(risk_router)
+    app.include_router(metrics_router)
     _register_error_handlers(app)
     _register_health_routes(app)
     return app

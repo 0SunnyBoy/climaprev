@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 from collections import Counter
 from collections.abc import Awaitable, Callable
 from contextvars import ContextVar
+from datetime import UTC, datetime
 from time import perf_counter
 from uuid import uuid4
 
@@ -27,6 +29,8 @@ class RequestMetrics:
     """Small in-process metric sink; a deployment can export its counters externally."""
 
     def __init__(self) -> None:
+        self._instance_id = uuid4().hex
+        self._started_at = datetime.now(UTC).isoformat()
         self._counters: Counter[str] = Counter()
         self._request_duration_count = 0
         self._request_duration_sum_seconds = 0.0
@@ -137,6 +141,9 @@ class RequestMetrics:
             if key.startswith("weather_missing_fields_total:")
         }
         return {
+            "instance_id": self._instance_id,
+            "pid": os.getpid(),
+            "started_at": self._started_at,
             "http_requests_total": {
                 key.split(":", 1)[1]: value
                 for key, value in self._counters.items()

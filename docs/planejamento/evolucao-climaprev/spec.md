@@ -213,7 +213,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | SEC-03         | Imagem de produção           | T18      | In Tasks |
 | SEC-04         | Cota externa                 | T14      | Verified |
 | OBS-01         | Cardinalidade                | T15      | Verified |
-| OBS-02         | Métricas internas            | T16, T20 | In Tasks |
+| OBS-02         | Métricas internas            | T16, T20 | Partial |
 | OPS-01         | Homologação protegida        | T19, T20 | In Tasks |
 | OPS-02         | Dependências reproduzíveis   | T17, T18 | In Tasks |
 | UI-01          | Consulta                     | T21, T22 | In Tasks |
@@ -222,7 +222,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
 **Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 14
-requisitos verificados nos gates T1–T15; revisão independente final pendente.
+requisitos verificados nos gates T1–T16; revisão independente final pendente.
 
 ## Success Criteria
 
