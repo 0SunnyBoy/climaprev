@@ -218,7 +218,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | OPS-02         | Dependências reproduzíveis   | T17, T18 | Verified |
 | UI-01          | Consulta                     | T21, T22 | Verified |
 | UI-02          | Resultado                    | T23      | Verified |
-| UI-03          | Estados                      | T24      | In Tasks |
+| UI-03          | Estados                      | T24      | Verified |
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
 **Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 19

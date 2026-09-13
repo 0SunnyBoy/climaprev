@@ -55,16 +55,17 @@ export async function queryRisk(formData, {signal} = {}) {
     throw new QueryError('NETWORK_ERROR');
   }
   const headerId = response.headers.get('X-Request-ID') || '';
+  const rawRetry = response.headers.get('Retry-After');
+  const seconds = rawRetry && /^\d+$/.test(rawRetry) ? Number(rawRetry) : NaN;
+  const retryAfter = Number.isSafeInteger(seconds) && seconds >= 0 ? seconds : 60;
   let data;
   try { data = await response.json(); }
-  catch { throw new QueryError('MALFORMED_RESPONSE', {status: response.status, requestId: headerId}); }
+  catch { throw new QueryError('MALFORMED_RESPONSE', {status: response.status, requestId: headerId, retryAfter}); }
   if (!response.ok) {
     const envelope = record(data) && record(data.error) && text(data.error.code) && text(data.error.request_id);
-    const rawRetry = response.headers.get('Retry-After');
-    const seconds = rawRetry && /^\d+$/.test(rawRetry) ? Number(rawRetry) : NaN;
     throw new QueryError(envelope ? data.error.code : 'MALFORMED_RESPONSE', {
       status: response.status, requestId: envelope ? data.error.request_id : headerId,
-      retryAfter: Number.isSafeInteger(seconds) && seconds >= 0 ? seconds : 60,
+      retryAfter,
     });
   }
   if (!validResult(data)) throw new QueryError('MALFORMED_RESPONSE', {status: response.status, requestId: headerId});
