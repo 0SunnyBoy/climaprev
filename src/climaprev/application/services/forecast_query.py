@@ -143,7 +143,7 @@ class ForecastQueryService:
         official_alerts = await self._get_official_alerts(location, period)
 
         return RiskQueryResult(
-            location=location,
+            location=replace(location, timezone=forecast.location.timezone),
             period=period,
             temperature_unit=query.temperature_unit,
             days=tuple(_response_day(day, query.temperature_unit) for day in forecast.days),
@@ -467,7 +467,7 @@ def _forecast_from_cache(
     expected_days = tuple(period.start + timedelta(days=index) for index in range(period.days))
     if tuple(day.date for day in days) != expected_days:
         return None
-    if location != expected_location or period != expected_period:
+    if replace(location, timezone=expected_location.timezone) != expected_location or period != expected_period:
         return None
     return NormalizedForecast(
         location=location,

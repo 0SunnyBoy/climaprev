@@ -197,7 +197,7 @@ atual e precisam de testes de contrato e nota de atualização.
 
 | Requirement ID | Story                        | Tasks    | Status   |
 | -------------- | ---------------------------- | -------- | -------- |
-| DAT-01         | Previsão coerente            | T1       | In Tasks |
+| DAT-01         | Previsão coerente            | T1       | Verified |
 | DAT-02         | Previsão coerente            | T2       | In Tasks |
 | DAT-03         | Qualidade explícita          | T3       | In Tasks |
 | DAT-04         | Média de temperatura         | T4       | In Tasks |

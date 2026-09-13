@@ -1,0 +1,50 @@
+from __future__ import annotations
+
+import pytest
+import respx
+
+from tests.contract.providers.test_open_meteo_payload import (
+    valid_forecast_payload,
+    valid_geocoding_payload,
+)
+from tests.integration.test_end_to_end import end_to_end_client
+
+PARAMS = {"latitude": "-22.90642", "longitude": "-43.18223",
+          "start_date": "2026-08-28", "end_date": "2026-08-29"}
+
+
+@pytest.mark.parametrize("by_text", [False, True])
+async def test_effective_timezone_survives_public_response_and_cache(by_text: bool) -> None:
+    payload = valid_forecast_payload()
+    payload["timezone"] = "America/Belem"
+    params = dict(PARAMS)
+    if by_text:
+        params.pop("latitude")
+        params.pop("longitude")
+        params["location_text"] = "Rio"
+    async with end_to_end_client() as (client, app):
+        with respx.mock(assert_all_called=False) as mock:
+            mock.get(f"{app.state.settings.geocoding_base_url}/v1/search").respond(
+                200, json=valid_geocoding_payload())
+            upstream = mock.get(f"{app.state.settings.forecast_base_url}/v1/forecast").respond(
+                200, json=payload)
+            first = await client.get("/api/v1/risk", params=params)
+            second = await client.get("/api/v1/risk", params=params)
+    assert first.status_code == second.status_code == 200
+    assert first.json()["location"]["timezone"] == "America/Belem"
+    assert second.json()["location"]["timezone"] == "America/Belem"
+    assert upstream.call_count == 1
+
+
+@pytest.mark.parametrize("timezone", ["Invalid/Timezone", "../UTC"])
+async def test_invalid_forecast_timezone_returns_sanitized_502(timezone: str) -> None:
+    payload = valid_forecast_payload()
+    payload["timezone"] = timezone
+    async with end_to_end_client() as (client, app):
+        with respx.mock:
+            respx.get(f"{app.state.settings.forecast_base_url}/v1/forecast").respond(
+                200, json=payload)
+            response = await client.get("/api/v1/risk", params=PARAMS)
+    assert response.status_code == 502
+    assert response.json()["error"]["code"] == "WEATHER_DATA_INVALID"
+    assert timezone not in response.text

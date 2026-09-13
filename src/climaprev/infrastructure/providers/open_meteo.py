@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
+from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from typing import Final
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -117,7 +118,7 @@ class OpenMeteoForecastClient:
         )
         days, missing_fields = _normalize_forecast(payload, period)
         return NormalizedForecast(
-            location=location,
+            location=replace(location, timezone=_iana_timezone(payload.get("timezone"), "forecast timezone")),
             period=period,
             days=days,
             provider="open-meteo",
