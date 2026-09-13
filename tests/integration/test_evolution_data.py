@@ -96,3 +96,25 @@ async def test_percentage_boundaries_and_null_are_preserved(value) -> None:
     assert response.status_code == 200
     assert response.json()["days"][0]["humidity_mean_pct"] == value
     assert response.json()["days"][0]["precipitation_probability_max_pct"] == value
+
+
+@pytest.mark.parametrize("values,unit,expected", [
+    ([19, 24, 20, 25], "celsius", 21.5),
+    ([19, 24, 20, 25], "fahrenheit", 70.7),
+    ([19, None, 20, 25], "celsius", 19),
+    ([None, None, None, None], "celsius", None),
+])
+async def test_daily_temperature_mean_uses_only_non_null_samples(values, unit, expected) -> None:
+    payload = valid_forecast_payload()
+    payload["hourly"]["temperature_2m"] = values
+    async with end_to_end_client() as (client, app):
+        with respx.mock:
+            respx.get(f"{app.state.settings.forecast_base_url}/v1/forecast").respond(
+                200, json=payload)
+            response = await client.get("/api/v1/risk", params={**PARAMS, "temperature_unit": unit})
+    assert response.status_code == 200
+    result = response.json()
+    assert result["days"][0]["temperature_mean"] == expected
+    assert result["temperature_unit"] == unit
+    assert "hourly.2026-08-28.temperature_2m.coverage" in result["data_quality"]["missing_fields"]
+    assert result["days"][0]["precipitation_sum_mm"] == 1.2

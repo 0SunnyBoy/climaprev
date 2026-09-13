@@ -178,7 +178,9 @@ def _normalize_forecast(
             date=day,
             temperature_min_c=_daily_number(daily_series["temperature_2m_min"], index),
             temperature_max_c=_daily_number(daily_series["temperature_2m_max"], index),
-            temperature_mean_c=None,
+            temperature_mean_c=_mean_for_day(
+                hourly_dates, hourly_series["temperature_2m"], day,
+            ),
             humidity_mean_pct=_mean_for_day(
                 hourly_dates,
                 hourly_series["relative_humidity_2m"],
@@ -209,6 +211,9 @@ def _normalize_forecast(
         for field in day.__dataclass_fields__:
             if field != "date" and getattr(day, field) is None:
                 missing_fields.append(f"days.{day.date.isoformat()}.{field}")
+        temperatures = _values_for_day(hourly_dates, hourly_series["temperature_2m"], day.date)
+        if len(temperatures) != expected_counts[day.date]:
+            missing_fields.append(f"hourly.{day.date.isoformat()}.temperature_2m.coverage")
         precipitation = _values_for_day(hourly_dates, hourly_series["precipitation"], day.date)
         if len(precipitation) != expected_counts[day.date]:
             missing_fields.append(f"hourly.{day.date.isoformat()}.precipitation.coverage")

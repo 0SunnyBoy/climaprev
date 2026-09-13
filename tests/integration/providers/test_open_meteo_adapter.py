@@ -154,7 +154,7 @@ async def test_forecast_normalizes_open_meteo_data_and_sends_required_parameters
     assert result.period == period()
     assert result.days[0].temperature_min_c == 16.0
     assert result.days[0].temperature_max_c == 25.0
-    assert result.days[0].temperature_mean_c is None
+    assert result.days[0].temperature_mean_c == 21.5
     assert result.days[0].humidity_mean_pct == 75.0
     assert result.days[0].precipitation_sum_mm == 1.2
     assert result.days[0].precipitation_probability_max_pct == 40.0
