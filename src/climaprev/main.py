@@ -37,6 +37,7 @@ from climaprev.infrastructure.providers.open_meteo import (
     OpenMeteoGeocodingClient,
 )
 from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
+from climaprev.infrastructure.rate_limit.provider_budget import ProviderBudget
 from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
 
 
@@ -61,19 +62,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         resources.push_async_callback(redis.aclose)
         app.state.redis = redis
         app.state.rate_limiter = RedisRateLimiter(redis, environment=settings.environment)
+        provider_budget = ProviderBudget(redis, settings)
         app.state.forecast_query_service = ForecastQueryService(
             geocoder=OpenMeteoGeocodingClient(
                 http_client,
                 settings,
                 on_retry=app.state.metrics.record_upstream_retry,
+                before_send=provider_budget.consume,
             ),
             weather_provider=OpenMeteoForecastClient(
                 http_client,
                 settings,
                 on_retry=app.state.metrics.record_upstream_retry,
+                before_send=provider_budget.consume,
             ),
-            cache=RedisCache(redis, environment=settings.environment,
-                             on_corruption=app.state.metrics.record_cache_corruption),
+            cache=RedisCache(
+                redis,
+                environment=settings.environment,
+                on_corruption=app.state.metrics.record_cache_corruption,
+            ),
             lock=RedisLock(redis, environment=settings.environment),
             risk_evaluator=RiskEvaluator(),
             risk_policy=RiskPolicy(),
@@ -149,7 +156,9 @@ def _register_error_handlers(app: FastAPI) -> None:
         return _error_response(request, 502, "WEATHER_DATA_INVALID", "weather data was invalid")
 
     @app.exception_handler(ProviderPermanentError)
-    async def provider_rejected_handler(request: Request, error: ProviderPermanentError) -> JSONResponse:
+    async def provider_rejected_handler(
+        request: Request, error: ProviderPermanentError
+    ) -> JSONResponse:
         return _error_response(
             request, 502, "WEATHER_PROVIDER_REJECTED", "weather provider rejected the request"
         )
@@ -218,7 +227,9 @@ def _error_response(
     request_id = getattr(request.state, "request_id", "unknown")
     return JSONResponse(
         status_code=status_code,
-        content=ErrorEnvelope(error=ErrorBody(code=code, message=message, request_id=request_id)).model_dump(),
+        content=ErrorEnvelope(
+            error=ErrorBody(code=code, message=message, request_id=request_id)
+        ).model_dump(),
         headers=headers,
     )
 

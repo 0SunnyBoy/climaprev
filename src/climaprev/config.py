@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     read_timeout_seconds: float = Field(default=5.0, gt=0)
     redis_socket_timeout_seconds: float = Field(default=1.0, gt=0)
     additional_retries: int = Field(default=2, ge=0)
+    provider_budget_capacity: int = Field(default=60, gt=0)
+    provider_budget_refill: int = Field(default=60, gt=0)
+    provider_budget_window_seconds: int = Field(default=60, gt=0)
     load_scenario: str | None = None
     load_redis_operation_delay_ms: int = 50
 

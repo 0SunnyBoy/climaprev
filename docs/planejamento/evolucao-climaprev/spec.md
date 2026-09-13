@@ -211,7 +211,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | SEC-01         | Limite e proxy               | T12      | Verified |
 | SEC-02         | Logs sanitizados             | T13, T20 | Partial |
 | SEC-03         | Imagem de produção           | T18      | In Tasks |
-| SEC-04         | Cota externa                 | T14      | In Tasks |
+| SEC-04         | Cota externa                 | T14      | Verified |
 | OBS-01         | Cardinalidade                | T15      | In Tasks |
 | OBS-02         | Métricas internas            | T16, T20 | In Tasks |
 | OPS-01         | Homologação protegida        | T19, T20 | In Tasks |
@@ -221,8 +221,8 @@ atual e precisam de testes de contrato e nota de atualização.
 | UI-03          | Estados                      | T24      | In Tasks |
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
-**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 12
-requisitos verificados nos gates T1–T13; revisão independente final pendente.
+**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 13
+requisitos verificados nos gates T1–T14; revisão independente final pendente.
 
 ## Success Criteria
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable, Mapping
+from collections.abc import Awaitable, Callable, Mapping
 from typing import Final
 
 import httpx
@@ -33,8 +33,10 @@ class AsyncJsonHttpClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
         self._client = client
+        self._before_send = before_send
         self._additional_retries = settings.additional_retries
         self._on_retry = on_retry
         self._timeout = httpx.Timeout(
@@ -44,9 +46,13 @@ class AsyncJsonHttpClient:
             pool=settings.connect_timeout_seconds,
         )
 
-    async def get_json(self, url: str, params: Mapping[str, str | float | int]) -> dict[str, object]:
+    async def get_json(
+        self, url: str, params: Mapping[str, str | float | int]
+    ) -> dict[str, object]:
         attempts = self._additional_retries + 1
         for attempt in range(attempts):
+            if self._before_send is not None:
+                await self._before_send(url)
             try:
                 response = await self._client.get(url, params=params, timeout=self._timeout)
             except httpx.TimeoutException as error:

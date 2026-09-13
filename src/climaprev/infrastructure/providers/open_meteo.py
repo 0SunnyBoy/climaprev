@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from math import isfinite
@@ -59,8 +59,11 @@ class OpenMeteoGeocodingClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
-        self._http = AsyncJsonHttpClient(client, settings, on_retry=on_retry)
+        self._http = AsyncJsonHttpClient(
+            client, settings, on_retry=on_retry, before_send=before_send
+        )
         self._base_url = settings.geocoding_base_url.rstrip("/")
 
     async def resolve(self, text: str) -> CanonicalLocation:
@@ -90,8 +93,11 @@ class OpenMeteoForecastClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
-        self._http = AsyncJsonHttpClient(client, settings, on_retry=on_retry)
+        self._http = AsyncJsonHttpClient(
+            client, settings, on_retry=on_retry, before_send=before_send
+        )
         self._base_url = settings.forecast_base_url.rstrip("/")
 
     async def forecast(
@@ -116,7 +122,9 @@ class OpenMeteoForecastClient:
         )
         days, missing_fields = _normalize_forecast(payload, period)
         return NormalizedForecast(
-            location=replace(location, timezone=_iana_timezone(payload.get("timezone"), "forecast timezone")),
+            location=replace(
+                location, timezone=_iana_timezone(payload.get("timezone"), "forecast timezone")
+            ),
             period=period,
             days=days,
             provider="open-meteo",
@@ -176,7 +184,9 @@ def _normalize_forecast(
             temperature_min_c=_daily_number(daily_series["temperature_2m_min"], index),
             temperature_max_c=_daily_number(daily_series["temperature_2m_max"], index),
             temperature_mean_c=_mean_for_day(
-                hourly_dates, hourly_series["temperature_2m"], day,
+                hourly_dates,
+                hourly_series["temperature_2m"],
+                day,
             ),
             humidity_mean_pct=_mean_for_day(
                 hourly_dates,
@@ -201,8 +211,11 @@ def _normalize_forecast(
         for index, day in enumerate(dates)
     )
     for day in days:
-        if (day.temperature_min_c is not None and day.temperature_max_c is not None
-                and day.temperature_min_c > day.temperature_max_c):
+        if (
+            day.temperature_min_c is not None
+            and day.temperature_max_c is not None
+            and day.temperature_min_c > day.temperature_max_c
+        ):
             raise WeatherDataInvalid("minimum temperature exceeds maximum")
     for day in days:
         for field in day.__dataclass_fields__:
@@ -233,7 +246,9 @@ def _daily_dates(daily: Mapping[str, object], period: DatePeriod) -> tuple[date,
 
 
 def _hourly_dates(
-    hourly: Mapping[str, object], period: DatePeriod, timezone: str,
+    hourly: Mapping[str, object],
+    period: DatePeriod,
+    timezone: str,
 ) -> tuple[tuple[date, ...], dict[date, int]]:
     zone = ZoneInfo(timezone)
     expected: list[datetime] = []
