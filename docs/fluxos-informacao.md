@@ -4,18 +4,18 @@
 
 ## Inventário de transferências
 
-| ID     | Origem → destino      | Informações transmitidas                                                                       | Finalidade                              |
-| ------ | --------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------- |
-| INF-01 | Cliente → API         | Texto de local ou coordenadas, datas, unidade e `X-Request-ID` opcional.                       | Solicitar previsão e risco.             |
-| INF-02 | Conexão/proxy → API   | IP do peer e, somente se confiável, cadeia `X-Forwarded-For`.                                  | Identificar cliente para limite de uso. |
-| INF-03 | API → Geocoding       | `name` com texto do local e `language=pt`.                                                     | Resolver local.                         |
-| INF-04 | Geocoding → API       | Resultados com nome, latitude, longitude e fuso.                                               | Selecionar primeiro local utilizável.   |
-| INF-05 | API → Forecast        | Coordenadas, datas, `timezone=auto`, unidades e variáveis diárias/horárias.                    | Obter previsão meteorológica.           |
-| INF-06 | Forecast → API        | JSON com fuso, datas e séries meteorológicas.                                                  | Validar e normalizar.                   |
-| INF-07 | API ↔ Redis           | Local canônico, previsão normalizada, timestamps de cache, tokens de lock e contadores por IP. | Cache e coordenação.                    |
-| INF-08 | Aplicação → domínio   | Previsão normalizada e política de risco.                                                      | Calcular estimativa sem rede.           |
-| INF-09 | API → cliente         | Local, período, dias, risco, alertas, qualidade, fonte, aviso e ID.                            | Apresentar resultado rastreável.        |
-| INF-10 | API → observabilidade | Rota, status, duração, cache, provider, retries, erro e ID.                                    | Diagnóstico operacional.                |
+| ID     | Origem → destino      | Informações transmitidas                                                       | Finalidade                              |
+| ------ | --------------------- | ------------------------------------------------------------------------------ | --------------------------------------- |
+| INF-01 | Cliente → API         | Texto de local ou coordenadas, datas, unidade e `X-Request-ID` opcional.       | Solicitar previsão e risco.             |
+| INF-02 | Conexão/proxy → API   | IP do peer e, somente se confiável, cadeia `X-Forwarded-For`.                  | Identificar cliente para limite de uso. |
+| INF-03 | API → Geocoding       | `name` com texto do local e `language=pt`.                                     | Resolver local.                         |
+| INF-04 | Geocoding → API       | Resultados com nome, latitude, longitude e fuso.                               | Selecionar primeiro local utilizável.   |
+| INF-05 | API → Forecast        | Coordenadas, datas, `timezone=auto`, unidades e variáveis diárias/horárias.    | Obter previsão meteorológica.           |
+| INF-06 | Forecast → API        | JSON com fuso, datas e séries meteorológicas.                                  | Validar e normalizar.                   |
+| INF-07 | API ↔ Redis           | Local, previsão, timestamps, tokens de lock, limite por IP e cota por destino. | Cache e coordenação.                    |
+| INF-08 | Aplicação → domínio   | Previsão normalizada e política de risco.                                      | Calcular estimativa sem rede.           |
+| INF-09 | API → cliente         | Local, período, dias, risco, alertas, qualidade, fonte, aviso e ID.            | Apresentar resultado rastreável.        |
+| INF-10 | API → observabilidade | Rota, status, duração, cache, provider, retries, erro e ID.                    | Diagnóstico operacional.                |
 
 O código não repassa `X-Forwarded-For`, identidade do usuário ou request ID nas
 chamadas Open-Meteo. O serviço externo recebe os parâmetros meteorológicos e
@@ -116,14 +116,25 @@ Exemplo realista do formato de erro, com valores ilustrativos:
 
 ## Armazenamento, retenção e acesso
 
-| Informação                         | Local / chave                                               | Retenção observada                                                        | Quem acessa no desenho atual            |
-| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
-| Texto consultado e local resolvido | Redis: `climaprev:{environment}:geo:v1:{texto-codificado}`  | 24 h após gravação.                                                       | Backend e quem tiver acesso ao Redis.   |
-| Previsão canônica                  | Redis: `climaprev:{environment}:forecast:v2:{digest}`       | Fresca 10 min; expiração total 15 min.                                    | Backend e acesso ao Redis.              |
-| Token de atualização               | Redis: `climaprev:{environment}:lock:{chave-previsao}`      | 10 s, renovado enquanto a operação mantém propriedade.                    | Backend e acesso ao Redis.              |
-| IP e estado do limite              | Redis: `climaprev:{environment}:rate-limit:v1:{identidade}` | TTL de `burst × janela / limite`, renovado a cada tentativa; padrão 10 s. | Backend e acesso ao Redis.              |
-| Metadados do app                   | Logger `climaprev.request`                                  | Sem política de retenção implementada.                                    | Operação, conforme destino configurado. |
-| Contadores                         | Memória de cada processo                                    | Até reiniciar o processo.                                                 | Código e futura integração de métricas. |
+| Informação                         | Local / chave                                               | Retenção observada                                                        | Quem acessa no desenho atual                |
+| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------- |
+| Texto consultado e local resolvido | Redis: `climaprev:{environment}:geo:v1:{texto-codificado}`  | 24 h após gravação.                                                       | Backend e quem tiver acesso ao Redis.       |
+| Previsão canônica                  | Redis: `climaprev:{environment}:forecast:v2:{digest}`       | Fresca 10 min; expiração total 15 min.                                    | Backend e acesso ao Redis.                  |
+| Token de atualização               | Redis: `climaprev:{environment}:lock:{chave-previsao}`      | 10 s, renovado enquanto a operação mantém propriedade.                    | Backend e acesso ao Redis.                  |
+| IP e estado do limite              | Redis: `climaprev:{environment}:rate-limit:v1:{identidade}` | TTL de `burst × janela / limite`, renovado a cada tentativa; padrão 10 s. | Backend e acesso ao Redis.                  |
+| Metadados do app e entrada | Homologação: socket Unix e arquivos JSONL do coletor; desenvolvimento: stdout sanitizado. | Homologação: teto de sete dias e 1 MiB por hora; desenvolvimento depende do destino. | Operação via volume dedicado. |
+| Contadores                         | Memória de cada processo                                    | Até reiniciar o processo.                                                 | Operação via snapshot interno por processo. |
+
+Na homologação, o coletor persiste somente evento, request ID, rota
+normalizada, status, duração e horário de registro. Métricas de cache, retries
+e risco ficam no snapshot em memória, sem retenção histórica automática.
+
+A cota externa usa um namespace próprio por ambiente, identificador do destino
+com hash e expiração do token bucket. Ela é compartilhada entre workers e
+consumida a cada tentativa, incluindo geocodificação e retries. Esgotamento
+produz 503 ou fallback de forecast ainda válido; Redis indisponível bloqueia
+o envio. As métricas de requisição usam templates de rota e `unmatched`,
+sem inserir caminhos arbitrários, query ou IP nas dimensões.
 
 O texto da chave de geocodificação usa `casefold` e codificação de URL; isso
 não é criptografia nem anonimização. O IP é armazenado diretamente na chave

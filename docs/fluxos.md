@@ -14,6 +14,8 @@
 5. Em cache fresco, usa o dado. Caso contrário, disputa o lock de atualização.
 6. O detentor do lock verifica o cache novamente, consulta o provedor,
    normaliza os dados e grava o resultado. Renova o lock durante a consulta.
+   Cada tentativa externa, incluindo geocodificação e retries, consome a cota
+   compartilhada do destino antes do envio. Cache hit dispensa esse consumo.
 7. O domínio calcula risco em Celsius, milímetros e km/h.
 8. O serviço obtém o estado de alertas oficiais e converte temperaturas de
    saída se o cliente pediu Fahrenheit.
@@ -74,7 +76,7 @@ sequenceDiagram
 
 O lock dura 10 s e recebe renovação a cada 5 s, com token de propriedade.
 A geocodificação não usa esse lock; textos distintos podem gerar consultas
-externas concorrentes.
+externas concorrentes, limitadas pela cota global Redis por ambiente/destino.
 
 A validade do stale é reavaliada após espera, retries e consulta opcional de
 alertas, imediatamente antes da entrega. Em 900 segundos completos, a entrada

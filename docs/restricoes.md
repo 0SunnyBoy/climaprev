@@ -102,8 +102,10 @@ Também não há um circuit breaker ativo: o registro `dependency_circuit_state`
   ela precisa estar no `environment`/`env_file` do serviço.
 - Não publicar perfil `load`, mock e limites de carga como ambiente de usuário.
 - Namespace por ambiente não é isolamento de segurança nem de capacidade.
-- Definir acesso e retenção de logs de infraestrutura: o logger do app não
-  registra query, mas o servidor de acesso pode registrá-la.
+- A homologação omite query/IP/payload dos logs, bloqueia métricas internas
+  na entrada TLS e aplica retenção de até sete dias. Logs operacionais podem
+  perder eventos durante indisponibilidade/saturação; não são auditoria durável.
+  Esses controles não configuram automaticamente outras implantações.
 
 ## Critérios para ampliar o produto
 

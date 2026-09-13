@@ -7,14 +7,18 @@ separadamente. [Índice](../PROJECT.md).
 
 ```mermaid
 flowchart LR
-    Cliente["Cliente HTTP"] -->|"GET /api/v1/risk"| API["Clima Prev - FastAPI"]
+    Cliente["Cliente HTTP"] --> Entrada["Entrada TLS de homologação"]
+    Entrada -->|"GET /api/v1/risk"| API["Clima Prev - FastAPI"]
     API -->|"JSON: previsão, risco e qualidade"| Cliente
-    API <-->|"Cache, lock e rate limit"| Redis[(Redis)]
+    API <-->|"Cache, lock, limite por cliente e cota externa"| Redis[(Redis)]
     API -->|"Texto do local"| Geo["Open-Meteo Geocoding"]
     Geo -->|"Local e coordenadas"| API
     API -->|"Coordenadas, datas e variáveis"| Meteo["Open-Meteo Forecast"]
     Meteo -->|"Séries diárias e horárias"| API
-    API --> Logs["Logs e contadores em memória"]
+    API --> Logs["Coletor Unix e logs sanitizados"]
+    Entrada --> Logs
+    Operador["Operação na rede interna"] --> Metricas["Snapshot JSON por processo"]
+    Metricas --> API
 ```
 
 Não há frontend, banco relacional, fila de mensagens ou serviço externo de
@@ -44,26 +48,44 @@ flowchart TB
     Main --> Adapters
 ```
 
-O desenho segue camadas e portas, mas a separação não é absoluta:
-`ForecastQueryService` importa `ProviderTransientError` de infraestrutura.
-Uma evolução pode mover a exceção para o contrato de aplicação. Isso é uma
-lacuna de dependência, não uma extração de serviço já realizada.
+Os erros que atravessam as integrações ficam no
+[contrato de aplicação](../src/climaprev/application/errors.py). O serviço
+depende das portas e desses erros, enquanto os adaptadores traduzem falhas
+externas. O cálculo de [completude](../src/climaprev/domain/data_quality.py)
+fica no domínio, separado da política de risco.
 
 ## Implantação existente
 
 - Python `>=3.12,<3.13`, FastAPI, Uvicorn, HTTPX e Redis, declarados no
-  [pyproject.toml](../pyproject.toml).
+  [pyproject.toml](../pyproject.toml), com versões/hashes transitivos no
+  [lock de produção](../requirements.lock). O [Dockerfile](../Dockerfile)
+  separa `dev` e `runtime`; a imagem final usa UID 10001 e pacote instalado
+  em wheel, sem ferramentas de teste ou arquivos locais de ambiente.
 - O [Compose](../docker-compose.yml) publica a API em
   `127.0.0.1:8000`; Redis não publica porta para o host.
 - A rede `local` é uma rede Compose comum. Seu nome não bloqueia acesso à
   internet; a aplicação padrão consulta Open-Meteo externo.
-- O [Dockerfile](../Dockerfile) inicia Uvicorn com `--no-proxy-headers`.
-  A API tem sua própria interpretação controlada de `X-Forwarded-For`.
+- O [runtime](../src/climaprev/runtime.py) inicia Uvicorn sem interpretação
+  automática de proxy e sem access log bruto. A API interpreta
+  `X-Forwarded-For` somente para peers explicitamente confiáveis.
 - O processo mantém clientes HTTP/Redis no lifespan e os fecha na saída.
 - Réplicas podem compartilhar Redis; métricas em memória permanecem separadas
   por processo. O perfil `app-load` usa dois workers.
-- Não há volume persistente declarado para Redis, TLS de entrada, proxy de
-  produção ou exportador de métricas no Compose atual.
+- O Compose de desenvolvimento não oferece a fronteira TLS de homologação.
+  [Métricas internas](../src/climaprev/api/routes/metrics.py) expõem JSON com
+  identidade, PID e início do processo. Não são agregadas automaticamente
+  entre workers; acesso protegido é responsabilidade da stack de homologação.
+
+## Homologação isolada
+
+O [Compose de homologação](../docker-compose.homolog.yml) usa o runtime sem
+privilégios, filesystem da API somente leitura e Redis com ACL. API e Redis
+não publicam portas diretas. Somente o app acessa a rede interna do cache;
+a saída aos provedores usa outra rede. A senha é provisionada fora do Git e
+lida de arquivo montado somente nos serviços autorizados. A entrada Nginx
+publica TLS apenas no loopback e bloqueia `/internal/`. Logs seguem por socket
+Unix para um coletor sem rede, com retenção de até sete dias. Os comandos e
+limites locais estão em [homologação](homologacao.md).
 
 ## Perfil de carga
 

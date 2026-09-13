@@ -1,7 +1,7 @@
 # PROJECT — Clima Prev
 
 **Data da análise:** 2026-09-13.  
-**Estado:** documentação da implementação local e propostas de evolução.
+**Estado:** evolução local em execução na branch `atualizaçao-geral`.
 
 ## Visão
 
@@ -62,9 +62,10 @@ Os diagramas Mermaid são editáveis como texto nos próprios arquivos `.md`.
 ## Planejamento de implementação
 
 O [contexto da evolução](docs/planejamento/evolucao-climaprev/context.md)
-consolida as premissas do próximo ciclo. A
+consolida as premissas do ciclo em execução. A
 [spec](docs/planejamento/evolucao-climaprev/spec.md) contém 23 requisitos,
 o [design](docs/planejamento/evolucao-climaprev/design.md) define os contratos
-propostos e as [tasks](docs/planejamento/evolucao-climaprev/tasks.md)
-organizam 25 tarefas em cinco fases. A branch local de planejamento é
-`docs/plano-evolucao-climaprev`; as tarefas de implementação ainda não começaram.
+adotados e as [tasks](docs/planejamento/evolucao-climaprev/tasks.md)
+organizam 25 tarefas em cinco fases. A execução ocorre na branch
+`atualizaçao-geral`, com agentes, testes e commits locais. Consulte
+[STATE](STATE.md) para o checkpoint e as tarefas para o progresso por requisito.

@@ -1,8 +1,8 @@
 # ROADMAP — Clima Prev
 
-**Data:** 2026-09-13. **Estado:** evolução proposta a partir da análise local.
-As prioridades abaixo não indicam implementação iniciada ou cronograma
-aprovado. [Índice](PROJECT.md).
+**Data:** 2026-09-13. **Estado:** execução local autorizada.
+O progresso e as evidências por tarefa estão no plano de evolução; este
+roadmap mantém a divisão de escopo. [Índice](PROJECT.md).
 
 | Etapa                          | Objetivo                                                                                                    | Entrega / critério de conclusão                                                                                      |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -14,21 +14,21 @@ aprovado. [Índice](PROJECT.md).
 | R5 — Alertas oficiais          | Implementar fonte e cobertura explicitamente definidas.                                                     | Adaptador real, testes de contrato e estados available/unavailable, sem misturar com risco heurístico.               |
 | R6 — Personalização            | Avaliar contas, favoritos, histórico e notificações.                                                        | Escopo próprio com autorização, dados, retenção e contratos definidos antes da implementação.                        |
 
-## Decisões pendentes
+## Decisões e limites do ciclo
 
-| ID     | Decisão                                                           | Quando resolver                               |
-| ------ | ----------------------------------------------------------------- | --------------------------------------------- |
-| DEC-01 | Consulta pública anônima ou consumidores autenticados?            | Antes de exposição ampla ou dados privados.   |
-| DEC-02 | Horizonte de datas permitido e tratamento de datas indisponíveis? | R1/R2, antes de fechar validação do frontend. |
-| DEC-03 | Como expor incompletude e eventual risco indeterminado?           | R1; o contrato hoje só tem low/moderate/high. |
-| DEC-04 | Qual infraestrutura e orçamento de chamadas externas?             | R3.                                           |
-| DEC-05 | Qual destino/retenção dos logs e tratamento de localização/IP?    | R3.                                           |
-| DEC-06 | Qual fonte de alertas e abrangência geográfica?                   | R5.                                           |
-| DEC-07 | Como validar a política de risco para o público-alvo?             | Antes de ampliar as afirmações do produto.    |
+| ID     | Decisão                                                                                      | Quando resolver                                           |
+| ------ | -------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| DEC-01 | Consulta anônima neste ciclo; operações pessoais ficam fora.                                 | Rever antes de dados privados.                            |
+| DEC-02 | Até sete dias, sem horizonte adicional fixo; indisponibilidade vira erro externo sanitizado. | Contrato preservado.                                      |
+| DEC-03 | Completude aditiva complete/partial/unavailable, com os níveis de risco existentes.          | Implementado em T3; apresentação em T23.                  |
+| DEC-04 | Homologação local isolada e cota externa configurável.                                       | Orçamento real e infraestrutura pública seguem pendentes. |
+| DEC-05 | Logs sanitizados com retenção local de sete dias.                                            | Entrega/verificação em T13/T20.                           |
+| DEC-06 | Qual fonte de alertas e abrangência geográfica?                                              | R5.                                                       |
+| DEC-07 | Como validar a política de risco para o público-alvo?                                        | Antes de ampliar as afirmações do produto.                |
 
-Não copiar a estrutura operacional do SIGFAS como dependência do produto.
-A próxima etapa técnica recomendada é R1/R2: fechar a semântica dos dados e
-erros antes de desenvolver a apresentação e publicar o serviço.
+A estrutura documental do SIGFAS é uma referência, sem dependência entre
+os produtos. R1/R2 são integradas antes de R3/R4. Publicação externa não faz
+parte deste ciclo; a homologação prevista é local.
 
 ## Desdobramento em tarefas
 
@@ -44,5 +44,6 @@ transforma este roadmap em quatro documentos de planejamento. O
 | R4 — Interface            | T21–T25: formulário, API, resultado, estados e acessibilidade.                           |
 | R5/R6 — Expansão          | Backlog condicionado; ainda depende de fonte de alertas e contratos de identidade/dados. |
 
-As decisões técnicas do plano estão registradas como premissas revisáveis.
-Esta atualização não indica implementação, homologação ou publicação.
+As decisões técnicas do plano estão registradas como premissas adotadas na
+execução local. Alertas oficiais e personalização continuam condicionados a
+contratos próprios; os resultados executados ficam no STATE e nas evidências.
