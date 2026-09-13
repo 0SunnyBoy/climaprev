@@ -2,7 +2,7 @@
 
 **Estado:** In Progress. **Branch:** `atualizaçao-geral`.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
-**Progresso de implementação:** 12/25 tarefas concluídas.
+**Progresso de implementação:** 13/25 tarefas concluídas.
 
 ## Execution Protocol
 
@@ -323,7 +323,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Commit futuro**: `fix(config): restrict production provider destinations`.
 
-
 **Evidência:** [T11](evidence/t11.md).
 
 #### T12: Preservar limite por cliente e fronteira de proxy
@@ -346,7 +345,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Commit futuro**: `test(security): verify proxy and client quota boundaries`.
 
-
 **Evidência:** [T12](evidence/t12.md).
 
 #### T13: Sanitizar registros de consulta
@@ -363,11 +361,14 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Done when**:
 
-- [ ] Parte atribuída nesta tarefa aos requisitos SEC-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
-- [ ] Casos acima verificados com evidência e gate Full aprovado.
-- [ ] Status, testes executados e desvios registrados antes de encerrar a tarefa.
+- [x] Parte atribuída nesta tarefa aos requisitos SEC-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
+- [x] Casos acima verificados com evidência e gate Full aprovado.
+- [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `fix(logging): keep request metadata free of sensitive input`.
+
+
+**Evidência:** [T13](evidence/t13.md).
 
 #### T14: Limitar chamadas externas globalmente
 

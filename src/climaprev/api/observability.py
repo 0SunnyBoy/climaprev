@@ -14,7 +14,11 @@ from starlette.responses import Response
 
 _REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 _LOGGER = logging.getLogger("climaprev.request")
-_UPSTREAM_ERROR_CODES = {"WEATHER_DATA_INVALID", "WEATHER_PROVIDER_UNAVAILABLE", "WEATHER_PROVIDER_REJECTED"}
+_UPSTREAM_ERROR_CODES = {
+    "WEATHER_DATA_INVALID",
+    "WEATHER_PROVIDER_UNAVAILABLE",
+    "WEATHER_PROVIDER_REJECTED",
+}
 _RETRY_COUNT: ContextVar[list[int] | None] = ContextVar("climaprev_retry_count", default=None)
 _REQUEST_EVENTS: ContextVar[set[str] | None] = ContextVar("climaprev_metric_events", default=None)
 
@@ -174,6 +178,11 @@ def request_id_from_header(value: str | None) -> str:
     return uuid4().hex
 
 
+def normalized_route(request: Request) -> str:
+    route = request.scope.get("route")
+    return str(getattr(route, "path", "unmatched"))
+
+
 async def observe_request(
     request: Request,
     call_next: Callable[[Request], Awaitable[Response]],
@@ -207,7 +216,7 @@ async def observe_request(
             json.dumps(
                 {
                     "event": "request_completed",
-                    "route": request.url.path,
+                    "route": normalized_route(request),
                     "status": response.status_code,
                     "latency_ms": latency_ms,
                     "cache": cache,

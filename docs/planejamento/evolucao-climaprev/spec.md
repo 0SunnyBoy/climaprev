@@ -209,7 +209,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | CFG-01         | Configuração numérica        | T10      | Verified |
 | CFG-02         | Destinos de rede             | T11      | Verified |
 | SEC-01         | Limite e proxy               | T12      | Verified |
-| SEC-02         | Logs sanitizados             | T13, T20 | In Tasks |
+| SEC-02         | Logs sanitizados             | T13, T20 | Partial |
 | SEC-03         | Imagem de produção           | T18      | In Tasks |
 | SEC-04         | Cota externa                 | T14      | In Tasks |
 | OBS-01         | Cardinalidade                | T15      | In Tasks |
@@ -222,7 +222,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
 **Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 12
-requisitos verificados nos gates T1–T12; revisão independente final pendente.
+requisitos verificados nos gates T1–T13; revisão independente final pendente.
 
 ## Success Criteria
 
