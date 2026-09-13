@@ -212,7 +212,7 @@ async def test_forecast_aggregates_precipitation_probability_from_hourly_values(
 
 
 @pytest.mark.asyncio
-async def test_forecast_rejects_hourly_data_that_omits_a_requested_day() -> None:
+async def test_forecast_marks_hourly_data_that_omits_a_requested_day_as_partial() -> None:
     payload = valid_forecast_payload()
     for values in payload["hourly"].values():
         del values[2:]
@@ -221,8 +221,10 @@ async def test_forecast_rejects_hourly_data_that_omits_a_requested_day() -> None
         with respx.mock:
             respx.get(f"{FORECAST_BASE_URL}/v1/forecast").respond(200, json=payload)
 
-            with pytest.raises(WeatherDataInvalid):
-                await adapter.forecast(location(), period())
+            result = await adapter.forecast(location(), period())
+
+    assert result.days[1].precipitation_max_hourly_mm is None
+    assert "hourly.2026-08-29.precipitation.coverage" in result.missing_fields
 
 
 @pytest.mark.asyncio

@@ -75,6 +75,7 @@ class OfficialAlertsResponse(BaseModel):
 class DataQualityResponse(BaseModel):
     is_stale: bool
     missing_fields: list[str]
+    completeness: Literal["complete", "partial", "unavailable"]
 
 
 class SourceResponse(BaseModel):
@@ -156,6 +157,7 @@ class RiskQueryResponse(BaseModel):
             data_quality=DataQualityResponse(
                 is_stale=result.data_quality.is_stale,
                 missing_fields=list(result.data_quality.missing_fields),
+                completeness=result.data_quality.completeness,
             ),
             source=SourceResponse(
                 provider=result.source.provider,

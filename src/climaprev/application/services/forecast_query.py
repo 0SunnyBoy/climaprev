@@ -20,6 +20,7 @@ from climaprev.application.ports import (
     WeatherProviderPort,
 )
 from climaprev.application.query import ForecastQuery
+from climaprev.domain.data_quality import Completeness, completeness
 from climaprev.domain.models import (
     CanonicalLocation,
     DailyForecast,
@@ -75,6 +76,7 @@ class ForecastDay:
 class DataQuality:
     is_stale: bool
     missing_fields: tuple[str, ...]
+    completeness: Completeness = "complete"
 
 
 @dataclass(frozen=True, slots=True)
@@ -152,6 +154,7 @@ class ForecastQueryService:
             data_quality=DataQuality(
                 is_stale=forecast.is_stale,
                 missing_fields=forecast.missing_fields,
+                completeness=completeness(forecast),
             ),
             source=ForecastSource(provider=forecast.provider, fetched_at=forecast.fetched_at),
             disclaimer=_DISCLAIMER,

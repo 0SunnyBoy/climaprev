@@ -199,7 +199,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | -------------- | ---------------------------- | -------- | -------- |
 | DAT-01         | Previsão coerente            | T1       | Verified |
 | DAT-02         | Previsão coerente            | T2       | Verified |
-| DAT-03         | Qualidade explícita          | T3       | In Tasks |
+| DAT-03         | Qualidade explícita          | T3       | Verified |
 | DAT-04         | Média de temperatura         | T4       | In Tasks |
 | CON-01         | Identidade do cache          | T5       | In Tasks |
 | RES-01         | Expiração no fallback        | T6       | In Tasks |

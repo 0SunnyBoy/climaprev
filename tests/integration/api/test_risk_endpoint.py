@@ -214,7 +214,7 @@ async def test_returns_complete_celsius_risk_contract_and_propagates_request_id(
             "conditions": [],
         },
         "official_alerts": {"status": "not_configured", "items": []},
-        "data_quality": {"is_stale": False, "missing_fields": []},
+        "data_quality": {"is_stale": False, "missing_fields": [], "completeness": "complete"},
         "source": {"provider": "fake-open-meteo", "fetched_at": "2026-08-28T12:00:00Z"},
         "disclaimer": "Forecast estimate only.",
     }

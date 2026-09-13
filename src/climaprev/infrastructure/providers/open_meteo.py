@@ -155,7 +155,7 @@ def _normalize_forecast(
     payload: Mapping[str, object],
     period: DatePeriod,
 ) -> tuple[tuple[DailyForecast, ...], tuple[str, ...]]:
-    _iana_timezone(payload.get("timezone"), "forecast timezone")
+    timezone = _iana_timezone(payload.get("timezone"), "forecast timezone")
     daily = _object(payload.get("daily"), "daily")
     hourly = _object(payload.get("hourly"), "hourly")
     dates = _daily_dates(daily, period)
@@ -164,7 +164,7 @@ def _normalize_forecast(
         field: _optional_series(daily, field, len(dates), "daily", missing_fields)
         for field in _DAILY_FIELDS
     }
-    hourly_dates = _hourly_dates(hourly, period)
+    hourly_dates, expected_counts = _hourly_dates(hourly, period, timezone)
     hourly_series = {
         field: _optional_series(hourly, field, len(hourly_dates), "hourly", missing_fields)
         for field in _HOURLY_FIELDS
@@ -205,6 +205,13 @@ def _normalize_forecast(
         if (day.temperature_min_c is not None and day.temperature_max_c is not None
                 and day.temperature_min_c > day.temperature_max_c):
             raise WeatherDataInvalid("minimum temperature exceeds maximum")
+    for day in days:
+        for field in day.__dataclass_fields__:
+            if field != "date" and getattr(day, field) is None:
+                missing_fields.append(f"days.{day.date.isoformat()}.{field}")
+        precipitation = _values_for_day(hourly_dates, hourly_series["precipitation"], day.date)
+        if len(precipitation) != expected_counts[day.date]:
+            missing_fields.append(f"hourly.{day.date.isoformat()}.precipitation.coverage")
     return days, tuple(missing_fields)
 
 
@@ -223,15 +230,33 @@ def _daily_dates(daily: Mapping[str, object], period: DatePeriod) -> tuple[date,
     return dates
 
 
-def _hourly_dates(hourly: Mapping[str, object], period: DatePeriod) -> tuple[date, ...]:
+def _hourly_dates(
+    hourly: Mapping[str, object], period: DatePeriod, timezone: str,
+) -> tuple[tuple[date, ...], dict[date, int]]:
+    zone = ZoneInfo(timezone)
+    expected: list[datetime] = []
+    counts: dict[date, int] = {}
+    for index in range(period.days):
+        day = period.start + timedelta(days=index)
+        instant = datetime.combine(day, datetime.min.time(), zone).astimezone(UTC)
+        end = datetime.combine(day + timedelta(days=1), datetime.min.time(), zone).astimezone(UTC)
+        counts[day] = 0
+        while instant < end:
+            expected.append(instant.astimezone(zone).replace(tzinfo=None))
+            counts[day] += 1
+            instant += timedelta(hours=1)
     values = _required_series(hourly, "time", "hourly")
-    dates = tuple(_parse_hour(value) for value in values)
-    requested_dates = tuple(period.start + timedelta(days=index) for index in range(period.days))
-    if not set(requested_dates).issubset(dates) or any(
-        hourly_date not in requested_dates for hourly_date in dates
-    ):
-        raise WeatherDataInvalid("hourly dates do not match the requested period")
-    return dates
+    parsed = tuple(_parse_hour(value) for value in values)
+    # The provider series must be a subsequence of the civil timeline. Repeated
+    # local hours are legitimate only when the timezone timeline repeats them.
+    position = 0
+    for hour in parsed:
+        while position < len(expected) and expected[position] != hour:
+            position += 1
+        if position == len(expected):
+            raise WeatherDataInvalid("hourly timestamps do not match the civil timeline")
+        position += 1
+    return tuple(hour.date() for hour in parsed), counts
 
 
 def _iana_timezone(value: object, field: str) -> str:
@@ -280,11 +305,11 @@ def _parse_date(value: object, field: str) -> date:
         raise WeatherDataInvalid(f"{field} must contain ISO dates") from error
 
 
-def _parse_hour(value: object) -> date:
+def _parse_hour(value: object) -> datetime:
     if not isinstance(value, str):
         raise WeatherDataInvalid("hourly.time must contain ISO datetimes")
     try:
-        return datetime.fromisoformat(value).date()
+        return datetime.fromisoformat(value)
     except ValueError as error:
         raise WeatherDataInvalid("hourly.time must contain ISO datetimes") from error
 
