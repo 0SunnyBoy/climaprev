@@ -98,6 +98,7 @@ async def test_unavailable_redis_never_bypasses_budget() -> None:
 
 async def test_runtime_cache_hit_spends_nothing_and_new_location_is_denied(budget) -> None:
     import respx
+
     from climaprev.main import create_app
     from tests.contract.providers.test_open_meteo_payload import valid_forecast_payload
 
@@ -111,25 +112,24 @@ async def test_runtime_cache_hit_spends_nothing_and_new_location_is_denied(budge
         "start_date": "2026-08-28",
         "end_date": "2026-08-29",
     }
-    async with app.router.lifespan_context(app):
-        async with httpx.AsyncClient(
-            transport=httpx.ASGITransport(app=app), base_url="http://test"
-        ) as client:
-            with respx.mock as mock:
-                forecast = mock.get(settings.forecast_base_url + "/v1/forecast").respond(
-                    200, json=valid_forecast_payload()
+    async with app.router.lifespan_context(app), httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test"
+    ) as client:
+        with respx.mock as mock:
+            forecast = mock.get(settings.forecast_base_url + "/v1/forecast").respond(
+                200, json=valid_forecast_payload()
+            )
+            first = await client.get("/api/v1/risk", params=params)
+            keys = [
+                key
+                async for key in redis.scan_iter(
+                    f"climaprev:{settings.environment}:provider-budget:*"
                 )
-                first = await client.get("/api/v1/risk", params=params)
-                keys = [
-                    key
-                    async for key in redis.scan_iter(
-                        f"climaprev:{settings.environment}:provider-budget:*"
-                    )
-                ]
-                before = await redis.hgetall(keys[0])
-                cached = await client.get("/api/v1/risk", params=params)
-                after = await redis.hgetall(keys[0])
-                denied = await client.get("/api/v1/risk", params={**params, "latitude": "-22"})
+            ]
+            before = await redis.hgetall(keys[0])
+            cached = await client.get("/api/v1/risk", params=params)
+            after = await redis.hgetall(keys[0])
+            denied = await client.get("/api/v1/risk", params={**params, "latitude": "-22"})
     assert first.status_code == 200
     assert cached.status_code == 200
     assert cached.json()["days"] == first.json()["days"]

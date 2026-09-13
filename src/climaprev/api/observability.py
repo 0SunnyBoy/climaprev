@@ -202,7 +202,7 @@ async def observe_request(
         retries = retry_state[0] if retry_state is not None else 0
         request.app.state.metrics.record_request(
             method=request.method,
-            route=request.url.path,
+            route=normalized_route(request),
             status_code=response.status_code,
             duration_seconds=latency_ms / 1000,
             cache=cache,

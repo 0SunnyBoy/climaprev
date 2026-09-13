@@ -36,8 +36,8 @@ from climaprev.infrastructure.providers.open_meteo import (
     OpenMeteoForecastClient,
     OpenMeteoGeocodingClient,
 )
-from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
 from climaprev.infrastructure.rate_limit.provider_budget import ProviderBudget
+from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
 from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
 
 
