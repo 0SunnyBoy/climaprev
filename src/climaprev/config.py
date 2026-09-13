@@ -7,24 +7,27 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="CLIMAPREV_", validate_default=True)
+    model_config = SettingsConfigDict(
+        env_prefix="CLIMAPREV_", validate_default=True,
+        hide_input_in_errors=True, allow_inf_nan=False,
+    )
 
     redis_url: str = Field(
         default="redis://localhost:6379/0",
         validation_alias=AliasChoices("CLIMAPREV_REDIS_URL", "REDIS_URL"),
     )
     environment: str = "development"
-    rate_limit: int = 60
-    rate_limit_window_seconds: int = 60
-    rate_limit_burst: int = 10
+    rate_limit: int = Field(default=60, gt=0)
+    rate_limit_window_seconds: int = Field(default=60, gt=0)
+    rate_limit_burst: int = Field(default=10, gt=0)
     cors_allow_origins: Annotated[tuple[str, ...], NoDecode] = ()
     trusted_proxy_ips: Annotated[tuple[str, ...], NoDecode] = ()
     geocoding_base_url: str = "https://geocoding-api.open-meteo.com"
     forecast_base_url: str = "https://api.open-meteo.com"
-    connect_timeout_seconds: float = 2.0
-    read_timeout_seconds: float = 5.0
-    redis_socket_timeout_seconds: float = 1.0
-    additional_retries: int = 2
+    connect_timeout_seconds: float = Field(default=2.0, gt=0)
+    read_timeout_seconds: float = Field(default=5.0, gt=0)
+    redis_socket_timeout_seconds: float = Field(default=1.0, gt=0)
+    additional_retries: int = Field(default=2, ge=0)
     load_scenario: str | None = None
     load_redis_operation_delay_ms: int = 50
 

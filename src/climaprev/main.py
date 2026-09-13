@@ -16,8 +16,11 @@ from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, Rat
 from climaprev.api.observability import RequestMetrics, observe_request
 from climaprev.api.routes import risk_router
 from climaprev.application.errors import (
-    DependencyUnavailable, LocationNotFound, ProviderPermanentError,
-    ProviderTransientError, WeatherDataInvalid,
+    DependencyUnavailable,
+    LocationNotFound,
+    ProviderPermanentError,
+    ProviderTransientError,
+    WeatherDataInvalid,
 )
 from climaprev.application.official_alerts import OfficialAlertsNotConfiguredProvider
 from climaprev.application.services.forecast_query import (

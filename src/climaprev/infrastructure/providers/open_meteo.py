@@ -10,7 +10,10 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import httpx
 
 from climaprev.application.errors import (
-    LocationNotFound, ProviderPermanentError, ProviderTransientError, WeatherDataInvalid,
+    LocationNotFound,
+    ProviderPermanentError,
+    ProviderTransientError,
+    WeatherDataInvalid,
 )
 from climaprev.config import Settings
 from climaprev.domain.models import (

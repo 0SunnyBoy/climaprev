@@ -11,6 +11,7 @@ from time import monotonic, perf_counter
 from typing import TYPE_CHECKING, Literal, Protocol, cast
 from urllib.parse import quote
 
+from climaprev.application.errors import DependencyUnavailable, ProviderTransientError
 from climaprev.application.ports import (
     CacheEntry,
     CachePort,
@@ -33,7 +34,6 @@ from climaprev.domain.models import (
 )
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit, convert_temperature
-from climaprev.application.errors import DependencyUnavailable, ProviderTransientError
 
 if TYPE_CHECKING:
     from climaprev.domain.models import RiskCondition

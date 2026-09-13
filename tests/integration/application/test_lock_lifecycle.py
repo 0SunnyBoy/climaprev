@@ -5,12 +5,21 @@ from uuid import uuid4
 import pytest
 from redis.asyncio import Redis
 
-from climaprev.application.errors import DependencyUnavailable, ProviderTransientError, WeatherDataInvalid
+from climaprev.application.errors import (
+    DependencyUnavailable,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.application.services import forecast_query
 from climaprev.application.services.forecast_query import WeatherProviderUnavailable
 from climaprev.infrastructure.cache.redis_lock import RedisLock
 from tests.integration.application.test_forecast_query import (
-    FakeProvider, InMemoryCache, InMemoryLock, forecast, service, text_query,
+    FakeProvider,
+    InMemoryCache,
+    InMemoryLock,
+    forecast,
+    service,
+    text_query,
 )
 from tests.integration.test_end_to_end import end_to_end_client
 from tests.integration.test_evolution_data import PARAMS

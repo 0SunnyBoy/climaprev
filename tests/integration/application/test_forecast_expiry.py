@@ -11,7 +11,14 @@ from climaprev.application.services.forecast_query import WeatherProviderUnavail
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.http.client import ProviderTransientError
 from tests.integration.application.test_forecast_query import (
-    LOCATION, PERIOD, FakeAlerts, FakeProvider, InMemoryLock, cached_forecast, service, text_query,
+    LOCATION,
+    PERIOD,
+    FakeAlerts,
+    FakeProvider,
+    InMemoryLock,
+    cached_forecast,
+    service,
+    text_query,
 )
 
 
@@ -60,7 +67,6 @@ async def test_stale_expiring_during_wait_is_never_delivered(clock_cache, monkey
     if during == "lock":
         async def no_lock(*args, **kwargs):
             clock[0] += 1
-            return None
         monkeypatch.setattr(lock, "acquire", no_lock)
         monkeypatch.setattr(forecast_query, "_LOCK_WAITER_DEADLINE_SECONDS", 0)
     elif during == "retry":
