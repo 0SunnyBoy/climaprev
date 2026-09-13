@@ -208,7 +208,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | RES-04         | Perda de lock                | T9       | Verified |
 | CFG-01         | Configuração numérica        | T10      | Verified |
 | CFG-02         | Destinos de rede             | T11      | Verified |
-| SEC-01         | Limite e proxy               | T12      | In Tasks |
+| SEC-01         | Limite e proxy               | T12      | Verified |
 | SEC-02         | Logs sanitizados             | T13, T20 | In Tasks |
 | SEC-03         | Imagem de produção           | T18      | In Tasks |
 | SEC-04         | Cota externa                 | T14      | In Tasks |
@@ -221,8 +221,8 @@ atual e precisam de testes de contrato e nota de atualização.
 | UI-03          | Estados                      | T24      | In Tasks |
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
-**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 11
-requisitos verificados nos gates T1–T11; revisão independente final pendente.
+**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 12
+requisitos verificados nos gates T1–T12; revisão independente final pendente.
 
 ## Success Criteria
 
