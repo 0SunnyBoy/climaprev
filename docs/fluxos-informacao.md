@@ -147,7 +147,13 @@ saída não alteram a identidade. O local é recomposto para a consulta atual e
 recebe o fuso efetivo do payload, inclusive no cache hit. Chaves v1 antigas
 expiram naturalmente; a migração não faz limpeza global do Redis.
 
-## Contrato proposto para consumidores futuros
+## Contrato da interface e de outros consumidores
+
+A interface nativa consulta a API na mesma origem com `fetch`, usando
+`URLSearchParams`, `credentials: omit` e `cache: no-store`. Ela envia cidade
+ou coordenadas, data inicial, data final quando preenchida e unidade. O
+seletor de modo é local e não integra a query. A consulta assíncrona não
+adiciona os parâmetros à URL da página nem grava histórico no aplicativo.
 
 - Enviar somente os campos de entrada descritos e renderizar a projeção pública.
 - Preservar unidades, fonte, qualidade e aviso; não recalcular risco no cliente.

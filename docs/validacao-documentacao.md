@@ -1,9 +1,14 @@
 # Validação e rastreabilidade documental
 
-**Data:** 2026-09-13. **Escopo:** documentação, leitura estática e coerência
-com os arquivos presentes. [Índice](../PROJECT.md).
+**Data:** 2026-09-13. **Escopo histórico:** análise documental inicial,
+anterior à implementação das tarefas. [Índice](../PROJECT.md).
 
-## Critérios desta entrega
+Este arquivo preserva a validação da primeira entrega documental. A execução
+posterior alterou código, testes e configuração; os resultados atuais estão
+em [tasks](planejamento/evolucao-climaprev/tasks.md) e nas evidências de cada
+tarefa. A ausência de testes descrita abaixo se refere apenas à revisão inicial.
+
+## Critérios da entrega inicial
 
 - Documentos `.md` em português com navegação a partir de PROJECT e README.
 - Arquitetura, fluxos, dados transmitidos, segurança e restrições cobertos.
@@ -29,7 +34,7 @@ com os arquivos presentes. [Índice](../PROJECT.md).
 Os links de testes indicam cobertura relacionada disponível para consulta,
 não comprovam que cada lacuna documentada já possui teste ou correção.
 
-## Verificação desta revisão
+## Verificação da revisão inicial
 
 Foi feita leitura dos módulos de API, aplicação, domínio, infraestrutura e
 configuração, além da documentação original e dos modelos SIGFAS. Os links

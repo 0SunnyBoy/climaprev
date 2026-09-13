@@ -7,7 +7,7 @@ separadamente. [Índice](../PROJECT.md).
 
 ```mermaid
 flowchart LR
-    Cliente["Cliente HTTP"] --> Entrada["Entrada TLS de homologação"]
+    Cliente["Navegador: interface HTML/CSS/JS ou cliente HTTP"] --> Entrada["Entrada TLS de homologação"]
     Entrada -->|"GET /api/v1/risk"| API["Clima Prev - FastAPI"]
     API -->|"JSON: previsão, risco e qualidade"| Cliente
     API <-->|"Cache, lock, limite por cliente e cota externa"| Redis[(Redis)]
@@ -21,13 +21,15 @@ flowchart LR
     Metricas --> API
 ```
 
-Não há frontend, banco relacional, fila de mensagens ou serviço externo de
-alertas oficiais configurado no código atual.
+A interface estática é servida pela mesma aplicação em `/` e `/assets/`.
+Não há banco relacional, fila de mensagens ou serviço externo de alertas
+oficiais configurado no código atual.
 
 ## Componentes e responsabilidades
 
 | Camada               | Evidência                                                                                                                                                                                              | Responsabilidade e limite                                         |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Interface web | [Página](../src/climaprev/web/index.html), [cliente](../src/climaprev/web/app.js) | Coletar entrada e apresentar a resposta; cálculo permanece no backend. |
 | Entrada HTTP         | [Rotas](../src/climaprev/api/routes/risk.py), [schema](../src/climaprev/api/schemas/risk.py)                                                                                                           | Validar query e serializar resposta; não calcular risco.          |
 | Proteção de entrada  | [Dependências](../src/climaprev/api/deps.py)                                                                                                                                                           | Resolver identidade de rede e aplicar rate limit.                 |
 | Aplicação            | [Serviço de consulta](../src/climaprev/application/services/forecast_query.py)                                                                                                                         | Resolver local, cache, lock, previsão, avaliação e alertas.       |
@@ -97,19 +99,11 @@ no Compose; portanto, ainda disputam seus recursos.
 O mock de carga não comprova desempenho nem disponibilidade do Open-Meteo
 público. Consulte [operações](operations.md) para os comandos existentes.
 
-## Evolução proposta
+## Limites de evolução
 
-```mermaid
-flowchart LR
-    UI["Frontend futuro"] --> Edge["Entrada HTTPS e controle de tráfego"]
-    Edge --> API["API Clima Prev"]
-    API --> Redis[("Redis com isolamento operacional")]
-    API --> Provider["Provedor meteorológico"]
-    API -.-> Alerts["Integração futura de alertas oficiais"]
-    API --> Obs["Coleta externa de logs e métricas"]
-```
-
-Todo o diagrama acima é um alvo de implantação, não uma descrição de serviços
-já entregues. Manter a avaliação no backend, usar somente contratos públicos
-no frontend e decidir autenticação antes de introduzir dados privados. Não há
-necessidade demonstrada de transformar as camadas em microserviços agora.
+A interface de consulta usa o contrato público e mantém a avaliação de risco
+no backend. Uma integração real de
+alertas oficiais depende de fonte e cobertura próprias. Contas, histórico e
+notificações exigem contratos de identidade e autorização antes da inclusão
+de dados privados. Não há necessidade demonstrada de transformar as camadas
+em microserviços neste ciclo.

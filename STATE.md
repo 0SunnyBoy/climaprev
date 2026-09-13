@@ -5,57 +5,58 @@
 
 ## Execução atual
 
-O usuário autorizou implementação local e coordenação de agentes para concluir
-as 25 tarefas. T1–T20 estão concluídas; T21–T25 estão em implementação, seguidas
-pela verificação independente. Push e publicação não integram o pedido.
+As 25 tarefas foram implementadas e commitadas pelos agentes. T25 fechou
+em `d5a7e21`; a verificação independente final é a próxima etapa. Push e publicação não integram o pedido.
 
-Entregues: fuso efetivo, validação de dados, completude, média de temperatura,
-identidade v2 do cache, expiração na entrega, tratamento de corrupção/erros,
-controle de perda de lock e validação numérica da configuração. O segundo
-bloco acrescentou limites de confiança e cotas, logs sanitizados, métricas
-por processo, dependências verificáveis e homologação local protegida.
+- T1–T10, `backend_dados_resiliencia`: fuso efetivo, validação, completude,
+  média de temperatura, cache v2, expiração na entrega, corrupção, falhas,
+  propriedade do lock e configuração numérica.
+- T11–T20, `preflight_operacao`: destinos permitidos, proxies e cotas, logs
+  sanitizados, métricas por processo, dependências com hashes, runtime sem
+  privilégios e homologação local protegida.
+- T21–T25, `interface_consulta`: formulário, consulta assíncrona, previsão,
+  qualidade/risco/alertas separados, recuperação, cancelamento, teclado e
+  layout móvel. Commits: `acd8d08`, `497363a`, `5b89ef0`, `63e6a91`
+  e `d5a7e21`.
 
-## Evidência
+## Evidências executadas
 
-- Baseline executado nesta sessão: 148 testes aprovados.
-- Fechamento T10: 267 testes aprovados, 82 no gate unitário, build e Ruff
-  aprovados; mypy aprovou 34 arquivos.
-- Commits do bloco: `b906b92`, `b766d45`, `626439a`, `58374de`, `c4731f8`,
-  `1e6f101`, `2e1d364`, `2888517`, `a64bdfd`, `9d2993c`.
-- Evidências por tarefa em [evidence](docs/planejamento/evolucao-climaprev/evidence/t10.md).
-- Fechamento T20 (`73c8fb5`): 312 testes aprovados, Ruff, mypy em 39
-  arquivos e builds dev/runtime aprovados. Provas reais de TLS, Redis
-  autenticado, isolamento, UID 10001 e retenção/reconexão de logs aprovadas.
-- A validação independente final ainda não ocorreu. Esses resultados não
-  representam capacidade ou disponibilidade do provedor público.
+- Baseline da sessão: 148 testes aprovados.
+- T10: 267 testes, build, Ruff e mypy em 34 arquivos aprovados.
+- T20 (`73c8fb5`): 312 testes, builds dev/runtime, Ruff e mypy em 39
+  arquivos aprovados; provas reais de TLS, Redis/ACL, isolamento e logs.
+- Fechamento da interface (`d5a7e21`): 316 testes aprovados em 47,53 s; Ruff, mypy em
+  39 arquivos, builds, assets no runtime e roteiro B01–B10 aprovados.
+- Browser HTTPS: rejeição sem CA e sucesso com CA explícita em perfil
+  temporário; `/internal/metrics` permanece 404 na entrada. Nenhum bypass
+  TLS ou alteração da confiança global do navegador.
+- Falhas iniciais do teste de logs ocorreram antes da prontidão do processo.
+  O harness agora aguarda até 10 s e falha explicitamente se o runtime não
+  iniciar; as assertions de sanitização foram preservadas. A suíte final
+  passou e as tentativas estão registradas na evidência T25.
 
-## Continuidade
+A revisão independente ainda está pendente. Testes com fixtures não indicam
+capacidade ou disponibilidade do Open-Meteo público. Não houve validação
+científica nova da política de risco.
 
-- Bloco T1–T10: `backend_dados_resiliencia`, concluído.
-- Bloco T11–T20: `preflight_operacao`, concluído. Homologação mantida em
-  `https://localhost:18443`, com CA local explícita e procedimentos em
-  [homologacao.md](docs/homologacao.md).
-- Bloco T21–T25: `interface_consulta`, em implementação.
-- Root revisou T13 e identificou falta de metadados em exceções inesperadas500;
-  correção/teste SEC02 incluídos pelo agente em T20.
-- Browser TLS sintético PASS com CA explícita em perfil descartável Chrome152,
-  sem bypass e sem instalar CA no perfil habitual. Script em
-  `/tmp/playwright-test-climaprev-ca-trust.js`; repetir contra stackreal em T25.
-- Docker usa Podman rootless. Redis do projeto `climaprev`, criado nesta sessão,
-  deve permanecer até a verificação final. Testes usam imagem atualizada ou
-  source/tests atuais montados somente leitura.
-- Chrome `/usr/bin/google-chrome` e Playwright da skill `playwright-skill`
-  estão disponíveis; lançamento visível já validado.
-- O preflight confirmou TLS com CA, montagem readonly e rede interna; o
-  Podman ignora uid/gid/mode de file secrets e traduz o IP de origem do host.
-  As permissões foram verificadas e a limitação está documentada.
-- Preservar `.harness-eval/`, `.notebook/` e a formatação preexistente do Compose
-  (diff inicial em `/tmp/climaprev-preexisting-compose.diff`).
+## Prévia e operação local
+
+- Interface: `http://127.0.0.1:18000`, contêiner `climaprev-ui-browser`, com
+  fontes atuais montadas. Para encerrar somente a prévia:
+  `docker rm -f climaprev-ui-browser`.
+- Homologação: `https://localhost:18443`; procedimentos, CA e limites em
+  [homologacao.md](docs/homologacao.md). API e Redis sem portas diretas.
+- Docker usa Podman rootless. Redis do projeto `climaprev` foi criado nesta
+  sessão e permanece para testes/prévia. O app da homologação usa IP fixo;
+  provas usam `compose exec -T app`, evitando conflito com `compose run`.
+- Podman não preserva necessariamente o IP externo original e ignora
+  uid/gid/mode de file secrets; permissões foram verificadas na stack local.
+- Preservar `.harness-eval/`, `.notebook/` e a formatação preexistente do
+  Compose. Diff inicial: `/tmp/climaprev-preexisting-compose.diff`.
 
 ## Escopo condicionado
 
-Frontend está em implementação; a stack protegida foi verificada localmente. Alertas
-oficiais permanecem `not_configured`. Contas, histórico, notificações,
+Alertas oficiais permanecem `not_configured`. Contas, histórico, notificações,
 validação científica da política e implantação pública exigem escopo próprio.
 A documentação SIGFAS foi usada como modelo; não há integração entre sistemas.
 O [handoff histórico](handoff.md) permanece como registro anterior.

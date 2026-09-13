@@ -9,10 +9,14 @@ roadmap mantém a divisão de escopo. [Índice](PROJECT.md).
 | R0 — Documentação              | Consolidar arquitetura e contratos.                                                                         | Documentos por tema com links válidos, estados explícitos e limitações registradas. Entregue nesta revisão.          |
 | R1 — Consistência dos dados    | Resolver fuso por coordenadas, cobertura horária, dados não finitos e sinalização de incompletude.          | Contratos definidos e testes com fuso local, valores ausentes e séries inconsistentes.                               |
 | R2 — Falhas e configuração     | Revalidar stale antes da resposta, mapear 4xx do provedor e perda de lock, validar números da configuração. | Casos de erro previsíveis e testes de fronteira de TTL, indisponibilidade e configuração inválida.                   |
-| R3 — Preparação de implantação | Definir entrada HTTPS, Redis, logs, cotas, imagem e métricas.                                               | Evidência dos controles descritos em segurança, isolamento do perfil de carga e métricas coletadas fora do processo. |
+| R3 — Preparação de implantação | Definir entrada HTTPS, Redis, logs, cotas, imagem e métricas.                                               | Evidência dos controles descritos em segurança, isolamento do perfil de carga e snapshot interno identificado por processo. |
 | R4 — Frontend                  | Criar consulta e visualização usando a API.                                                                 | Jornada com loading, erro, stale, null, fonte, aviso e alertas não configurados; sem recalcular risco.               |
 | R5 — Alertas oficiais          | Implementar fonte e cobertura explicitamente definidas.                                                     | Adaptador real, testes de contrato e estados available/unavailable, sem misturar com risco heurístico.               |
 | R6 — Personalização            | Avaliar contas, favoritos, histórico e notificações.                                                        | Escopo próprio com autorização, dados, retenção e contratos definidos antes da implementação.                        |
+
+R0–R4 foram implementadas no ciclo de 25 tarefas. A revisão independente
+final está pendente; consulte STATE e as evidências por tarefa. R5/R6
+continuam fora do escopo entregue.
 
 ## Decisões e limites do ciclo
 
@@ -28,7 +32,7 @@ roadmap mantém a divisão de escopo. [Índice](PROJECT.md).
 
 A estrutura documental do SIGFAS é uma referência, sem dependência entre
 os produtos. R1/R2 são integradas antes de R3/R4. Publicação externa não faz
-parte deste ciclo; a homologação prevista é local.
+parte deste ciclo; a homologação deste ciclo é local.
 
 ## Desdobramento em tarefas
 

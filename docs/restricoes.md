@@ -13,7 +13,7 @@ explicitamente. [Índice](../PROJECT.md).
 | RES-04 | Período entre um e sete dias inclusivos; fim não anterior ao início.         | Implementada no schema HTTP; `DatePeriod` no domínio só valida a ordem.          |
 | RES-05 | Unidade de temperatura: `celsius` ou `fahrenheit`.                           | Implementada; chuva, vento e umidade mantêm suas unidades.                       |
 | RES-06 | Disponibilidade das datas depende do endpoint meteorológico.                 | Não há validação de início relativo a hoje ou do horizonte aceito pelo provedor. |
-| RES-07 | Não há autenticação, histórico, mapas, frontend, mobile, notificações ou ML. | Fora da implementação disponível.                                                |
+| RES-07 | Não há autenticação, histórico, mapas, app mobile, notificações ou ML. | Fora da implementação disponível.                                                |
 | RES-08 | Não há integração real com alertas oficiais.                                 | A aplicação retorna `not_configured`; não é ausência confirmada de alertas.      |
 
 Base: [schema](../src/climaprev/api/schemas/risk.py),
@@ -78,6 +78,7 @@ Base: [adaptador](../src/climaprev/infrastructure/providers/open_meteo.py) e
 | Backoff                         | 50 ms, depois 100 ms                          | Não há retry de 4xx do provedor.                                                          |
 | Timeout de socket Redis         | 1 s                                           | Configurado para conexão e operações.                                                     |
 | Rate limit                      | Reposição de 60 tokens em 60 s; capacidade 10 | Token bucket: burst inicial 10, depois cerca de 1 token/s, não janela fixa de 60 pedidos. |
+| Cota externa por destino | Reposição de 60 tokens em 60 s; capacidade 60 | Compartilhada por ambiente/destino, cobrada antes de cada tentativa. Homologação exige valores explícitos do operador. |
 
 Evidências: [serviço](../src/climaprev/application/services/forecast_query.py),
 [configuração](../src/climaprev/config.py),
@@ -114,4 +115,4 @@ Antes de oferecer histórico/notificações, definir consentimento de produto,
 dados armazenados, retenção, exclusão e destinatários. Antes de exibir alertas
 oficiais, definir fonte, cobertura geográfica/temporal e semântica de falha.
 Esses são requisitos propostos de projeto; nenhuma dessas funcionalidades
-foi adicionada por esta documentação.
+integra o ciclo atual de implementação.

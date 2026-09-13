@@ -36,15 +36,15 @@ RBAC, tenant ou operações administrativas HTTP implementadas.
 
 ## Permissões e informações expostas
 
-| Ator                         | Acesso atual                                                   | Restrição proposta                                      |
+| Ator                         | Acesso atual                                                   | Restrição / alcance                                      |
 | ---------------------------- | -------------------------------------------------------------- | ------------------------------------------------------- |
 | Cliente HTTP                 | Consulta de risco e rotas acessíveis da aplicação.             | Não enviar informação privada no campo de local.        |
-| Navegador externo            | Leitura cross-origin condicionada a CORS.                      | Configurar origens exatas do frontend.                  |
+| Navegador externo            | Leitura cross-origin condicionada a CORS.                      | Interface deste ciclo usa a mesma origem; CORS externo exige configuração.                  |
 | Operador com acesso ao Redis | Pode ler chaves com texto, coordenadas e IP, e alterar estado. | Restringir acesso de rede e credenciais ao necessário.  |
-| Operador de logs             | Depende da coleta implantada; não há perfis no app.            | Definir acesso e retenção fora do código.               |
+| Operador de logs             | Acesso operacional ao volume de logs sanitizados; sem perfis no app.            | Volume restrito à operação, retenção local de até sete dias.               |
 | Provedor meteorológico       | Texto de local ou coordenadas/datas da consulta externa.       | Manter envio mínimo e revisar eventual nova integração. |
 
-## Lacunas e medidas propostas
+## Tratamento das lacunas identificadas
 
 | ID     | Cenário observado / risco                                                                                   | Medida proposta                                                                                                     | Como comprovar                                                                                                  |
 | ------ | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -59,8 +59,8 @@ RBAC, tenant ou operações administrativas HTTP implementadas.
 | PEN-09 | Resolvido em T15: template da rota e `unmatched` para desconhecidas.                                        | Snapshot por processo, sem agregação global automática.                                                             | [T15](planejamento/evolucao-climaprev/evidence/t15.md), [T16](planejamento/evolucao-climaprev/evidence/t16.md). |
 
 Os estados resolvidos indicam controles locais com as evidências citadas.
-Itens restantes são concluídos conforme o plano; não representam certificação
-ou inspeção de uma infraestrutura pública de produção.
+Itens de implantação pública e identidade permanecem fora deste ciclo;
+essas evidências não representam certificação ou inspeção de produção.
 
 ## Restrições para uma próxima implantação
 

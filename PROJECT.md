@@ -1,7 +1,8 @@
 # PROJECT — Clima Prev
 
 **Data da análise:** 2026-09-13.  
-**Estado:** evolução local em execução na branch `atualizaçao-geral`.
+**Estado:** implementação local entregue pelos agentes na branch
+`atualizaçao-geral`; fechamento e revisão independente em andamento.
 
 ## Visão
 
@@ -10,22 +11,22 @@ estimativa de risco para um local e um período de até sete dias. A resposta
 informa a fonte, a qualidade dos dados, a política usada e a disponibilidade
 de alertas oficiais. A estimativa não substitui alertas das autoridades.
 
-O código disponível contém um backend Python/FastAPI, Redis e adaptadores
-Open-Meteo. Frontend, contas de usuário, notificações e integração real de
-alertas oficiais ainda não estão implementados.
+O sistema reúne uma interface web na mesma origem, backend Python/FastAPI,
+Redis e adaptadores Open-Meteo. Contas de usuário, notificações e integração real de alertas oficiais ficam
+fora deste ciclo.
 
 ## Documentação do projeto
 
 | Arquivo                                                          | Conteúdo                                                    |
 | ---------------------------------------------------------------- | ----------------------------------------------------------- |
 | [Arquitetura](docs/arquitetura.md)                               | Componentes, camadas, dependências e implantação.           |
-| [Fluxos](docs/fluxos.md)                                         | Consulta, cache, concorrência, falhas e jornada futura.     |
+| [Fluxos](docs/fluxos.md)                                         | Consulta, cache, concorrência, falhas e jornada web.     |
 | [Fluxos de informação](docs/fluxos-informacao.md)                | Dados enviados, recebidos, transformados e armazenados.     |
 | [Segurança](docs/seguranca.md)                                   | Fronteiras de confiança, controles existentes e lacunas.    |
 | [Restrições](docs/restricoes.md)                                 | Regras de entrada, limites operacionais e de interpretação. |
 | [Análise dos modelos SIGFAS](docs/analise-referencias-sigfas.md) | Estrutura aproveitada e diferenças entre projetos.          |
-| [Validação](docs/validacao-documentacao.md)                      | Evidências, rastreabilidade e limites da verificação.       |
-| [ROADMAP](ROADMAP.md)                                            | Evolução proposta com critérios de conclusão.               |
+| [Análise documental inicial](docs/validacao-documentacao.md)                      | Evidências, rastreabilidade e limites da verificação.       |
+| [ROADMAP](ROADMAP.md)                                            | Escopo de evolução e critérios de conclusão.               |
 | [STATE](STATE.md)                                                | Estado observado, decisões e pendências.                    |
 | [Operações](docs/operations.md)                                  | Comandos e configuração já documentados.                    |
 
@@ -43,6 +44,7 @@ referência para comportamento existente; propostas descrevem mudanças futuras.
 
 | Local                           | Papel                                                   |
 | ------------------------------- | ------------------------------------------------------- |
+| `src/climaprev/web/` | Interface de consulta e apresentação do contrato público. |
 | `src/climaprev/api/`            | Contrato HTTP, validação, rate limit e observabilidade. |
 | `src/climaprev/application/`    | Orquestração de consulta e portas de integração.        |
 | `src/climaprev/domain/`         | Modelos, unidades e política de risco.                  |
@@ -53,8 +55,8 @@ referência para comportamento existente; propostas descrevem mudanças futuras.
 
 ## Escopo da documentação
 
-Esta revisão cria documentação para arquitetura, integração e continuidade
-do Clima Prev. A estrutura foi adaptada dos documentos do SIGFAS; não existe
+Este ciclo documenta e implementa a evolução da arquitetura, da integração
+e da interface do Clima Prev. A estrutura foi adaptada dos documentos do SIGFAS; não existe
 integração de dados entre os dois sistemas identificada neste projeto.
 
 Os diagramas Mermaid são editáveis como texto nos próprios arquivos `.md`.

@@ -1,6 +1,7 @@
 # Fluxos de consulta e operação
 
-**Estado:** comportamento atual, salvo a jornada identificada como proposta.
+**Estado:** contratos implementados no backend e na interface; evidências
+e progresso por tarefa no plano de evolução.
 [Índice](../PROJECT.md).
 
 ## Consulta principal
@@ -88,7 +89,7 @@ falha de limpeza não substitui um erro principal já identificado.
 
 ## Falhas e resposta ao consumidor
 
-| HTTP / código                        | Significado                                                | Tratamento esperado no futuro cliente           |
+| HTTP / código                        | Significado                                                | Tratamento no cliente           |
 | ------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------- |
 | 422 / `INVALID_LOCATION_INPUT`       | Local ausente, conflitante ou inválido.                    | Corrigir entrada.                               |
 | 422 / `INVALID_PERIOD`               | Data inválida, ordem incorreta ou mais de sete dias.       | Corrigir período.                               |
@@ -111,7 +112,7 @@ O provedor opcional de alertas, quando implementado, pode falhar sem bloquear a
 previsão: o serviço retorna `official_alerts.status=unavailable`. Atualmente
 o provedor instalado sempre indica `not_configured`.
 
-## Jornada de frontend proposta
+## Jornada da interface
 
 ```mermaid
 flowchart LR
@@ -122,8 +123,12 @@ flowchart LR
     Qualidade --> Alertas["Mostrar estado separado dos alertas oficiais"]
 ```
 
-O frontend deve exibir valores `null` como indisponíveis, sinalizar stale,
-mostrar o período/local retornados e manter o aviso da estimativa visível.
+A interface exibe valores `null` como indisponíveis, sinaliza stale, mostra
+o período/local retornados e mantém o aviso da estimativa visível. Uma nova
+consulta cancela a anterior; um contador impede respostas antigas de
+sobrescrever o resultado atual. Erros da consulta limpam o resultado anterior
+e preservam o formulário. Em 429, a espera segue `Retry-After` válido ou 60 segundos;
+a repetição depende de ação do visitante.
 `not_configured` e `unavailable` não significam ausência de alertas reais.
 O contrato atual não oferece lista de cidades para desambiguação: o geocoder
 seleciona o primeiro resultado utilizável.
