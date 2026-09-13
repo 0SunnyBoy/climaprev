@@ -86,3 +86,22 @@ Registre p50/p95/p99, throughput, 5xx e 429. Não trate 429 como capacidade:
 100 req/s por 600 s precisa de limite compatível e identidades de carga
 compatíveis. Registre também a faixa de 90--110 req/s e declare falha se ela
 não for atingida.
+
+## Atualizar dependências reproduzíveis
+
+A plataforma validada é Python3.12 em Linuxamd64. `requirements.lock` registra
+produção e transitivas; `requirements-build.lock` fixa ferramentas usadas
+para construir o pacote sem resolução implícita em build isolation.
+
+```bash
+uv --no-config pip compile pyproject.toml --generate-hashes --no-header --python-version 3.12 --python-platform x86_64-unknown-linux-gnu --default-index https://pypi.org/simple -o requirements.lock
+uv --no-config pip compile docker/build-requirements.in --generate-hashes --no-header --python-version 3.12 --python-platform x86_64-unknown-linux-gnu --default-index https://pypi.org/simple -o requirements-build.lock
+docker compose build
+docker compose run --rm app python tests/docker/check_lock_install.py
+docker compose run --rm app pytest -q -W error
+```
+
+Executar resolução em ambiente sem variáveis de índices/credenciais pessoais.
+Revisar o diff dos locks e executar Full/Ruff/mypy antes do commit da atualização.
+A verificação explícita instala duas vezes em ambientes vazios, exige hashes,
+executa pip check e compara todas as versões instaladas com o lock.

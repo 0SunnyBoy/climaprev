@@ -2,7 +2,7 @@
 
 **Estado:** In Progress. **Branch:** `atualizaçao-geral`.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
-**Progresso de implementação:** 16/25 tarefas concluídas.
+**Progresso de implementação:** 17/25 tarefas concluídas.
 
 ## Execution Protocol
 
@@ -367,7 +367,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Commit futuro**: `fix(logging): keep request metadata free of sensitive input`.
 
-
 **Evidência:** [T13](evidence/t13.md).
 
 #### T14: Limitar chamadas externas globalmente
@@ -389,7 +388,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 - [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `feat(rate-limit): enforce shared provider request budget`.
-
 
 **Evidência:** [T14](evidence/t14.md).
 
@@ -415,7 +413,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 ### Phase 4: Operação e homologação
 
-
 **Evidência:** [T15](evidence/t15.md).
 
 #### T16: Expor snapshot interno por processo
@@ -438,7 +435,6 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Commit futuro**: `feat(metrics): expose internal process snapshot`.
 
-
 **Evidência:** [T16](evidence/t16.md).
 
 #### T17: Registrar dependências de produção
@@ -455,11 +451,14 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Done when**:
 
-- [ ] Parte atribuída nesta tarefa aos requisitos OPS-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
-- [ ] Casos acima verificados com evidência e gate Build aprovado.
-- [ ] Status, testes executados e desvios registrados antes de encerrar a tarefa.
+- [x] Parte atribuída nesta tarefa aos requisitos OPS-02 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
+- [x] Casos acima verificados com evidência e gate Build aprovado.
+- [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `build(deps): lock production dependency resolution`.
+
+
+**Evidência:** [T17](evidence/t17.md).
 
 #### T18: Separar imagem runtime e dev
 

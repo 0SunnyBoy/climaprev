@@ -21,7 +21,7 @@ async def test_internal_snapshot_exposes_process_identity_and_existing_counters(
     assert payload["requests_total"] == 1
 
 
-async def test_restart_has_distinct_identity_and_no_previous_counters() -> None:
+def test_restart_has_distinct_identity_and_no_previous_counters() -> None:
     code = "from climaprev.api.observability import RequestMetrics; import json; print(json.dumps(RequestMetrics().snapshot()))"
     first = json.loads(subprocess.check_output([sys.executable, "-c", code], text=True))
     second = json.loads(subprocess.check_output([sys.executable, "-c", code], text=True))
