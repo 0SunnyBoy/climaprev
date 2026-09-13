@@ -33,7 +33,12 @@ O endpoint devolve `forecast_risk`, `official_alerts` (por padrão
 `not_configured`), `data_quality`, fonte, `request_id` e disclaimer. Erros usam
 o envelope estável `{ "error": { "code", "message", "request_id" } }`.
 Os códigos usuais são 422 (entrada), 404 (local não encontrado), 429 (limite),
-502 (dados inválidos) e 503 (dependência indisponível).
+502 (dados inválidos ou requisição rejeitada pelo provedor) e 503 (dependência indisponível).
+
+O 429 do provedor retorna `503 WEATHER_PROVIDER_UNAVAILABLE`, sem retry automático
+nessa operação e com fallback apenas dentro do TTL. Outros 4xx externos retornam
+`502 WEATHER_PROVIDER_REJECTED`, sem retry nem fallback. Rede, timeout e 5xx têm
+até duas tentativas adicionais. Mensagens externas não aparecem na resposta.
 
 Redis reduz chamadas repetidas: previsões frescas duram 10 minutos e podem ser
 servidas como `stale` até 15 minutos quando o provedor falha. O limite padrão é

@@ -204,7 +204,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | CON-01         | Identidade do cache          | T5       | Verified |
 | RES-01         | Expiração no fallback        | T6       | Verified |
 | RES-02         | Cache corrompido             | T7       | Verified |
-| RES-03         | Falhas externas              | T8       | In Tasks |
+| RES-03         | Falhas externas              | T8       | Verified |
 | RES-04         | Perda de lock                | T9       | In Tasks |
 | CFG-01         | Configuração numérica        | T10      | In Tasks |
 | CFG-02         | Destinos de rede             | T11      | In Tasks |

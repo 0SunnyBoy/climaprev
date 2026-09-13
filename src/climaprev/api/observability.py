@@ -14,7 +14,7 @@ from starlette.responses import Response
 
 _REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 _LOGGER = logging.getLogger("climaprev.request")
-_UPSTREAM_ERROR_CODES = {"WEATHER_DATA_INVALID", "WEATHER_PROVIDER_UNAVAILABLE"}
+_UPSTREAM_ERROR_CODES = {"WEATHER_DATA_INVALID", "WEATHER_PROVIDER_UNAVAILABLE", "WEATHER_PROVIDER_REJECTED"}
 _RETRY_COUNT: ContextVar[list[int] | None] = ContextVar("climaprev_retry_count", default=None)
 _REQUEST_EVENTS: ContextVar[set[str] | None] = ContextVar("climaprev_metric_events", default=None)
 

@@ -15,6 +15,10 @@ from starlette.responses import JSONResponse
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
 from climaprev.api.observability import RequestMetrics, observe_request
 from climaprev.api.routes import risk_router
+from climaprev.application.errors import (
+    DependencyUnavailable, LocationNotFound, ProviderPermanentError,
+    ProviderTransientError, WeatherDataInvalid,
+)
 from climaprev.application.official_alerts import OfficialAlertsNotConfiguredProvider
 from climaprev.application.services.forecast_query import (
     ForecastQueryService,
@@ -25,10 +29,7 @@ from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
-from climaprev.infrastructure.errors import DependencyUnavailable
-from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
 from climaprev.infrastructure.providers.open_meteo import (
-    LocationNotFound,
     OpenMeteoForecastClient,
     OpenMeteoGeocodingClient,
 )
@@ -143,6 +144,12 @@ def _register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(WeatherDataInvalid)
     async def weather_data_handler(request: Request, error: WeatherDataInvalid) -> JSONResponse:
         return _error_response(request, 502, "WEATHER_DATA_INVALID", "weather data was invalid")
+
+    @app.exception_handler(ProviderPermanentError)
+    async def provider_rejected_handler(request: Request, error: ProviderPermanentError) -> JSONResponse:
+        return _error_response(
+            request, 502, "WEATHER_PROVIDER_REJECTED", "weather provider rejected the request"
+        )
 
     @app.exception_handler(ProviderTransientError)
     @app.exception_handler(WeatherProviderUnavailable)

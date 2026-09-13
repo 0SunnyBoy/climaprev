@@ -33,7 +33,7 @@ from climaprev.domain.models import (
 )
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit, convert_temperature
-from climaprev.infrastructure.http.client import ProviderTransientError
+from climaprev.application.errors import ProviderTransientError
 
 if TYPE_CHECKING:
     from climaprev.domain.models import RiskCondition

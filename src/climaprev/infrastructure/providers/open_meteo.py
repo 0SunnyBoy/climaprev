@@ -9,6 +9,9 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
 
+from climaprev.application.errors import (
+    LocationNotFound, ProviderPermanentError, ProviderTransientError, WeatherDataInvalid,
+)
 from climaprev.config import Settings
 from climaprev.domain.models import (
     CanonicalLocation,
@@ -16,12 +19,7 @@ from climaprev.domain.models import (
     DatePeriod,
     NormalizedForecast,
 )
-from climaprev.infrastructure.http.client import (
-    AsyncJsonHttpClient,
-    ProviderPermanentError,
-    ProviderTransientError,
-    WeatherDataInvalid,
-)
+from climaprev.infrastructure.http.client import AsyncJsonHttpClient
 
 _DAILY_FIELDS: Final = (
     "temperature_2m_min",
@@ -49,10 +47,6 @@ __all__ = [
     "ProviderTransientError",
     "WeatherDataInvalid",
 ]
-
-
-class LocationNotFound(Exception):
-    """No usable canonical location was returned by the geocoding provider."""
 
 
 class OpenMeteoGeocodingClient:

@@ -6,22 +6,19 @@ from typing import Final
 
 import httpx
 
+from climaprev.application.errors import (
+    ProviderPermanentError,
+    ProviderRateLimited,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.config import Settings
+
+__all__ = ["AsyncJsonHttpClient", "ProviderPermanentError", "ProviderTransientError",
+           "ProviderRateLimited", "WeatherDataInvalid"]
 
 _BACKOFF_SECONDS: Final = 0.05
 _MAX_BACKOFF_SECONDS: Final = 0.1
-
-
-class ProviderTransientError(Exception):
-    """The provider failed in a way that may succeed on a later request."""
-
-
-class ProviderPermanentError(Exception):
-    """The provider rejected a request that should not be retried."""
-
-
-class WeatherDataInvalid(Exception):
-    """The provider response is not valid JSON data for this adapter."""
 
 
 class AsyncJsonHttpClient:
@@ -63,6 +60,8 @@ class AsyncJsonHttpClient:
                     raise ProviderTransientError("provider server error")
                 await self._backoff(attempt)
                 continue
+            if response.status_code == 429:
+                raise ProviderRateLimited("provider request limit reached")
             if response.status_code >= 400:
                 raise ProviderPermanentError("provider rejected the request")
 
