@@ -1,4 +1,5 @@
 import {queryRisk} from './api.js';
+import {renderResult} from './result.js';
 
 const form = document.querySelector('#query-form');
 const mode = document.querySelector('#location-mode');
@@ -32,6 +33,7 @@ form.addEventListener('submit', async (event) => {
   status.textContent = 'Consultando a previsão…';
   try {
     const result = await queryRisk(new FormData(form));
+    renderResult(document.querySelector('#result'), result);
     status.textContent = `Previsão recebida para ${result.location.name}.`;
   } catch (error) {
     status.textContent = `Não foi possível concluir a consulta. Tente novamente. ${error.requestId ? `Referência: ${error.requestId}` : ''}`;

@@ -46,3 +46,30 @@ footer > span { font-weight: bold; font-size: 16px; letter-spacing: -1px; }
 .skip-link { position: fixed; top: -100px; left: 16px; z-index: 5; background: var(--ink); color: var(--paper); padding: 12px; }
 .skip-link:focus { top: 12px; }
 @media (max-width: 700px) { .masthead, main, footer { width: calc(100% - 36px); } .masthead { padding-block: 20px; } .masthead-note { display: none; } .intro { padding: 36px 0 30px; } h1 { letter-spacing: -1.2px; } .intro-copy { font-size: 14px; } .query-section { padding: 22px 18px 16px; } .location-row, .period-row { flex-direction: column; gap: 18px; } .mode-field { flex-basis: auto; } .coordinates { gap: 12px; } .section-heading { flex-wrap: wrap; gap: 8px; } .section-note { font-size: 10px; } .primary { margin-top: 0; width: 100%; } footer { gap: 20px; } footer p { max-width: 180px; text-align: right; line-height: 1.5; } }
+#result { margin-top: 42px; overflow-wrap: anywhere; }
+.result-heading { display: flex; justify-content: space-between; gap: 30px; align-items: flex-end; padding-bottom: 24px; }
+.result-heading .eyebrow { margin-bottom: 12px; font-size: 10px; }
+.result-heading h2 { font: normal clamp(28px, 3vw, 40px)/1.15 Georgia, serif; letter-spacing: -1px; }
+.result-period { font-size: 13px; line-height: 1.6; margin-bottom: 0; }
+.source-note { text-align: right; font-size: 10px; color: var(--muted); line-height: 1.6; }
+.source-note p { margin: 2px 0; }
+h3 { font-size: 18px; font-weight: bold; letter-spacing: -.4px; margin: 0 0 16px; }
+.risk-section { display: grid; grid-template-columns: 1fr 2fr; gap: 35px; border-block: 1px solid var(--line); padding: 25px 0; }
+.risk-title h3 { margin-bottom: 8px; }
+.risk-title p, .risk-explanation { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 6px 0 0; }
+.risk-level { display: inline-block; padding: 5px 12px; margin: 0 0 8px; font-size: 16px; font-weight: bold; border-radius: 2px; }
+.risk-low { background: #dce6d5; color: #254a2b; }.risk-moderate { background: #f0d693; color: #604713; }.risk-high { background: #f4d9c8; color: #802f19; }
+.quality-line, .quality-warning { font-size: 12px; line-height: 1.6; margin: 0; }.quality-warning { font-weight: bold; color: #764516; }
+.notice { font-size: 13px; padding: 18px; background: #eee1b7; line-height: 1.65; }
+.conditions { display: grid; gap: 14px; padding: 20px 0 0; list-style: none; margin: 0; }
+.conditions strong { font-size: 12px; }.conditions p { font-size: 11px; line-height: 1.7; margin: 4px 0 0; color: var(--muted); }
+summary { cursor: pointer; font-size: 12px; padding: 10px 0; line-height: 1.5; }
+.missing-fields { margin-top: 16px; font-size: 12px; line-height: 1.8; }
+.days { margin-top: 34px; }.day { border-top: 1px solid var(--line); padding: 22px 0 10px; }.day:last-child { border-bottom: 1px solid var(--line); }
+.day-main { display: flex; align-items: center; gap: 24px; }.day-date { flex: 0 0 24%; }.day-date h4 { margin: 0 0 5px; font-size: 15px; }.day-date span { font-size: 11px; color: var(--muted); }
+.day-overview { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 20px; flex: 1; margin: 0; }
+.measurement dt { font-size: 10px; color: var(--muted); margin-bottom: 7px; }.measurement dd { margin: 0; font-size: 14px; line-height: 1.5; }.day-details { margin-top: 8px; }.day-details > summary { color: var(--muted); font-size: 11px; }
+.all-measurements { display: grid; grid-template-columns: repeat(5,1fr); gap: 22px; margin: 15px 0 22px; }.all-measurements .measurement dd { font-size: 13px; }
+.alerts { margin-top: 32px; }.alerts h3 { font-size: 16px; margin-bottom: 10px; }.alerts p, .disclaimer, .methodology p { font-size: 12px; line-height: 1.75; }.alerts h4 { margin-bottom: 8px; }.alerts article { border-top: 1px solid var(--line); padding-top: 10px; }
+.disclaimer { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 25px; color: var(--muted); }.methodology { color: var(--muted); }.methodology p { margin: 4px 0; }
+@media(max-width:700px) { .result-heading { flex-direction: column; align-items: flex-start; gap: 15px; }.source-note { text-align: left; }.risk-section { grid-template-columns: 1fr; gap: 18px; }.day-main { flex-direction: column; align-items: stretch; gap: 20px; }.day-overview { grid-template-columns: 1.3fr 1fr; gap: 16px; }.day-overview .measurement:first-child { grid-column: 1/-1; }.day-date { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }.all-measurements { grid-template-columns: repeat(2,1fr); gap: 20px 15px; } }
