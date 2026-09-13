@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Awaitable, Callable
 from dataclasses import replace
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from time import monotonic
 
 import pytest
@@ -102,7 +102,11 @@ class InMemoryCache:
         self.set_calls: list[tuple[str, CacheEntry, int, int]] = []
 
     async def get(self, key: str) -> CacheEntry | None:
-        return self.entries.get(key)
+        entry = self.entries.get(key)
+        if entry is not None and entry.expires_at is None:
+            entry = replace(entry, expires_at=datetime.now(UTC) + timedelta(seconds=900))
+            self.entries[key] = entry
+        return entry
 
     async def set(
         self,
@@ -111,12 +115,13 @@ class InMemoryCache:
         fresh_ttl_seconds: int,
         stale_ttl_seconds: int,
     ) -> None:
-        self.entries[key] = value
+        self.entries[key] = replace(value, expires_at=datetime.now(UTC) +
+                                    timedelta(seconds=stale_ttl_seconds))
         self.set_calls.append((key, value, fresh_ttl_seconds, stale_ttl_seconds))
 
     def mark_stale(self, key: str) -> None:
         entry = self.entries[key]
-        self.entries[key] = CacheEntry(value=entry.value, is_stale=True)
+        self.entries[key] = replace(entry, is_stale=True)
 
 
 class InMemoryLock:
@@ -218,6 +223,7 @@ def service(
     alerts: object | None = None,
     metrics: RequestMetrics | None = None,
     provider_identity: str = "https://api.open-meteo.com",
+    now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> ForecastQueryService:
     return ForecastQueryService(
         geocoder=geocoder or FakeGeocoder(),
@@ -229,6 +235,7 @@ def service(
         official_alert_provider=alerts or OfficialAlertsNotConfiguredProvider(),
         metrics=metrics,
         provider_identity=provider_identity,
+        now=now,
     )
 
 

@@ -3,10 +3,10 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass, replace
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from time import monotonic, perf_counter
 from typing import TYPE_CHECKING, Literal, Protocol, cast
 from urllib.parse import quote
@@ -112,6 +112,16 @@ class ForecastQueryPort(Protocol):
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult: ...
 
 
+@dataclass(frozen=True, slots=True)
+class _CachedForecast:
+    forecast: NormalizedForecast
+    expires_at: datetime
+
+    @property
+    def is_stale(self) -> bool:
+        return self.forecast.is_stale
+
+
 class ForecastQueryService:
     def __init__(
         self,
@@ -125,6 +135,7 @@ class ForecastQueryService:
         official_alert_provider: OfficialAlertPort,
         metrics: MetricsPort | None = None,
         provider_identity: str = "https://api.open-meteo.com",
+        now: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._geocoder = geocoder
         self._weather_provider = weather_provider
@@ -135,18 +146,23 @@ class ForecastQueryService:
         self._official_alert_provider = official_alert_provider
         self._metrics = metrics
         self._provider_identity = provider_identity.rstrip("/")
+        self._now = now
 
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult:
         period = DatePeriod(start=query.start_date, end=query.end_date)
         location = await self._resolve_location(query)
         forecast_key = _forecast_key(location, period, self._provider_identity)
-        forecast, cache_status = await self._get_forecast(forecast_key, location, period)
+        forecast, cache_status, fallback_expires_at = await self._get_forecast(
+            forecast_key, location, period
+        )
         forecast_risk = self._risk_evaluator.evaluate(forecast, self._risk_policy)
         if self._metrics is not None:
             self._metrics.record_risk_evaluation(forecast_risk)
             self._metrics.record_missing_fields(forecast.missing_fields)
         response_forecast_risk = _response_risk(forecast_risk, query.temperature_unit)
         official_alerts = await self._get_official_alerts(location, period)
+        if fallback_expires_at is not None and self._now() >= fallback_expires_at:
+            raise WeatherProviderUnavailable("cached forecast expired before delivery")
 
         return RiskQueryResult(
             location=replace(location, timezone=forecast.location.timezone),
@@ -199,29 +215,29 @@ class ForecastQueryService:
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> tuple[NormalizedForecast, Literal["hit", "miss", "stale"]]:
+    ) -> tuple[NormalizedForecast, Literal["hit", "miss", "stale"], datetime | None]:
         cached = await self._read_forecast(key, location, period)
         if cached is not None and not cached.is_stale:
             self._metrics_record_cache("hit")
-            return cached, "hit"
+            return cached.forecast, "hit", None
         stale_forecast = cached if cached is not None and cached.is_stale else None
 
         lock_result = await self._wait_for_lock(key, location, period)
-        if isinstance(lock_result, NormalizedForecast):
+        if isinstance(lock_result, _CachedForecast):
             self._metrics_record_cache("hit")
-            return lock_result, "hit"
+            return lock_result.forecast, "hit", None
         token = lock_result
         if token is None:
-            if stale_forecast is not None:
+            if stale_forecast is not None and self._now() < stale_forecast.expires_at:
                 self._metrics_record_cache("stale")
-                return stale_forecast, "stale"
+                return stale_forecast.forecast, "stale", stale_forecast.expires_at
             raise WeatherProviderUnavailable("forecast refresh lock timed out")
 
         try:
             cached_after_lock = await self._read_forecast(key, location, period)
             if cached_after_lock is not None and not cached_after_lock.is_stale:
                 self._metrics_record_cache("hit")
-                return cached_after_lock, "hit"
+                return cached_after_lock.forecast, "hit", None
             if cached_after_lock is not None and cached_after_lock.is_stale:
                 stale_forecast = cached_after_lock
 
@@ -238,9 +254,9 @@ class ForecastQueryService:
                         forecast.provider, perf_counter() - started_at, "success"
                     )
             except ProviderTransientError as error:
-                if stale_forecast is not None:
+                if stale_forecast is not None and self._now() < stale_forecast.expires_at:
                     self._metrics_record_cache("stale")
-                    return stale_forecast, "stale"
+                    return stale_forecast.forecast, "stale", stale_forecast.expires_at
                 raise WeatherProviderUnavailable("weather provider is temporarily unavailable") from error
 
             canonical_forecast = replace(forecast, is_stale=False)
@@ -251,7 +267,7 @@ class ForecastQueryService:
                 stale_ttl_seconds=_FORECAST_STALE_TTL_SECONDS,
             )
             self._metrics_record_cache("miss")
-            return canonical_forecast, "miss"
+            return canonical_forecast, "miss", None
         finally:
             await self._lock.release(key, token)
 
@@ -260,7 +276,7 @@ class ForecastQueryService:
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> str | NormalizedForecast | None:
+    ) -> str | _CachedForecast | None:
         deadline = monotonic() + _LOCK_WAITER_DEADLINE_SECONDS
         while True:
             token = await self._lock.acquire(key, ttl_seconds=_LOCK_TTL_SECONDS)
@@ -280,14 +296,14 @@ class ForecastQueryService:
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> NormalizedForecast | None:
+    ) -> _CachedForecast | None:
         entry = await self._cache.get(key)
-        if entry is None:
+        if entry is None or entry.expires_at is None or self._now() >= entry.expires_at:
             return None
         forecast = _forecast_from_cache(entry.value, location, period)
         if forecast is None:
             return None
-        return replace(forecast, is_stale=entry.is_stale)
+        return _CachedForecast(replace(forecast, is_stale=entry.is_stale), entry.expires_at)
 
     async def _forecast_with_lock_heartbeat(
         self,

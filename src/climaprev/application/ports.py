@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import TYPE_CHECKING, Protocol
 
 from climaprev.domain.models import (
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
 class CacheEntry:
     value: object
     is_stale: bool
+    expires_at: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)

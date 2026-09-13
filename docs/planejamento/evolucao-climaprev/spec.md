@@ -202,7 +202,7 @@ atual e precisam de testes de contrato e nota de atualização.
 | DAT-03         | Qualidade explícita          | T3       | Verified |
 | DAT-04         | Média de temperatura         | T4       | Verified |
 | CON-01         | Identidade do cache          | T5       | Verified |
-| RES-01         | Expiração no fallback        | T6       | In Tasks |
+| RES-01         | Expiração no fallback        | T6       | Verified |
 | RES-02         | Cache corrompido             | T7       | In Tasks |
 | RES-03         | Falhas externas              | T8       | In Tasks |
 | RES-04         | Perda de lock                | T9       | In Tasks |
