@@ -10,7 +10,9 @@ services:
       retries: 5
 
   app:
-    build: .
+    build:
+      context: .
+      target: dev
     environment:
       REDIS_URL: redis://redis:6379/0
       CLIMAPREV_ENVIRONMENT: ${CLIMAPREV_ENVIRONMENT:-development}
@@ -26,7 +28,9 @@ services:
       - "127.0.0.1:8000:8000"
 
   load:
-    build: .
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
@@ -39,7 +43,9 @@ services:
     command: ["locust", "-f", "tests/load/locustfile.py", "--host", "http://app-load:8000"]
 
   provider-mock:
-    build: .
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
     networks:
       - local
@@ -54,7 +60,9 @@ services:
       retries: 10
 
   app-load:
-    build: .
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
     environment:
       REDIS_URL: redis://redis:6379/0

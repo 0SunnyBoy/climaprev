@@ -210,19 +210,19 @@ atual e precisam de testes de contrato e nota de atualização.
 | CFG-02         | Destinos de rede             | T11      | Verified |
 | SEC-01         | Limite e proxy               | T12      | Verified |
 | SEC-02         | Logs sanitizados             | T13, T20 | Partial  |
-| SEC-03         | Imagem de produção           | T18      | In Tasks |
+| SEC-03         | Imagem de produção           | T18      | Verified |
 | SEC-04         | Cota externa                 | T14      | Verified |
 | OBS-01         | Cardinalidade                | T15      | Verified |
 | OBS-02         | Métricas internas            | T16, T20 | Partial  |
 | OPS-01         | Homologação protegida        | T19, T20 | In Tasks |
-| OPS-02         | Dependências reproduzíveis   | T17, T18 | Partial |
+| OPS-02         | Dependências reproduzíveis   | T17, T18 | Verified |
 | UI-01          | Consulta                     | T21, T22 | In Tasks |
 | UI-02          | Resultado                    | T23      | In Tasks |
 | UI-03          | Estados                      | T24      | In Tasks |
 | UI-04          | Acesso por teclado e celular | T25      | In Tasks |
 
-**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 14
-requisitos verificados nos gates T1–T17; revisão independente final pendente.
+**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 16
+requisitos verificados nos gates T1–T18; revisão independente final pendente.
 
 ## Success Criteria
 

@@ -105,3 +105,16 @@ Executar resolução em ambiente sem variáveis de índices/credenciais pessoais
 Revisar o diff dos locks e executar Full/Ruff/mypy antes do commit da atualização.
 A verificação explícita instala duas vezes em ambientes vazios, exige hashes,
 executa pip check e compara todas as versões instaladas com o lock.
+
+## Imagens de desenvolvimento e runtime
+
+`docker compose build` seleciona `dev` explicitamente nos quatro serviços de
+aplicação/carga. O alvo final padrão é `runtime`, com UID10001, dependências
+hashadas e o wheel do pacote; testes/docs/env e ferramentas dev ficam fora.
+O Python base está fixado por digest. Assets HTML/CSS/JS em `climaprev/web`
+entram no wheel. `.dockerignore` envia somente arquivos necessários ao build.
+
+```bash
+docker build --load --target runtime -t climaprev-runtime:local .
+docker run --rm -v "$PWD/tests/docker/check_runtime_image.py:/check.py:ro" climaprev-runtime:local python /check.py
+```
