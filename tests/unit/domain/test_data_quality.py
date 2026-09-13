@@ -1,9 +1,9 @@
 from dataclasses import replace
 
 import pytest
+from tests.integration.application.test_forecast_query import forecast
 
 from climaprev.domain.data_quality import completeness
-from tests.integration.application.test_forecast_query import forecast
 
 
 @pytest.mark.parametrize("state,expected", [("zero", "complete"), ("none", "unavailable"),

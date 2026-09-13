@@ -74,6 +74,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             risk_policy=RiskPolicy(),
             official_alert_provider=OfficialAlertsNotConfiguredProvider(),
             metrics=app.state.metrics,
+            provider_identity=settings.forecast_base_url,
         )
         yield
 

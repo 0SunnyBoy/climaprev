@@ -217,6 +217,7 @@ def service(
     provider: FakeProvider | None = None,
     alerts: object | None = None,
     metrics: RequestMetrics | None = None,
+    provider_identity: str = "https://api.open-meteo.com",
 ) -> ForecastQueryService:
     return ForecastQueryService(
         geocoder=geocoder or FakeGeocoder(),
@@ -227,6 +228,7 @@ def service(
         risk_policy=RiskPolicy(),
         official_alert_provider=alerts or OfficialAlertsNotConfiguredProvider(),
         metrics=metrics,
+        provider_identity=provider_identity,
     )
 
 
@@ -299,7 +301,7 @@ async def test_refreshes_from_provider_when_cached_day_omits_a_serialized_field(
     cache = InMemoryCache()
     cached = cached_forecast()
     del cached["days"][0]["temperature_max_c"]  # type: ignore[index]
-    forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -315,8 +317,8 @@ async def test_refreshes_from_provider_when_cached_day_omits_a_serialized_field(
 async def test_refreshes_from_provider_when_cached_forecast_is_bound_to_another_request() -> None:
     cache = InMemoryCache()
     cached = cached_forecast()
-    cached["location"] = {**cached["location"], "name": "Rio de Janeiro"}  # type: ignore[arg-type]
-    forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+    cached["location"] = {**cached["location"], "latitude": -22.90642}  # type: ignore[arg-type]
+    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -336,7 +338,7 @@ async def test_rechecks_cache_after_acquiring_lock_before_calling_provider() -> 
     query_service = service(cache=cache, lock=lock, provider=provider)
 
     async def publish_forecast() -> None:
-        forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+        forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
         await cache.set(forecast_key, CacheEntry(value=cached_forecast(), is_stale=False), 600, 900)
 
     lock.on_acquire = publish_forecast
@@ -410,7 +412,7 @@ async def test_uses_stale_forecast_when_provider_has_transient_failure() -> None
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = ProviderTransientError("temporary outage")
 
@@ -428,7 +430,7 @@ async def test_records_cache_risk_missing_fields_and_stale_provider_failure_metr
     query_service = service(cache=cache, provider=provider, metrics=metrics)
 
     await query_service.execute(text_query(), "metrics-fresh")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = ProviderTransientError("temporary outage")
 
@@ -452,7 +454,7 @@ async def test_raises_unavailable_when_no_valid_stale_forecast_exists() -> None:
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     del cache.entries[forecast_key]
     provider.value = ProviderTransientError("temporary outage")
 
@@ -467,7 +469,7 @@ async def test_does_not_use_stale_forecast_when_provider_payload_is_invalid() ->
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = WeatherDataInvalid("invalid payload")
 

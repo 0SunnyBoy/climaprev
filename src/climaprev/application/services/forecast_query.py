@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
 from collections.abc import Mapping
 from contextlib import suppress
 from dataclasses import dataclass, replace
@@ -122,6 +124,7 @@ class ForecastQueryService:
         risk_policy: RiskPolicy,
         official_alert_provider: OfficialAlertPort,
         metrics: MetricsPort | None = None,
+        provider_identity: str = "https://api.open-meteo.com",
     ) -> None:
         self._geocoder = geocoder
         self._weather_provider = weather_provider
@@ -131,11 +134,12 @@ class ForecastQueryService:
         self._risk_policy = risk_policy
         self._official_alert_provider = official_alert_provider
         self._metrics = metrics
+        self._provider_identity = provider_identity.rstrip("/")
 
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult:
         period = DatePeriod(start=query.start_date, end=query.end_date)
         location = await self._resolve_location(query)
-        forecast_key = _forecast_key(location, period)
+        forecast_key = _forecast_key(location, period, self._provider_identity)
         forecast, cache_status = await self._get_forecast(forecast_key, location, period)
         forecast_risk = self._risk_evaluator.evaluate(forecast, self._risk_policy)
         if self._metrics is not None:
@@ -344,11 +348,16 @@ def _geo_key(location_text: str) -> str:
     return f"geo:v1:{quote(location_text.casefold(), safe='')}"
 
 
-def _forecast_key(location: CanonicalLocation, period: DatePeriod) -> str:
-    return (
-        f"forecast:v1:{location.latitude:.4f}:{location.longitude:.4f}:"
-        f"{period.start.isoformat()}:{period.end.isoformat()}"
+def _forecast_key(
+    location: CanonicalLocation, period: DatePeriod,
+    provider_identity: str = "https://api.open-meteo.com",
+) -> str:
+    identity = json.dumps(
+        [location.latitude, location.longitude, period.start.isoformat(), period.end.isoformat(),
+         "normalization-v2", provider_identity.rstrip("/")],
+        separators=(",", ":"), allow_nan=False,
     )
+    return "forecast:v2:" + hashlib.sha256(identity.encode()).hexdigest()
 
 
 def _response_day(day: DailyForecast, unit: TemperatureUnit) -> ForecastDay:
@@ -470,10 +479,11 @@ def _forecast_from_cache(
     expected_days = tuple(period.start + timedelta(days=index) for index in range(period.days))
     if tuple(day.date for day in days) != expected_days:
         return None
-    if replace(location, timezone=expected_location.timezone) != expected_location or period != expected_period:
+    if (location.latitude != expected_location.latitude
+            or location.longitude != expected_location.longitude or period != expected_period):
         return None
     return NormalizedForecast(
-        location=location,
+        location=replace(expected_location, timezone=location.timezone),
         period=period,
         days=days,
         provider=provider,
