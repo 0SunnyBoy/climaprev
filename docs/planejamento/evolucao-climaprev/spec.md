@@ -1,6 +1,6 @@
 # Especificação — evolução do Clima Prev
 
-**Estado:** Approved para execução local por solicitação do usuário em 2026-09-13.
+**Estado:** Implementação local entregue; verificação independente final pendente.
 **Contexto:** [context.md](context.md). **Design:** [design.md](design.md).
 Os marcadores WHEN/IF/THEN/SHALL formalizam critérios verificáveis; SHALL
 significa “deve”. IDs identificam requisitos, não funcionalidades já entregues.
@@ -15,16 +15,16 @@ O usuário final ainda não dispõe de uma interface de consulta.
 
 ## Goals
 
-- [ ] Fornecer local, período, unidades e qualidade coerentes em todas as respostas.
-- [ ] Impedir entrega de cache expirado e erros internos para falhas previstas.
-- [ ] Tornar os controles de operação verificáveis em ambiente local isolado.
-- [ ] Entregar uma interface de consulta que comunique limitações corretamente.
+- [x] Fornecer local, período, unidades e qualidade coerentes em todas as respostas.
+- [x] Impedir entrega de cache expirado e erros internos para falhas previstas.
+- [x] Tornar os controles de operação verificáveis em ambiente local isolado.
+- [x] Entregar uma interface de consulta que comunique limitações corretamente.
 
 ## Out of Scope
 
 | Item                                                        | Motivo                                                                       |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Implantação pública, domínio ou contratação cloud           | O pedido atual é de planejamento; fornecedor e ambiente ainda não definidos. |
+| Implantação pública, domínio ou contratação cloud           | Publicação não faz parte da execução local; ambiente público não definido. |
 | Contas, favoritos, histórico e notificações                 | Exigem contratos de identidade e dados próprios.                             |
 | Integração real de alertas oficiais                         | Fonte e cobertura não escolhidas.                                            |
 | Alterar limiares de risco ou introduzir ML                  | Não há validação científica nova para mudar a política.                      |
@@ -219,19 +219,19 @@ atual e precisam de testes de contrato e nota de atualização.
 | UI-01          | Consulta                     | T21, T22 | Verified |
 | UI-02          | Resultado                    | T23      | Verified |
 | UI-03          | Estados                      | T24      | Verified |
-| UI-04          | Acesso por teclado e celular | T25      | In Tasks |
+| UI-04          | Acesso por teclado e celular | T25      | Verified |
 
-**Cobertura planejada:** 23 requisitos, todos mapeados a tarefas; 19
-requisitos verificados nos gates T1–T20; revisão independente final pendente.
+**Cobertura:** 23 requisitos mapeados e verificados nos gates das 25 tarefas.
+Revisão independente final pendente.
 
 ## Success Criteria
 
-- [ ] Todos os critérios e casos de fronteira têm evidência de verificação.
-- [ ] A suíte existente continua passando, sem exclusão de testes para ocultar falhas.
-- [ ] Os testes de integração usam Redis real e provedor controlado.
-- [ ] A interface passa pelo roteiro local em 360 px e 1280 px.
-- [ ] Qualidade, risco heurístico e alertas oficiais têm apresentação distinta.
-- [ ] Nenhum teste de carga é apresentado como capacidade do Open-Meteo público.
+- [x] Todos os critérios e casos de fronteira têm evidência de verificação.
+- [x] A suíte existente continua passando, sem exclusão de testes para ocultar falhas.
+- [x] Os testes de integração usam Redis real e provedor controlado.
+- [x] A interface passa pelo roteiro local em 360 px e 1280 px.
+- [x] Qualidade, risco heurístico e alertas oficiais têm apresentação distinta.
+- [x] Nenhum teste de carga é apresentado como capacidade do Open-Meteo público.
 
 Passar os validadores destes documentos comprova estrutura e rastreabilidade,
 não implementação ou segurança de uma implantação.

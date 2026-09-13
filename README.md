@@ -1,6 +1,6 @@
-# ClimaPrev API
+# ClimaPrev
 
-Backend FastAPI para estimar risco climático de curto prazo. A resposta é uma
+Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais
 nem instruções de Defesa Civil, INMET ou autoridades locais.
 
@@ -18,7 +18,17 @@ Consulte também o [estado atual](STATE.md) e a [evolução proposta](ROADMAP.md
 docker compose up --build
 ```
 
-A API fica disponível apenas em `http://localhost:8000`.
+A interface fica em `http://localhost:8000/`, na mesma origem da API.
+Escolha cidade ou coordenadas, período de até sete dias e Celsius/Fahrenheit.
+Os resultados mostram dias, qualidade, fonte/coleta, risco estimado e alertas
+oficiais em seções separadas. Dados ausentes não viram zero; dados desatualizados
+recebem aviso. Erros mantêm o formulário e exigem nova tentativa manual.
+
+A consulta usa JavaScript nativo, sem dependências ou fontes externas, cookies
+de identidade, histórico, localStorage ou sessionStorage. A URL da página não
+recebe a localização consultada. Sem JavaScript, o botão permanece desabilitado
+e a página informa essa necessidade. O formato do campo de data segue o
+navegador; a API sempre recebe ISO `YYYY-MM-DD`.
 
 ```bash
 curl "http://localhost:8000/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
@@ -56,6 +66,11 @@ docker compose run --rm app pytest -q -W error
 docker compose run --rm app ruff check src tests
 docker compose run --rm app mypy src
 ```
+
+O roteiro [Browser B01–B10](docs/planejamento/evolucao-climaprev/evidence/browser-tests.md)
+registra testes reais em Chrome, cenários controlados, teclado, capturas 360/1280
+e validação HTTPS em perfil temporário com CA explícita. Scripts são extraídos
+para `/tmp`; não há instalação npm requerida pelo aplicativo.
 
 O smoke de carga é curto e não representa a meta de capacidade. Cada usuário
 do Locust é limitado por taxa de chegada a 1 requisição/s; portanto, 100

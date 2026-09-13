@@ -12,6 +12,7 @@ let sequence = 0;
 let controller;
 let retryUntil = 0;
 let retryTimer;
+submit.disabled = false;
 
 mode.addEventListener('change', () => {
   const useCoordinates = mode.value === 'coordinates';
@@ -54,7 +55,7 @@ function showError(error) {
       field = mode.value === 'city' ? form.elements.location_text : form.elements.latitude;
     } else if (error.status === 422) {
       if (error.code === 'INVALID_PERIOD') {
-        message = 'Revise o período: use de 1 a 7 dias, com a data final após a inicial.';
+        message = 'Revise o período: use de 1 a 7 dias, com a data final igual ou posterior à inicial.';
         field = form.elements.end_date.value ? form.elements.end_date : form.elements.start_date;
       } else if (error.code === 'INVALID_TEMPERATURE_UNIT') {
         message = 'Revise a unidade de temperatura e consulte novamente.';
@@ -85,7 +86,7 @@ form.addEventListener('submit', async (event) => {
   const location = form.elements.location_text;
   if (!location.disabled && !location.value.trim()) location.setCustomValidity('Informe uma cidade.');
   if (end.value && (end.value < start.value || (Date.parse(end.value) - Date.parse(start.value)) / 86400000 >= 7)) {
-    end.setCustomValidity('Escolha um período de até 7 dias, com a data final após a inicial.');
+    end.setCustomValidity('Escolha um período de até 7 dias, com a data final igual ou posterior à inicial.');
   }
   if (!form.reportValidity()) {
     form.setAttribute('aria-busy', 'false');

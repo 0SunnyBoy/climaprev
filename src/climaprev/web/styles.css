@@ -31,7 +31,7 @@ label { font-size: 12px; font-weight: bold; }
 input, select, button { font: inherit; }
 input, select { width: 100%; min-width: 0; height: 46px; padding: 10px 12px; color: var(--ink); background: var(--surface); border: 1px solid #889783; border-radius: 3px; font-size: 14px; }
 input::placeholder { color: #667565; }
-.field-hint { color: var(--muted); font-size: 10px; line-height: 1.4; }
+.field-hint { color: var(--muted); font-size: 11px; line-height: 1.4; }
 .primary { align-self: flex-start; margin-top: 23px; display: flex; justify-content: space-between; gap: 25px; align-items: center; height: 46px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 3px; background: var(--ink); color: #f5f3e9; font-size: 13px; font-weight: bold; cursor: pointer; }
 .primary:hover { background: #335347; }
 .primary:disabled { opacity: .6; cursor: wait; }
@@ -43,8 +43,8 @@ input::placeholder { color: #667565; }
 .context-note p { font-size: 12px; line-height: 1.6; margin: 0; color: var(--muted); }
 footer { border-top: 1px solid var(--line); padding-block: 22px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); }
 footer > span { font-weight: bold; font-size: 16px; letter-spacing: -1px; }
-.skip-link { position: fixed; top: -100px; left: 16px; z-index: 5; background: var(--ink); color: var(--paper); padding: 12px; }
-.skip-link:focus { top: 12px; }
+.skip-link { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.skip-link:focus { position: fixed; top: 12px; left: 16px; z-index: 5; width: auto; height: auto; clip-path: none; background: var(--ink); color: var(--paper); padding: 12px; }
 @media (max-width: 700px) { .masthead, main, footer { width: calc(100% - 36px); } .masthead { padding-block: 20px; } .masthead-note { display: none; } .intro { padding: 36px 0 30px; } h1 { letter-spacing: -1.2px; } .intro-copy { font-size: 14px; } .query-section { padding: 22px 18px 16px; } .location-row, .period-row { flex-direction: column; gap: 18px; } .mode-field { flex-basis: auto; } .coordinates { gap: 12px; } .section-heading { flex-wrap: wrap; gap: 8px; } .section-note { font-size: 10px; } .primary { margin-top: 0; width: 100%; } footer { gap: 20px; } footer p { max-width: 180px; text-align: right; line-height: 1.5; } }
 #result { margin-top: 42px; overflow-wrap: anywhere; }
 .result-heading { display: flex; justify-content: space-between; gap: 30px; align-items: flex-end; padding-bottom: 24px; }
@@ -68,7 +68,7 @@ summary { cursor: pointer; font-size: 12px; padding: 10px 0; line-height: 1.5; }
 .days { margin-top: 34px; }.day { border-top: 1px solid var(--line); padding: 22px 0 10px; }.day:last-child { border-bottom: 1px solid var(--line); }
 .day-main { display: flex; align-items: center; gap: 24px; }.day-date { flex: 0 0 24%; }.day-date h4 { margin: 0 0 5px; font-size: 15px; }.day-date span { font-size: 11px; color: var(--muted); }
 .day-overview { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 20px; flex: 1; margin: 0; }
-.measurement dt { font-size: 10px; color: var(--muted); margin-bottom: 7px; }.measurement dd { margin: 0; font-size: 14px; line-height: 1.5; }.day-details { margin-top: 8px; }.day-details > summary { color: var(--muted); font-size: 11px; }
+.measurement dt { font-size: 11px; color: var(--muted); margin-bottom: 7px; }.measurement dd { margin: 0; font-size: 14px; line-height: 1.5; }.day-details { margin-top: 8px; }.day-details > summary { color: var(--muted); font-size: 11px; }
 .all-measurements { display: grid; grid-template-columns: repeat(5,1fr); gap: 22px; margin: 15px 0 22px; }.all-measurements .measurement dd { font-size: 13px; }
 .alerts { margin-top: 32px; }.alerts h3 { font-size: 16px; margin-bottom: 10px; }.alerts p, .disclaimer, .methodology p { font-size: 12px; line-height: 1.75; }.alerts h4 { margin-bottom: 8px; }.alerts article { border-top: 1px solid var(--line); padding-top: 10px; }
 .disclaimer { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 25px; color: var(--muted); }.methodology { color: var(--muted); }.methodology p { margin: 4px 0; }

@@ -1,8 +1,8 @@
 # Tarefas — evolução do Clima Prev
 
-**Estado:** In Progress. **Branch:** `atualizaçao-geral`.
+**Estado:** Implementação concluída; revisão independente pendente. **Branch:** `atualizaçao-geral`.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
-**Progresso de implementação:** 24/25 tarefas concluídas.
+**Progresso de implementação:** 25/25 tarefas concluídas.
 
 ## Execution Protocol
 
@@ -13,8 +13,7 @@ Cada tarefa entrega um comportamento e seus testes; não adiar testes de uma
 alteração para uma tarefa posterior. Não alterar assertions válidas para
 ocultar regressões. Registrar desvios e resultados reais.
 
-Na implementação futura, cada tarefa concluída terá commit atômico quando o
-fluxo de commits estiver autorizado. Não incluir arquivos de outras tarefas
+Cada tarefa foi concluída com commit atômico após seu gate. Não incluir arquivos de outras tarefas
 ou alterações locais anteriores por engano. Commits locais atômicos fazem parte desta execução. Push e publicação
 externa não fazem parte do pedido.
 
@@ -53,15 +52,15 @@ Preparação já adotada pelo projeto: `docker compose build`.
 | Quick      | Testes unitários da alteração                   | `docker compose run --rm app pytest -q -W error tests/unit`                                                                          |
 | Full       | Integração, contrato ou fronteira de componente | `docker compose run --rm app pytest -q -W error`                                                                                     |
 | Build      | Imagem, dependências e fechamento de fase       | `docker compose build`, seguido de Full, `docker compose run --rm app ruff check src tests` e `docker compose run --rm app mypy src` |
-| Homolog    | Após T19/T20 criarem a stack                    | Comandos futuros abaixo e provas de rede/TLS/Redis descritas no aceite.                                                              |
+| Homolog    | Após T19/T20 criarem a stack                    | Comandos abaixo e provas de rede/TLS/Redis descritas no aceite.                                                              |
 | Browser    | Interface funcional                             | Executar B01–B10 aplicáveis e registrar entrada, ação, saída esperada/observada.                                                     |
 
-Comandos de homologação planejados; não existem antes de T19:
+Comandos de homologação implementados em T19/T20, com secrets e CA já provisionados:
 
 ```bash
-docker compose -f docker-compose.homolog.yml config --quiet
-docker compose -f docker-compose.homolog.yml build
-docker compose -f docker-compose.homolog.yml up -d
+docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml config --quiet
+docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml build
+docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml up -d
 ```
 
 Secrets e CA local devem ser provisionados conforme T19/T20 antes do up.
@@ -633,11 +632,13 @@ outro módulo. Não criar arquivos vazios para antecipar tarefas.
 
 **Done when**:
 
-- [ ] Parte atribuída nesta tarefa aos requisitos UI-04 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
-- [ ] Casos acima verificados com evidência e gate Browser aprovado.
-- [ ] Status, testes executados e desvios registrados antes de encerrar a tarefa.
+- [x] Parte atribuída nesta tarefa aos requisitos UI-04 e ao design entregue sem ampliar o escopo; requisito compartilhado só é verificado após todas as suas tarefas.
+- [x] Casos acima verificados com evidência e gate Browser aprovado.
+- [x] Status, testes executados e desvios registrados antes de encerrar a tarefa.
 
 **Commit futuro**: `feat(web): improve responsive and keyboard query access`.
+
+**Evidência:** [T25](evidence/t25.md).
 
 ## Diagram-Definition Cross-Check
 

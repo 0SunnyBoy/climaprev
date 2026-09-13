@@ -18,12 +18,17 @@ def test_real_runtime_emits_only_sanitized_request_metadata(channel: str) -> Non
     )
     try:
         with httpx.Client(base_url="http://127.0.0.1:8000") as client:
-            for _ in range(100):
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline:
+                assert process.poll() is None, "runtime exited before readiness"
                 try:
                     if client.get("/health/live").status_code == 200:
                         break
                 except httpx.TransportError:
-                    time.sleep(0.02)
+                    pass
+                time.sleep(0.05)
+            else:
+                pytest.fail("runtime did not become live within 10 seconds")
             headers = {"X-Request-ID": "log-proof"}
             if channel == "ip":
                 headers["X-Forwarded-For"] = "198.51.100.99"
