@@ -1,0 +1,17 @@
+*
+!Dockerfile
+!pyproject.toml
+!requirements.lock
+!requirements-build.lock
+!README.md
+!.env.example
+!src/
+!src/**
+!tests/
+!tests/**
+!docs/
+!docs/**
+**/__pycache__
+**/*.pyc
+**/.env
+**/*.key
