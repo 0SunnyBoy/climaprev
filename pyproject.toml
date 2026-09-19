@@ -41,6 +41,3 @@ src = ["src", "tests"]
 python_version = "3.12"
 strict = true
 mypy_path = "src"
-
-[tool.setuptools.package-data]
-climaprev = ["web/*.html", "web/*.css", "web/*.js"]

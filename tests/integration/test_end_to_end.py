@@ -71,7 +71,7 @@ async def test_end_to_end_uses_real_redis_and_never_calls_open_meteo_after_cache
 
     assert first.status_code == 200, first.text
     assert first.headers["x-request-id"] == "e2e-cache"
-    assert first.json()["official_alerts"] == {"status": "not_configured", "items": []}
+    assert first.json()["official_alerts"] == {"status": "unavailable", "items": []}
     assert "estimativa" in first.json()["disclaimer"].lower()
     assert cached_fahrenheit.status_code == 200, cached_fahrenheit.text
     assert cached_fahrenheit.json()["temperature_unit"] == "fahrenheit"

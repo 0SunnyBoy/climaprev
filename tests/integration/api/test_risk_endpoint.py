@@ -112,6 +112,30 @@ async def test_router_converts_http_schema_to_application_query() -> None:
 
 
 @pytest.mark.asyncio
+async def test_post_router_converts_json_schema_to_application_query() -> None:
+    async with app_for() as (client, service, _, _):
+        response = await client.post("/api/v1/risk", json=valid_query())
+
+    assert response.status_code == 200
+    assert isinstance(service.calls[0][0], ForecastQuery)
+    assert service.calls[0][0].location_text == "Sao Paulo"
+
+
+@pytest.mark.asyncio
+async def test_post_maps_invalid_json_query_to_422_error_envelope() -> None:
+    async with app_for() as (client, _, _, _):
+        response = await client.post(
+            "/api/v1/risk",
+            json={"start_date": "2026-08-28"},
+            headers={"X-Request-ID": "invalid-post-request"},
+        )
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "INVALID_LOCATION_INPUT"
+    assert response.json()["error"]["request_id"] == "invalid-post-request"
+
+
+@pytest.mark.asyncio
 async def test_serializes_optional_official_alert_fields_as_null() -> None:
     result = query_result()
     result = replace(
@@ -376,6 +400,13 @@ async def test_cors_uses_configured_allowlist() -> None:
                 "Access-Control-Request-Method": "GET",
             },
         )
+        allowed_post = await client.options(
+            "/api/v1/risk",
+            headers={
+                "Origin": "https://console.example",
+                "Access-Control-Request-Method": "POST",
+            },
+        )
         denied = await client.options(
             "/api/v1/risk",
             headers={
@@ -386,6 +417,8 @@ async def test_cors_uses_configured_allowlist() -> None:
 
     assert allowed.status_code == 200
     assert allowed.headers["access-control-allow-origin"] == "https://console.example"
+    assert allowed_post.status_code == 200
+    assert allowed_post.headers["access-control-allow-origin"] == "https://console.example"
     assert denied.status_code == 400
     assert "access-control-allow-origin" not in denied.headers
 
@@ -464,16 +497,25 @@ async def test_lifespan_closes_http_client_when_redis_creation_fails(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     class ClosingHttpClient:
-        def __init__(self) -> None:
+        def __init__(self, *args, **kwargs) -> None:
             self.closed = False
+            self.args = args
+            self.kwargs = kwargs
 
         async def aclose(self) -> None:
             self.closed = True
 
     http_client = ClosingHttpClient()
+    def fake_async_client(*args, **kwargs):
+        http_client.args = args
+        http_client.kwargs = kwargs
+        return http_client
+
     settings = Settings(redis_url=os.environ["REDIS_URL"], environment=f"api-test-{uuid4().hex}")
     app = create_app(settings)
-    monkeypatch.setattr("climaprev.main.httpx.AsyncClient", lambda: http_client)
+    monkeypatch.setattr(
+        "climaprev.main.httpx.AsyncClient", fake_async_client
+    )
     monkeypatch.setattr(
         "climaprev.main.Redis.from_url",
         lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("redis construction failed")),
@@ -484,3 +526,14 @@ async def test_lifespan_closes_http_client_when_redis_creation_fails(
             pass
 
     assert http_client.closed is True
+    assert http_client.kwargs["follow_redirects"] is False
+    assert http_client.kwargs["limits"].max_connections == settings.http_max_connections
+    assert (
+        http_client.kwargs["limits"].max_keepalive_connections
+        == settings.http_max_keepalive_connections
+    )
+    timeout = http_client.kwargs["timeout"]
+    assert timeout.connect == settings.connect_timeout_seconds
+    assert timeout.read == settings.read_timeout_seconds
+    assert timeout.write == settings.read_timeout_seconds
+    assert timeout.pool == settings.connect_timeout_seconds

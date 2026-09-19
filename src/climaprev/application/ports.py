@@ -37,6 +37,11 @@ class GeocodingPort(Protocol):
         pass
 
 
+class LocationSearchPort(Protocol):
+    async def search(self, text: str) -> list[CanonicalLocation]:
+        pass
+
+
 class WeatherProviderPort(Protocol):
     async def forecast(
         self,
@@ -114,4 +119,10 @@ class MetricsPort(Protocol):
         pass
 
     def record_missing_fields(self, fields: tuple[str, ...]) -> None:
+        pass
+
+    def record_lock_contention(self) -> None:
+        pass
+
+    def record_lock_timeout(self) -> None:
         pass

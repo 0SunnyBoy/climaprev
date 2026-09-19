@@ -38,8 +38,6 @@ _HOURLY_FIELDS: Final = (
     "relative_humidity_2m",
     "precipitation",
     "precipitation_probability",
-    "wind_speed_10m",
-    "wind_gusts_10m",
 )
 
 __all__ = [
@@ -67,6 +65,12 @@ class OpenMeteoGeocodingClient:
         self._base_url = settings.geocoding_base_url.rstrip("/")
 
     async def resolve(self, text: str) -> CanonicalLocation:
+        locations = await self.search(text)
+        if not locations:
+            raise LocationNotFound("location was not found")
+        return locations[0]
+
+    async def search(self, text: str) -> list[CanonicalLocation]:
         payload = await self._http.get_json(
             f"{self._base_url}/v1/search",
             {"name": text, "language": "pt"},
@@ -76,14 +80,12 @@ class OpenMeteoGeocodingClient:
             raise WeatherDataInvalid("geocoding results must be a list")
         if not isinstance(results, list):
             raise WeatherDataInvalid("geocoding results must be a list")
-        if not results:
-            raise LocationNotFound("location was not found")
-
+        locations: list[CanonicalLocation] = []
         for item in results:
-            location = _canonical_location(item)
+            location = _canonical_location(item, include_context=True)
             if location is not None:
-                return location
-        raise LocationNotFound("location was not found")
+                locations.append(location)
+        return locations
 
 
 class OpenMeteoForecastClient:
@@ -134,7 +136,11 @@ class OpenMeteoForecastClient:
         )
 
 
-def _canonical_location(item: object) -> CanonicalLocation | None:
+def _canonical_location(
+    item: object,
+    *,
+    include_context: bool = False,
+) -> CanonicalLocation | None:
     if not isinstance(item, Mapping):
         return None
     name = item.get("name")
@@ -147,8 +153,16 @@ def _canonical_location(item: object) -> CanonicalLocation | None:
         return None
     if not isinstance(provider_timezone, str) or not provider_timezone.strip():
         return None
+    display_name = name
+    if include_context:
+        context = [item.get("admin1"), item.get("country")]
+        suffix = ", ".join(
+            value.strip() for value in context if isinstance(value, str) and value.strip()
+        )
+        if suffix:
+            display_name = f"{name}, {suffix}"
     return CanonicalLocation(
-        name=name,
+        name=display_name,
         latitude=latitude,
         longitude=longitude,
         timezone=_iana_timezone(provider_timezone, "geocoding timezone"),

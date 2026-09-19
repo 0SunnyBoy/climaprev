@@ -374,6 +374,36 @@ async def test_concurrent_requests_share_one_provider_call() -> None:
 
 
 @pytest.mark.asyncio
+async def test_lock_wait_uses_bounded_backoff_and_records_contention_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    cache = InMemoryCache()
+    lock = InMemoryLock()
+    await lock.acquire("held-key", ttl_seconds=100)
+    lock.acquires.clear()
+    metrics = RequestMetrics()
+    query_service = service(cache=cache, lock=lock, metrics=metrics)
+    sleeps: list[float] = []
+
+    async def fake_sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+
+    monkeypatch.setattr(asyncio, "sleep", fake_sleep)
+    monkeypatch.setattr(forecast_query, "monotonic", lambda: 0.0)
+    monkeypatch.setattr(forecast_query, "uniform", lambda _lower, _upper: 1.0)
+    monkeypatch.setattr(forecast_query, "_LOCK_MAX_ATTEMPTS", 5)
+
+    result = await query_service._wait_for_lock("wait-key", LOCATION, PERIOD)
+
+    assert result is None
+    assert len(lock.acquires) == 5
+    assert sleeps == [0.05, 0.1, 0.2, 0.4]
+    snapshot = metrics.snapshot()
+    assert snapshot["lock_contention_total"] == 1
+    assert snapshot["lock_timeouts_total"] == 1
+
+
+@pytest.mark.asyncio
 async def test_renews_ten_second_lock_during_long_provider_call(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -517,6 +547,20 @@ async def test_keeps_forecast_when_official_alerts_are_not_configured_or_fail() 
     assert unavailable.official_alerts.status == "unavailable"
     assert unavailable.official_alerts.items == ()
     assert unavailable.forecast_risk.level == "high"
+
+
+@pytest.mark.asyncio
+async def test_caches_successful_official_alert_lookup() -> None:
+    cache = InMemoryCache()
+    alerts = FakeAlerts()
+    query_service = service(cache=cache, alerts=alerts)
+
+    first = await query_service.execute(text_query(), "alerts-cache-one")
+    second = await query_service.execute(text_query(), "alerts-cache-two")
+
+    assert alerts.calls == 1
+    assert first.official_alerts.status == second.official_alerts.status == "available"
+    assert any(key.startswith("official-alerts:v1:") for key in cache.entries)
 
 
 @pytest.mark.asyncio

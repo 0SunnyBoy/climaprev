@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate application
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Compose configuration
+        run: docker compose config --quiet
+
+      - name: Build application image
+        run: docker compose build app
+
+      - name: Run test suite
+        run: docker compose run --rm app pytest -q -W error
+
+      - name: Run Ruff
+        run: docker compose run --rm app ruff check src tests --ignore EXE002
+
+      - name: Run mypy
+        run: docker compose run --rm app mypy src
+
+      - name: Start application and frontend
+        run: docker compose up -d app frontend
+
+      - name: Validate Nginx configuration
+        run: docker compose exec -T frontend nginx -t
+
+      - name: Smoke test frontend and API health
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --retry 20 --retry-delay 2 \
+            --retry-connrefused http://127.0.0.1:8080/health/live
+          curl --fail --silent --show-error --head \
+            http://127.0.0.1:8080/assets/styles.css | grep -iq 'content-type: text/css'
+          curl --fail --silent --show-error http://127.0.0.1:8080/ \
+            | grep -q '<title>Clima Prev'
+
+      - name: Stop Compose services
+        if: always()
+        run: docker compose down -v --remove-orphans

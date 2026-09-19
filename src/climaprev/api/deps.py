@@ -6,7 +6,7 @@ from typing import Annotated, cast
 from fastapi import Depends, Request
 
 from climaprev.api.errors import RateLimitExceeded
-from climaprev.application.ports import RateLimiterPort
+from climaprev.application.ports import LocationSearchPort, RateLimiterPort
 from climaprev.application.services.forecast_query import ForecastQueryPort
 from climaprev.config import Settings
 
@@ -19,6 +19,10 @@ def get_settings(request: Request) -> Settings:
 
 def get_forecast_query_service(request: Request) -> ForecastQueryPort:
     return cast(ForecastQueryPort, request.app.state.forecast_query_service)
+
+
+def get_location_search(request: Request) -> LocationSearchPort:
+    return cast(LocationSearchPort, request.app.state.location_search)
 
 
 def get_rate_limiter(request: Request) -> RateLimiterPort:

@@ -4,7 +4,9 @@ from pydantic import ValidationError
 from climaprev.config import Settings
 
 
-@pytest.mark.parametrize("field", ["forecast_base_url", "geocoding_base_url"])
+@pytest.mark.parametrize(
+    "field", ["forecast_base_url", "geocoding_base_url", "inmet_alerts_base_url"]
+)
 @pytest.mark.parametrize(
     "url",
     [
@@ -26,11 +28,15 @@ def test_production_rejects_unapproved_destinations_without_echo(field: str, url
 
 def test_production_accepts_defaults_and_explicit_allowlist() -> None:
     assert Settings(environment="production").forecast_base_url == "https://api.open-meteo.com"
+    assert Settings(environment="production").inmet_alerts_base_url == (
+        "https://apiprevmet3.inmet.gov.br"
+    )
     settings = Settings(
         environment="production",
         provider_allowed_hosts=("weather.example",),
         forecast_base_url="https://weather.example:443/v1",
         geocoding_base_url="https://weather.example/geo",
+        inmet_alerts_base_url="https://weather.example/alerts",
     )
     assert settings.forecast_base_url == "https://weather.example:443/v1"
 

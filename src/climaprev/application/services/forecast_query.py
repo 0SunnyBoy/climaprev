@@ -7,6 +7,7 @@ from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass, replace
 from datetime import UTC, date, datetime, timedelta
+from random import uniform
 from time import monotonic, perf_counter
 from typing import TYPE_CHECKING, Literal, Protocol, cast
 from urllib.parse import quote
@@ -41,10 +42,18 @@ if TYPE_CHECKING:
 _GEO_CACHE_TTL_SECONDS = 24 * 60 * 60
 _FORECAST_FRESH_TTL_SECONDS = 10 * 60
 _FORECAST_STALE_TTL_SECONDS = 15 * 60
+_OFFICIAL_ALERTS_FRESH_TTL_SECONDS = 5 * 60
+_OFFICIAL_ALERTS_STALE_TTL_SECONDS = 10 * 60
+_OFFICIAL_ALERTS_FAILURE_FRESH_TTL_SECONDS = 30
+_OFFICIAL_ALERTS_FAILURE_STALE_TTL_SECONDS = 60
 _LOCK_TTL_SECONDS = 10
 _LOCK_HEARTBEAT_SECONDS = _LOCK_TTL_SECONDS / 2
 _LOCK_WAITER_DEADLINE_SECONDS = 30
-_LOCK_POLL_SECONDS = 0.01
+_LOCK_INITIAL_BACKOFF_SECONDS = 0.05
+_LOCK_MAX_BACKOFF_SECONDS = 1.0
+_LOCK_BACKOFF_FACTOR = 2.0
+_LOCK_BACKOFF_JITTER = 0.25
+_LOCK_MAX_ATTEMPTS = 64
 _DISCLAIMER = (
     "Esta previsão é uma estimativa baseada em dados meteorológicos e não substitui alertas "
     "oficiais das autoridades competentes."
@@ -286,18 +295,39 @@ class ForecastQueryService:
         period: DatePeriod,
     ) -> str | _CachedForecast | None:
         deadline = monotonic() + _LOCK_WAITER_DEADLINE_SECONDS
-        while True:
+        backoff_seconds = _LOCK_INITIAL_BACKOFF_SECONDS
+        contended = False
+        for attempt in range(_LOCK_MAX_ATTEMPTS):
             token = await self._lock.acquire(key, ttl_seconds=_LOCK_TTL_SECONDS)
             if token is not None:
                 return token
+            if not contended:
+                self._metrics_record_lock_contention()
+                contended = True
 
             cached = await self._read_forecast(key, location, period)
             if cached is not None and not cached.is_stale:
                 return cached
 
-            if monotonic() >= deadline:
+            remaining_seconds = deadline - monotonic()
+            if remaining_seconds <= 0:
+                self._metrics_record_lock_timeout()
                 return None
-            await asyncio.sleep(_LOCK_POLL_SECONDS)
+            if attempt == _LOCK_MAX_ATTEMPTS - 1:
+                self._metrics_record_lock_timeout()
+                return None
+            wait_seconds = min(
+                remaining_seconds,
+                backoff_seconds
+                * uniform(1 - _LOCK_BACKOFF_JITTER, 1 + _LOCK_BACKOFF_JITTER),
+            )
+            await asyncio.sleep(wait_seconds)
+            backoff_seconds = min(
+                _LOCK_MAX_BACKOFF_SECONDS,
+                backoff_seconds * _LOCK_BACKOFF_FACTOR,
+            )
+        self._metrics_record_lock_timeout()
+        return None
 
     async def _read_forecast(
         self,
@@ -349,11 +379,43 @@ class ForecastQueryService:
     ) -> OfficialAlertsResult:
         if getattr(self._official_alert_provider, "status", None) == "not_configured":
             return OfficialAlertsResult(status="not_configured", items=())
+
+        cache_key = _official_alerts_key(location, period)
+        try:
+            cached = await self._cache.get(cache_key)
+        except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+            cached = None
+        if cached is not None:
+            cached_result = _official_alerts_from_cache(cached.value)
+            if cached_result is not None:
+                return cached_result
+
         try:
             alerts = await self._official_alert_provider.get_alerts(location, period)
         except Exception:  # noqa: BLE001 - optional alert providers must not block the forecast.
-            return OfficialAlertsResult(status="unavailable", items=())
-        return OfficialAlertsResult(status="available", items=tuple(alerts))
+            unavailable = OfficialAlertsResult(status="unavailable", items=())
+            try:
+                await self._cache.set(
+                    cache_key,
+                    CacheEntry(value=_official_alerts_to_cache(unavailable), is_stale=False),
+                    _OFFICIAL_ALERTS_FAILURE_FRESH_TTL_SECONDS,
+                    _OFFICIAL_ALERTS_FAILURE_STALE_TTL_SECONDS,
+                )
+            except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+                return unavailable
+            return unavailable
+        alert_items = tuple(alerts)
+        available = OfficialAlertsResult(status="available", items=alert_items)
+        try:
+            await self._cache.set(
+                cache_key,
+                CacheEntry(value=_official_alerts_to_cache(available), is_stale=False),
+                _OFFICIAL_ALERTS_FRESH_TTL_SECONDS,
+                _OFFICIAL_ALERTS_STALE_TTL_SECONDS,
+            )
+        except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+            return available
+        return available
 
     def _metrics_record_cache(self, status: str) -> None:
         if self._metrics is not None:
@@ -366,6 +428,14 @@ class ForecastQueryService:
     def _metrics_record_upstream_error(self) -> None:
         if self._metrics is not None:
             self._metrics.record_upstream_error()
+
+    def _metrics_record_lock_contention(self) -> None:
+        if self._metrics is not None:
+            self._metrics.record_lock_contention()
+
+    def _metrics_record_lock_timeout(self) -> None:
+        if self._metrics is not None:
+            self._metrics.record_lock_timeout()
 
 
 def _geo_key(location_text: str) -> str:
@@ -382,6 +452,85 @@ def _forecast_key(
         separators=(",", ":"), allow_nan=False,
     )
     return "forecast:v2:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def _official_alerts_key(location: CanonicalLocation, period: DatePeriod) -> str:
+    identity = json.dumps(
+        [
+            location.latitude,
+            location.longitude,
+            period.start.isoformat(),
+            period.end.isoformat(),
+            "inmet-alerts-v1",
+        ],
+        separators=(",", ":"),
+        allow_nan=False,
+    )
+    return "official-alerts:v1:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def _official_alerts_to_cache(result: OfficialAlertsResult) -> dict[str, object]:
+    return {
+        "status": result.status,
+        "items": [
+            {
+                "source": alert.source,
+                "event": alert.event,
+                "severity": alert.severity,
+                "effective_at": alert.effective_at.isoformat(),
+                "expires_at": alert.expires_at.isoformat() if alert.expires_at else None,
+                "geographic_scope": alert.geographic_scope,
+                "source_url": alert.source_url,
+            }
+            for alert in result.items
+        ],
+    }
+
+
+def _official_alerts_from_cache(value: object) -> OfficialAlertsResult | None:
+    if not isinstance(value, Mapping):
+        return None
+    status = value.get("status")
+    items = value.get("items")
+    if status not in {"available", "unavailable"} or not isinstance(items, list):
+        return None
+    if status == "unavailable" and items:
+        return None
+    alerts: list[OfficialAlert] = []
+    for item in items:
+        if not isinstance(item, Mapping):
+            return None
+        source = _string(item.get("source"))
+        event = _string(item.get("event"))
+        severity = _string(item.get("severity"))
+        effective_at = _datetime(item.get("effective_at"))
+        expires_at_value = item.get("expires_at")
+        expires_at = None if expires_at_value is None else _datetime(expires_at_value)
+        geographic_scope = _string(item.get("geographic_scope"))
+        source_url_value = item.get("source_url")
+        source_url = None if source_url_value is None else _string(source_url_value)
+        if (
+            source is None
+            or event is None
+            or severity is None
+            or effective_at is None
+            or (expires_at_value is not None and expires_at is None)
+            or geographic_scope is None
+            or (source_url_value is not None and source_url is None)
+        ):
+            return None
+        alerts.append(
+            OfficialAlert(
+                source=source,
+                event=event,
+                severity=severity,
+                effective_at=effective_at,
+                expires_at=expires_at,
+                geographic_scope=geographic_scope,
+                source_url=source_url,
+            )
+        )
+    return OfficialAlertsResult(status=cast(Literal["available", "unavailable"], status), items=tuple(alerts))
 
 
 def _response_day(day: DailyForecast, unit: TemperatureUnit) -> ForecastDay:

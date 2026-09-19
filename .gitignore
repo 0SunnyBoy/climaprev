@@ -27,6 +27,4 @@ Desktop.ini
 # Generated local homologation credentials and certificates.
 .homolog/
 
-# Arquivos .md
-*.md
-!README.md
+# Arquivos .md (Removido por hora)

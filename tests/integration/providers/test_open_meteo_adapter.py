@@ -79,6 +79,30 @@ async def test_geocoding_maps_an_empty_result_to_location_not_found() -> None:
 
 
 @pytest.mark.asyncio
+async def test_geocoding_search_returns_context_for_ambiguous_candidates() -> None:
+    payload = valid_geocoding_payload()
+    payload["results"].append(
+        {
+            "name": "Rio de Janeiro",
+            "latitude": -22.9,
+            "longitude": -43.2,
+            "timezone": "America/Sao_Paulo",
+            "admin1": "Rio de Janeiro",
+            "country": "Brasil",
+        }
+    )
+    async with httpx.AsyncClient() as client:
+        adapter = OpenMeteoGeocodingClient(client, settings())
+        with respx.mock:
+            respx.get(f"{GEOCODING_BASE_URL}/v1/search").respond(200, json=payload)
+
+            results = await adapter.search("Rio")
+
+    assert len(results) == 2
+    assert results[1].name == "Rio de Janeiro, Rio de Janeiro, Brasil"
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("payload", [{}, {"results": None}], ids=["missing", "null"])
 async def test_geocoding_rejects_missing_or_null_results_as_invalid_weather_data(
     payload: dict[str, object],
@@ -145,8 +169,7 @@ async def test_forecast_normalizes_open_meteo_data_and_sends_required_parameters
         "precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,weather_code"
     )
     assert params["hourly"] == (
-        "temperature_2m,relative_humidity_2m,precipitation,precipitation_probability,"
-        "wind_speed_10m,wind_gusts_10m"
+        "temperature_2m,relative_humidity_2m,precipitation,precipitation_probability"
     )
     assert result.provider == "open-meteo"
     assert result.fetched_at.tzinfo is UTC

@@ -6,11 +6,17 @@ nem instruções de Defesa Civil, INMET ou autoridades locais.
 
 ## Documentação do projeto
 
-Comece por [PROJECT — visão geral e índice](PROJECT.md). Os documentos
-detalham [arquitetura](docs/arquitetura.md), [fluxos](docs/fluxos.md),
-[informações transmitidas](docs/fluxos-informacao.md),
-[segurança](docs/seguranca.md) e [restrições](docs/restricoes.md).
-Consulte também o [estado atual](STATE.md) e a [evolução proposta](ROADMAP.md).
+Comece por [PROJECT — visão geral e índice](docs/projeto/PROJECT.md). Os documentos
+detalham [arquitetura](docs/arquitetura/arquitetura.md), [fluxos](docs/arquitetura/fluxos.md),
+[informações transmitidas](docs/arquitetura/fluxos-informacao.md),
+[segurança](docs/seguranca/seguranca.md) e [restrições](docs/operacoes/restricoes.md).
+Consulte também o [estado atual](docs/projeto/STATE.md) e a [evolução proposta](docs/projeto/ROADMAP.md).
+O desacoplamento do frontend está descrito em
+[Frontend-Rework](docs/frontend/Frontend-Rework.md).
+Os campos, limites e limiares da consulta estão em
+[parâmetros de predição](docs/arquitetura/parametros-de-predicao.md). O estudo
+offline para possível ampliação do escopo está em
+[continuação e viabilidade de escopo](docs/planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md).
 
 ## Executar com Docker
 
@@ -18,11 +24,15 @@ Consulte também o [estado atual](STATE.md) e a [evolução proposta](ROADMAP.md
 docker compose up --build
 ```
 
-A interface fica em `http://localhost:8000/`, na mesma origem da API.
+A interface fica em `http://localhost:8080/`, servida pelo Nginx. O serviço
+`app` continua disponível em `http://localhost:8000/` para acesso direto à API
+e para debug. No uso normal, o frontend encaminha as consultas para o backend
+na rede interna do Compose.
 Escolha cidade ou coordenadas, período de até sete dias e Celsius/Fahrenheit.
 Os resultados mostram dias, qualidade, fonte/coleta, risco estimado e alertas
 oficiais em seções separadas. Dados ausentes não viram zero; dados desatualizados
 recebem aviso. Erros mantêm o formulário e exigem nova tentativa manual.
+O campo de cidade oferece até cinco sugestões de localidade antes do envio.
 
 A consulta usa JavaScript nativo, sem dependências ou fontes externas, cookies
 de identidade, histórico, localStorage ou sessionStorage. A URL da página não
@@ -31,16 +41,26 @@ e a página informa essa necessidade. O formato do campo de data segue o
 navegador; a API sempre recebe ISO `YYYY-MM-DD`.
 
 ```bash
-curl "http://localhost:8000/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
-curl "http://localhost:8000/api/v1/risk?latitude=-23.5505&longitude=-46.6333&start_date=2026-08-28&temperature_unit=fahrenheit"
+curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
+curl "http://localhost:8080/api/v1/risk?latitude=-23.5505&longitude=-46.6333&start_date=2026-08-28&temperature_unit=fahrenheit"
 ```
+
+O frontend envia a consulta principal como `POST /api/v1/risk`; o `GET`
+continua disponível para clientes diretos e exemplos simples.
+
+O Nginx entrega os arquivos estáticos diretamente a partir de `frontend/` e
+encaminha `/api/v1/risk`, `/api/v1/locations` e `/health/` para o serviço
+`app`. O backend não serve mais HTML ou assets; por isso, a porta `8000` não
+entrega a interface.
 
 `location_text` ou o par `latitude`/`longitude` é obrigatório. `end_date` é
 opcional e o período aceita até sete dias. `temperature_unit` aceita `celsius`
 ou `fahrenheit`; só temperaturas são convertidas, não chuva, vento ou umidade.
 
-O endpoint devolve `forecast_risk`, `official_alerts` (por padrão
-`not_configured`), `data_quality`, fonte, `request_id` e disclaimer. Erros usam
+O endpoint devolve `forecast_risk`, `official_alerts` do INMET, `data_quality`,
+fonte, `request_id` e disclaimer. `official_alerts` informa `available` quando
+há resposta válida do INMET e `unavailable` quando a dependência não pode ser
+consultada; esses alertas permanecem separados do risco heurístico. Erros usam
 o envelope estável `{ "error": { "code", "message", "request_id" } }`.
 Os códigos usuais são 422 (entrada), 404 (local não encontrado), 429 (limite),
 502 (dados inválidos ou requisição rejeitada pelo provedor) e 503 (dependência indisponível).
@@ -53,8 +73,9 @@ até duas tentativas adicionais. Mensagens externas não aparecem na resposta.
 Redis reduz chamadas repetidas: previsões frescas duram 10 minutos e podem ser
 servidas como `stale` até 15 minutos quando o provedor falha. O limite padrão é
 60 requisições/minuto por cliente, com burst de 10. Fontes meteorológicas:
-[Open-Meteo Forecast](https://open-meteo.com/) e
-[Open-Meteo Geocoding](https://open-meteo.com/en/docs/geocoding-api).
+[Open-Meteo Forecast](https://open-meteo.com/),
+[Open-Meteo Geocoding](https://open-meteo.com/en/docs/geocoding-api) e
+[INMET — avisos ativos](https://apiprevmet3.inmet.gov.br/avisos/ativos).
 
 ## Testes
 
@@ -63,7 +84,7 @@ Todos os testes executam dentro de Docker:
 ```bash
 docker compose build
 docker compose run --rm app pytest -q -W error
-docker compose run --rm app ruff check src tests
+docker compose run --rm app ruff check src tests --ignore EXE002
 docker compose run --rm app mypy src
 ```
 
@@ -99,14 +120,22 @@ causado por orçamento esgotado não mede a capacidade de processamento do backe
 O cenário adicional `lock_contention` reutiliza uma chave única entre usuários
 concorrentes para medir a contenção do lock distribuído.
 
-Veja [operações](docs/operations.md) para configuração, métricas e baseline.
+Veja [operações](docs/operacoes/operations.md) para configuração, métricas e baseline.
+
+## Integração contínua
+
+O workflow [CI](.github/workflows/ci.yml) executa automaticamente em cada
+`push`, Pull Request ou execução manual pelo GitHub. Ele constrói a imagem,
+executa a suíte de testes, Ruff, mypy, valida o Nginx e faz um smoke test do
+frontend e da saúde da API. A CI não faz deploy; apenas valida o estado do
+repositório em um runner temporário.
 
 
 ## Homologação com TLS
 
 O perfil separado usa runtime não root, Redis autenticado, entrada TLS local
 e coleta sanitizada com retenção máxima de sete dias. Veja o procedimento e
-as limitações de rede em [homologação local](docs/homologacao.md). A CA é
+as limitações de rede em [homologação local](docs/operacoes/homologacao.md). A CA é
 confiada explicitamente; não há publicação externa. Nesse perfil os logs ficam
 no volume do coletor, sem stdout persistido pelo engine; o documento mostra
 como lê-los e diagnosticar os serviços.

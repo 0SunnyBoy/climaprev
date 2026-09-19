@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import AsyncExitStack, asynccontextmanager
-from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, Request
@@ -11,12 +10,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
-from starlette.responses import FileResponse, JSONResponse
-from starlette.staticfiles import StaticFiles
+from starlette.responses import JSONResponse
 
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
 from climaprev.api.observability import RequestMetrics, observe_request
 from climaprev.api.routes import risk_router
+from climaprev.api.routes.locations import router as locations_router
 from climaprev.api.routes.metrics import router as metrics_router
 from climaprev.application.errors import (
     DependencyUnavailable,
@@ -25,7 +24,6 @@ from climaprev.application.errors import (
     ProviderTransientError,
     WeatherDataInvalid,
 )
-from climaprev.application.official_alerts import OfficialAlertsNotConfiguredProvider
 from climaprev.application.services.forecast_query import (
     ForecastQueryService,
     WeatherProviderUnavailable,
@@ -35,6 +33,7 @@ from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
+from climaprev.infrastructure.providers.inmet_alerts import InmetOfficialAlertsProvider
 from climaprev.infrastructure.providers.open_meteo import (
     OpenMeteoForecastClient,
     OpenMeteoGeocodingClient,
@@ -48,7 +47,19 @@ from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings: Settings = app.state.settings
     async with AsyncExitStack() as resources:
-        http_client = httpx.AsyncClient()
+        http_client = httpx.AsyncClient(
+            follow_redirects=False,
+            limits=httpx.Limits(
+                max_connections=settings.http_max_connections,
+                max_keepalive_connections=settings.http_max_keepalive_connections,
+            ),
+            timeout=httpx.Timeout(
+                connect=settings.connect_timeout_seconds,
+                read=settings.read_timeout_seconds,
+                write=settings.read_timeout_seconds,
+                pool=settings.connect_timeout_seconds,
+            ),
+        )
         resources.push_async_callback(http_client.aclose)
         raw_redis = Redis.from_url(
             settings.redis_url,
@@ -67,13 +78,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.redis = redis
         app.state.rate_limiter = RedisRateLimiter(redis, environment=settings.environment)
         provider_budget = ProviderBudget(redis, settings)
+        geocoder = OpenMeteoGeocodingClient(
+            http_client,
+            settings,
+            on_retry=app.state.metrics.record_upstream_retry,
+            before_send=provider_budget.consume,
+        )
+        app.state.location_search = geocoder
         app.state.forecast_query_service = ForecastQueryService(
-            geocoder=OpenMeteoGeocodingClient(
-                http_client,
-                settings,
-                on_retry=app.state.metrics.record_upstream_retry,
-                before_send=provider_budget.consume,
-            ),
+            geocoder=geocoder,
             weather_provider=OpenMeteoForecastClient(
                 http_client,
                 settings,
@@ -88,7 +101,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             lock=RedisLock(redis, environment=settings.environment),
             risk_evaluator=RiskEvaluator(),
             risk_policy=RiskPolicy(),
-            official_alert_provider=OfficialAlertsNotConfiguredProvider(),
+            official_alert_provider=InmetOfficialAlertsProvider(
+                http_client,
+                settings,
+                on_retry=app.state.metrics.record_upstream_retry,
+                before_send=provider_budget.consume,
+            ),
             metrics=app.state.metrics,
             provider_identity=settings.forecast_base_url,
         )
@@ -96,29 +114,30 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    app = FastAPI(lifespan=lifespan)
-    app.state.settings = settings or Settings()
+    runtime_settings = settings or Settings()
+    documentation = runtime_settings.environment == "development"
+    app = FastAPI(
+        lifespan=lifespan,
+        docs_url="/docs" if documentation else None,
+        redoc_url="/redoc" if documentation else None,
+        openapi_url="/openapi.json" if documentation else None,
+    )
+    app.state.settings = runtime_settings
     app.state.metrics = RequestMetrics()
     if app.state.settings.cors_allow_origins:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=list(app.state.settings.cors_allow_origins),
             allow_credentials=False,
-            allow_methods=["GET"],
+            allow_methods=["GET", "POST"],
             allow_headers=["X-Request-ID"],
         )
     app.middleware("http")(observe_request)
     app.include_router(risk_router)
+    app.include_router(locations_router)
     app.include_router(metrics_router)
     _register_error_handlers(app)
     _register_health_routes(app)
-    web = Path(__file__).parent / "web"
-    app.mount("/assets", StaticFiles(directory=web), name="assets")
-
-    @app.get("/", include_in_schema=False)
-    async def index() -> FileResponse:
-        return FileResponse(web / "index.html")
-
     return app
 
 

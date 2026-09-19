@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-from collections import Counter
+from collections import Counter, defaultdict, deque
 from collections.abc import Awaitable, Callable
 from contextvars import ContextVar
 from datetime import UTC, datetime
@@ -25,6 +25,24 @@ _UPSTREAM_ERROR_CODES = {
 }
 _RETRY_COUNT: ContextVar[list[int] | None] = ContextVar("climaprev_retry_count", default=None)
 _REQUEST_EVENTS: ContextVar[set[str] | None] = ContextVar("climaprev_metric_events", default=None)
+_LATENCY_SAMPLE_LIMIT = 2048
+
+
+def _latency_summary(samples: deque[float]) -> dict[str, float | int]:
+    if not samples:
+        return {"sample_count": 0, "p50": 0.0, "p95": 0.0, "p99": 0.0}
+    ordered = sorted(samples)
+
+    def percentile(rate: float) -> float:
+        index = min(len(ordered) - 1, int(rate * len(ordered)))
+        return round(ordered[index], 2)
+
+    return {
+        "sample_count": len(ordered),
+        "p50": percentile(0.50),
+        "p95": percentile(0.95),
+        "p99": percentile(0.99),
+    }
 
 
 class RequestMetrics:
@@ -38,6 +56,10 @@ class RequestMetrics:
         self._request_duration_sum_seconds = 0.0
         self._provider_duration_count = 0
         self._provider_duration_sum_seconds = 0.0
+        self._request_latency_samples: deque[float] = deque(maxlen=_LATENCY_SAMPLE_LIMIT)
+        self._provider_latency_samples: defaultdict[str, deque[float]] = defaultdict(
+            lambda: deque(maxlen=_LATENCY_SAMPLE_LIMIT)
+        )
         self._states: dict[str, str] = {}
 
     def begin_request(self) -> object:
@@ -81,6 +103,7 @@ class RequestMetrics:
         self._counters[f"weather_provider_requests_total:{provider}|{outcome}"] += 1
         self._provider_duration_count += 1
         self._provider_duration_sum_seconds += duration_seconds
+        self._provider_latency_samples[provider].append(max(duration_seconds, 0.0) * 1000)
 
     def record_upstream_error(self) -> None:
         if not self._record_once("upstream_error"):
@@ -95,6 +118,12 @@ class RequestMetrics:
     def record_missing_fields(self, fields: tuple[str, ...]) -> None:
         for field in fields:
             self._counters[f"weather_missing_fields_total:{field}"] += 1
+
+    def record_lock_contention(self) -> None:
+        self._counters["lock_contention_total"] += 1
+
+    def record_lock_timeout(self) -> None:
+        self._counters["lock_timeouts_total"] += 1
 
     def record_dependency_circuit_state(self, dependency: str, state: str) -> None:
         self._states[dependency] = state
@@ -117,6 +146,9 @@ class RequestMetrics:
         self._counters["requests_total"] += 1
         self._request_duration_count += 1
         self._request_duration_sum_seconds += seconds
+        self._request_latency_samples.append(max(seconds, 0.0) * 1000)
+        if status_code in {429, 502, 503}:
+            self._counters[f"http_status_{status_code}_total"] += 1
         if error_code in _UPSTREAM_ERROR_CODES:
             self.record_upstream_error()
         if status_code >= 500:
@@ -155,10 +187,15 @@ class RequestMetrics:
                 "count": self._request_duration_count,
                 "sum": self._request_duration_sum_seconds,
             },
+            "request_latency_ms": _latency_summary(self._request_latency_samples),
             "weather_provider_requests_total": provider_requests,
             "weather_provider_duration_seconds": {
                 "count": self._provider_duration_count,
                 "sum": self._provider_duration_sum_seconds,
+            },
+            "weather_provider_latency_ms": {
+                provider: _latency_summary(samples)
+                for provider, samples in self._provider_latency_samples.items()
             },
             "weather_provider_request_duration_seconds": {
                 "count": self._provider_duration_count,
@@ -174,9 +211,14 @@ class RequestMetrics:
             "upstream_retries_total": self._counters["upstream_retries_total"],
             "rate_limit_rejections_total": self._counters["rate_limit_rejections_total"],
             "rate_limit_exceeded_total": self._counters["rate_limit_rejections_total"],
+            "http_status_429_total": self._counters["http_status_429_total"],
+            "http_status_502_total": self._counters["http_status_502_total"],
+            "http_status_503_total": self._counters["http_status_503_total"],
             "server_errors_total": self._counters["server_errors_total"],
             "risk_evaluations_total": risk_evaluations,
             "weather_missing_fields_total": missing_fields,
+            "lock_contention_total": self._counters["lock_contention_total"],
+            "lock_timeouts_total": self._counters["lock_timeouts_total"],
             "dependency_circuit_state": dict(self._states),
         }
 

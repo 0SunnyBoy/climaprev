@@ -16,6 +16,7 @@ def test_limits_and_windows_must_be_positive(field, value):
 
 
 @pytest.mark.parametrize("field", ["connect_timeout_seconds", "read_timeout_seconds",
+                                   "http_max_connections", "http_max_keepalive_connections",
                                    "redis_socket_timeout_seconds"])
 @pytest.mark.parametrize("value", [0, -0.1, math.nan, math.inf, -math.inf])
 def test_timeouts_must_be_positive_and_finite(field, value):
@@ -36,6 +37,11 @@ def test_negative_retries_fail_before_startup():
     assert "additional_retries" in str(raised.value)
 
 
+def test_keepalive_connections_cannot_exceed_total_connections():
+    with pytest.raises(ValidationError, match="http_max_keepalive_connections"):
+        Settings(http_max_connections=4, http_max_keepalive_connections=5)
+
+
 def test_bad_environment_number_does_not_echo_raw_configuration(monkeypatch):
     monkeypatch.setenv("CLIMAPREV_CONNECT_TIMEOUT_SECONDS", "SentinelSecret")
     with pytest.raises(ValidationError) as raised:
@@ -51,6 +57,8 @@ def test_default_runtime_numbers_are_valid_and_keep_load_zero_delay():
     assert configured.rate_limit_window_seconds == 60
     assert configured.connect_timeout_seconds == 2
     assert configured.read_timeout_seconds == 5
+    assert configured.http_max_connections == 20
+    assert configured.http_max_keepalive_connections == 10
     assert configured.redis_socket_timeout_seconds == 1
     assert configured.additional_retries == 2
     assert Settings(load_redis_operation_delay_ms=0).load_redis_operation_delay_ms == 0

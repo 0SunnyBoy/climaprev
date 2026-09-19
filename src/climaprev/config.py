@@ -31,11 +31,15 @@ class Settings(BaseSettings):
     provider_allowed_hosts: Annotated[tuple[str, ...], NoDecode] = (
         "api.open-meteo.com",
         "geocoding-api.open-meteo.com",
+        "apiprevmet3.inmet.gov.br",
     )
     geocoding_base_url: str = "https://geocoding-api.open-meteo.com"
     forecast_base_url: str = "https://api.open-meteo.com"
+    inmet_alerts_base_url: str = "https://apiprevmet3.inmet.gov.br"
     connect_timeout_seconds: float = Field(default=2.0, gt=0)
     read_timeout_seconds: float = Field(default=5.0, gt=0)
+    http_max_connections: int = Field(default=20, gt=0)
+    http_max_keepalive_connections: int = Field(default=10, gt=0)
     redis_socket_timeout_seconds: float = Field(default=1.0, gt=0)
     additional_retries: int = Field(default=2, ge=0)
     provider_budget_capacity: int = Field(default=60, gt=0)
@@ -107,10 +111,22 @@ class Settings(BaseSettings):
         return self
 
     @model_validator(mode="after")
+    def validate_http_connection_limits(self) -> "Settings":
+        if self.http_max_keepalive_connections > self.http_max_connections:
+            raise ValueError(
+                "http_max_keepalive_connections must not exceed http_max_connections"
+            )
+        return self
+
+    @model_validator(mode="after")
     def validate_production_destinations(self) -> "Settings":
         if self.environment != "production":
             return self
-        for value in (self.geocoding_base_url, self.forecast_base_url):
+        for value in (
+            self.geocoding_base_url,
+            self.forecast_base_url,
+            self.inmet_alerts_base_url,
+        ):
             try:
                 url = urlsplit(value)
                 valid = (

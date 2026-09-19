@@ -62,8 +62,6 @@ async def test_invalid_forecast_timezone_returns_sanitized_502(timezone: str) ->
     ("hourly", "precipitation", -0.1),
     ("daily", "wind_speed_10m_max", -1),
     ("daily", "wind_gusts_10m_max", -1),
-    ("hourly", "wind_speed_10m", -1),
-    ("hourly", "wind_gusts_10m", -1),
     ("daily", "temperature_2m_min", 26),
 ])
 async def test_weather_bounds_are_rejected_before_cache(section, field, value) -> None:

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Consulte a previsão do tempo e uma estimativa de risco climático, com fonte e qualidade dos dados.">
+  <title>Clima Prev · Previsão com contexto</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#consulta">Ir para a consulta</a>
+  <header class="masthead"><a class="brand" href="/" aria-label="Clima Prev, início"><span class="brand-mark" aria-hidden="true">◒</span> clima prev<span class="brand-dot">.</span></a><span class="masthead-note">TEMPO · DADOS · CONTEXTO</span></header>
+  <main>
+    <section class="intro" aria-labelledby="page-title"><p class="eyebrow">SEU PRÓXIMO DIA, MAIS CLARO</p><h1 id="page-title">O tempo muda.<br><em>Planeje com contexto.</em></h1><p class="intro-copy">Veja a previsão e os sinais de risco para o seu local. Entenda o que os dados dizem e o que ainda falta saber.</p></section>
+    <section class="query-section" aria-labelledby="query-heading" id="consulta">
+      <div class="section-heading"><span class="section-number" aria-hidden="true">01</span><h2 id="query-heading">Sua consulta</h2><span class="section-note">Até 7 dias por vez</span></div>
+      <form id="query-form" autocomplete="off" action="/api/v1/risk" method="post">
+        <div class="location-row"><div class="field mode-field"><label for="location-mode">Buscar por</label><select id="location-mode"><option value="city">Cidade</option><option value="coordinates">Coordenadas</option></select></div>
+          <div id="city-fields" class="field city-field"><label for="location_text">Cidade</label><input id="location_text" name="location_text" type="text" maxlength="200" placeholder="Ex.: Belém, Pará" aria-describedby="city-hint" required autocomplete="off"><span class="field-hint" id="city-hint">Inclua o estado ou país para uma busca mais precisa.</span><div id="location-suggestions" class="location-suggestions" role="listbox" aria-label="Sugestões de localidade" hidden></div></div>
+          <fieldset id="coordinate-fields" class="coordinates" hidden disabled><legend>Coordenadas do local</legend><div class="field"><label for="latitude">Latitude</label><input id="latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="-1.4558" required></div><div class="field"><label for="longitude">Longitude</label><input id="longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-48.4902" required></div></fieldset>
+        </div>
+        <div class="period-row"><div class="field"><label for="start_date">Data inicial</label><input id="start_date" name="start_date" type="date" required></div><div class="field"><label for="end_date">Data final <span class="optional">opcional</span></label><input id="end_date" name="end_date" type="date" aria-describedby="end-hint"><span class="field-hint" id="end-hint">Em branco: apenas a data inicial.</span></div><div class="field"><label for="temperature_unit">Temperatura</label><select id="temperature_unit" name="temperature_unit"><option value="celsius">Celsius (°C)</option><option value="fahrenheit">Fahrenheit (°F)</option></select></div><button class="primary" type="submit" disabled>Consultar previsão <span aria-hidden="true">↗</span></button><button class="secondary" id="cancel-query" type="button" hidden>Cancelar</button></div>
+      </form>
+      <noscript>Ative o JavaScript para consultar e interpretar os resultados nesta página.</noscript>
+      <div id="query-status" class="query-status" role="status" aria-live="polite" aria-atomic="true"></div>
+    </section>
+    <section id="result" aria-label="Resultado da consulta" hidden></section>
+    <aside class="context-note"><span aria-hidden="true">↳</span><div><h2>Previsão é orientação, não certeza.</h2><p>A estimativa de risco ajuda a interpretar a previsão. Ela não substitui uma avaliação local nem os alertas das autoridades.</p></div></aside>
+  </main>
+  <footer><span>clima prev.</span><p>Consulta anônima · Sem histórico de localização</p></footer>
+</body>
+</html>
