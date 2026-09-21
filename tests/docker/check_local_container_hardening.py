@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Validate the local Compose container-hardening contract."""
 
 from pathlib import Path

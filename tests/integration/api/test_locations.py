@@ -3,15 +3,14 @@ from __future__ import annotations
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from uuid import uuid4
 
 import httpx
 import pytest
 
 from climaprev.api.deps import get_location_search
-from climaprev.config import Settings
 from climaprev.domain.models import CanonicalLocation
 from climaprev.main import create_app
+from tests.security_fixtures import isolated_settings
 
 
 class FakeLocationSearch:
@@ -31,9 +30,8 @@ class FakeLocationSearch:
 @asynccontextmanager
 async def client() -> AsyncIterator[httpx.AsyncClient]:
     app = create_app(
-        Settings(
+        isolated_settings(
             redis_url=os.environ["REDIS_URL"],
-            environment=f"locations-test-{uuid4().hex}",
         )
     )
     app.dependency_overrides[get_location_search] = lambda: FakeLocationSearch()

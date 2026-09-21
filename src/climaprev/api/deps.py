@@ -30,8 +30,8 @@ def get_rate_limiter(request: Request) -> RateLimiterPort:
 
 
 def client_identity(request: Request, settings: Settings) -> str:
-    peer = request.client.host if request.client is not None else "unknown"
-    peer_ip = _canonical_ip(peer)
+    peer_ip = _canonical_ip(request.client.host) if request.client is not None else None
+    peer = peer_ip or "unknown"
     if peer_ip is None or peer_ip not in settings.trusted_proxy_ips:
         return peer
 
@@ -56,6 +56,8 @@ def client_identity(request: Request, settings: Settings) -> str:
 
 def _canonical_ip(value: str) -> str | None:
     try:
+        if "%" in value:
+            return None
         return str(ipaddress.ip_address(value))
     except ValueError:
         return None

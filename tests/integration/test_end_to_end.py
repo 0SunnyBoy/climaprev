@@ -11,25 +11,26 @@ import httpx
 import pytest
 import respx
 
-from climaprev.config import Settings
 from climaprev.main import create_app
 from tests.contract.providers.test_open_meteo_payload import (
     valid_forecast_payload,
     valid_geocoding_payload,
 )
+from tests.security_fixtures import isolated_settings
 
 
 @asynccontextmanager
 async def end_to_end_client() -> AsyncIterator[tuple[httpx.AsyncClient, object]]:
     app = create_app(
-        Settings(
+        isolated_settings(
             redis_url=os.environ["REDIS_URL"],
-            environment=f"e2e-{uuid4().hex}",
             rate_limit=1_000,
             rate_limit_burst=1_000,
         )
     )
     async with app.router.lifespan_context(app):
+        # This existing E2E gate requires a dedicated disposable test Redis.
+        # Never point REDIS_URL at development/shared/production data.
         await app.state.redis.flushdb()
         transport = httpx.ASGITransport(app=app, raise_app_exceptions=False)
         async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
@@ -41,6 +42,7 @@ async def test_end_to_end_uses_real_redis_and_never_calls_open_meteo_after_cache
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     caplog.set_level(logging.INFO, logger="climaprev.request")
+    location_text = f"Sensitive Rio {uuid4().hex}"
     async with end_to_end_client() as (client, app):
         settings = app.state.settings
         with respx.mock(assert_all_called=True) as mock:
@@ -53,7 +55,7 @@ async def test_end_to_end_uses_real_redis_and_never_calls_open_meteo_after_cache
             first = await client.get(
                 "/api/v1/risk",
                     params={
-                        "location_text": "Sensitive Rio",
+                        "location_text": location_text,
                         "start_date": "2026-08-28",
                         "end_date": "2026-08-29",
                     },
@@ -62,7 +64,7 @@ async def test_end_to_end_uses_real_redis_and_never_calls_open_meteo_after_cache
             cached_fahrenheit = await client.get(
                 "/api/v1/risk",
                 params={
-                    "location_text": "Sensitive Rio",
+                    "location_text": location_text,
                     "start_date": "2026-08-28",
                     "end_date": "2026-08-29",
                     "temperature_unit": "fahrenheit",

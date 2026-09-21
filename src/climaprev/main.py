@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import JSONResponse
 
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
@@ -49,6 +50,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     async with AsyncExitStack() as resources:
         http_client = httpx.AsyncClient(
             follow_redirects=False,
+            trust_env=False,
             limits=httpx.Limits(
                 max_connections=settings.http_max_connections,
                 max_keepalive_connections=settings.http_max_keepalive_connections,
@@ -76,7 +78,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
         resources.push_async_callback(redis.aclose)
         app.state.redis = redis
-        app.state.rate_limiter = RedisRateLimiter(redis, environment=settings.environment)
+        app.state.rate_limiter = RedisRateLimiter(
+            redis, environment=settings.environment, identity_key=settings.client_ip_hmac_key
+        )
         provider_budget = ProviderBudget(redis, settings)
         geocoder = OpenMeteoGeocodingClient(
             http_client,
@@ -124,6 +128,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = runtime_settings
     app.state.metrics = RequestMetrics()
+    app.add_middleware(
+        TrustedHostMiddleware, allowed_hosts=list(runtime_settings.allowed_hosts), www_redirect=False
+    )
     if app.state.settings.cors_allow_origins:
         app.add_middleware(
             CORSMiddleware,

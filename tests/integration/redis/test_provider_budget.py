@@ -1,6 +1,7 @@
 import asyncio
 import os
-from uuid import uuid4
+from hashlib import sha256
+from urllib.parse import urlsplit
 
 import httpx
 import pytest
@@ -11,19 +12,22 @@ from climaprev.config import Settings
 from climaprev.infrastructure.http.client import AsyncJsonHttpClient
 from climaprev.infrastructure.providers.open_meteo import OpenMeteoGeocodingClient
 from climaprev.infrastructure.rate_limit.provider_budget import ProviderBudget
+from tests.security_fixtures import isolated_settings
 
 
 @pytest.fixture
 async def budget():
     redis = Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
-    settings = Settings(
-        environment=f"budget-{uuid4().hex}",
+    settings = isolated_settings(
+        redis_url=os.environ["REDIS_URL"],
         provider_budget_capacity=2,
         provider_budget_refill=2,
         provider_budget_window_seconds=60,
     )
-    yield redis, settings, ProviderBudget(redis, settings)
-    await redis.aclose()
+    try:
+        yield redis, settings, ProviderBudget(redis, settings)
+    finally:
+        await redis.aclose()
 
 
 async def test_two_instances_limit_ten_concurrent_http_attempts_to_two(budget) -> None:
@@ -41,7 +45,7 @@ async def test_two_instances_limit_ten_concurrent_http_attempts_to_two(budget) -
             for item in (first, second)
         ]
         results = await asyncio.gather(
-            *(clients[i % 2].get_json("https://forecast.test/x", {}) for i in range(10)),
+            *(clients[i % 2].get_json(settings.forecast_base_url + "/x", {}) for i in range(10)),
             return_exceptions=True,
         )
     assert len(sent) == 2
@@ -52,19 +56,19 @@ async def test_two_instances_limit_ten_concurrent_http_attempts_to_two(budget) -
 async def test_refill_allows_exactly_one_new_attempt_after_thirty_seconds(
     budget, monkeypatch
 ) -> None:
-    _, _, quota = budget
+    _, settings, quota = budget
     clock = [1000.0]
     monkeypatch.setattr(
         "climaprev.infrastructure.rate_limit.redis_rate_limiter.time.time", lambda: clock[0]
     )
-    await quota.consume("https://forecast.test/x")
-    await quota.consume("https://forecast.test/x")
+    await quota.consume(settings.forecast_base_url + "/x")
+    await quota.consume(settings.forecast_base_url + "/x")
     with pytest.raises(ProviderRateLimited):
-        await quota.consume("https://forecast.test/x")
+        await quota.consume(settings.forecast_base_url + "/x")
     clock[0] += 30
-    await quota.consume("https://forecast.test/x")
+    await quota.consume(settings.forecast_base_url + "/x")
     with pytest.raises(ProviderRateLimited):
-        await quota.consume("https://forecast.test/x")
+        await quota.consume(settings.forecast_base_url + "/x")
 
 
 async def test_geocoding_retries_each_consume_budget_and_never_send_third(budget) -> None:
@@ -104,7 +108,6 @@ async def test_runtime_cache_hit_spends_nothing_and_new_location_is_denied(budge
 
     redis, settings, _ = budget
     settings.provider_budget_capacity = 1
-    settings.redis_url = os.environ["REDIS_URL"]
     app = create_app(settings)
     params = {
         "latitude": "-22.90642",
@@ -120,12 +123,14 @@ async def test_runtime_cache_hit_spends_nothing_and_new_location_is_denied(budge
                 200, json=valid_forecast_payload()
             )
             first = await client.get("/api/v1/risk", params=params)
+            destination = sha256(urlsplit(settings.forecast_base_url).netloc.encode()).hexdigest()
             keys = [
                 key
                 async for key in redis.scan_iter(
-                    f"climaprev:{settings.environment}:provider-budget:*"
+                    f"climaprev:{settings.environment}:provider-budget:rate-limit:v1:{destination}"
                 )
             ]
+            assert len(keys) == 1
             before = await redis.hgetall(keys[0])
             cached = await client.get("/api/v1/risk", params=params)
             after = await redis.hgetall(keys[0])

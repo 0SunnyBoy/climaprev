@@ -14,4 +14,12 @@
 **/__pycache__
 **/*.pyc
 **/.env
+**/.env.*
 **/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+**/*.password
+**/*.acl
+**/client-ip-hmac.key
+!/.env.example

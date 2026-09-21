@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Validate the local frontend proxy identity configuration."""
 
 from pathlib import Path

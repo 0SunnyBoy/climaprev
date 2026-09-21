@@ -1,5 +1,10 @@
 # ClimaPrev - Handoff de retomada
 
+> Para retomar a segurança da branch `Atualizacao-Geral-V3`, leia primeiro o
+> [contexto de 2026-09-21](../planejamento/seguranca-configuracao-segredos/context.md).
+> A implementação está pausada e incompleta. O registro abaixo é histórico e
+> não representa a validação desse checkpoint.
+
 > Registro histórico de 2026-08-29. Para o estado atual, consulte [STATE](STATE.md),
 > [ROADMAP](ROADMAP.md) e [Implementations and refactoring](ImplementationsAndRefactoring.md).
 

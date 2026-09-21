@@ -1,5 +1,20 @@
 # STATE — Clima Prev
 
+## Checkpoint de segurança — 2026-09-21
+
+A implementação de segurança em `Atualizacao-Geral-V3` está **pausada e
+incompleta**. O usuário solicitou o envio de um checkpoint para continuidade
+por outro Codex. Leia o [contexto atual](../planejamento/seguranca-configuracao-segredos/context.md)
+e as [evidências](../planejamento/seguranca-configuracao-segredos/evidence.md)
+antes de retomar. T1–T9 têm alterações escritas com validação ainda parcial;
+T10–T19 permanecem pendentes. A homologação precisa integrar os novos secrets.
+
+Os resultados abaixo são históricos, anteriores a esse ciclo, e não aprovam
+o código novo. Alterações locais anteriores de frontend, Compose e outros
+documentos foram preservadas fora do checkpoint de segurança.
+
+## Registro anterior — 2026-09-18
+
 **Atualização:** 18 de setembro de 2026.  
 **Estado:** P0–P2.6 concluídos; revisão independente final pendente.
 

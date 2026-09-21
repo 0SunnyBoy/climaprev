@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Host-side smoke checks for the homologation frontend boundary."""
 
 import argparse

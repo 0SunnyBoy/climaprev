@@ -7,7 +7,6 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import replace
 from datetime import UTC, date, datetime
-from uuid import uuid4
 
 import httpx
 import pytest
@@ -32,6 +31,7 @@ from climaprev.infrastructure.errors import DependencyUnavailable
 from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
 from climaprev.infrastructure.providers.open_meteo import LocationNotFound
 from climaprev.main import create_app, lifespan
+from tests.security_fixtures import isolated_settings
 
 
 class FakeForecastQueryService:
@@ -171,9 +171,8 @@ async def app_for(
     trusted_proxy_ips: tuple[str, ...] = (),
     peer: tuple[str, int] = ("127.0.0.1", 123),
 ) -> AsyncIterator[tuple[httpx.AsyncClient, FakeForecastQueryService, RequestMetrics, object]]:
-    settings = Settings(
+    settings = isolated_settings(
         redis_url=redis_url or os.environ["REDIS_URL"],
-        environment=f"api-test-{uuid4().hex}",
         cors_allow_origins=cors_allow_origins,
         trusted_proxy_ips=trusted_proxy_ips,
     )
@@ -461,17 +460,18 @@ async def test_uses_only_a_valid_trusted_forwarded_chain_for_rate_limit_identity
 
 def test_settings_accept_csv_or_json_lists_and_reject_wildcard_in_any_production_case(
     monkeypatch: pytest.MonkeyPatch,
+    production_config,
 ) -> None:
     monkeypatch.setenv("CLIMAPREV_CORS_ALLOW_ORIGINS", "https://console.example,https://ops.example")
     monkeypatch.setenv("CLIMAPREV_TRUSTED_PROXY_IPS", '["10.0.0.1", "2001:db8::1"]')
-    settings = Settings(environment="Production")
+    settings = Settings(environment="Production", **production_config)
 
     assert settings.environment == "production"
     assert settings.cors_allow_origins == ("https://console.example", "https://ops.example")
     assert settings.trusted_proxy_ips == ("10.0.0.1", "2001:db8::1")
 
     with pytest.raises(ValueError, match="wildcard"):
-        Settings(environment="PRODUCTION", cors_allow_origins=("*",))
+        Settings(environment="PRODUCTION", cors_allow_origins=("*",), **production_config)
 
 
 @pytest.mark.asyncio
@@ -511,7 +511,7 @@ async def test_lifespan_closes_http_client_when_redis_creation_fails(
         http_client.kwargs = kwargs
         return http_client
 
-    settings = Settings(redis_url=os.environ["REDIS_URL"], environment=f"api-test-{uuid4().hex}")
+    settings = isolated_settings(redis_url=os.environ["REDIS_URL"])
     app = create_app(settings)
     monkeypatch.setattr(
         "climaprev.main.httpx.AsyncClient", fake_async_client
@@ -527,6 +527,7 @@ async def test_lifespan_closes_http_client_when_redis_creation_fails(
 
     assert http_client.closed is True
     assert http_client.kwargs["follow_redirects"] is False
+    assert http_client.kwargs["trust_env"] is False
     assert http_client.kwargs["limits"].max_connections == settings.http_max_connections
     assert (
         http_client.kwargs["limits"].max_keepalive_connections

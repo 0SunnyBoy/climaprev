@@ -10,6 +10,9 @@ def test_built_wheel_excludes_web_assets(tmp_path: Path) -> None:
     source.mkdir()
     shutil.copy("pyproject.toml", source)
     shutil.copytree("src", source / "src")
+    sentinel = b"SYNTHETIC-BUILD-SECRET-SENTINEL"
+    for name in (".env", ".env.production", "private.key", "redis.password"):
+        (source / "src" / "climaprev" / name).write_bytes(sentinel)
     subprocess.run(
         [
             sys.executable,
@@ -31,3 +34,5 @@ def test_built_wheel_excludes_web_assets(tmp_path: Path) -> None:
         names = set(archive.namelist())
         assert any(name.startswith("climaprev/") and name.endswith(".py") for name in names)
         assert not any(name.startswith("climaprev/web/") for name in names)
+        assert not any(sentinel in archive.read(name) for name in names)
+        assert not any(Path(name).name.startswith(".env") for name in names)

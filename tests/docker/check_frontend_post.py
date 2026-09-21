@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Validate that the frontend uses the privacy-preserving risk POST contract."""
 
 from pathlib import Path
