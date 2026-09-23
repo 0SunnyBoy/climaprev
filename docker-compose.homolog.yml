@@ -85,7 +85,10 @@ services:
       retries: 15
 
   entrada:
-    image: nginx:alpine@sha256:c8497b180665e631ec92a5091125bec5b214f0e2b99409e30653a125b37557da
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: climaprev-homolog-frontend:local
     user: "101:101"
     read_only: true
     cap_drop: [ALL]
@@ -99,7 +102,6 @@ services:
       - "127.0.0.1:${CLIMAPREV_HOMOLOG_PORT:-18443}:8443"
     volumes:
       - ./docker/homolog/entrada/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./frontend:/usr/share/nginx/html:ro
       - log-socket:/run/climaprev-logs:ro
     secrets:
       - tls_certificate

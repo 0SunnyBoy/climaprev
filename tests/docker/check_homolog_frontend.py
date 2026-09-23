@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import re
 import ssl
 import subprocess
 import urllib.error
@@ -62,13 +63,13 @@ def check(
     assert content_type(headers) == "text/html"
     assert "<!doctype html>" in body.lower()
 
-    for path, expected_type in (
-        ("/assets/styles.css", "text/css"),
-        ("/assets/app.js", "application/javascript"),
-    ):
+    assets = re.findall(r"(?:href|src)=\"(/assets/[^\"]+)\"", body)
+    assert any(asset.endswith(".css") for asset in assets)
+    assert any(asset.endswith(".js") for asset in assets)
+    for path in assets:
         status, body, headers = request(f"{base}{path}", context)
         assert status == 200
-        assert content_type(headers) == expected_type
+        assert content_type(headers) in {"text/css", "application/javascript"}
         assert body
 
     status, body, headers = request(f"{base}/health/live", context)

@@ -1,8 +1,8 @@
 # ROADMAP — Clima Prev
 
-**Data:** 18 de setembro de 2026.  
-**Estado:** implementação local até P2.6 concluída; revisão independente final
-pendente.
+**Data:** 23 de setembro de 2026.
+**Estado:** implementação local até P2.6 concluída; branch conectada ao Git;
+commit, push e revisão independente final pendentes.
 
 O progresso detalhado está em [STATE](STATE.md), e o catálogo técnico está em
 [Implementations and refactoring](ImplementationsAndRefactoring.md).
@@ -51,15 +51,19 @@ final ainda precisa ser executada.
 - Timeout, cancelamento e proteção contra respostas obsoletas.
 - Acessibilidade funcional e layout responsivo validados.
 - Workflow de CI para build, testes, análise estática, Nginx e smoke test.
+- Smoke test da CI compatível com assets hashados gerados pelo Vite.
 
 ## Próximas etapas
 
 1. Executar a revisão independente final com evidência por requisito.
 2. Sincronizar evidências após essa revisão.
-3. Definir protocolo e dados para calibrar a política de risco.
-4. Consolidar o contrato operacional dos alertas oficiais.
-5. Definir, se necessário, identidade, histórico e notificações.
-6. Planejar implantação pública, CD, monitoramento e rollback.
+3. Revisar as alterações, criar o commit e publicar `Atualizacao-Geral-V3`.
+4. Provisionar `.homolog/` e validar a stack real de homologação.
+5. Executar a revisão independente final com evidência por requisito.
+6. Definir protocolo e dados para calibrar a política de risco.
+7. Consolidar o contrato operacional dos alertas oficiais.
+8. Definir, se necessário, identidade, histórico e notificações.
+9. Planejar implantação pública, CD, monitoramento e rollback.
 
 O processo de validação offline, com fallback e critérios para aumentar o
 escopo da previsão, está descrito em [possível continuação e viabilidade de

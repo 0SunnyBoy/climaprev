@@ -1,7 +1,7 @@
 # Implementations and refactoring
 
 **Status:** P0–P2.6 concluídos; revisão independente final pendente.  
-**Última atualização:** 18 de setembro de 2026.  
+**Última atualização:** 23 de setembro de 2026.
 **Projeto:** ClimaPrev
 
 ## Objetivo
@@ -26,6 +26,23 @@ As tarefas autorizadas até **P2.6** foram concluídas. O código atual contém:
 - busca de localidades com sugestões;
 - cancelamento, timeout e mensagens acessíveis no frontend;
 - documentação dos parâmetros usados na predição.
+
+### Rework do frontend com Vue — 23 de setembro de 2026
+
+- Substituiu a manipulação direta do DOM por Vue 3 e Composition API.
+- Adicionou TypeScript `strict`, Vite, Vitest e ESLint.
+- Tipou a consulta, a resposta de risco, erros, qualidade dos dados e alertas.
+- Separou formulário, autocomplete, consulta, risco, previsão diária e alertas
+  em componentes e composables.
+- Preservou POST same-origin, timeout, cancelamento, rate limit, foco, teclado,
+  live region e ausência de persistência da localização.
+- Criou build multi-stage Node → Nginx, com assets hashados e sem `node_modules`
+  na imagem final.
+- Atualizou local e homologação para usar a mesma imagem compilada e manteve
+  suas configurações de proxy independentes.
+- Atualizou os gates estáticos, de segurança, contrato POST e assets dinâmicos.
+- Corrigiu o smoke test da CI para descobrir os assets hashados diretamente do
+  HTML, sem depender do antigo `/assets/styles.css`.
 
 ## Alterações implementadas
 
@@ -169,7 +186,8 @@ As tarefas autorizadas até **P2.6** foram concluídas. O código atual contém:
 
 ## Validações realizadas
 
-- Suíte completa: **341 testes aprovados**.
+- Backend: **195 testes unitários/contratuais aprovados** nesta auditoria; a
+  suíte de integração completa depende dos serviços Redis/Compose.
 - Ruff aprovado; a verificação foi executada ignorando `EXE002`, que é ruído
   de permissões/shebang preexistente nos arquivos do repositório.
 - Mypy aprovado em 41 arquivos de origem.
@@ -187,7 +205,8 @@ As tarefas autorizadas até **P2.6** foram concluídas. O código atual contém:
   execução manual.
 - Reutilizou o Docker Compose para build, suíte completa, Ruff, mypy e
   validação da configuração do Nginx.
-- Adicionou smoke test HTTP para a página, CSS e health check da API.
+- Adicionou smoke test HTTP para a página, assets hashados e health check da
+  API por meio de `tests/docker/check_frontend_security.py`.
 - Limitou as permissões do workflow a leitura do conteúdo do repositório e
   encerrou os serviços temporários ao final da execução.
 
@@ -196,6 +215,19 @@ As verificações de acessibilidade desta etapa foram smoke tests funcionais,
 DOM, foco, teclado, viewport e headers.
 
 ## Itens ainda pendentes
+
+### Estado operacional da cópia correta
+
+- A pasta `climaprev-Atualizacao-Geral-V3` está conectada ao repositório Git
+  correto na branch `Atualizacao-Geral-V3`, acompanhando
+  `origin/Atualizacao-Geral-V3`.
+- As alterações atuais ainda não foram commitadas nem enviadas. O próximo
+  passo é revisar o staging e criar o commit da atualização.
+- Os arquivos `.homolog/` não são versionados; devem ser provisionados
+  localmente com secrets e certificados antes de iniciar a homologação.
+- As dependências de produção do frontend não apresentam vulnerabilidades no
+  lock atual. Há alertas somente em ferramentas de desenvolvimento e eles
+  devem ser tratados em atualização separada, sem `npm audit fix --force`.
 
 ### Próximo item técnico
 

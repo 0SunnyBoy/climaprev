@@ -1,143 +1,145 @@
-# Rework do frontend
-
-Este documento registra a separação entre a interface web e a API do
-ClimaPrev. O frontend continua sendo uma página estática com JavaScript
-nativo, mas deixa de fazer parte do pacote Python e passa a ser servido por um
-contêiner Nginx.
+# Frontend Rework
 
 ## Objetivo
 
-Manter o FastAPI como uma API pura e colocar a entrega dos arquivos estáticos
-em uma camada HTTP dedicada. Essa separação torna explícito o limite entre a
-aplicação Python e a interface, além de alinhar a execução local ao padrão de
-homologação planejado.
+O frontend do ClimaPrev foi migrado de JavaScript nativo com manipulação
+imperativa do DOM para Vue 3 com TypeScript estrito e Vite. A migração mantém o
+contrato público da API, a linguagem visual, os requisitos de acessibilidade e
+os fluxos de consulta existentes.
 
-## Estrutura antes e depois
+## Stack atual
 
-Antes do rework, os arquivos da interface ficavam em
-`src/climaprev/web/`. O FastAPI montava esse diretório em `/assets` e tinha
-uma rota `/` que devolvia `index.html`. O `pyproject.toml` também incluía os
-arquivos HTML, CSS e JavaScript como dados do pacote.
+- Vue 3 com Composition API;
+- TypeScript em modo `strict`;
+- Vite para desenvolvimento e build;
+- Vitest para testes unitários;
+- ESLint com suporte a Vue e TypeScript;
+- Nginx como runtime estático;
+- Docker multi-stage: Node compila e Nginx serve somente `dist`.
 
-Depois do rework, a estrutura fica assim:
+## Estrutura
 
-| Local | Responsabilidade |
-| --- | --- |
-| `frontend/` | Arquivos estáticos da interface: HTML, CSS e JavaScript. |
-| `docker/frontend/nginx.conf` | Entrega do frontend e proxy das rotas públicas. |
-| `src/climaprev/` | Código Python da API, sem arquivos da interface. |
-| `docker-compose.yml` | Orquestra os serviços `app`, `frontend` e Redis. |
-
-## Alterações realizadas
-
-### Arquivos do frontend
-
-Os arquivos `index.html`, `app.js`, `api.js`, `result.js` e `styles.css`
-foram movidos de `src/climaprev/web/` para `frontend/`. Os caminhos usados
-pela interface não mudaram: o HTML continua referenciando `/assets/styles.css`
-e o JavaScript continua chamando `/api/v1/risk`.
-
-### Backend FastAPI
-
-`src/climaprev/main.py` deixou de importar e usar `Path`, `StaticFiles` e
-`FileResponse`. Também foram removidos:
-
-- o mount de `/assets`;
-- a rota `/` que retornava `index.html`;
-- a resolução do diretório web a partir do pacote Python.
-
-O serviço `app` continua responsável pelas rotas da API, incluindo
-`/api/v1/risk`, `/health/live`, `/health/ready` e as rotas internas de
-observabilidade. A porta `8000` permanece disponível para chamadas diretas à
-API e diagnóstico, mas não entrega mais a interface web.
-
-### Empacotamento Python
-
-O bloco `[tool.setuptools.package-data]` foi removido de `pyproject.toml`. Os
-arquivos do frontend não são mais incluídos no wheel nem dependem da
-instalação do pacote Python para serem servidos.
-
-### Testes
-
-Na antiga suíte de integração web, foram removidos os testes que verificavam
-o FastAPI servindo a página e os assets:
-
-- `test_page_serves_labeled_same_origin_query_form`;
-- `test_static_assets_serve_with_correct_media_types`;
-- `test_assets_are_available_from_package_directory`.
-
-O teste `test_web_does_not_capture_api_health_or_internal_routes` foi mantido
-e passou a ficar em `tests/integration/api/web/test_route_boundaries.py`. Ele
-continua verificando que as rotas de saúde e observabilidade permanecem API,
-que uma rota inexistente não retorna HTML e que a separação não captura
-rotas internas indevidamente.
-
-O teste Docker `tests/docker/test_package_assets.py` permanece fora desse
-ajuste e ainda valida assets dentro do wheel. Como o `package-data` foi
-removido, esse teste requer revisão em uma etapa posterior caso continue
-fazendo parte da suíte executada no CI.
-
-### Nginx
-
-Foi criado `docker/frontend/nginx.conf` com estas regras:
-
-- `GET /` entrega `frontend/index.html`;
-- `/assets/...` resolve diretamente os arquivos estáticos em
-  `/usr/share/nginx/html`;
-- `/etc/nginx/mime.types` associa CSS e JavaScript aos tipos MIME esperados;
-- `/api/v1/risk` é encaminhado para `app:8000`;
-- `/health/...` é encaminhado para `app:8000`.
-
-O `alias` da localização de assets preserva os URLs existentes no HTML e no
-JavaScript. Nenhuma alteração nesses caminhos é necessária.
-
-O arquivo de configuração deve ser salvo em UTF-8 sem BOM. Um BOM antes de
-`events {}` faz o Nginx interpretar a diretiva como desconhecida e encerra o
-contêiner antes de aceitar conexões.
-
-### Docker Compose
-
-O `docker-compose.yml` ganhou o serviço `frontend`, baseado em
-`nginx:1.27-alpine`. Ele monta `./frontend` como somente leitura em
-`/usr/share/nginx/html` e monta a configuração do Nginx em
-`/etc/nginx/nginx.conf`.
-
-O serviço depende de `app`, usa a rede `local` e publica a porta local
-`127.0.0.1:8080`, encaminhada para a porta 80 do Nginx. O serviço `app`
-continua publicando `127.0.0.1:8000` para acesso direto à API e debug.
-
-## Fluxo de requisições
-
-| Requisição | Responsável | Resultado |
-| --- | --- | --- |
-| `http://localhost:8080/` | `frontend` | Entrega `index.html`. |
-| `http://localhost:8080/assets/...` | `frontend` | Entrega CSS ou JavaScript. |
-| `http://localhost:8080/api/v1/risk...` | `frontend` → `app:8000` | Retorna a resposta JSON de risco. |
-| `http://localhost:8080/health/...` | `frontend` → `app:8000` | Retorna o status de saúde da API. |
-| `http://localhost:8000/...` | `app` | Acesso direto às rotas da API, sem frontend. |
-
-## Como executar
-
-Suba a stack local com:
-
-```bash
-docker compose up --build
+```text
+frontend/
+  src/
+    components/
+      DataQualityNotice.vue
+      ForecastDayCard.vue
+      ForecastResult.vue
+      LocationAutocomplete.vue
+      OfficialAlerts.vue
+      QueryForm.vue
+      QueryStatus.vue
+      RiskSummary.vue
+    composables/
+      useLocationSearch.ts
+      useRiskQuery.ts
+    services/
+      api.ts
+      api.test.ts
+    types/
+      api.ts
+      query.ts
+    utils/
+      formatters.ts
+    App.vue
+    main.ts
+  index.html
+  styles.css
+  package.json
+  package-lock.json
+  tsconfig.json
+  vite.config.ts
+  vitest.config.ts
+  Dockerfile
 ```
 
-Abra `http://localhost:8080`. Use `http://localhost:8000` apenas quando
-precisar chamar a API diretamente ou diagnosticar o backend.
+## Responsabilidades
 
-Exemplos de chamada pela entrada normal do sistema:
+`App.vue` coordena o fluxo da tela, o status da consulta, o cooldown de rate
+limit e a integração entre formulário e resultado.
+
+`QueryForm.vue` preserva os campos de cidade, coordenadas, período e unidade de
+temperatura. A validação nativa do navegador continua sendo utilizada, com a
+regra adicional de período máximo de sete dias.
+
+`LocationAutocomplete.vue` e `useLocationSearch.ts` isolam o debounce, o
+cancelamento da busca anterior e a seleção de localidades.
+
+`useRiskQuery.ts` encapsula timeout de dez segundos, cancelamento, substituição
+de requisições antigas e descarte de respostas obsoletas.
+
+`services/api.ts` é a fronteira de rede. Ele mantém requisições same-origin,
+`credentials: omit`, `POST` para risco, validação runtime da resposta e
+tratamento tipado de erros.
+
+`ForecastResult.vue` compõe os componentes de qualidade dos dados, risco,
+previsão diária e alertas oficiais. A renderização usa interpolação Vue, sem
+`innerHTML` ou execução de conteúdo recebido da rede.
+
+O `styles.css` existente foi preservado como folha global e importado pelo
+entrypoint Vue para manter a identidade visual durante a migração.
+
+## Build e execução
+
+Na pasta `frontend/`:
 
 ```bash
-curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
-curl "http://localhost:8080/api/v1/risk?latitude=-23.5505&longitude=-46.6333&start_date=2026-08-28&temperature_unit=fahrenheit"
+npm ci
+npm run typecheck
+npm run lint
+npm run test
+npm run build
 ```
 
-## Homologação
+O build gera `frontend/dist/`. A imagem `frontend/Dockerfile` executa esse
+build em uma etapa Node e copia somente os arquivos estáticos para uma imagem
+Nginx final. O `docker-compose.yml` constrói essa imagem e publica a interface
+em `127.0.0.1:8080`.
 
-Esta alteração atualiza o Compose local e adiciona a configuração do Nginx
-para o frontend. A configuração de entrada TLS de homologação continua fora
-deste rework; a adaptação de `docker/homolog/entrada/nginx.conf` pode ser
-feita posteriormente para aplicar a mesma estratégia de servir estáticos e
-encaminhar apenas API e health checks.
+O Nginx serve `/` e `/assets/` e encaminha apenas as rotas públicas de API e
+health previstas na configuração. Os nomes de assets são gerados pelo Vite e
+podem conter hash; por isso os testes descobrem os recursos a partir do HTML,
+em vez de depender de nomes fixos.
+
+O Compose de homologação também constrói a imagem `frontend/Dockerfile` e
+monta apenas sua configuração de entrada TLS. Assim, local e homologação usam
+o mesmo `dist`, enquanto cada ambiente mantém seu próprio proxy e política de
+transporte.
+
+## Paridade preservada
+
+- consulta por cidade;
+- consulta por coordenadas;
+- autocomplete de localidades;
+- período de até sete dias;
+- Celsius e Fahrenheit;
+- timeout e cancelamento;
+- proteção contra respostas antigas;
+- tratamento de rede, validação, indisponibilidade e rate limit;
+- identificação da requisição;
+- fonte, horário e qualidade dos dados;
+- previsão desatualizada;
+- separação entre risco estimado e alerta oficial;
+- navegação por teclado, foco e live region;
+- responsividade e ausência de armazenamento local da consulta.
+
+## Verificações executadas
+
+- `npm run lint`;
+- `npm run typecheck`;
+- `npm run test`;
+- `npm run build`;
+- teste estático de segurança do frontend;
+- teste do contrato de `POST /api/v1/risk`;
+- validação de identidade e proxy Nginx local;
+- `docker build -f frontend/Dockerfile .`;
+- `nginx -t` dentro da imagem com o alias de rede necessário para o upstream
+  Docker `app`.
+
+## Decisões de escopo
+
+Pinia, Nuxt, biblioteca visual pesada, autenticação, histórico e notificações
+não foram introduzidos. O estado atual é local à tela e aos composables; uma
+store global só será adicionada quando houver mais de uma tela ou estado
+compartilhado real.

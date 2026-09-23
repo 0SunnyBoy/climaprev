@@ -1,6 +1,6 @@
 # Restrições funcionais, técnicas e de informação
 
-**Data:** 2026-09-18. Regras implementadas e lacunas estão identificadas
+**Data:** 2026-09-23. Regras implementadas e lacunas estão identificadas
 explicitamente. [Índice](../projeto/PROJECT.md).
 
 ## Entrada e escopo

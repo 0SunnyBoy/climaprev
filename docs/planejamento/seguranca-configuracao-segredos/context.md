@@ -1,5 +1,9 @@
 # Contexto de retomada — segurança do ClimaPrev
 
+> Contexto de checkpoint histórico. As referências a arquivos do frontend
+> antigo devem ser interpretadas como evidência da versão auditada naquele
+> momento; a implementação atual está em `frontend/src/` com Vue e TypeScript.
+
 Atualização: 2026-09-23. T14–T19 foram validadas com dados sintéticos;
 os workflows CI e Security gates passaram no GitHub para `525854a`.
 T19 concluiu com decisão condicional. O histórico abaixo descreve o checkpoint anterior e deve

@@ -7,6 +7,12 @@ permanecem aqui como registro da origem do planejamento.
 
 Este documento consolida o plano de evolução da ClimaPrev a partir da análise atual de arquitetura, backend, frontend, segurança, performance, testes e operação.
 
+> Atualização de 23/09/2026: o frontend foi migrado para Vue 3 + TypeScript +
+> Vite. As referências a `src/climaprev/web/`, `frontend/app.js` e aos nomes
+> fixos `/assets/styles.css` e `/assets/app.js` abaixo são requisitos do estado
+> anterior ou critérios históricos. O estado implementado está documentado em
+> [Frontend-Rework](../frontend/Frontend-Rework.md) e no [STATE](STATE.md).
+
 ## Objetivos
 
 - Consolidar a separação entre frontend estático e backend API.

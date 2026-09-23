@@ -28,17 +28,21 @@ A interface fica em `http://localhost:8080/`, servida pelo Nginx. O serviço
 `app` continua disponível em `http://localhost:8000/` para acesso direto à API
 e para debug. No uso normal, o frontend encaminha as consultas para o backend
 na rede interna do Compose.
+
+Na cópia correta do projeto, provisionamento de homologação, inicialização do
+Git e publicação da branch são etapas separadas. Não copie `.homolog/` para o
+repositório: gere seus secrets e certificados localmente conforme o runbook.
 Escolha cidade ou coordenadas, período de até sete dias e Celsius/Fahrenheit.
 Os resultados mostram dias, qualidade, fonte/coleta, risco estimado e alertas
 oficiais em seções separadas. Dados ausentes não viram zero; dados desatualizados
 recebem aviso. Erros mantêm o formulário e exigem nova tentativa manual.
 O campo de cidade oferece até cinco sugestões de localidade antes do envio.
 
-A consulta usa JavaScript nativo, sem dependências ou fontes externas, cookies
-de identidade, histórico, localStorage ou sessionStorage. A URL da página não
-recebe a localização consultada. Sem JavaScript, o botão permanece desabilitado
-e a página informa essa necessidade. O formato do campo de data segue o
-navegador; a API sempre recebe ISO `YYYY-MM-DD`.
+A consulta usa Vue 3, TypeScript estrito e assets compilados pelo Vite. Não há
+fontes externas, cookies de identidade, histórico, localStorage ou
+sessionStorage. A URL da página não recebe a localização consultada. Sem
+JavaScript, a página informa essa necessidade. O formato do campo de data
+segue o navegador; a API sempre recebe ISO `YYYY-MM-DD`.
 
 ```bash
 curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
@@ -48,10 +52,10 @@ curl "http://localhost:8080/api/v1/risk?latitude=-23.5505&longitude=-46.6333&sta
 O frontend envia a consulta principal como `POST /api/v1/risk`; o `GET`
 continua disponível para clientes diretos e exemplos simples.
 
-O Nginx entrega os arquivos estáticos diretamente a partir de `frontend/` e
-encaminha `/api/v1/risk`, `/api/v1/locations` e `/health/` para o serviço
-`app`. O backend não serve mais HTML ou assets; por isso, a porta `8000` não
-entrega a interface.
+O Docker compila `frontend/` com Vite e a imagem final do Nginx entrega somente
+`frontend/dist/`. O Nginx encaminha `/api/v1/risk`, `/api/v1/locations` e
+`/health/` para o serviço `app`. O backend não serve mais HTML ou assets; por
+isso, a porta `8000` não entrega a interface.
 
 `location_text` ou o par `latitude`/`longitude` é obrigatório. `end_date` é
 opcional e o período aceita até sete dias. `temperature_unit` aceita `celsius`
@@ -87,6 +91,11 @@ docker compose run --rm app pytest -q -W error
 docker compose run --rm app ruff check src tests --ignore EXE002
 docker compose run --rm app mypy src
 ```
+
+Os gates do frontend são executados na etapa Node da imagem e podem ser
+reproduzidos dentro de `frontend/` com `npm ci`, `npm run lint`,
+`npm run typecheck`, `npm run test` e `npm run build`. A imagem final não
+contém `node_modules` nem ferramentas de desenvolvimento.
 
 O roteiro [Browser B01–B10](docs/planejamento/evolucao-climaprev/evidence/browser-tests.md)
 registra testes reais em Chrome, cenários controlados, teclado, capturas 360/1280
@@ -128,7 +137,16 @@ O workflow [CI](.github/workflows/ci.yml) executa automaticamente em cada
 `push`, Pull Request ou execução manual pelo GitHub. Ele constrói a imagem,
 executa a suíte de testes, Ruff, mypy, valida o Nginx e faz um smoke test do
 frontend e da saúde da API. A CI não faz deploy; apenas valida o estado do
-repositório em um runner temporário.
+repositório em um runner temporário. O smoke test descobre os assets hashados
+no HTML gerado pelo Vite; ele não depende de `/assets/styles.css`.
+
+## Estado da branch
+
+A cópia correta está na branch `Atualizacao-Geral-V3`, conectada a
+`origin/Atualizacao-Geral-V3`. A implementação local e sua validação foram
+concluídas, mas as alterações atuais ainda precisam ser revisadas, commitadas
+e enviadas ao GitHub. A pasta `.homolog/` permanece local, ignorada pelo Git,
+e deve ser provisionada separadamente para validar a homologação.
 
 
 ## Homologação com TLS

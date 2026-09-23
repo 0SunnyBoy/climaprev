@@ -1,5 +1,37 @@
 # STATE — Clima Prev
 
+## Auditoria da cópia correta — 2026-09-23
+
+A pasta `climaprev-Atualizacao-Geral-V3` recebeu o código, frontend Vue,
+Docker, homologação, testes e documentação sincronizados. Nesta auditoria:
+
+- build do backend e do frontend aprovado;
+- Compose local e de homologação aprovado em modo `config`;
+- Ruff e mypy aprovados;
+- 195 testes unitários/contratuais aprovados;
+- lint, typecheck, Vitest e build Vite aprovados;
+- smoke test do Nginx, assets hashados e headers aprovado;
+- dependências de produção do frontend sem vulnerabilidades conhecidas no lock.
+
+O workflow da CI foi corrigido para descobrir CSS e JavaScript pelo HTML do
+Vite. A validação integrada local de 23 de setembro confirmou Redis saudável,
+frontend HTTP 200, health check HTTP 200, assets e contratos do frontend.
+O repositório Git da cópia correta está inicializado e acompanha
+`origin/Atualizacao-Geral-V3`; as alterações ainda estão no working tree e
+não foram commitadas nem enviadas.
+
+A homologação real ainda depende do provisionamento local de `.homolog/`, que
+não existe nesta cópia e não deve ser versionado.
+
+## Estado de publicação — 2026-09-23
+
+- Pasta correta: `climaprev-Atualizacao-Geral-V3`.
+- Branch local: `Atualizacao-Geral-V3`.
+- Branch remota acompanhada: `origin/Atualizacao-Geral-V3`.
+- Base remota atual: commit `4d4e0fb`.
+- Próximo passo Git: revisar o staging, criar o commit e executar o push.
+- Nenhum commit, push, merge ou deploy foi executado nesta etapa.
+
 ## Segurança — atualização de 2026-09-23
 
 A implementação de segurança em `Atualizacao-Geral-V3` continua **sem
@@ -32,7 +64,7 @@ adicionais até P2.6, conforme o catálogo
 
 ### Arquitetura e frontend
 
-- O frontend está em `frontend/` e é servido pelo Nginx local.
+- O frontend Vue/TypeScript está em `frontend/`, é compilado pelo Vite e servido pelo Nginx local.
 - O FastAPI funciona como backend API, health check e superfície interna.
 - O Compose local expõe a interface em `127.0.0.1:8080` e a API direta em
   `127.0.0.1:8000`.

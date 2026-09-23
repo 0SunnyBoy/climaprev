@@ -1,8 +1,8 @@
 # Visualização geral do projeto
 
 **Projeto:** ClimaPrev  
-**Estado:** P0–P2.6 concluídos; revisão independente final pendente  
-**Data da análise:** 18 de setembro de 2026
+**Estado:** P0–P2.6 concluídos; branch conectada ao Git; commit e push pendentes
+**Data da análise:** 23 de setembro de 2026
 
 ## Prompt operacional para produção
 
@@ -140,7 +140,7 @@ Navegador
    | HTTP :8080
    v
 Nginx frontend
-   |-- entrega frontend/index.html, CSS e JavaScript
+   |-- entrega dist/index.html e assets hashados
    |-- encaminha /api/v1/risk
    |-- encaminha /api/v1/locations/search
    |-- encaminha /health/
@@ -176,14 +176,16 @@ acoplamento entre a distribuição Python e os arquivos da interface.
 
 ### Frontend
 
-- HTML sem framework.
-- CSS sem biblioteca externa.
-- JavaScript nativo com módulos ES.
-- `fetch` para comunicação com a API.
-- `AbortController` para cancelamento e timeout.
-- Validação nativa dos campos do formulário.
-- Sugestões de localidades via `GET /api/v1/locations/search`.
-- Nenhuma dependência Node ou fonte externa é necessária para executar a interface.
+- Vue 3 com Composition API.
+- TypeScript em modo `strict`.
+- Vite para desenvolvimento e build.
+- Vitest para testes unitários.
+- ESLint para análise de Vue e TypeScript.
+- CSS global sem biblioteca visual externa.
+- `fetch` e `AbortController` para comunicação, timeout e cancelamento.
+- Nginx para servir os assets compilados e encaminhar a API.
+- `node_modules` existe apenas no estágio de build/teste; não entra na imagem
+  final do frontend.
 
 ### Infraestrutura
 
@@ -359,8 +361,14 @@ smoke test do frontend.
 
 ## 10. Estado e próximas evoluções
 
-P0–P2.6 estão concluídos. A próxima etapa é a revisão independente final.
-Depois dela, o planejamento contempla:
+P0–P2.6 e o rework do frontend estão concluídos. A branch
+`Atualizacao-Geral-V3` está conectada a `origin/Atualizacao-Geral-V3`, mas as
+alterações atuais ainda não foram commitadas nem enviadas. A próxima etapa
+operacional é revisar o diff e publicar a branch. A revisão independente final
+e a validação real de homologação continuam pendentes antes de qualquer
+produção.
+
+Depois da publicação da branch, o planejamento contempla:
 
 1. piloto offline para validar `reference-v1`;
 2. eventual política candidata com fallback e rollback;

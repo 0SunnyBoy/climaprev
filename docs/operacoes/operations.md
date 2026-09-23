@@ -127,10 +127,10 @@ executa pip check e compara todas as versões instaladas com o lock.
 `docker compose build` seleciona `dev` explicitamente nos quatro serviços de
 aplicação/carga. O alvo final padrão é `runtime`, com UID10001, dependências
 hashadas e o wheel do pacote; testes/docs/env e ferramentas dev ficam fora.
-O Python base está fixado por digest. Os assets HTML/CSS/JS ficam em
-`frontend/` e são servidos pelo Nginx; não entram no wheel nem na imagem de
-runtime Python. O `.dockerignore` envia somente os arquivos necessários ao
-build do backend.
+O Python base está fixado por digest. O código HTML/CSS/TypeScript fica em
+`frontend/`, é compilado pelo Vite e servido pelo Nginx a partir de `dist/`;
+não entram no wheel nem na imagem de runtime Python. O `.dockerignore` envia
+os arquivos necessários aos builds do backend e do frontend.
 
 ```bash
 docker build --load --target runtime -t climaprev-runtime:local .

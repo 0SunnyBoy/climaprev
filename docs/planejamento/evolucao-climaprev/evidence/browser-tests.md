@@ -1,5 +1,11 @@
 # Roteiro Browser reproduzível — B01–B10
 
+> Evidência histórica do frontend anterior à migração Vue/TypeScript. Os
+> exemplos que importam `frontend/api.js` representam o contrato de teste da
+> implementação antiga e não devem ser executados contra o frontend atual.
+> Para o estado atual, use `tests/docker/check_frontend_browser.py` e
+> `tests/docker/check_frontend_security.py`.
+
 Os blocos abaixo são as fontes exatas dos scripts executados em Chrome 152
 visível com Playwright disponível no host. Eles usam respostas sintéticas
 interceptadas, sem chamar o provedor público. TLS é verificado separadamente

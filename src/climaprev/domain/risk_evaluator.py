@@ -32,8 +32,8 @@ class RiskEvaluator:
                         value=rain.value,
                         unit=rain.unit,
                         reason=(
-                            "Forecast precipitation indicates a flooding risk proxy; "
-                            "this is not a local hydrological assessment or an official alert."
+                            "A precipitação prevista indica um sinal de risco de alagamento; "
+                            "isso não representa uma avaliação hidrológica local nem um alerta oficial."
                         ),
                     ),
                 )
@@ -79,7 +79,7 @@ def _rain_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate | None
                 severity=hourly_severity,
                 value=day.precipitation_max_hourly_mm,
                 unit="mm/h",
-                reason="Forecast hourly precipitation reached a heavy rain proxy, not an official alert.",
+                reason="A precipitação horária prevista atingiu um indicador de chuva intensa, não um alerta oficial.",
             )
         )
 
@@ -95,7 +95,7 @@ def _rain_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate | None
                 severity=daily_severity,
                 value=day.precipitation_sum_mm,
                 unit="mm/day",
-                reason="Forecast daily precipitation reached a heavy rain proxy, not an official alert.",
+                reason="A precipitação diária prevista atingiu um indicador de chuva intensa, não um alerta oficial.",
             )
         )
     return _best(candidates)
@@ -114,7 +114,7 @@ def _wind_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate | None
         severity=severity,
         value=day.wind_gust_max_kmh,
         unit="km/h",
-        reason="Forecast wind gust reached a strong wind proxy, not an official alert.",
+        reason="A rajada de vento prevista atingiu um indicador de vento forte, não um alerta oficial.",
     )
 
 
@@ -133,8 +133,8 @@ def _temperature_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate
                 value=day.temperature_max_c,
                 unit="celsius",
                 reason=(
-                    "Forecast maximum temperature reached an absolute temperature extreme proxy, "
-                    "not a heatwave or official alert."
+                    "A temperatura máxima prevista atingiu um indicador de temperatura extrema absoluta, "
+                    "não uma onda de calor nem um alerta oficial."
                 ),
             )
         )
@@ -152,8 +152,8 @@ def _temperature_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate
                 value=day.temperature_min_c,
                 unit="celsius",
                 reason=(
-                    "Forecast minimum temperature reached an absolute temperature extreme proxy, "
-                    "not a heatwave or official alert."
+                    "A temperatura mínima prevista atingiu um indicador de temperatura extrema absoluta, "
+                    "não uma onda de calor nem um alerta oficial."
                 ),
             )
         )

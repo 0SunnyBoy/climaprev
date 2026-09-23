@@ -1,5 +1,17 @@
 # Tarefas — evolução do Clima Prev
 
+> Este arquivo preserva o plano e as evidências do ciclo original. A
+> implementação atual do frontend foi posteriormente migrada para Vue 3,
+> TypeScript e Vite em `frontend/src/`. Referências históricas a
+> `frontend/api.js`, `frontend/app.js`, `frontend/result.js` e
+> `frontend/styles.css` descrevem o estado anterior das tarefas T21–T25; não
+> são caminhos ativos do runtime atual.
+
+> Este arquivo preserva o plano e as referências do ciclo base. As tarefas
+> T21–T25 registram a implementação vanilla original; o rework atual foi
+> concluído em Vue 3 + TypeScript e está catalogado em
+> `docs/frontend/Frontend-Rework.md`.
+
 **Estado:** Ciclo base concluído; incrementos P0–P2.6 concluídos; revisão independente pendente.
 **Spec:** [spec.md](spec.md). **Design:** [design.md](design.md).
 **Progresso de implementação:** 25/25 tarefas base concluídas, com incrementos posteriores registrados em `docs/projeto/ImplementationsAndRefactoring.md`.

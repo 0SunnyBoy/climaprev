@@ -1,5 +1,9 @@
 # Design — segurança orientada por evidência
 
+> Documento de desenho e evidência histórica. Referências a `frontend/api.js`
+> e `frontend/result.js` descrevem a implementação anterior; os gates atuais
+> devem usar os componentes Vue e os testes em `tests/docker/`.
+
 Estado: desenho implementado/validado até T19 com dados sintéticos;
 revisão independente e validação do ambiente real pendentes.
 Data: 2026-09-19.

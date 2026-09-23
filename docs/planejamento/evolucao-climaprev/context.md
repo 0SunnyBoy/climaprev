@@ -1,10 +1,14 @@
 # Contexto — evolução do Clima Prev
 
 **Data do baseline:** 2026-09-13. **Estado do documento:** planejamento inicial;
-o estado atual está em [STATE](../../projeto/STATE.md), atualizado em 2026-09-18.
-**Branch:** `atualizaçao-geral`. O planejamento começou em
+o estado atual está em [STATE](../../projeto/STATE.md), atualizado em 2026-09-23.
+**Branch atual:** `Atualizacao-Geral-V3`. O planejamento começou em
 `docs/plano-evolucao-climaprev`, a partir de `main`, commit `a010c3b`.
 As alterações locais anteriores foram preservadas.
+
+As referências à branch e ao commit nas seções históricas abaixo descrevem o
+baseline de 13 de setembro. Elas não substituem o estado atual registrado em
+`STATE.md`.
 
 ## Objetivo solicitado
 
@@ -114,8 +118,9 @@ incluídos nas tarefas abaixo.
 ## Execução autorizada em 2026-09-13
 
 O usuário solicitou a criação da branch “atualizaçao geral” e a coordenação
-de agentes para finalizar as tarefas. A branch ativa é `atualizaçao-geral`
-(espaços não são aceitos por Git). O plano passa à execução local, com suas
+de agentes para finalizar as tarefas. A branch usada naquele baseline era
+`atualizaçao-geral` (espaços não são aceitos por Git). O plano passa à execução
+local, com suas
 premissas como baseline: consulta anônima, qualidade aditiva, frontend nativo
 e homologação local. O backlog condicionado continua fora das 25 tarefas.
 A solicitação inclui implementação, testes, commits locais e revisão por

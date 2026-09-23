@@ -1,6 +1,6 @@
 # Validação e rastreabilidade documental
 
-**Data:** 2026-09-18. **Escopo:** rastreabilidade atualizada após a análise
+**Data:** 2026-09-23. **Escopo:** rastreabilidade atualizada após a análise
 documental inicial de 2026-09-13. [Índice](../projeto/PROJECT.md).
 
 Este arquivo preserva a validação da primeira entrega documental. A execução
@@ -59,6 +59,12 @@ Na revisão atual, foram executados dentro do Docker:
 - `docker compose run --rm app mypy src`: **41 source files**;
 - `docker compose exec -T frontend nginx -t`: configuração válida;
 - smoke HTTP do frontend, CSS e `/health/live`: respostas esperadas.
+
+Na validação integrada da cópia correta em 23 de setembro, também foram
+confirmados build das imagens, Redis saudável, página HTTP 200, health check
+HTTP 200, assets hashados e contratos de segurança e POST do frontend. A
+execução local do homolog real não foi feita porque `.homolog/` não está
+presente nesta cópia.
 
 Os diagramas foram revisados como texto; não houve renderização automatizada
 Mermaid nesta revisão.

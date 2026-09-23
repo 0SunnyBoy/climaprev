@@ -11,6 +11,13 @@
 !tests/**
 !docs/
 !docs/**
+!docker/
+!docker/frontend/
+!docker/frontend/**
+!frontend/
+!frontend/**
+frontend/node_modules/
+frontend/dist/
 **/__pycache__
 **/*.pyc
 **/.env

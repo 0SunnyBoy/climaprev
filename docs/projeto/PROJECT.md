@@ -1,7 +1,8 @@
 # PROJECT — Clima Prev
 
-**Data da análise:** 2026-09-18.  
-**Estado:** P0–P2.6 concluídos; revisão independente final pendente.
+**Data da análise:** 2026-09-23.
+**Estado:** P0–P2.6 e rework Vue concluídos; branch conectada ao Git; commit,
+push e revisão independente final pendentes.
 
 ## Visão
 
@@ -10,7 +11,7 @@ estimativa de risco para um local e um período de até sete dias. A resposta
 informa a fonte, a qualidade dos dados, a política usada e a disponibilidade
 de alertas oficiais. A estimativa não substitui alertas das autoridades.
 
-O sistema reúne uma interface web estática servida pelo Nginx, backend
+O sistema reúne uma interface web Vue/TypeScript compilada pelo Vite e servida pelo Nginx, backend
 Python/FastAPI, Redis, adaptadores Open-Meteo e integração de avisos ativos do
 INMET. Contas de usuário, notificações e personalização continuam fora deste
 ciclo.
@@ -47,7 +48,7 @@ referência para comportamento existente; propostas descrevem mudanças futuras.
 
 | Local                           | Papel                                                   |
 | ------------------------------- | ------------------------------------------------------- |
-| `frontend/`                      | Interface de consulta e apresentação do contrato público. |
+| `frontend/`                      | Código-fonte Vue/TypeScript, build Vite e apresentação do contrato público. |
 | `docker/frontend/nginx.conf`    | Nginx local para servir o frontend e encaminhar API/health. |
 | `docker/homolog/entrada/nginx.conf` | Nginx TLS de homologação para servir o frontend e encaminhar API/health. |
 | `src/climaprev/api/`            | Contrato HTTP, validação, rate limit e observabilidade. |

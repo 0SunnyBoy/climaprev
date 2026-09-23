@@ -1,6 +1,6 @@
 # Segurança e fronteiras de confiança
 
-**Escopo:** controles do código e da execução local em 2026-09-18;
+**Escopo:** controles do código e da execução local observados em 2026-09-23;
 progresso e testes em [tasks](../planejamento/evolucao-climaprev/tasks.md).
 Não representa teste de invasão ou certificação de um ambiente publicado.
 [Índice](../projeto/PROJECT.md).

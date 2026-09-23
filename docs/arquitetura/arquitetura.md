@@ -1,13 +1,14 @@
 # Arquitetura do Clima Prev
 
-**Estado:** implementação observada em 2026-09-18; P0–P2.6 concluídos e revisão
-independente final pendente. [Índice](../projeto/PROJECT.md).
+**Estado:** implementação observada em 2026-09-23; P0–P2.6 e rework Vue
+concluídos. Commit, push e revisão independente final continuam pendentes.
+[Índice](../projeto/PROJECT.md).
 
 ## Visão de contexto
 
 ```mermaid
 flowchart LR
-    Cliente["Navegador: interface HTML/CSS/JS ou cliente HTTP"] --> Entrada["Nginx local ou entrada TLS"]
+    Cliente["Navegador: Vue/TypeScript compilado ou cliente HTTP"] --> Entrada["Nginx local ou entrada TLS"]
     Entrada -->|"HTML, CSS e JavaScript"| Cliente
     Entrada -->|"GET/POST /api/v1/risk"| API["Clima Prev - FastAPI"]
     Entrada -->|"GET /api/v1/locations/search"| API
@@ -25,8 +26,8 @@ flowchart LR
     Metricas --> API
 ```
 
-A interface estática fica em `frontend/` e é servida diretamente pelo Nginx em
-`/` e `/assets/`. O FastAPI expõe somente a API e os endpoints de health check;
+O código-fonte da interface fica em `frontend/`, é compilado pelo Vite e o
+Nginx serve o `dist` resultante em `/` e `/assets/`. O FastAPI expõe somente a API e os endpoints de health check;
 ele não serve HTML ou assets. O serviço integra avisos ativos do INMET, mantendo
 esses avisos separados da avaliação heurística de risco. Não há banco
 relacional ou fila de mensagens.
@@ -35,7 +36,7 @@ relacional ou fila de mensagens.
 
 | Camada               | Evidência                                                                                                                                                                                              | Responsabilidade e limite                                         |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Interface web | [Página](../../frontend/index.html), [cliente](../../frontend/app.js) | Coletar entrada e apresentar a resposta; cálculo permanece no backend. |
+| Interface web | [Aplicação](../../frontend/src/App.vue), [serviço de API](../../frontend/src/services/api.ts) | Coletar entrada e apresentar a resposta; cálculo permanece no backend. |
 | Entrada estática e proxy | [Nginx local](../../docker/frontend/nginx.conf), [Nginx de homologação](../../docker/homolog/entrada/nginx.conf) | Servir o frontend e encaminhar somente API e health check ao backend. |
 | Entrada HTTP         | [Rotas](../../src/climaprev/api/routes/risk.py), [schema](../../src/climaprev/api/schemas/risk.py)                                                                                                           | Validar query e serializar resposta; não calcular risco.          |
 | Proteção de entrada  | [Dependências](../../src/climaprev/api/deps.py)                                                                                                                                                           | Resolver identidade de rede e aplicar rate limit.                 |
@@ -70,7 +71,7 @@ fica no domínio, separado da política de risco.
   [lock de produção](../../requirements.lock). O [Dockerfile](../../Dockerfile)
   separa `dev` e `runtime`; a imagem final usa UID 10001 e pacote instalado
   em wheel, sem ferramentas de teste ou arquivos locais de ambiente.
-- O [Compose](../../docker-compose.yml) publica o frontend em
+- O [Compose](../../docker-compose.yml) compila e publica o frontend em
   `127.0.0.1:8080` e a API diretamente em `127.0.0.1:8000` para debug; Redis
   não publica porta para o host.
 - A rede `local` é uma rede Compose comum. Seu nome não bloqueia acesso à
@@ -90,8 +91,9 @@ fica no domínio, separado da política de risco.
 
 O [Compose de homologação](../../docker-compose.homolog.yml) usa o runtime sem
 privilégios, filesystem da API somente leitura e Redis com ACL. API e Redis
-não publicam portas diretas. A entrada Nginx monta `frontend/`, serve a página
-e os assets, e encaminha somente API e health check para o app. Somente o app
+não publicam portas diretas. A entrada Nginx usa a imagem compilada do
+frontend, serve a página e os assets, e encaminha somente API e health check
+para o app. Somente o app
 acessa a rede interna do cache; a saída aos provedores usa outra rede. A senha
 é provisionada fora do Git e lida de arquivo montado somente nos serviços
 autorizados. A entrada Nginx publica TLS apenas no loopback e bloqueia

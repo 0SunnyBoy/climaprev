@@ -48,10 +48,8 @@ jobs:
         run: |
           curl --fail --silent --show-error --retry 20 --retry-delay 2 \
             --retry-connrefused http://127.0.0.1:8080/health/live
-          curl --fail --silent --show-error --head \
-            http://127.0.0.1:8080/assets/styles.css | grep -iq 'content-type: text/css'
-          curl --fail --silent --show-error http://127.0.0.1:8080/ \
-            | grep -q '<title>Clima Prev'
+          python tests/docker/check_frontend_security.py \
+            --base-url http://127.0.0.1:8080
 
       - name: Stop Compose services
         if: always()

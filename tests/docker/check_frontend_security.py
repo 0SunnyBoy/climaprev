@@ -1,9 +1,4 @@
-"""HTTP/static acceptance gate for the public frontend boundary.
-
-The production image remains free of test dependencies. With ``--base-url`` this
-also checks a running local or TLS entrance. Browser automation can reuse the
-same assertions from a pinned Playwright runner in CI.
-"""
+"""HTTP/static acceptance gate for the public Vue frontend boundary."""
 
 import argparse
 import json
@@ -13,7 +8,6 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ASSETS = ("/assets/styles.css", "/assets/app.js", "/assets/api.js", "/assets/result.js")
 
 
 def _request(url: str) -> tuple[int, str, str]:
@@ -28,17 +22,18 @@ def _request(url: str) -> tuple[int, str, str]:
 
 def check_static() -> None:
     index = (ROOT / "frontend/index.html").read_text(encoding="utf-8")
-    scripts = "\n".join((ROOT / f"frontend/{name}").read_text(encoding="utf-8") for name in ("app.js", "api.js", "result.js"))
-    assert "fetch('/api/v1/risk'" in scripts
-    assert "/api/v1/locations/search?query=" in scripts
-    assert "innerHTML" not in scripts
-    assert "document.write" not in scripts
-    assert "eval(" not in scripts and "new Function(" not in scripts
-    assert "textContent" in scripts
-    assert not re.search(r"(?:password|secret|api[_-]?key|token)\s*[:=]", index + "\n" + scripts, re.IGNORECASE)
-    assert "http://" not in scripts and "https://" not in scripts
+    source = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "frontend/src").rglob("*.ts"))
+    source += "\n" + "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "frontend/src").rglob("*.vue"))
+    assert "fetch('/api/v1/risk'" in source
+    assert "/api/v1/locations/search?query=" in source
+    assert "innerHTML" not in source
+    assert "document.write" not in source
+    assert "eval(" not in source and "new Function(" not in source
+    assert "textContent" not in source
+    assert not re.search(r"(?:password|secret|api[_-]?key|token)\s*[:=]", index + "\n" + source, re.IGNORECASE)
+    assert "http://" not in source and "https://" not in source
     synthetic = "<img src=x onerror=alert('SYNTHETIC-XSS')>"
-    assert synthetic not in index + scripts
+    assert synthetic not in index + source
     assert json.loads(json.dumps({"name": synthetic}))["name"].startswith("<img")
 
 
@@ -46,7 +41,10 @@ def check_http(base_url: str) -> None:
     root = base_url.rstrip("/")
     status, body, content_type = _request(root + "/")
     assert status == 200 and content_type == "text/html" and "<title>" in body
-    for path in ASSETS:
+    assets = re.findall(r"(?:href|src)=\"(/assets/[^\"]+)\"", body)
+    assert any(asset.endswith(".css") for asset in assets)
+    assert any(asset.endswith(".js") for asset in assets)
+    for path in assets:
         status, body, content_type = _request(root + path)
         assert status == 200 and body
         assert content_type in {"text/css", "application/javascript"}

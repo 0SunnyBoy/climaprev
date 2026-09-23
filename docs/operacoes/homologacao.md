@@ -1,5 +1,10 @@
 # Homologação local
 
+O procedimento abaixo descreve uma validação separada do ambiente local. Na
+cópia atual, `.homolog/` não está presente; portanto, a stack de homologação
+não foi iniciada nesta revisão. Provisionar os arquivos somente na máquina
+responsável pela homologação e nunca adicioná-los ao Git.
+
 A stack `climaprev-homolog` é separada do desenvolvimento. API e Redis não
 publicam portas. Redis exige ACL, limita chaves ao prefixo versionado
 `climaprev:production:` e

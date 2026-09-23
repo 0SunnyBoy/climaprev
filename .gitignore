@@ -17,6 +17,8 @@ __pycache__/
 htmlcov/
 dist/
 build/
+frontend/node_modules/
+frontend/dist/
 *.egg-info/
 
 # Local IDE and OS files.
