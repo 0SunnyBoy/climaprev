@@ -2,6 +2,14 @@
 
 Atualizado em 2026-09-23. Branch: `Atualizacao-Geral-V3`.
 
+## Publicação atual
+
+O rework do frontend, as atualizações de backend, infraestrutura, testes e
+documentação estão publicados na branch `Atualizacao-Geral-V3` no commit
+`0f17809` (`feat: finalize Vue frontend rework and project updates`). A branch
+acompanha `origin/Atualizacao-Geral-V3`; nenhum deploy ou merge em `main` foi
+realizado.
+
 Este é um checkpoint de trabalho **sem aprovação de produção**. T14–T19
 foram implementadas e validadas com dados sintéticos; CI e Security gates
 passaram no GitHub para o commit `525854ab132e4db37bde9b483468e72ac36cdf10`.
