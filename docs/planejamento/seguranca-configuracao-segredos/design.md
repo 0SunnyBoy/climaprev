@@ -1,11 +1,12 @@
 # Design — segurança orientada por evidência
 
-Estado: Implementing — desenho aprovado para implementação local.
+Estado: desenho implementado/validado até T18 com dados sintéticos;
+revisão independente e T19 pendentes.
 Data: 2026-09-19.
 
-Atualização de 2026-09-21: execução local retomada após o checkpoint. Consulte
-o [contexto](context.md) para separar controles implementados, provas parciais
-e gates ainda dependentes do ambiente.
+Atualização de 2026-09-23: gates locais e workflows remotos passaram para
+`525854a`. Consulte o [contexto](context.md) para separar essas provas
+da validação ainda necessária no ambiente real.
 
 [Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
 [Tasks](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).

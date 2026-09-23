@@ -1,7 +1,7 @@
 # Evidências de execução da segurança
 
-Estado em 2026-09-23: T14–T16 e T18 com gates locais aprovados; T17
-aguarda execução remota e T19 está pendente. Sem aprovação de release.
+Estado em 2026-09-23: T14–T18 com gates locais aprovados; T17 também
+aprovado no GitHub Actions. T19 está pendente. Sem aprovação de release.
 Base histórica: branch `Atualizacao-Geral-V3`, HEAD `0a4654e` no checkpoint
 de 2026-09-21; as seções posteriores registram a retomada. Data inicial:
 2026-09-19.
@@ -252,8 +252,8 @@ sintéticos, sem alterar os recursos produtivos nem expor valores.
 | --- | --- | --- |
 | T14 | Compose homolog com Redis e Nginx pinados por digest, UID fixo sem root, rootfs somente leitura, capabilities removidas, secrets por consumidor; topologia, ACL/readiness, TLS/CA, logs sanitizados e reinício do coletor passaram | Stack sintética, não ambiente produtivo |
 | T15 | Runner Playwright 1.63.0 pinado passou em HTTP local e HTTPS homolog; CSS, mesma origem, DOM inerte, storage vazio e CA explícita | Não é auditoria formal de acessibilidade |
-| T16 | Gitleaks com regras padrão examinou 33 commits; fixture bloqueou tokens sintéticos em `.env.example` e em outro arquivo, com saída redigida | Uma exceção histórica por fingerprint exato em `.gitleaksignore` |
-| T17 | Workflow de segurança escrito; Gitleaks, Trivy, Browser, Homolog, 437 testes, Ruff e mypy passaram localmente | GitHub Actions ainda não executado; não há aceite remoto |
+| T16 | Gitleaks com regras padrão examinou 34 commits após o commit de segurança; fixture bloqueou tokens sintéticos em `.env.example` e em outro arquivo, com saída redigida | Uma exceção histórica por fingerprint exato em `.gitleaksignore` |
+| T17 | Gitleaks, Trivy, Browser, Homolog e regressão passaram localmente e no GitHub Actions | Não substitui revisão independente nem controles de produção |
 | T18 | Runbook e rotação de dois conjuntos sintéticos; senha anterior recusada, nova aceita e duas execuções compartilharam a mesma cota Redis/HMAC | Não houve rotação real nem validação de DNS/firewall/certificado público |
 
 O Redis efêmero recriado inicia com cache/cota frios. A nova chave HMAC
@@ -273,8 +273,9 @@ não zero no gate.
 
 O Trivy 0.74.0 examinou a imagem runtime Alpine final, detectou pacotes do
 sistema e Python e retornou código 0 com **zero HIGH/CRITICAL**;
-`ignore-unfixed` permaneceu desativado. O resultado é específico da base de
-vulnerabilidades consultada em 2026-09-23 e deve ser repetido no CI.
+`ignore-unfixed` permaneceu desativado. O CI repetiu o gate com sucesso;
+o resultado é específico da base de vulnerabilidades consultada em
+2026-09-23 e não garante ausência futura de achados.
 
 Após rebuild da imagem de desenvolvimento, `pytest -q -W error` passou com
 **437 testes**; Ruff passou com `--ignore EXE002` e mypy passou nos
@@ -288,6 +289,18 @@ oficial. A stack sintética e seus volumes foram encerrados, e os diretórios
 temporários de certificados/segredos sintéticos foram removidos; a stack
 local de desenvolvimento permaneceu intacta.
 
-Pendências: observar o workflow remoto de T17, resolver eventuais falhas no
-runner, executar T19 e revisão independente. Os testes locais não autorizam
-deploy nem declaração de prontidão de produção.
+## Gates remotos — 2026-09-23
+
+Commit `525854ab132e4db37bde9b483468e72ac36cdf10` foi enviado à
+branch `Atualizacao-Geral-V3` após nova varredura Gitleaks dos 34 commits.
+O [CI](https://github.com/0SunnyBoy/climaprev/actions/runs/35878967535)
+e o [Security gates](https://github.com/0SunnyBoy/climaprev/actions/runs/35878967681)
+terminaram com conclusão **success**. No workflow de segurança, passaram
+política de arquivos, fixture e histórico Gitleaks, build runtime,
+Playwright local, homologação TLS/Browser, rotação sintética, Trivy,
+regressão e limpeza final. Ambos usaram o runner Ubuntu do GitHub; nenhum
+segredo produtivo foi fornecido a esses jobs.
+
+Pendências: T19, revisão independente e verificação do ambiente real.
+Os gates locais/remotos não autorizam deploy nem declaração de prontidão
+de produção.

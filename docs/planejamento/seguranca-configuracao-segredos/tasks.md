@@ -1,7 +1,7 @@
 # Tasks — implementação da segurança do ClimaPrev
 
-Estado em 2026-09-23: T1–T16 e T18 com implementação e gates locais;
-T17 com execução local, mas sem execução remota do workflow; T19 pendente.
+Estado em 2026-09-23: T1–T18 com implementação e gates locais;
+T17 também aprovado no workflow remoto; T19 pendente.
 Sem prontidão de produção. Nenhuma
 rotação real, publicação ou alteração no SIGFAS está autorizada por esta
 execução.
@@ -9,8 +9,8 @@ execução.
 Na retomada de 2026-09-23, T14 passou em stack sintética com Redis, TLS,
 ACL, coleta de logs e menor privilégio; T15 passou em navegadores HTTP e
 HTTPS com CA explícita; T16 passou com regras padrão, uma exceção histórica
-por fingerprint e fixtures de detecção; T17 executou os gates localmente,
-mas depende do runner GitHub; T18 passou no ensaio sintético de rotação e
+por fingerprint e fixtures de detecção; T17 passou também no runner GitHub;
+T18 passou no ensaio sintético de rotação e
 tem runbook. Consulte [contexto](context.md) e [evidências](evidence.md).
 
 [Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
@@ -402,14 +402,14 @@ a tarefa como concluída. Não iniciar provedores reais para contornar mocks.
 
 ## Status desta entrega
 
-O usuário aprovou implementação e testes locais. Os status finais dependem
-dos gates e da revisão independente; código escrito não significa verificado.
-Lote T1–T9 pausado com validação parcial. As alterações anteriores do usuário
-são preservadas. Não houve resultado final do agente auxiliar antes da parada.
+T1–T18 passaram nos gates aplicáveis com dados sintéticos. T17 também passou
+nos workflows remotos CI e Security gates para `525854a`. T19, revisão
+independente e validação do ambiente real permanecem pendentes. Isso não
+significa prontidão de produção. Alterações anteriores não relacionadas
+permanecem preservadas fora do commit de segurança.
 
-SPEC_DEVIATION: commits por tarefa adiados durante a integração porque a
-árvore já contém mudanças do usuário nos mesmos arquivos. Não agrupar nem
-versionar essas mudanças automaticamente. Posteriormente, o usuário autorizou
-um checkpoint Git da segurança e do contexto para outro Codex. Essa exceção
-não inclui mudanças anteriores de frontend/Compose/documentação geral, deploy,
-revogação de segredo real ou reescrita de histórico.
+SPEC_DEVIATION: commits por tarefa foram agrupados devido à integração com
+uma árvore já alterada. O commit `525854a` selecionou somente segurança,
+contexto e documentação relacionada; mudanças não relacionadas de
+`risk_evaluator` e seus testes ficaram fora. Nenhum deploy, revogação real
+ou reescrita de histórico foi realizada.

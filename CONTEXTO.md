@@ -1,10 +1,11 @@
 # Contexto para o próximo Codex
 
-Atualizado em 2026-09-21. Branch: `Atualizacao-Geral-V3`.
+Atualizado em 2026-09-23. Branch: `Atualizacao-Geral-V3`.
 
-Este é um checkpoint de trabalho **parcial**, não uma versão aprovada para
-produção. A implementação foi retomada para concluir controles locais e
-registrar gates reproduzíveis. Não houve publicação, deploy ou troca de
+Este é um checkpoint de trabalho **sem aprovação de produção**. T14–T18
+foram implementadas e validadas com dados sintéticos; CI e Security gates
+passaram no GitHub para o commit `525854ab132e4db37bde9b483468e72ac36cdf10`.
+T19 e a revisão independente ainda faltam. Não houve deploy nem troca de
 segredos reais.
 
 Comece pelo [contexto de retomada da segurança](docs/planejamento/seguranca-configuracao-segredos/context.md).
@@ -15,7 +16,7 @@ Depois leia [spec](docs/planejamento/seguranca-configuracao-segredos/spec.md),
 [evidências](docs/planejamento/seguranca-configuracao-segredos/evidence.md).
 
 Não confunda resultados históricos do projeto com validação deste checkpoint.
-Os gates locais abaixo foram reexecutados em Redis/containers descartáveis;
-homologação dependente de mounts Windows, scanners externos e revisão
-independente continuam fora do aceite local. Preserve alterações locais e
-não publique segredos ou artefatos de scanner.
+Os gates locais foram reexecutados em Redis/containers descartáveis, e os
+dois workflows remotos passaram. A homologação sintética não valida DNS,
+firewall, certificado público nem credenciais reais. Preserve alterações
+locais e não publique segredos ou artefatos de scanner.

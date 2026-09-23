@@ -1,10 +1,12 @@
 # Spec — segurança, segredos e exposição do ClimaPrev
 
-Estado: Implementing — implementação local autorizada pelo usuário.
+Estado: T1–T18 implementadas/validadas com dados sintéticos; T19 e revisão
+independente pendentes. Sem prontidão de produção.
 Data: 2026-09-19. Branch: `Atualizacao-Geral-V3`, checkpoint remoto `7ac70d8`.
 
-Atualização de 2026-09-21: implementação local retomada e parcialmente
-validada, sem aceite final. Veja o [contexto](context.md) e [evidências](evidence.md).
+Atualização de 2026-09-23: CI e Security gates remotos passaram para
+`525854a`, sem aceite de produção. Veja o [contexto](context.md) e
+[evidências](evidence.md).
 
 [Design e análise comparativa](../../../docs/planejamento/seguranca-configuracao-segredos/design.md) ·
 [Tarefas e verificações](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).

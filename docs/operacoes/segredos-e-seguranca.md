@@ -70,6 +70,6 @@ URLs completas de provedor ou logs brutos em issues/artefatos.
 ## Status
 
 Os gates locais de homologação/TLS e o ensaio de rotação passaram com dois
-conjuntos sintéticos em 2026-09-23. A execução do workflow remoto, a revisão
-independente e os controles de rede/certificado do ambiente real não foram
+conjuntos sintéticos em 2026-09-23; o workflow remoto também passou. A
+revisão independente e os controles de rede/certificado do ambiente real não foram
 validados; nenhuma prontidão de produção é declarada.
