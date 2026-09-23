@@ -12,20 +12,15 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parents[2]
 COMPOSE_FILE = ROOT / "docker-compose.homolog.yml"
 ENV_FILE = ROOT / ".homolog" / "compose.env"
-CA_FILE = ROOT / ".homolog" / "ca.crt"
+DEFAULT_CA_FILE = ROOT / ".homolog" / "ca.crt"
 
 
-def compose(*args: str) -> None:
+def compose(*args: str, env_file: Path | None = ENV_FILE) -> None:
+    command = ["docker", "compose"]
+    if env_file is not None:
+        command.extend(["--env-file", str(env_file)])
     result = subprocess.run(
-        [
-            "docker",
-            "compose",
-            "--env-file",
-            str(ENV_FILE),
-            "-f",
-            str(COMPOSE_FILE),
-            *args,
-        ],
+        [*command, "-f", str(COMPOSE_FILE), *args],
         check=False,
         capture_output=True,
         text=True,
@@ -56,9 +51,11 @@ def content_type(headers: dict[str, str]) -> str:
     return headers.get("content-type", "").split(";", 1)[0].lower()
 
 
-def check(port: int) -> None:
+def check(
+    port: int, ca_file: Path = DEFAULT_CA_FILE, env_file: Path | None = ENV_FILE
+) -> None:
     base = f"https://localhost:{port}"
-    context = ssl.create_default_context(cafile=str(CA_FILE))
+    context = ssl.create_default_context(cafile=str(ca_file))
 
     status, body, headers = request(f"{base}/", context)
     assert status == 200
@@ -93,11 +90,15 @@ def check(port: int) -> None:
     status, _, _ = request(f"{base}/__climaprev_smoke_unknown__", context)
     assert status == 404
 
-    compose("exec", "-T", "entrada", "nginx", "-t")
+    compose("exec", "-T", "entrada", "nginx", "-t", env_file=env_file)
     print("Homolog frontend smoke: page/assets/API/health/internal boundary/nginx config OK.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=18443)
-    check(parser.parse_args().port)
+    parser.add_argument("--ca-file", type=Path, default=DEFAULT_CA_FILE)
+    parser.add_argument("--env-file", type=Path, default=ENV_FILE)
+    parser.add_argument("--use-process-env", action="store_true")
+    args = parser.parse_args()
+    check(args.port, args.ca_file, None if args.use_process_env else args.env_file)

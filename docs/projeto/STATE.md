@@ -1,13 +1,16 @@
 # STATE — Clima Prev
 
-## Checkpoint de segurança — 2026-09-21
+## Segurança — atualização de 2026-09-23
 
-A implementação de segurança em `Atualizacao-Geral-V3` está **pausada e
-incompleta**. O usuário solicitou o envio de um checkpoint para continuidade
-por outro Codex. Leia o [contexto atual](../planejamento/seguranca-configuracao-segredos/context.md)
-e as [evidências](../planejamento/seguranca-configuracao-segredos/evidence.md)
-antes de retomar. T1–T9 têm alterações escritas com validação ainda parcial;
-T10–T19 permanecem pendentes. A homologação precisa integrar os novos secrets.
+A implementação de segurança em `Atualizacao-Geral-V3` continua **sem
+prontidão de produção**. T14 passou na stack sintética de homologação com
+TLS/ACL, logs e isolamento; T15 passou no runner Playwright pinado em HTTP
+e HTTPS com CA explícita; T16 passou no Gitleaks com regras padrão e teste
+de segredo sintético. T17 tem workflow e gates locais aprovados, mas a
+execução no GitHub ainda não foi observada. T18 tem runbook e ensaio de
+rotação sintética; T19 e revisão independente permanecem pendentes.
+Leia o [contexto atual](../planejamento/seguranca-configuracao-segredos/context.md)
+e as [evidências](../planejamento/seguranca-configuracao-segredos/evidence.md).
 
 Os resultados abaixo são históricos, anteriores a esse ciclo, e não aprovam
 o código novo. Alterações locais anteriores de frontend, Compose e outros
@@ -81,6 +84,28 @@ adicionais até P2.6, conforme o catálogo
 - Workflow de CI criado para repetir build, testes, análise estática, mypy,
   Nginx e smoke test no GitHub; primeira execução remota depende do push.
 
+### Retomada de segurança — 2026-09-21
+
+- Suíte completa após o checkpoint: **437 testes aprovados**.
+- Build das imagens `app` e runtime com a base Python 3.12 Alpine fixada por
+  digest: aprovados.
+- Ruff com `--ignore EXE002`: aprovado; mypy em 41 arquivos: aprovado.
+- Nginx local: `nginx -t` aprovado; body acima de 16 KiB retornou 413,
+  método PUT indevido 403 e rota desconhecida 404.
+- Frontend/assets e contrato de segurança estático/HTTP: aprovado.
+- Perfil de carga: Redis e redes próprios, ambos `internal: true`; smoke
+  Locust de 3 requisições, 0 falhas.
+- Ensaio sintético de rotação: aprovado, conjuntos independentes e sem
+  valores exibidos.
+- Gitleaks 8.30.1 passou com regras padrão, exceção por fingerprint para
+  um falso positivo histórico e fixture que detecta token sintético; 33
+  commits examinados. Trivy 0.74.0 passou com 0 HIGH/CRITICAL na imagem
+  runtime Alpine; `ignore-unfixed` permanece desativado.
+- Validação manual adicional no navegador local: página, assets, validação
+  nativa, consulta sintética, renderização do resultado e console sem erros.
+- Runner Playwright `1.63.0` executado em container de teste pinado:
+  fluxo local HTTP e homologação HTTPS passaram, sem ignorar erros TLS.
+
 As verificações de acessibilidade foram funcionais e visuais. Não houve
 certificação formal por Lighthouse ou leitor de tela nesta etapa.
 
@@ -108,6 +133,7 @@ certificação formal por Lighthouse ou leitor de tela nesta etapa.
 
 ## Retomada
 
-O próximo passo do planejamento é a revisão independente final. Qualquer nova
-alteração de código deve registrar processo, ganho esperado, impacto e
-validação antes da execução.
+Os próximos gates são, nesta ordem: homologação TLS/ACL (T14), runner
+Playwright reproduzível e CI remoto (T15/T17), revisão do runbook de rotação
+(T18) e revisão independente final (T19). Qualquer nova alteração de código
+deve registrar processo, ganho esperado, impacto e validação antes da execução.

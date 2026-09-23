@@ -1,14 +1,17 @@
 # Tasks — implementação da segurança do ClimaPrev
 
-Estado: Implementing. Implementação local autorizada, com agentes por lote
-sequencial e verificação independente. Nenhuma rotação real, publicação ou
-alteração no SIGFAS está autorizada por esta execução.
+Estado em 2026-09-23: T1–T16 e T18 com implementação e gates locais;
+T17 com execução local, mas sem execução remota do workflow; T19 pendente.
+Sem prontidão de produção. Nenhuma
+rotação real, publicação ou alteração no SIGFAS está autorizada por esta
+execução.
 
-Checkpoint de 2026-09-21: implementação pausada a pedido do usuário. Foi
-autorizado separadamente documentar e enviar o estado parcial à branch V3,
-sem deploy. Consulte [contexto](context.md) e [evidências](evidence.md).
-T1–T9 têm código escrito, mas ainda não têm todos os gates aprovados.
-T10–T19 permanecem pendentes; não interpretar esta lista como concluída.
+Na retomada de 2026-09-23, T14 passou em stack sintética com Redis, TLS,
+ACL, coleta de logs e menor privilégio; T15 passou em navegadores HTTP e
+HTTPS com CA explícita; T16 passou com regras padrão, uma exceção histórica
+por fingerprint e fixtures de detecção; T17 executou os gates localmente,
+mas depende do runner GitHub; T18 passou no ensaio sintético de rotação e
+tem runbook. Consulte [contexto](context.md) e [evidências](evidence.md).
 
 [Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
 [Design](../../../docs/planejamento/seguranca-configuracao-segredos/design.md).
@@ -112,7 +115,7 @@ secrets ou inspeções que exponham valores. Usar `config --quiet`.
 | Build      | Fim de fase executável                                                  | `docker compose config --quiet`, `docker compose build app`, Full, `docker compose run --rm app ruff check src tests --ignore EXE002`, `docker compose run --rm app mypy src` |
 | Local      | Proxy local após subir stack isolada                                    | `docker compose exec -T frontend nginx -t`; executar smokes locais atualizados na tarefa                                                                                      |
 | Homolog    | Após provisionar diretório de teste e subir stack dedicada              | `python3 tests/docker/check_homolog_tls.py`, `python3 tests/docker/check_homolog_frontend.py`, `python3 tests/docker/check_homolog_topology.py`; Redis pelo método abaixo     |
-| Browser    | Depois de T15, usando seu runner de teste pinado; T17 o reutiliza no CI | `python3 tests/docker/check_frontend_security.py` — novo comando, ainda não disponível                                                                                        |
+| Browser    | Depois de T15, usando o runner pinado; T17 o reutiliza no CI            | `python tests/docker/check_frontend_browser.py --base-url http://127.0.0.1:8080`; HTTPS exige `--ca-file` e perfil Firefox temporário |
 | Security   | Depois de T16/T17, com binários pinados                                 | `gitleaks git --redact --config .gitleaks.toml .`; scan da imagem por Trivy configurado em T17; fixtures do scanner                                                           |
 
 Smoke Redis atual, que T5/T14 precisam adaptar ao novo namespace:
@@ -302,11 +305,11 @@ a tarefa como concluída. Não iniciar provedores reais para contornar mocks.
 ### T15: Provar segurança do frontend público
 
 **What**: Acrescentar componente de aceitação HTTP/browser para a fronteira pública; nenhuma refatoração visual é necessária para este controle.
-**Where**: `/home/ney/Documentos/clima prev/climaprev-Atualizacao-Geral-V3/tests/docker/check_frontend_security.py` (novo)
+**Where**: `/home/ney/Documentos/clima prev/climaprev-Atualizacao-Geral-V3/tests/docker/check_frontend_security.py` e `tests/docker/check_frontend_browser.py` (novos)
 **Depends on**: T10, T11, T13, T14
 **Reuses**: Frontend textContent, chamadas relativas e provider-mock; reaproveitar smokes existentes.
 **Requirement**: WEB-01, BUILD-01.
-**Tests**: O próprio componente usa dados sintéticos, nome contendo markup, interceptação de rede, assets e storage; prova que o script não executa, requisições são de mesma origem e sentinelas secretas do servidor não aparecem no cliente. Incluir caso que faria o teste falhar.
+**Tests**: Os componentes usam dados sintéticos, nome contendo markup, interceptação de rede, assets e storage; o runner Playwright pinado prova CSS carregado, requisições de mesma origem e DOM inerte. O contrato HTTP também verifica que sentinelas secretas do servidor não aparecem no cliente. Incluir caso que faria o teste falhar.
 **Gate**: Browser + Local + Homolog; escolher e validar nesta tarefa um runner Playwright pinado apenas de teste, registrar versão/digest em instruções do componente; T17 reutiliza esse runner sem dependência produtiva nova.
 **Done when**: Matriz passa nas duas entradas e usa CA explícita; nenhuma opção ignoreHTTPS ou acesso a provedor real é necessária.
 

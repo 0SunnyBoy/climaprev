@@ -1,8 +1,10 @@
 # Evidências de execução da segurança
 
-Estado: pausado; checkpoint solicitado em 2026-09-21, sem aprovação de release.
-Base: branch `Atualizacao-Geral-V3`, HEAD `0a4654e`, com mudanças locais
-anteriores preservadas. Data inicial: 2026-09-19.
+Estado em 2026-09-23: T14–T16 e T18 com gates locais aprovados; T17
+aguarda execução remota e T19 está pendente. Sem aprovação de release.
+Base histórica: branch `Atualizacao-Geral-V3`, HEAD `0a4654e` no checkpoint
+de 2026-09-21; as seções posteriores registram a retomada. Data inicial:
+2026-09-19.
 
 ## Verificação inicial
 
@@ -58,7 +60,7 @@ Uma comparação somente leitura com a imagem oficial Python 3.12.14,
 digest `sha256:2f17fc044b579bab302c2e8054d3a686e2cb9a83de48e70534b94cd8ebbe06a9`,
 encontrou 44 ocorrências HIGH, oito CVEs diferentes, zero CRITICAL e nenhuma
 versão corrigida indicada para os achados restantes. A troca do Dockerfile
-foi apresentada ao usuário e ainda não foi realizada nesta etapa.
+foi aplicada na retomada; o scan da imagem atual ainda precisa ser reexecutado.
 
 Os alertas são achados do scanner, não demonstrações de exploração remota
 do ClimaPrev. Por exemplo, o Debian já informa correção do
@@ -69,22 +71,19 @@ Não foi criada exceção nem usado `ignore-unfixed` para aprovar a imagem.
 
 ## Gates pendentes
 
-Ainda faltam a regressão após as alterações, smokes de entrada/TLS/ACL,
-browser, isolamento de carga, política de scanner, ensaio de rotação e
-verificação independente. O gate de vulnerabilidades está bloqueado pelos
-achados acima até correção ou decisão de risco explícita do responsável.
+Ainda faltam homologação TLS/ACL, browser Playwright reproduzível, CI remoto e
+verificação independente. A política de scanner foi executada e passou
+localmente; o CI remoto ainda precisa confirmar o mesmo resultado no runner do
+GitHub.
 DNS, firewall e certificado público de uma implantação real estão fora
 das provas locais; nenhuma prontidão de produção foi declarada.
 
 ## Ponto de parada e resultados parciais
 
-A última regressão completa recebida após as alterações teve **419 testes
-aprovados e 14 falhas**, totalizando 433. As falhas eram de isolamento de
-cache: 12 em `test_evolution_data.py` e duas em
-`test_provider_failure_contract.py`. O `flushdb` original da fixture de
-`test_end_to_end.py` foi restaurado antes da interrupção, exclusivamente
-para Redis descartável de teste. Não foi recebido resultado completo depois
-desse ajuste; a correção ainda precisa ser comprovada por nova execução.
+A última regressão do ponto de parada teve **419 testes aprovados e 14
+falhas**, totalizando 433. Após restaurar o `flushdb` original da fixture de
+`test_end_to_end.py`, a retomada confirmou **437 testes aprovados** em Redis
+descartável; nenhuma limpeza foi feita em Redis compartilhado.
 
 Passaram separadamente 17 testes de política de arquivos e provisionamento:
 
@@ -99,7 +98,8 @@ resultados não substituem a regressão completa ou os demais gates.
 Uma prova exploratória com Playwright 1.63.0/Firefox 155.0 confirmou que
 HTTPS falha sem a CA local e funciona após importá-la em perfil temporário.
 Não houve `ignoreHTTPS`, alteração do trust store global ou aceitação
-completa do frontend. O teste reproduzível de T15 ainda precisa ser criado.
+completa do frontend. O contrato estático/HTTP de T15 foi criado na retomada;
+o teste Playwright reproduzível com CA explícita ainda precisa ser executado.
 
 O agente auxiliar foi encerrado antes de entregar sua conclusão. Os dois
 containers temporários ainda ativos e o Redis nativo de teste foram parados.
@@ -141,3 +141,153 @@ sem liberar todos os exemplos, documentos ou testes.
 Essas verificações servem para registrar o checkpoint, não para aprovar uma
 release. A regressão completa, imagem atualizada, homologação e revisão
 independente continuam pendentes conforme o contexto.
+
+## Retomada local — 2026-09-21
+
+Executada após o pedido de continuidade, com a stack local e Redis descartável:
+
+| Gate | Resultado |
+| --- | --- |
+| Suíte completa `pytest -q -W error` | **437 passed** |
+| `docker compose config --quiet` | **passou** |
+| `docker compose --profile load config --quiet` | **passou** |
+| Build `app` e runtime | **passou** |
+| Ruff com `--ignore EXE002` | **passou** |
+| Mypy em `src` | **passou em 41 arquivos** |
+| `nginx -t` no frontend | **passou** |
+| Local body/método/rota | 413 para body >16 KiB, 403 para PUT, 404 para rota desconhecida |
+| Frontend/security HTTP smoke | **passou** |
+| Load smoke | 3 requisições, 0 falhas; Redis e redes próprios/internal |
+| Rotação sintética | **passou**, sem exibir valores |
+
+Alterações aplicadas neste lote: rotas Nginx exatas e negação padrão, headers
+em erro, limite de body, access log bruto desativado no local, busca no
+coletor, Redis/rede exclusivos do perfil load, `app-load` em allowed hosts,
+`--no-access-log`, HMAC montado somente no app de homologação, base Python
+atualizada, contrato estático/HTTP do frontend, `.gitleaks.toml`, workflow de
+segurança e runbook de rotação.
+
+Não foram executados: Gitleaks/Trivy nesta sessão, homologação TLS/ACL com os
+secrets do engine Windows, Playwright completo com CA explícita, execução
+remota do workflow e revisão independente. O workflow está preparado para
+bloquear findings HIGH/CRITICAL e não usa `ignore-unfixed`; a ausência dessas
+execuções impede declarar produção pronta.
+
+## Validação de navegador — 2026-09-23
+
+Foi feita uma validação interativa no navegador contra a stack local em
+`http://127.0.0.1:8080/`, usando somente dados sintéticos e uma localidade
+pública. Foram observados:
+
+- carregamento do documento com título e estrutura acessível;
+- `styles.css` e `app.js` carregados pela mesma origem;
+- submissão vazia rejeitada pela validação nativa, sem chamada de consulta;
+- consulta sintética de `Sao Paulo` concluída e resultado renderizado como
+  texto, incluindo risco, período, fonte e alerta de dados indisponíveis;
+- nenhum erro ou aviso de console capturado durante a jornada;
+- nenhum segredo, URL de provedor ou conteúdo HTML interpretável exposto no
+  DOM público.
+
+Essa execução fecha a evidência manual do fluxo local de T15, mas não fecha o
+gate obrigatório de HTTPS/homologação. Depois dela, o runner Playwright
+versionado com CA explícita foi criado e integrado ao CI; a execução real do
+runner ainda depende de um ambiente em que o navegador possa iniciar. A
+validação local executada foi:
+
+```text
+Frontend security acceptance contract: OK.
+Local frontend proxy identity configuration: OK.
+Synthetic secret rotation contract: OK.
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+## Execução autorizada de T16/T17 — 2026-09-23
+
+Com autorização explícita, os scanners foram executados em containers pinados:
+
+- Gitleaks 8.30.1, digest
+  `sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f`:
+  **passou**, examinando 33 commits e aproximadamente 1,92 MB, sem leaks.
+- A imagem `climaprev-security-runtime:ci` foi reconstruída com a base Alpine
+  fixada no digest Python versionado e `apk upgrade --no-cache`.
+- Trivy 0.74.0, digest
+  `sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969`:
+  **passou**, com 0 vulnerabilidades HIGH/CRITICAL na imagem Alpine final.
+  Os pacotes Python também não apresentaram achados HIGH/CRITICAL.
+
+O código de saída do Trivy foi 0, com `ignore-unfixed` desativado. Nenhuma
+exceção foi criada. T16 está verificado e T17 está aprovado localmente; a
+execução remota do workflow continua necessária antes do aceite final.
+
+A regressão final da aplicação executada no container `app` passou com
+**437 testes**, em 39,24 s, já com a base Alpine atualizada. Ruff, mypy,
+Nginx, contratos de frontend/proxy, Compose e rotação sintética também
+passaram. O CI remoto ainda precisa reproduzir esses gates.
+
+## Runner de navegador — 2026-09-23
+
+Foi criado `tests/docker/check_frontend_browser.py` com Playwright `1.63.0`
+instalado somente no runner de teste/CI, sem dependência produtiva na imagem
+Alpine. O fluxo HTTP valida título, CSS, submissão por coordenadas e renderiza
+um payload sintético contendo markup; confirma que o texto permanece no DOM sem
+criar `img`, `script` ou atributo de evento. O fluxo HTTPS exige `--ca-file` e
+importa a CA em perfil Firefox temporário, sem `ignore_https_errors` e sem
+alterar o trust store global.
+
+O lint, o type check da origem e a compilação sintática do runner passaram. A
+execução interativa local ficou bloqueada pelo ambiente Windows: o instalador
+baixou o Chrome, mas o shell headless esperado não foi disponibilizado e o
+processo do navegador retornou `spawn UNKNOWN`; a tentativa de baixar o
+FFmpeg adicional também encontrou falha de DNS. Portanto, T15 foi avançada
+com implementação e workflow, mas a aceitação Browser/Homolog completa ainda
+não deve ser marcada como concluída.
+
+## Retomada T14–T18 — 2026-09-23
+
+Os parágrafos anteriores descrevem o histórico do checkpoint, não o estado
+atual. Todas as provas desta seção usaram credenciais e certificados
+sintéticos, sem alterar os recursos produtivos nem expor valores.
+
+| Tarefa | Resultado local | Limite |
+| --- | --- | --- |
+| T14 | Compose homolog com Redis e Nginx pinados por digest, UID fixo sem root, rootfs somente leitura, capabilities removidas, secrets por consumidor; topologia, ACL/readiness, TLS/CA, logs sanitizados e reinício do coletor passaram | Stack sintética, não ambiente produtivo |
+| T15 | Runner Playwright 1.63.0 pinado passou em HTTP local e HTTPS homolog; CSS, mesma origem, DOM inerte, storage vazio e CA explícita | Não é auditoria formal de acessibilidade |
+| T16 | Gitleaks com regras padrão examinou 33 commits; fixture bloqueou tokens sintéticos em `.env.example` e em outro arquivo, com saída redigida | Uma exceção histórica por fingerprint exato em `.gitleaksignore` |
+| T17 | Workflow de segurança escrito; Gitleaks, Trivy, Browser, Homolog, 437 testes, Ruff e mypy passaram localmente | GitHub Actions ainda não executado; não há aceite remoto |
+| T18 | Runbook e rotação de dois conjuntos sintéticos; senha anterior recusada, nova aceita e duas execuções compartilharam a mesma cota Redis/HMAC | Não houve rotação real nem validação de DNS/firewall/certificado público |
+
+O Redis efêmero recriado inicia com cache/cota frios. A nova chave HMAC
+separa identidades da geração anterior; esse efeito foi registrado no
+runbook, sem afirmar preservação da cota durante a rotação.
+
+**Correção importante de T16:** a primeira versão local de
+`.gitleaks.toml` não herdava as regras padrão; portanto o passe inicial
+de Gitleaks anotado acima não demonstrava detecção efetiva. A configuração
+final ativa explicitamente `useDefault = true`. A linha de hosts públicos
+em `.env.example` gerou um único falso positivo no commit
+`7ac70d82d2eb9d424244eb36a70ae5a9f055c843`; a exceção ignora só o
+fingerprint desse achado. Com a configuração final, a fixture positiva
+retornou finding, a negativa passou e a varredura dos 33 commits terminou
+sem achados não exceptuados. Falha do scanner também resulta em código
+não zero no gate.
+
+O Trivy 0.74.0 examinou a imagem runtime Alpine final, detectou pacotes do
+sistema e Python e retornou código 0 com **zero HIGH/CRITICAL**;
+`ignore-unfixed` permaneceu desativado. O resultado é específico da base de
+vulnerabilidades consultada em 2026-09-23 e deve ser repetido no CI.
+
+Após rebuild da imagem de desenvolvimento, `pytest -q -W error` passou com
+**437 testes**; Ruff passou com `--ignore EXE002` e mypy passou nos
+**41 arquivos** de origem. `git diff --check` não encontrou erros.
+`docker compose -f docker-compose.homolog.yml config --quiet` passou com
+variáveis sintéticas em processo; sem essas variáveis, o Compose corretamente
+recusa a configuração. A stack final foi recriada com os digests pinados
+antes dos smokes de topologia, hardening, frontend, TLS e Redis.
+O workflow de segurança também passou no `actionlint 1.7.12` em container
+oficial. A stack sintética e seus volumes foram encerrados, e os diretórios
+temporários de certificados/segredos sintéticos foram removidos; a stack
+local de desenvolvimento permaneceu intacta.
+
+Pendências: observar o workflow remoto de T17, resolver eventuais falhas no
+runner, executar T19 e revisão independente. Os testes locais não autorizam
+deploy nem declaração de prontidão de produção.

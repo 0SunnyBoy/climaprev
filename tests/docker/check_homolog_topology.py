@@ -1,5 +1,6 @@
 """Read-only host-side topology proof; never prints expanded configuration."""
 
+import argparse
 import json
 import subprocess
 
@@ -11,6 +12,9 @@ def inspect(kind: str, name: str, template: str):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--env-file")
+    args = parser.parse_args()
     for service in ("app", "redis"):
         ports = json.loads(
             subprocess.check_output(
@@ -31,19 +35,12 @@ if __name__ == "__main__":
         "climaprev-homolog-app-1",
         "climaprev-homolog-redis-1",
     }
+    compose_command = ["docker", "compose"]
+    if args.env_file:
+        compose_command.extend(["--env-file", args.env_file])
     configuration = json.loads(
         subprocess.check_output(
-            [
-                "docker",
-                "compose",
-                "--env-file",
-                ".homolog/compose.env",
-                "-f",
-                "docker-compose.homolog.yml",
-                "config",
-                "--format",
-                "json",
-            ],
+            [*compose_command, "-f", "docker-compose.homolog.yml", "config", "--format", "json"],
             text=True,
         )
     )

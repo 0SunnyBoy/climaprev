@@ -1,7 +1,8 @@
 # Homologação local
 
 A stack `climaprev-homolog` é separada do desenvolvimento. API e Redis não
-publicam portas. Redis exige ACL, limita chaves ao prefixo `climaprev:` e
+publicam portas. Redis exige ACL, limita chaves ao prefixo versionado
+`climaprev:production:` e
 fica em rede interna; somente o app participa dessa rede. O app dispõe de
 rede separada para saída aos provedores HTTPS permitidos.
 
@@ -17,6 +18,10 @@ docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml up 
 ```
 
 O diretório gerado tem modo 0700 e é ignorado pelo Git/contexto de build.
+Ele contém senha Redis, chave HMAC independente, ACL e material TLS. A senha
+e a chave HMAC são montadas somente no app; ACL vai somente ao Redis e TLS vai
+somente à entrada. `CLIMAPREV_ALLOWED_HOSTS` deve ser explícito para o domínio
+da entrada (o default local é `localhost`).
 Arquivos de secret têm modo 0444 e são montados somente nos respectivos
 serviços, como leitura. Compose sobre Podman ignora uid/gid/mode de file
 secrets; o funcionamento não depende desses campos. Não alterar permissões
@@ -51,6 +56,23 @@ python3 tests/docker/check_homolog_frontend.py
 
 Um navegador de homologação deve confiar nessa CA em perfil isolado. Não
 usar ignoreHTTPS, certificados ignorados ou desabilitar validação TLS.
+Para a aceitação automatizada, construa a imagem de teste pinada e execute o
+runner com a CA explícita. No PowerShell:
+
+```powershell
+docker build -f tests/docker/Playwright.Dockerfile -t climaprev-playwright-test:local tests/docker
+docker run --rm --network container:climaprev-homolog-entrada-1 `
+  --mount "type=bind,source=$((Resolve-Path tests/docker).Path),target=/work/tests/docker,readonly" `
+  --mount "type=bind,source=$((Resolve-Path .homolog/ca.crt).Path),target=/test-ca.crt,readonly" `
+  -w /work climaprev-playwright-test:local python tests/docker/check_frontend_browser.py `
+  --base-url https://localhost:8443 --ca-file /test-ca.crt
+```
+
+O runner importa a CA em um perfil Firefox temporário, valida CSS e JavaScript
+na mesma origem, storage vazio e texto sintético inerte no DOM. O perfil é
+descartado ao fim; nenhum trust store global é alterado. A imagem de teste usa
+Playwright 1.63.0 e base fixada por digest em
+`tests/docker/Playwright.Dockerfile`.
 `/internal` e `/internal/*`, inclusive caminhos codificados/normalizados,
 retornam 404 pela entrada. A rota interna continua disponível ao operador por
 `docker compose exec app`, sem porta publicada da API.

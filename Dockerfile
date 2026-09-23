@@ -1,6 +1,7 @@
-FROM python:3.12-slim@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea AS base
+FROM python:3.12-alpine@sha256:5459054a89e9a1cda63864b0b2e9d31802256103f2f42af59fdc3ee11f65ddbd AS base
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+RUN apk upgrade --no-cache
 
 FROM base AS production-deps
 COPY requirements.lock .

@@ -1,0 +1,5 @@
+# Keep all pinned Gitleaks default detection rules enabled.
+# The sole historical false positive is identified by an exact fingerprint in
+# .gitleaksignore; no path, rule, or future finding is globally exempted.
+[extend]
+useDefault = true

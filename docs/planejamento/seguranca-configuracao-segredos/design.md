@@ -3,9 +3,9 @@
 Estado: Implementing — desenho aprovado para implementação local.
 Data: 2026-09-19.
 
-Atualização de 2026-09-21: execução pausada, com checkpoint solicitado para
-retomada por outro Codex. Consulte o [contexto](context.md) para separar
-controles implementados, provas parciais e itens ainda planejados.
+Atualização de 2026-09-21: execução local retomada após o checkpoint. Consulte
+o [contexto](context.md) para separar controles implementados, provas parciais
+e gates ainda dependentes do ambiente.
 
 [Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
 [Tasks](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).

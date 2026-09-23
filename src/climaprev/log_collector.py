@@ -20,6 +20,7 @@ LOG_DIRECTORY = Path("/var/log/climaprev")
 _ROUTES = {
     "/",
     "/api/v1/risk",
+    "/api/v1/locations/search",
     "/health/live",
     "/health/ready",
     "/internal/metrics",

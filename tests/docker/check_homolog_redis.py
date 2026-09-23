@@ -73,6 +73,6 @@ async def check() -> None:
 
 if __name__ == "__main__":
     asyncio.run(check())
-    with urllib.request.urlopen("http://app:8000/health/ready") as response:
+    with urllib.request.urlopen("http://localhost:8000/health/ready") as response:
         assert response.status == 200
     print("API readiness: internal HTTP 200.")

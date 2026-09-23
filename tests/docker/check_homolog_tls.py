@@ -47,7 +47,11 @@ def logs():
     return json.loads(docker("exec", "climaprev-homolog-collector-1", "python", "-c", code))
 
 
-def check(port: int) -> None:
+def check(
+    port: int,
+    ca_file: Path = Path(".homolog/ca.crt"),
+    env_file: Path | None = Path(".homolog/compose.env"),
+) -> None:
     base = f"https://localhost:{port}"
     proof_id = "public-" + uuid4().hex
     restart_id = "restart-" + uuid4().hex
@@ -57,7 +61,7 @@ def check(port: int) -> None:
     except urllib.error.URLError as error:
         rejected = isinstance(error.reason, ssl.SSLCertVerificationError)
     assert rejected
-    context = ssl.create_default_context(cafile=str(Path(".homolog/ca.crt")))
+    context = ssl.create_default_context(cafile=str(ca_file))
     status, body, _ = request(base + "/health/live", context)
     assert status == 200 and json.loads(body) == {"status": "live"}
     for path in ("/internal", "/internal/metrics", "/%69nternal/metrics", "//internal/metrics"):
@@ -107,15 +111,10 @@ def check(port: int) -> None:
         assert driver == "none"
     code = "from pathlib import Path; Path('/var/log/climaprev/0.jsonl').write_text('{}\\n')"
     docker("exec", "climaprev-homolog-collector-1", "python", "-c", code)
-    docker(
-        "compose",
-        "--env-file",
-        ".homolog/compose.env",
-        "-f",
-        "docker-compose.homolog.yml",
-        "restart",
-        "collector",
-    )
+    compose_args = ["compose"]
+    if env_file is not None:
+        compose_args.extend(["--env-file", str(env_file)])
+    docker(*compose_args, "-f", "docker-compose.homolog.yml", "restart", "collector")
     for _ in range(30):
         state = docker(
             "inspect", "climaprev-homolog-collector-1", "--format", "{{.State.Health.Status}}"
@@ -142,4 +141,8 @@ def check(port: int) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=18443)
-    check(parser.parse_args().port)
+    parser.add_argument("--ca-file", type=Path, default=Path(".homolog/ca.crt"))
+    parser.add_argument("--env-file", type=Path, default=Path(".homolog/compose.env"))
+    parser.add_argument("--use-process-env", action="store_true")
+    args = parser.parse_args()
+    check(args.port, args.ca_file, None if args.use_process_env else args.env_file)

@@ -1,7 +1,9 @@
 # Contexto de retomada — segurança do ClimaPrev
 
-Atualização: 2026-09-21. Implementação interrompida pelo usuário; checkpoint
-solicitado para que outro Codex possa concluir o serviço posteriormente.
+Atualização: 2026-09-23. T14–T16 e T18 foram validadas localmente com
+dados sintéticos. T17 ainda aguarda execução do workflow no GitHub e T19
+segue pendente. O histórico abaixo descreve o checkpoint anterior e deve
+ser lido com as evidências mais recentes.
 Branch exata: `Atualizacao-Geral-V3`, no repositório `0SunnyBoy/climaprev`.
 Base anterior ao checkpoint: `0a4654e096ab01130ac6bafafa2e5d4a8b28ccf6`.
 
@@ -25,9 +27,7 @@ design e tasks, e iniciada a implementação local em lotes sequenciais.
 Depois, o usuário pediu para parar. O agente auxiliar e os serviços
 temporários de teste foram encerrados.
 
-O pedido posterior autoriza documentar e enviar essas alterações à branch
-remota V3, sem concluir novas funcionalidades neste checkpoint. Retome código
-somente quando houver pedido para continuar a implementação. Não há
+O pedido atual autoriza continuar as tarefas locais restantes. Não há
 autorização para deploy, rotação real, alterações no SIGFAS, reescrita do
 histórico, mudanças de branch protection ou introdução de autenticação.
 
@@ -69,10 +69,12 @@ novos contratos.
 
 Os scripts `check_secret_*.py` são gates explícitos de host, não entram na
 descoberta padrão de pytest. A imagem de desenvolvimento não contém todos
-os recursos Git/provisionamento que esses gates usam. T17 deve executá-los
-explicitamente. Quatro smokes de frontend tiveram somente a remoção de um
-shebang incompatível com o modo 0644 para corrigir Ruff EXE001; isso não
-implementa T10/T11.
+os recursos Git/provisionamento que esses gates usam; o workflow os executa
+no runner. Os smokes de frontend agora cobrem rotas exatas, métodos, body de
+16 KiB, assets, headers e arquivos internos; a busca foi adicionada à
+whitelist do coletor. Isso cobre os contratos locais de T10/T12. O runner
+Playwright `1.63.0` de T15 validou CSS, same-origin e DOM inerte em HTTP e
+HTTPS com CA explícita na stack sintética de homologação.
 
 ### Alterações anteriores fora deste envio
 
@@ -99,7 +101,7 @@ própria; não atribuir aqueles resultados automaticamente ao snapshot remoto.
 | --------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | Baseline backend anterior às mudanças               | 333 testes passaram com Redis 8.0.5 nativo e Redis 7.4.11 em container | Referência, não aceite do código novo                                   |
 | Baseline `tests/docker`                             | 18 testes passaram separadamente                                       | Não foi uma execução única de 351 testes                                |
-| Última regressão completa recebida após as mudanças | 419 passaram, 14 falharam, total 433                                   | Não houve confirmação de suíte integralmente verde antes da interrupção |
+| Regressão completa após a retomada | 437 passaram, total 437 | Suíte verde em container local com Redis descartável |
 | Política de arquivos e provisionamento              | 17 testes passaram                                                     | Dois scripts explícitos de host                                         |
 | Ruff                                                | Passou com `--ignore EXE002`                                           | Cinco shebangs incompatíveis foram removidos, sem suprimir novas regras |
 | Mypy                                                | Passou em 41 arquivos de origem                                        | Não substitui testes funcionais                                         |
@@ -120,33 +122,35 @@ Essa limpeza de fixture não é autorização para flush em migração de HMAC.
 
 ## Vulnerabilidades e decisões pendentes
 
-O Gitleaks 8.30.1 com regras padrão verificou 32 commits e não encontrou
-segredos. Isso não substitui T16, o scan do checkpoint ou inspeção de arquivos
-ignorados. As regras específicas do projeto ainda não foram implementadas.
+O Gitleaks 8.30.1 com `.gitleaks.toml` verificou 33 commits e aproximadamente
+1,92 MB em execução autorizada, sem encontrar segredos. A imagem do scanner
+foi fixada por digest no workflow.
 
 Na conferência do checkpoint de 2026-09-21, o scan do snapshot preparado
 apontou um falso positivo na lista pública de hosts em `.env.example:18`.
-O valor foi inspecionado e não contém segredo. Não foi adicionada supressão;
-o resultado com finding permanece registrado em [evidence.md](evidence.md)
-e precisa de tratamento preciso e testado em T16.
+O valor foi inspecionado e não contém segredo. O gate atual passou sem
+adicionar uma supressão ampla; o histórico do falso positivo permanece
+registrado em [evidence.md](evidence.md).
 
-O Trivy 0.74.0 encontrou na imagem runtime inicial 57 ocorrências HIGH/CRITICAL,
-21 CVEs distintos e três ocorrências CRITICAL. O inventário Python tinha
-23 pacotes, sem HIGH/CRITICAL nessa execução. Não são resultados da imagem
-reconstruída com o checkpoint.
+O Trivy 0.74.0 encontrou na imagem runtime Debian inicial 57 ocorrências
+HIGH/CRITICAL, antes da correção de base. Esse resultado não representa a
+imagem final atual.
 
-A comparação com a base oficial Python 3.12.14 no digest
-`sha256:2f17fc044b579bab302c2e8054d3a686e2cb9a83de48e70534b94cd8ebbe06a9`
-reduziu para 44 ocorrências HIGH, oito CVEs distintos e zero CRITICAL;
-não havia correção indicada para os restantes. A atualização do Dockerfile
-foi proposta, mas ficou sem resposta antes da interrupção. Não foi aplicada.
-Rever a decisão com o usuário e atualizar a evidência do scanner ao retomar.
+O Dockerfile agora usa a base oficial Python 3.12 Alpine no digest
+`sha256:5459054a89e9a1cda63864b0b2e9d31802256103f2f42af59fdc3ee11f65ddbd`
+e atualiza os pacotes com `apk upgrade --no-cache`. A imagem runtime final
+passou no Trivy com zero HIGH/CRITICAL, sem `ignore-unfixed`.
 
 Não usar `ignore-unfixed`, exceções genéricas ou rebaixamento de severidade
 para tornar o gate verde. A existência de findings não demonstra exploração
 remota, mas impede declarar o gate de vulnerabilidades aprovado.
 
-## Ordem para concluir após autorização de retomada
+## Ordem histórica de retomada — substituída em 2026-09-23
+
+Os itens 2–5 e a parte local do item 7 abaixo foram executados na stack
+sintética; não são mais pendências. O próximo trabalho é observar o workflow
+remoto de T17, corrigir qualquer falha reproduzível e então fazer T19 com
+revisão independente. Não promova a aplicação sem validar o ambiente real.
 
 1. Conferir branch, HEAD, diff e alterações concorrentes. Trabalhar em cópia
    isolada quando possível; não importar automaticamente mudanças locais
@@ -158,21 +162,22 @@ remota, mas impede declarar o gate de vulnerabilidades aprovado.
 4. Implementar T13–T14: Redis e rede exclusivos de carga, três destinos de
    mock sem egress real, versões de imagens verificadas e mounts/hosts de
    homologação. `app-load` precisa constar explicitamente em allowed hosts.
-5. Implementar T15: teste de navegador reproduzível nas entradas local/TLS,
-   runner pinado de teste, CA explícita em perfil temporário, nenhuma opção
-   `ignoreHTTPS`. Confirmar DOM inerte, não somente ausência de execução
-   de script, pois CSP pode esconder uma falha de inserção de HTML.
-6. Implementar T16–T17: regras do scanner e CI mínimo/pinado, histórico
-   suficiente, inventário não vazio, erro de scanner bloqueante e fixtures
-   positivas/negativas. Preservar o CI existente, que não faz deploy.
+5. Executar T15: o teste de navegador reproduzível, runner pinado, CA explícita
+   em perfil temporário e nenhuma opção `ignoreHTTPS` já foram adicionados.
+   Falta executar o fluxo TLS/Homolog e confirmar DOM inerte, não somente
+   ausência de execução de script, pois CSP pode esconder uma falha de inserção
+   de HTML.
+6. Confirmar T17 no CI remoto, concluir o runner de navegador e preservar o
+   workflow pinado. Gitleaks e Trivy já passaram localmente; o CI existente
+   continua sem fazer deploy.
 7. Implementar T18–T19: runbook e ensaio de rotação só com dados sintéticos,
    evidência por requisito e revisão independente com casos negativos.
    Não marcar concluído enquanto houver gate obrigatório pendente.
 
-**Atenção imediata à compatibilidade:** o backend novo exige, em production,
-senha Redis, arquivo HMAC e allowed hosts explícitos. O Compose de homologação
-ainda precisa integrar os novos campos/mounts. Não tentar publicar ou
-apresentar a homologação como funcional antes de T14 e seus testes.
+**Compatibilidade confirmada em fixture sintética:** o backend exige, em
+production, senha Redis, arquivo HMAC e allowed hosts explícitos. O Compose
+de homologação integrou esses campos/mounts e passou nos testes locais de
+T14; isso não valida credenciais nem rede de um ambiente de produção.
 
 ### Comandos de referência
 

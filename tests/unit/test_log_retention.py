@@ -78,6 +78,15 @@ def test_socket_input_keeps_only_allowed_fields_and_normalized_routes(tmp_path: 
     assert saved["status"] == 200 and saved["latency_ms"] == 3
 
 
+def test_location_search_route_is_whitelisted_without_query_data(tmp_path: Path) -> None:
+    store = LogStore(tmp_path, clock=lambda: 3600.0)
+    store.append(record(route="/api/v1/locations/search", query="Sensitive City"))
+    path = next(tmp_path.glob("*.jsonl"))
+    saved = json.loads(path.read_text())
+    assert saved["route"] == "/api/v1/locations/search"
+    assert "Sensitive City" not in path.read_text()
+
+
 def test_invalid_and_oversized_socket_records_are_not_persisted(tmp_path: Path) -> None:
     store = LogStore(tmp_path, clock=lambda: 3600.0)
     for raw in (

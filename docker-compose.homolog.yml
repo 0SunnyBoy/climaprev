@@ -1,7 +1,14 @@
 name: climaprev-homolog
 services:
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf
+    user: "999:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /data:rw,noexec,nosuid,size=16m,uid=999,gid=1000
+      - /tmp:rw,noexec,nosuid,size=8m,uid=999,gid=1000
     command: ["redis-server", "/etc/redis/redis.conf"]
     logging:
       driver: none
@@ -23,21 +30,26 @@ services:
       target: runtime
     image: climaprev-homolog-app:local
     read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
     logging:
       driver: none
     volumes:
       - log-socket:/run/climaprev-logs:ro
     environment:
       CLIMAPREV_ENVIRONMENT: production
+      CLIMAPREV_ALLOWED_HOSTS: ${CLIMAPREV_ALLOWED_HOSTS:-localhost}
       CLIMAPREV_LOG_SOCKET: /run/climaprev-logs/request.sock
       CLIMAPREV_TRUSTED_PROXY_IPS: ${CLIMAPREV_PROXY_IP:-10.253.248.2}
       REDIS_URL: redis://climaprev@redis:6379/0
       CLIMAPREV_REDIS_PASSWORD_FILE: /run/secrets/redis_password
+      CLIMAPREV_CLIENT_IP_HMAC_KEY_FILE: /run/secrets/client_ip_hmac_key
       CLIMAPREV_PROVIDER_BUDGET_CAPACITY: ${CLIMAPREV_PROVIDER_BUDGET_CAPACITY:?Set local budget capacity}
       CLIMAPREV_PROVIDER_BUDGET_REFILL: ${CLIMAPREV_PROVIDER_BUDGET_REFILL:?Set local budget refill}
       CLIMAPREV_PROVIDER_BUDGET_WINDOW_SECONDS: ${CLIMAPREV_PROVIDER_BUDGET_WINDOW_SECONDS:?Set local budget window}
     secrets:
       - redis_password
+      - client_ip_hmac_key
     networks:
       cache:
       egress:
@@ -59,6 +71,8 @@ services:
     command: ["python", "-m", "climaprev.log_collector"]
     network_mode: none
     read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
     logging:
       driver: none
     volumes:
@@ -71,7 +85,13 @@ services:
       retries: 15
 
   entrada:
-    image: nginx:alpine
+    image: nginx:alpine@sha256:c8497b180665e631ec92a5091125bec5b214f0e2b99409e30653a125b37557da
+    user: "101:101"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,uid=101,gid=101
     entrypoint: ["nginx", "-g", "daemon off;"]
     logging:
       driver: none
@@ -110,6 +130,8 @@ secrets:
     file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.password
   redis_acl:
     file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/redis.acl
+  client_ip_hmac_key:
+    file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/client-ip-hmac.key
   tls_certificate:
     file: ${CLIMAPREV_HOMOLOG_DIR:?Run local provision}/server.crt
   tls_key:

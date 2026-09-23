@@ -86,7 +86,7 @@ services:
       app-load:
         condition: service_healthy
     networks:
-      - edge
+      - load-edge
     command: ["locust", "-f", "tests/load/locustfile.py", "--host", "http://app-load:8000"]
 
   provider-mock:
@@ -98,7 +98,7 @@ services:
     tmpfs:
       - /tmp
     networks:
-      - edge
+      - load-edge
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
       CLIMAPREV_PROVIDER_MOCK_DELAY_MS: ${CLIMAPREV_PROVIDER_MOCK_DELAY_MS:-150}
@@ -116,8 +116,9 @@ services:
       target: dev
     profiles: ["load"]
     environment:
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://redis-load:6379/0
       CLIMAPREV_ENVIRONMENT: load
+      CLIMAPREV_ALLOWED_HOSTS: app-load,localhost,127.0.0.1
       CLIMAPREV_GEOCODING_BASE_URL: http://provider-mock:8080
       CLIMAPREV_FORECAST_BASE_URL: http://provider-mock:8080
       CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_LOAD_RATE_LIMIT:-100000}
@@ -132,18 +133,37 @@ services:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
       CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS: ${CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS:-50}
     depends_on:
-      redis:
+      redis-load:
         condition: service_healthy
       provider-mock:
         condition: service_healthy
     tmpfs:
       - /tmp
     networks:
-      - edge
-      - backend
-    command: ["uvicorn", "climaprev.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-proxy-headers"]
+      - load-edge
+      - load-backend
+    command: ["uvicorn", "climaprev.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-proxy-headers", "--no-access-log"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live')"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  redis-load:
+    image: redis:7-alpine@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf
+    <<: *hardened-service
+    profiles: ["load"]
+    read_only: true
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    tmpfs:
+      - /data
+    networks:
+      - load-backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 2s
       timeout: 2s
       retries: 10
@@ -158,3 +178,7 @@ networks:
     ipam:
       config:
         - subnet: ${CLIMAPREV_BACKEND_SUBNET:-172.31.0.0/24}
+  load-edge:
+    internal: true
+  load-backend:
+    internal: true

@@ -1,0 +1,105 @@
+name: Security gates
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security:
+    name: Secret, dependency and boundary checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      # SHA is pinned; no repository secrets are exposed to pull-request code.
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Validate file policy and static security contracts
+        run: |
+          docker compose build app
+          test "$(git check-ignore --no-index -q .env.production; echo $?)" = "0"
+          test "$(git check-ignore --no-index -q .homolog/redis.password; echo $?)" = "0"
+          test "$(git check-ignore --no-index -q .env.example; echo $?)" = "1"
+          python tests/docker/check_local_frontend_proxy.py
+          python tests/docker/check_load_isolation.py
+          python tests/docker/check_frontend_security.py
+          python tests/docker/check_secret_rotation.py
+
+      - name: Scan Git history for secrets
+        run: |
+          # Gitleaks v8.30.1
+          python tests/docker/check_gitleaks_policy.py
+          docker run --rm -v "$PWD:/repo:ro" zricethezav/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            git --redact --config /repo/.gitleaks.toml --gitleaks-ignore-path /repo/.gitleaksignore /repo
+
+      - name: Build runtime image
+        run: docker build --target runtime -t climaprev-security-runtime:ci .
+
+      - name: Build pinned test-only browser runner
+        run: docker build -f tests/docker/Playwright.Dockerfile -t climaprev-playwright-test:ci tests/docker
+
+      - name: Run reproducible frontend browser acceptance
+        run: |
+          docker compose up -d app frontend
+          docker run --rm --network "container:$(docker compose ps -q frontend)" \
+            --mount "type=bind,source=$PWD/tests/docker,target=/work/tests/docker,readonly" \
+            -w /work climaprev-playwright-test:ci \
+            python tests/docker/check_frontend_browser.py --base-url http://localhost:80
+
+      - name: Run synthetic homologation and TLS browser gates
+        run: |
+          python docker/homolog/provision.py .homolog --capacity 60 --refill 60 --window 60
+          python docker/homolog/entrada/provision_tls.py .homolog
+          docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml config --quiet
+          docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml up -d --build
+          python tests/docker/check_homolog_topology.py --env-file .homolog/compose.env
+          python tests/docker/check_homolog_hardening.py
+          python tests/docker/check_homolog_frontend.py
+          python tests/docker/check_homolog_tls.py
+          docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml exec -T app python - < tests/docker/check_homolog_redis.py
+          docker run --rm --network "container:$(docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml ps -q entrada)" \
+            --mount "type=bind,source=$PWD/tests/docker,target=/work/tests/docker,readonly" \
+            --mount "type=bind,source=$PWD/.homolog/ca.crt,target=/test-ca.crt,readonly" \
+            -w /work climaprev-playwright-test:ci \
+            python tests/docker/check_frontend_browser.py \
+            --base-url https://localhost:8443 --ca-file /test-ca.crt
+
+      - name: Rehearse synthetic credential rotation
+        run: |
+          python docker/homolog/provision.py .homolog/next --capacity 60 --refill 60 --window 60
+          python docker/homolog/entrada/provision_tls.py .homolog/next
+          docker compose --env-file .homolog/next/compose.env -f docker-compose.homolog.yml config --quiet
+          docker compose --env-file .homolog/next/compose.env -f docker-compose.homolog.yml up -d --force-recreate
+          python tests/docker/check_secret_rotation_runtime.py --old-password-file .homolog/redis.password
+          python tests/docker/check_homolog_hardening.py
+          python tests/docker/check_homolog_frontend.py \
+            --ca-file .homolog/next/ca.crt --env-file .homolog/next/compose.env
+
+      - name: Scan runtime image
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969 image --exit-code 1 --severity HIGH,CRITICAL \
+            --ignore-unfixed=false climaprev-security-runtime:ci
+
+      - name: Run application regression suite
+        run: docker compose run --rm app pytest -q -W error
+
+      - name: Stop synthetic homologation and local services
+        if: always()
+        run: |
+          if [ -f .homolog/next/compose.env ]; then
+            docker compose --env-file .homolog/next/compose.env -f docker-compose.homolog.yml down -v --remove-orphans
+          elif [ -f .homolog/compose.env ]; then
+            docker compose --env-file .homolog/compose.env -f docker-compose.homolog.yml down -v --remove-orphans
+          fi
+          docker compose down -v --remove-orphans
