@@ -8,7 +8,8 @@ TLS/ACL, logs e isolamento; T15 passou no runner Playwright pinado em HTTP
 e HTTPS com CA explícita; T16 passou no Gitleaks com regras padrão e teste
 de segredo sintético. T17 passou também no workflow de segurança do GitHub
 para `525854a`. T18 tem runbook e ensaio de
-rotação sintética; T19 e revisão independente permanecem pendentes.
+rotação sintética; T19 consolidou decisão condicional. A revisão independente
+do proprietário e a validação do ambiente real continuam pendentes.
 Leia o [contexto atual](../planejamento/seguranca-configuracao-segredos/context.md)
 e as [evidências](../planejamento/seguranca-configuracao-segredos/evidence.md).
 

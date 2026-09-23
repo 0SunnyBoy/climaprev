@@ -1,8 +1,8 @@
 # Contexto de retomada — segurança do ClimaPrev
 
-Atualização: 2026-09-23. T14–T18 foram validadas com dados sintéticos;
+Atualização: 2026-09-23. T14–T19 foram validadas com dados sintéticos;
 os workflows CI e Security gates passaram no GitHub para `525854a`.
-T19 segue pendente. O histórico abaixo descreve o checkpoint anterior e deve
+T19 concluiu com decisão condicional. O histórico abaixo descreve o checkpoint anterior e deve
 ser lido com as evidências mais recentes.
 Branch exata: `Atualizacao-Geral-V3`, no repositório `0SunnyBoy/climaprev`.
 Base anterior ao checkpoint: `0a4654e096ab01130ac6bafafa2e5d4a8b28ccf6`.
@@ -148,8 +148,9 @@ remota, mas impede declarar o gate de vulnerabilidades aprovado.
 ## Ordem histórica de retomada — substituída em 2026-09-23
 
 Os itens 2–7 abaixo foram executados e validados, inclusive no CI remoto;
-não são mais pendências. O próximo trabalho é T19 com revisão independente.
-Não promova a aplicação sem validar o ambiente real.
+não são mais pendências. T19 foi consolidada na evidência final, com decisão
+condicional. Não promova a aplicação sem validar o ambiente real e obter
+revisão independente.
 
 1. Conferir branch, HEAD, diff e alterações concorrentes. Trabalhar em cópia
    isolada quando possível; não importar automaticamente mudanças locais

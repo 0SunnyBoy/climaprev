@@ -1,7 +1,7 @@
 # Spec — segurança, segredos e exposição do ClimaPrev
 
-Estado: T1–T18 implementadas/validadas com dados sintéticos; T19 e revisão
-independente pendentes. Sem prontidão de produção.
+Estado: T1–T19 implementadas/validadas com dados sintéticos; revisão
+independente e validação do ambiente real pendentes. Sem prontidão de produção.
 Data: 2026-09-19. Branch: `Atualizacao-Geral-V3`, checkpoint remoto `7ac70d8`.
 
 Atualização de 2026-09-23: CI e Security gates remotos passaram para
@@ -152,27 +152,28 @@ sem descobrir o procedimento durante um incidente.
 
 | ID       | Requirement                              | Design     | Tasks                  | Status   |
 | -------- | ---------------------------------------- | ---------- | ---------------------- | -------- |
-| GIT-01   | Exclusão de segredos no Git              | D1         | T1, T16, T17           | in tasks |
-| BUILD-01 | Artefatos sem segredos                   | D1, D7     | T2, T15, T17           | in tasks |
-| CFG-01   | Configuração fechada e sem ambiguidade   | D2         | T3, T4                 | in tasks |
-| SEC-01   | Segredos por arquivo e privilégio mínimo | D2, D3     | T3, T4, T5, T8, T14    | in tasks |
-| NET-01   | Exposição restrita e TLS                 | D3, D4     | T10, T11, T13, T14     | in tasks |
-| REDIS-01 | Autenticação, ACL e falha segura         | D3         | T5, T7, T8, T14        | in tasks |
-| PROXY-01 | Identidade confiável e canônica          | D4         | T6, T10, T11, T13, T14 | in tasks |
-| IP-01    | Pseudonimização no rate limit            | D4         | T4, T5, T7, T8, T14    | in tasks |
-| LOG-01   | Logs minimizados e retenção              | D5         | T10, T11, T12, T14     | in tasks |
-| WEB-01   | Frontend e fronteira HTTP seguros        | D4, D5     | T10, T11, T15          | in tasks |
-| HTTP-01  | Destinos, hosts e recursos limitados     | D2, D4, D6 | T4, T8, T9, T10, T11   | in tasks |
-| LOAD-01  | Carga sem produção/terceiros             | D7         | T13, T17               | in tasks |
-| CI-01    | Gates preventivos                        | D7         | T16, T17, T19          | in tasks |
-| OPS-01   | Rotação e resposta a exposição           | D8         | T18, T19               | in tasks |
-| AUTH-01  | Fronteira pública versus operacional     | D4, D8     | T8, T10, T11, T18      | in tasks |
+| GIT-01   | Exclusão de segredos no Git              | D1         | T1, T16, T17           | verified |
+| BUILD-01 | Artefatos sem segredos                   | D1, D7     | T2, T15, T17           | verified |
+| CFG-01   | Configuração fechada e sem ambiguidade   | D2         | T3, T4                 | verified |
+| SEC-01   | Segredos por arquivo e privilégio mínimo | D2, D3     | T3, T4, T5, T8, T14    | verified; host admin remains trusted |
+| NET-01   | Exposição restrita e TLS                 | D3, D4     | T10, T11, T13, T14     | verified in synthetic homolog; real edge pending |
+| REDIS-01 | Autenticação, ACL e falha segura         | D3         | T5, T7, T8, T14        | verified |
+| PROXY-01 | Identidade confiável e canônica          | D4         | T6, T10, T11, T13, T14 | verified |
+| IP-01    | Pseudonimização no rate limit            | D4         | T4, T5, T7, T8, T14    | verified in synthetic homolog |
+| LOG-01   | Logs minimizados e retenção              | D5         | T10, T11, T12, T14     | verified |
+| WEB-01   | Frontend e fronteira HTTP seguros        | D4, D5     | T10, T11, T15          | verified |
+| HTTP-01  | Destinos, hosts e recursos limitados     | D2, D4, D6 | T4, T8, T9, T10, T11   | verified |
+| LOAD-01  | Carga sem produção/terceiros             | D7         | T13, T17               | verified |
+| CI-01    | Gates preventivos                        | D7         | T16, T17, T19          | verified in local and remote CI |
+| OPS-01   | Rotação e resposta a exposição           | D8         | T18, T19               | verified synthetically; real incident pending |
+| AUTH-01  | Fronteira pública versus operacional     | D4, D8     | T8, T10, T11, T18      | verified |
 
 ## Success Criteria
 
-A implementação futura estará pronta somente quando todos os critérios acima
-tiverem evidência, os testes existentes passarem e o ensaio local comprovar
-ausência de sentinelas sensíveis em artefatos, navegador, logs e respostas.
+A implementação do ciclo T1–T19 tem evidência nos gates locais e remotos.
+Isso não equivale a autorização de produção: os requisitos marcados como
+dependentes da borda real precisam ser confirmados pelo operador responsável
+antes da publicação.
 Nenhum segredo real será usado em testes. Uma falha ou teste não executado
 será registrado como pendência, nunca como aprovação.
 

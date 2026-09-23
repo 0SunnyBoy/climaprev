@@ -1,7 +1,7 @@
 # Design — segurança orientada por evidência
 
-Estado: desenho implementado/validado até T18 com dados sintéticos;
-revisão independente e T19 pendentes.
+Estado: desenho implementado/validado até T19 com dados sintéticos;
+revisão independente e validação do ambiente real pendentes.
 Data: 2026-09-19.
 
 Atualização de 2026-09-23: gates locais e workflows remotos passaram para

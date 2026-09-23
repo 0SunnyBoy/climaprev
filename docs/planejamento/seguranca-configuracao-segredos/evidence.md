@@ -1,7 +1,8 @@
 # Evidências de execução da segurança
 
-Estado em 2026-09-23: T14–T18 com gates locais aprovados; T17 também
-aprovado no GitHub Actions. T19 está pendente. Sem aprovação de release.
+Estado em 2026-09-23: T14–T19 com gates locais aprovados; T17 também
+aprovado no GitHub Actions. T19 concluiu com decisão condicional. Sem
+aprovação de release.
 Base histórica: branch `Atualizacao-Geral-V3`, HEAD `0a4654e` no checkpoint
 de 2026-09-21; as seções posteriores registram a retomada. Data inicial:
 2026-09-19.
@@ -69,12 +70,13 @@ mas ainda classifica a versão estável de util-linux afetada por
 [CVE-2026-78408](https://security-tracker.debian.org/tracker/CVE-2026-78408).
 Não foi criada exceção nem usado `ignore-unfixed` para aprovar a imagem.
 
-## Gates pendentes
+## Gates pendentes no checkpoint de 2026-09-21
 
 Ainda faltam homologação TLS/ACL, browser Playwright reproduzível, CI remoto e
 verificação independente. A política de scanner foi executada e passou
 localmente; o CI remoto ainda precisa confirmar o mesmo resultado no runner do
-GitHub.
+GitHub. Esta seção é histórica; a execução remota foi registrada na seção
+de T19 abaixo.
 DNS, firewall e certificado público de uma implantação real estão fora
 das provas locais; nenhuma prontidão de produção foi declarada.
 
@@ -216,13 +218,15 @@ Com autorização explícita, os scanners foram executados em containers pinados
   Os pacotes Python também não apresentaram achados HIGH/CRITICAL.
 
 O código de saída do Trivy foi 0, com `ignore-unfixed` desativado. Nenhuma
-exceção foi criada. T16 está verificado e T17 está aprovado localmente; a
-execução remota do workflow continua necessária antes do aceite final.
+exceção foi criada. Naquele checkpoint, T16 estava verificado e T17 aprovado
+localmente; o workflow remoto passou posteriormente, conforme a seção de
+T19.
 
 A regressão final da aplicação executada no container `app` passou com
 **437 testes**, em 39,24 s, já com a base Alpine atualizada. Ruff, mypy,
 Nginx, contratos de frontend/proxy, Compose e rotação sintética também
-passaram. O CI remoto ainda precisa reproduzir esses gates.
+passaram. Naquele checkpoint, o CI remoto ainda precisava reproduzir esses
+gates; a execução posterior está registrada na seção de T19.
 
 ## Runner de navegador — 2026-09-23
 
@@ -301,6 +305,40 @@ Playwright local, homologação TLS/Browser, rotação sintética, Trivy,
 regressão e limpeza final. Ambos usaram o runner Ubuntu do GitHub; nenhum
 segredo produtivo foi fornecido a esses jobs.
 
-Pendências: T19, revisão independente e verificação do ambiente real.
-Os gates locais/remotos não autorizam deploy nem declaração de prontidão
-de produção.
+## T19 — decisão consolidada — 2026-09-23
+
+Foi feita uma segunda passagem da matriz de requisitos, dos artefatos
+versionados e dos gates locais/remotos. O conjunto avaliado corresponde ao
+commit de segurança `525854a` e ao registro documental `83dd264`; as mudanças
+locais não commitadas em `risk_evaluator.py` e no teste correspondente foram
+deliberadamente excluídas.
+
+| Evidência | Resultado |
+| --- | --- |
+| Regressão atual no container | `437 passed` com `pytest -q -W error` |
+| Qualidade estática | Ruff aprovado com `--ignore EXE002`; mypy aprovado em 41 arquivos |
+| Compose | Configuração local e perfil `load` aprovados com `config --quiet` |
+| Segredos/histórico | Gitleaks com regras padrão, fixture positiva/negativa e 34 commits aprovados |
+| Imagem | Trivy sem vulnerabilidades HIGH/CRITICAL, sem `ignore-unfixed` |
+| Fronteira web | Browser HTTP local e HTTPS de homologação com CA explícita aprovados |
+| Homologação | Topologia, ACL Redis, TLS, hardening, logs e rotação sintética aprovados |
+| CI remoto | Workflows `CI` e `Security gates` concluídos com `success` no GitHub |
+
+Todos os requisitos têm evidência controlada; `NET-01`, `IP-01` e `OPS-01`
+continuam condicionados à validação operacional real. A revisão de T19
+encontrou estes bloqueios de publicação:
+
+1. DNS, firewall, certificado público, ingress e NAT do ambiente real não
+   foram verificados.
+2. Secrets reais, permissões do host, armazenamento e procedimento de
+   observabilidade do ambiente de produção não foram exercitados.
+3. Falta uma aprovação independente do proprietário/operador após revisar
+   esta matriz.
+4. A imagem e a base de vulnerabilidades precisam ser escaneadas novamente
+   no momento da publicação, pois o resultado do Trivy é temporal.
+
+**Decisão T19:** ciclo de segurança T1–T19 **concluído com decisão
+condicional**. Os controles implementados estão verificados nos ambientes
+controlados e no CI remoto, mas a aplicação está **não pronta para produção**
+até que os quatro bloqueios acima sejam resolvidos e registrados. Esta
+decisão não autoriza deploy, rotação real ou alteração de branch protection.

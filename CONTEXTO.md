@@ -2,11 +2,11 @@
 
 Atualizado em 2026-09-23. Branch: `Atualizacao-Geral-V3`.
 
-Este é um checkpoint de trabalho **sem aprovação de produção**. T14–T18
+Este é um checkpoint de trabalho **sem aprovação de produção**. T14–T19
 foram implementadas e validadas com dados sintéticos; CI e Security gates
 passaram no GitHub para o commit `525854ab132e4db37bde9b483468e72ac36cdf10`.
-T19 e a revisão independente ainda faltam. Não houve deploy nem troca de
-segredos reais.
+T19 concluiu com decisão condicional; a revisão independente e a validação
+da borda real ainda faltam. Não houve deploy nem troca de segredos reais.
 
 Comece pelo [contexto de retomada da segurança](docs/planejamento/seguranca-configuracao-segredos/context.md).
 Ele registra alterações, testes, falhas, dependências e ordem de continuação.

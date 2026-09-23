@@ -1,7 +1,7 @@
 # Tasks — implementação da segurança do ClimaPrev
 
-Estado em 2026-09-23: T1–T18 com implementação e gates locais;
-T17 também aprovado no workflow remoto; T19 pendente.
+Estado em 2026-09-23: T1–T19 concluídas com evidências locais e remotas;
+decisão final **condicional — não pronto para produção**.
 Sem prontidão de produção. Nenhuma
 rotação real, publicação ou alteração no SIGFAS está autorizada por esta
 execução.
@@ -398,14 +398,14 @@ a tarefa como concluída. Não iniciar provedores reais para contornar mocks.
 | T15     | Componente de aceitação + fixtures positivas/negativas  | Execução de script e segredo visível devem ser detectados |
 | T16–T17 | Scanner/workflow + fixtures                             | Bloqueio real e redação sem credenciais produtivas        |
 | T18     | Runbook + ensaio sintético                              | Senha antiga recusada e procedimento reproduzível         |
-| T19     | Evidências + reexecução dos gates anteriores            | Sem status aprovado para teste não executado              |
+| T19     | Evidências + reexecução dos gates anteriores            | Matriz completa registrada; bloqueios reais explicitados  |
 
 ## Status desta entrega
 
-T1–T18 passaram nos gates aplicáveis com dados sintéticos. T17 também passou
-nos workflows remotos CI e Security gates para `525854a`. T19, revisão
-independente e validação do ambiente real permanecem pendentes. Isso não
-significa prontidão de produção. Alterações anteriores não relacionadas
+T1–T19 passaram nos gates aplicáveis, com dados sintéticos quando necessário.
+T17 também passou nos workflows remotos CI e Security gates. A decisão T19 é
+condicional: não há prontidão de produção enquanto a borda real e a revisão
+independente não forem confirmadas. Alterações anteriores não relacionadas
 permanecem preservadas fora do commit de segurança.
 
 SPEC_DEVIATION: commits por tarefa foram agrupados devido à integração com
