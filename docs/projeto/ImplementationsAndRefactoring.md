@@ -1,7 +1,7 @@
 # Implementations and refactoring
 
 **Status:** P0–P2.6 concluídos; revisão independente final pendente.  
-**Última atualização:** 23 de setembro de 2026.
+**Última atualização:** 24 de setembro de 2026.
 **Projeto:** ClimaPrev
 
 ## Objetivo
@@ -178,7 +178,7 @@ As tarefas autorizadas até **P2.6** foram concluídas. O código atual contém:
 
 - `docs/frontend/Frontend-Rework.md`: separação entre frontend e backend.
 - `docs/projeto/PossivelPlanoDeEvolução.md`: plano amplo de evolução.
-- `Visualização geral do projeto.md`: visão geral técnica na raiz do projeto.
+- `docs/projeto/overview.md`: visão geral técnica do projeto.
 - `docs/arquitetura/parametros-de-predicao.md`: parâmetros de entrada,
   variáveis meteorológicas e limiares do risco.
 - `docs/projeto/PROJECT.md`: índice e mapa da documentação.
@@ -219,10 +219,9 @@ DOM, foco, teclado, viewport e headers.
 ### Estado operacional da cópia correta
 
 - A pasta `climaprev-Atualizacao-Geral-V3` está conectada ao repositório Git
-  correto na branch `Atualizacao-Geral-V3`, acompanhando
-  `origin/Atualizacao-Geral-V3`.
-- As alterações atuais ainda não foram commitadas nem enviadas. O próximo
-  passo é revisar o staging e criar o commit da atualização.
+  correto na branch `develop`, acompanhando `origin/develop`.
+- O estado atual foi publicado no commit `b671d9b`. A `main` permanece como
+  branch estável; novas alterações devem passar por revisão antes do merge.
 - Os arquivos `.homolog/` não são versionados; devem ser provisionados
   localmente com secrets e certificados antes de iniciar a homologação.
 - As dependências de produção do frontend não apresentam vulnerabilidades no

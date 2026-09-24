@@ -1,8 +1,8 @@
 # PROJECT — Clima Prev
 
-**Data da análise:** 2026-09-23.
-**Estado:** P0–P2.6 e rework Vue concluídos; branch conectada ao Git; commit,
-push e revisão independente final pendentes.
+**Data da análise:** 2026-09-24.
+**Estado:** P0–P2.6 e rework Vue concluídos; estado atual publicado em
+`develop`; revisão independente final pendente.
 
 ## Visão
 
@@ -31,6 +31,8 @@ ciclo.
 | [Análise documental inicial](../operacoes/validacao-documentacao.md)                      | Evidências, rastreabilidade e limites da verificação.       |
 | [ROADMAP](ROADMAP.md)                                            | Escopo de evolução e critérios de conclusão.               |
 | [STATE](STATE.md)                                                | Estado observado, decisões e pendências.                    |
+| [Contexto de retomada](context.md)                              | Branch ativa, validações recentes e como continuar.         |
+| [Visão geral](overview.md)                                       | Arquitetura, tecnologias, operação e limites do projeto.    |
 | [Operações](../operacoes/operations.md)                                  | Comandos e configuração já documentados.                    |
 | [CI](../../.github/workflows/ci.yml)                            | Validação automática no GitHub.                             |
 
