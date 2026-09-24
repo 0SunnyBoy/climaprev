@@ -11,6 +11,8 @@ detalham [arquitetura](docs/arquitetura/arquitetura.md), [fluxos](docs/arquitetu
 [informações transmitidas](docs/arquitetura/fluxos-informacao.md),
 [segurança](docs/seguranca/seguranca.md) e [restrições](docs/operacoes/restricoes.md).
 Consulte também o [estado atual](docs/projeto/STATE.md) e a [evolução proposta](docs/projeto/ROADMAP.md).
+Para uma leitura resumida, consulte a [visão geral do projeto](docs/projeto/overview.md)
+e o [contexto de retomada](docs/projeto/context.md).
 O desacoplamento do frontend está descrito em
 [Frontend-Rework](docs/frontend/Frontend-Rework.md).
 Os campos, limites e limiares da consulta estão em
@@ -142,10 +144,9 @@ no HTML gerado pelo Vite; ele não depende de `/assets/styles.css`.
 
 ## Estado da branch
 
-A cópia correta está na branch `Atualizacao-Geral-V3`, conectada a
-`origin/Atualizacao-Geral-V3`. A implementação local e sua validação foram
-concluídas, mas as alterações atuais ainda precisam ser revisadas, commitadas
-e enviadas ao GitHub. A pasta `.homolog/` permanece local, ignorada pelo Git,
+A cópia correta está na branch `develop`, conectada a `origin/develop`. A
+implementação local e sua validação foram concluídas e o estado atual está
+publicado no commit `b671d9b`. A pasta `.homolog/` permanece local, ignorada pelo Git,
 e deve ser provisionada separadamente para validar a homologação.
 
 
