@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import secrets
 from uuid import uuid4
 
 import pytest
@@ -76,3 +77,23 @@ async def test_rate_limit_raises_dependency_unavailable_when_redis_cannot_connec
             await limiter.allow("127.0.0.1", limit=60, window_seconds=60, burst=10)
     finally:
         await unavailable_redis.aclose()
+
+
+async def test_hmac_workers_share_atomic_bucket_and_ttl_without_ip(redis: Redis) -> None:
+    key = secrets.token_bytes(32)
+    workers = [RedisRateLimiter(redis, environment="production", identity_key=key) for _ in range(2)]
+    decisions = await asyncio.gather(*(
+        workers[i % 2].allow("198.51.100.7", limit=60, window_seconds=60, burst=10)
+        for i in range(11)
+    ))
+    stored = workers[0]._redis_key("198.51.100.7")
+    assert stored.startswith("climaprev:production:rate-limit:v2:")
+    assert "198.51.100.7" not in stored
+    assert sum(decision.allowed for decision in decisions) == 10
+    assert [decision.retry_after_seconds for decision in decisions if not decision.allowed] == [1]
+    assert 0 < await redis.pttl(stored) <= 10_000
+    assert await redis.exists("climaprev:production:rate-limit:v1:198.51.100.7") == 0
+    rotated = RedisRateLimiter(redis, environment="production", identity_key=secrets.token_bytes(32))
+    assert (await rotated.allow("198.51.100.7", 60, 60, 10)).remaining == 9
+    assert await redis.exists(stored) == 1  # Rotation never flushes existing state.
+    await redis.delete(stored, rotated._redis_key("198.51.100.7"))

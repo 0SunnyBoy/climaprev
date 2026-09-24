@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
@@ -36,11 +37,16 @@ async def test_cache_returns_miss_fresh_stale_then_expired_entry(redis: Redis) -
         stale_ttl_seconds=3,
     )
 
-    assert await cache.get(key) == CacheEntry(value={"temperature_c": 24.5}, is_stale=False)
+    fresh = await cache.get(key)
+    assert fresh is not None
+    expires_at = fresh.expires_at
+    assert expires_at is not None and expires_at > datetime.now(UTC)
+    assert fresh == CacheEntry(value={"temperature_c": 24.5}, is_stale=False, expires_at=expires_at)
 
     await asyncio.sleep(1.1)
 
-    assert await cache.get(key) == CacheEntry(value={"temperature_c": 24.5}, is_stale=True)
+    assert await cache.get(key) == CacheEntry(
+        value={"temperature_c": 24.5}, is_stale=True, expires_at=expires_at)
 
     await asyncio.sleep(2.1)
 

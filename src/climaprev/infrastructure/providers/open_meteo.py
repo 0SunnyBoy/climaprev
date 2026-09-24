@@ -1,12 +1,20 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Awaitable, Callable, Mapping, Sequence
+from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
+from math import isfinite
 from typing import Final
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
 
+from climaprev.application.errors import (
+    LocationNotFound,
+    ProviderPermanentError,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.config import Settings
 from climaprev.domain.models import (
     CanonicalLocation,
@@ -14,12 +22,7 @@ from climaprev.domain.models import (
     DatePeriod,
     NormalizedForecast,
 )
-from climaprev.infrastructure.http.client import (
-    AsyncJsonHttpClient,
-    ProviderPermanentError,
-    ProviderTransientError,
-    WeatherDataInvalid,
-)
+from climaprev.infrastructure.http.client import AsyncJsonHttpClient
 
 _DAILY_FIELDS: Final = (
     "temperature_2m_min",
@@ -35,8 +38,6 @@ _HOURLY_FIELDS: Final = (
     "relative_humidity_2m",
     "precipitation",
     "precipitation_probability",
-    "wind_speed_10m",
-    "wind_gusts_10m",
 )
 
 __all__ = [
@@ -49,10 +50,6 @@ __all__ = [
 ]
 
 
-class LocationNotFound(Exception):
-    """No usable canonical location was returned by the geocoding provider."""
-
-
 class OpenMeteoGeocodingClient:
     def __init__(
         self,
@@ -60,11 +57,20 @@ class OpenMeteoGeocodingClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
-        self._http = AsyncJsonHttpClient(client, settings, on_retry=on_retry)
+        self._http = AsyncJsonHttpClient(
+            client, settings, on_retry=on_retry, before_send=before_send
+        )
         self._base_url = settings.geocoding_base_url.rstrip("/")
 
     async def resolve(self, text: str) -> CanonicalLocation:
+        locations = await self.search(text)
+        if not locations:
+            raise LocationNotFound("location was not found")
+        return locations[0]
+
+    async def search(self, text: str) -> list[CanonicalLocation]:
         payload = await self._http.get_json(
             f"{self._base_url}/v1/search",
             {"name": text, "language": "pt"},
@@ -74,14 +80,12 @@ class OpenMeteoGeocodingClient:
             raise WeatherDataInvalid("geocoding results must be a list")
         if not isinstance(results, list):
             raise WeatherDataInvalid("geocoding results must be a list")
-        if not results:
-            raise LocationNotFound("location was not found")
-
+        locations: list[CanonicalLocation] = []
         for item in results:
-            location = _canonical_location(item)
+            location = _canonical_location(item, include_context=True)
             if location is not None:
-                return location
-        raise LocationNotFound("location was not found")
+                locations.append(location)
+        return locations
 
 
 class OpenMeteoForecastClient:
@@ -91,8 +95,11 @@ class OpenMeteoForecastClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
-        self._http = AsyncJsonHttpClient(client, settings, on_retry=on_retry)
+        self._http = AsyncJsonHttpClient(
+            client, settings, on_retry=on_retry, before_send=before_send
+        )
         self._base_url = settings.forecast_base_url.rstrip("/")
 
     async def forecast(
@@ -117,7 +124,9 @@ class OpenMeteoForecastClient:
         )
         days, missing_fields = _normalize_forecast(payload, period)
         return NormalizedForecast(
-            location=location,
+            location=replace(
+                location, timezone=_iana_timezone(payload.get("timezone"), "forecast timezone")
+            ),
             period=period,
             days=days,
             provider="open-meteo",
@@ -127,7 +136,11 @@ class OpenMeteoForecastClient:
         )
 
 
-def _canonical_location(item: object) -> CanonicalLocation | None:
+def _canonical_location(
+    item: object,
+    *,
+    include_context: bool = False,
+) -> CanonicalLocation | None:
     if not isinstance(item, Mapping):
         return None
     name = item.get("name")
@@ -140,8 +153,16 @@ def _canonical_location(item: object) -> CanonicalLocation | None:
         return None
     if not isinstance(provider_timezone, str) or not provider_timezone.strip():
         return None
+    display_name = name
+    if include_context:
+        context = [item.get("admin1"), item.get("country")]
+        suffix = ", ".join(
+            value.strip() for value in context if isinstance(value, str) and value.strip()
+        )
+        if suffix:
+            display_name = f"{name}, {suffix}"
     return CanonicalLocation(
-        name=name,
+        name=display_name,
         latitude=latitude,
         longitude=longitude,
         timezone=_iana_timezone(provider_timezone, "geocoding timezone"),
@@ -153,7 +174,7 @@ def _normalize_forecast(
     payload: Mapping[str, object],
     period: DatePeriod,
 ) -> tuple[tuple[DailyForecast, ...], tuple[str, ...]]:
-    _iana_timezone(payload.get("timezone"), "forecast timezone")
+    timezone = _iana_timezone(payload.get("timezone"), "forecast timezone")
     daily = _object(payload.get("daily"), "daily")
     hourly = _object(payload.get("hourly"), "hourly")
     dates = _daily_dates(daily, period)
@@ -162,18 +183,25 @@ def _normalize_forecast(
         field: _optional_series(daily, field, len(dates), "daily", missing_fields)
         for field in _DAILY_FIELDS
     }
-    hourly_dates = _hourly_dates(hourly, period)
+    hourly_dates, expected_counts = _hourly_dates(hourly, period, timezone)
     hourly_series = {
         field: _optional_series(hourly, field, len(hourly_dates), "hourly", missing_fields)
         for field in _HOURLY_FIELDS
     }
+
+    for field, series in (*daily_series.items(), *hourly_series.items()):
+        _validate_weather_series(field, series)
 
     days = tuple(
         DailyForecast(
             date=day,
             temperature_min_c=_daily_number(daily_series["temperature_2m_min"], index),
             temperature_max_c=_daily_number(daily_series["temperature_2m_max"], index),
-            temperature_mean_c=None,
+            temperature_mean_c=_mean_for_day(
+                hourly_dates,
+                hourly_series["temperature_2m"],
+                day,
+            ),
             humidity_mean_pct=_mean_for_day(
                 hourly_dates,
                 hourly_series["relative_humidity_2m"],
@@ -196,6 +224,23 @@ def _normalize_forecast(
         )
         for index, day in enumerate(dates)
     )
+    for day in days:
+        if (
+            day.temperature_min_c is not None
+            and day.temperature_max_c is not None
+            and day.temperature_min_c > day.temperature_max_c
+        ):
+            raise WeatherDataInvalid("minimum temperature exceeds maximum")
+    for day in days:
+        for field in day.__dataclass_fields__:
+            if field != "date" and getattr(day, field) is None:
+                missing_fields.append(f"days.{day.date.isoformat()}.{field}")
+        temperatures = _values_for_day(hourly_dates, hourly_series["temperature_2m"], day.date)
+        if len(temperatures) != expected_counts[day.date]:
+            missing_fields.append(f"hourly.{day.date.isoformat()}.temperature_2m.coverage")
+        precipitation = _values_for_day(hourly_dates, hourly_series["precipitation"], day.date)
+        if len(precipitation) != expected_counts[day.date]:
+            missing_fields.append(f"hourly.{day.date.isoformat()}.precipitation.coverage")
     return days, tuple(missing_fields)
 
 
@@ -214,15 +259,35 @@ def _daily_dates(daily: Mapping[str, object], period: DatePeriod) -> tuple[date,
     return dates
 
 
-def _hourly_dates(hourly: Mapping[str, object], period: DatePeriod) -> tuple[date, ...]:
+def _hourly_dates(
+    hourly: Mapping[str, object],
+    period: DatePeriod,
+    timezone: str,
+) -> tuple[tuple[date, ...], dict[date, int]]:
+    zone = ZoneInfo(timezone)
+    expected: list[datetime] = []
+    counts: dict[date, int] = {}
+    for index in range(period.days):
+        day = period.start + timedelta(days=index)
+        instant = datetime.combine(day, datetime.min.time(), zone).astimezone(UTC)
+        end = datetime.combine(day + timedelta(days=1), datetime.min.time(), zone).astimezone(UTC)
+        counts[day] = 0
+        while instant < end:
+            expected.append(instant.astimezone(zone).replace(tzinfo=None))
+            counts[day] += 1
+            instant += timedelta(hours=1)
     values = _required_series(hourly, "time", "hourly")
-    dates = tuple(_parse_hour(value) for value in values)
-    requested_dates = tuple(period.start + timedelta(days=index) for index in range(period.days))
-    if not set(requested_dates).issubset(dates) or any(
-        hourly_date not in requested_dates for hourly_date in dates
-    ):
-        raise WeatherDataInvalid("hourly dates do not match the requested period")
-    return dates
+    parsed = tuple(_parse_hour(value) for value in values)
+    # The provider series must be a subsequence of the civil timeline. Repeated
+    # local hours are legitimate only when the timezone timeline repeats them.
+    position = 0
+    for hour in parsed:
+        while position < len(expected) and expected[position] != hour:
+            position += 1
+        if position == len(expected):
+            raise WeatherDataInvalid("hourly timestamps do not match the civil timeline")
+        position += 1
+    return tuple(hour.date() for hour in parsed), counts
 
 
 def _iana_timezone(value: object, field: str) -> str:
@@ -271,11 +336,11 @@ def _parse_date(value: object, field: str) -> date:
         raise WeatherDataInvalid(f"{field} must contain ISO dates") from error
 
 
-def _parse_hour(value: object) -> date:
+def _parse_hour(value: object) -> datetime:
     if not isinstance(value, str):
         raise WeatherDataInvalid("hourly.time must contain ISO datetimes")
     try:
-        return datetime.fromisoformat(value).date()
+        return datetime.fromisoformat(value)
     except ValueError as error:
         raise WeatherDataInvalid("hourly.time must contain ISO datetimes") from error
 
@@ -339,4 +404,20 @@ def _number_or_none(value: object) -> float | None:
         return None
     if isinstance(value, bool) or not isinstance(value, int | float):
         raise WeatherDataInvalid("weather series must contain numbers or null")
-    return float(value)
+    number = float(value)
+    if not isfinite(number):
+        raise WeatherDataInvalid("weather values must be finite")
+    return number
+
+
+def _validate_weather_series(field: str, series: Sequence[object] | None) -> None:
+    if series is None:
+        return
+    for raw in series:
+        value = _number_or_none(raw)
+        if value is None:
+            continue
+        if ("probability" in field or "humidity" in field) and not 0 <= value <= 100:
+            raise WeatherDataInvalid("percentage must be between zero and one hundred")
+        if field.startswith(("precipitation", "wind_")) and value < 0:
+            raise WeatherDataInvalid("precipitation and wind must not be negative")

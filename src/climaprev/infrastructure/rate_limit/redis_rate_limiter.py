@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hmac
+import ipaddress
 import time
 from typing import cast
 
@@ -44,9 +46,17 @@ return {allowed and 1 or 0, math.floor(tokens), retry_after_seconds}
 
 
 class RedisRateLimiter:
-    def __init__(self, redis: RedisConnection, *, environment: str = "development") -> None:
+    def __init__(
+        self, redis: RedisConnection, *, environment: str = "development",
+        identity_key: bytes | None = None,
+    ) -> None:
         self._redis = redis
-        self._environment = environment
+        self._environment = environment.strip().lower()
+        if identity_key is not None and (not isinstance(identity_key, bytes) or len(identity_key) != 32):
+            raise ValueError("identity_key must contain 32 bytes")
+        if self._environment == "production" and identity_key is None:
+            raise ValueError("identity_key is required in production")
+        self._identity_key = identity_key
 
     async def allow(
         self,
@@ -78,4 +88,12 @@ class RedisRateLimiter:
         )
 
     def _redis_key(self, identity: str) -> str:
+        if self._identity_key is not None:
+            try:
+                canonical = str(ipaddress.ip_address(identity)) if "%" not in identity else "unknown"
+            except ValueError:
+                canonical = "unknown"
+            message = f"climaprev-ip-v1|{self._environment}|{canonical}".encode()
+            digest = hmac.digest(self._identity_key, message, "sha256").hex()
+            return f"climaprev:{self._environment}:rate-limit:v2:{digest}"
         return f"climaprev:{self._environment}:rate-limit:v1:{identity}"

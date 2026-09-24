@@ -5,14 +5,28 @@
 As variáveis usam o prefixo `CLIMAPREV_`: `REDIS_URL` (também aceito por
 compatibilidade), `CLIMAPREV_ENVIRONMENT`, `CLIMAPREV_RATE_LIMIT`,
 `CLIMAPREV_RATE_LIMIT_BURST`, `CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS`,
-`CLIMAPREV_CORS_ALLOW_ORIGINS`, `CLIMAPREV_TRUSTED_PROXY_IPS`, URLs Open-Meteo,
-timeouts e `CLIMAPREV_ADDITIONAL_RETRIES` (máximo dois). Redis é estado
+`CLIMAPREV_CORS_ALLOW_ORIGINS`, `CLIMAPREV_TRUSTED_PROXY_IPS`, URLs Open-Meteo
+e INMET, timeouts, limites de conexão e `CLIMAPREV_ADDITIONAL_RETRIES` (máximo
+dois). Redis é estado
 compartilhado para cache, lock e rate limit; execute réplicas sem afinidade e
 use Redis gerenciado com alta disponibilidade em produção.
 
 `GET /health/live` não depende de Redis. `GET /health/ready` exige Redis e
 deve ser o health check de tráfego. Cada resposta carrega `X-Request-ID`;
 propague-o em incidentes.
+
+No desenvolvimento, acesse a interface em `http://localhost:8080`. O serviço
+`app` fica disponível em `http://localhost:8000` somente para acesso direto à
+API e debug. Em homologação, a entrada TLS serve o frontend e encaminha API e
+health check; API e Redis não publicam portas diretas.
+
+## Integração contínua
+
+O workflow [CI](../../.github/workflows/ci.yml) executa em cada `push`, Pull
+Request ou acionamento manual. Ele valida o Compose, constrói a imagem,
+executa testes, Ruff e mypy, testa a configuração do Nginx e verifica a
+resposta do frontend. A CI valida o código em um runner temporário e não faz
+deploy.
 
 ## Observabilidade e privacidade
 
@@ -26,8 +40,10 @@ somente para rate limit; proxies confiáveis devem ser configurados exatamente.
 ## Falhas e rollout
 
 Em falha transitória do Open-Meteo, a API usa apenas entrada stale dentro de 15
-minutos; sem dado válido retorna 503. Alertas oficiais são uma porta isolada e
-ficam `not_configured` até que uma integração seja formalmente habilitada.
+minutos; sem dado válido retorna 503. Alertas oficiais são uma porta isolada:
+o app consulta o INMET, retorna `available` quando obtém resposta válida e
+`unavailable` quando a dependência falha. O risco heurístico não é alterado
+pelos alertas.
 
 A policy de risco é versionada (`reference-v1`). Faça rollout por canário,
 monitore mudanças de distribuição de `forecast_risk`, e faça rollback para a
@@ -86,3 +102,45 @@ Registre p50/p95/p99, throughput, 5xx e 429. Não trate 429 como capacidade:
 100 req/s por 600 s precisa de limite compatível e identidades de carga
 compatíveis. Registre também a faixa de 90--110 req/s e declare falha se ela
 não for atingida.
+
+## Atualizar dependências reproduzíveis
+
+A plataforma validada é Python3.12 em Linuxamd64. `requirements.lock` registra
+produção e transitivas; `requirements-build.lock` fixa ferramentas usadas
+para construir o pacote sem resolução implícita em build isolation.
+
+```bash
+uv --no-config pip compile pyproject.toml --generate-hashes --no-header --python-version 3.12 --python-platform x86_64-unknown-linux-gnu --default-index https://pypi.org/simple -o requirements.lock
+uv --no-config pip compile docker/build-requirements.in --generate-hashes --no-header --python-version 3.12 --python-platform x86_64-unknown-linux-gnu --default-index https://pypi.org/simple -o requirements-build.lock
+docker compose build
+docker compose run --rm app python tests/docker/check_lock_install.py
+docker compose run --rm app pytest -q -W error
+```
+
+Executar resolução em ambiente sem variáveis de índices/credenciais pessoais.
+Revisar o diff dos locks e executar Full/Ruff/mypy antes do commit da atualização.
+A verificação explícita instala duas vezes em ambientes vazios, exige hashes,
+executa pip check e compara todas as versões instaladas com o lock.
+
+## Imagens de desenvolvimento e runtime
+
+`docker compose build` seleciona `dev` explicitamente nos quatro serviços de
+aplicação/carga. O alvo final padrão é `runtime`, com UID10001, dependências
+hashadas e o wheel do pacote; testes/docs/env e ferramentas dev ficam fora.
+O Python base está fixado por digest. O código HTML/CSS/TypeScript fica em
+`frontend/`, é compilado pelo Vite e servido pelo Nginx a partir de `dist/`;
+não entram no wheel nem na imagem de runtime Python. O `.dockerignore` envia
+os arquivos necessários aos builds do backend e do frontend.
+
+```bash
+docker build --load --target runtime -t climaprev-runtime:local .
+docker run --rm -v "$PWD/tests/docker/check_runtime_image.py:/check.py:ro" climaprev-runtime:local python /check.py
+```
+
+
+O perfil `app-load` conserva o token bucket global, com fixture de capacidade
+e reposição 100000 por 60 s, exclusiva do provider mock. Os overrides são
+`CLIMAPREV_LOAD_PROVIDER_BUDGET_CAPACITY`, `CLIMAPREV_LOAD_PROVIDER_BUDGET_REFILL`
+e `CLIMAPREV_LOAD_PROVIDER_BUDGET_WINDOW_SECONDS`. Essa configuração não muda
+a cota do app público. Separar recusas 503 por orçamento de medições de
+processamento; não interpretar o limite como capacidade do Open-Meteo.

@@ -1,27 +1,30 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable, Mapping
+import json
+from collections.abc import Awaitable, Callable, Mapping
 from typing import Final
 
 import httpx
 
+from climaprev.application.errors import (
+    ProviderPermanentError,
+    ProviderRateLimited,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.config import Settings
+
+__all__ = [
+    "AsyncJsonHttpClient",
+    "ProviderPermanentError",
+    "ProviderRateLimited",
+    "ProviderTransientError",
+    "WeatherDataInvalid",
+]
 
 _BACKOFF_SECONDS: Final = 0.05
 _MAX_BACKOFF_SECONDS: Final = 0.1
-
-
-class ProviderTransientError(Exception):
-    """The provider failed in a way that may succeed on a later request."""
-
-
-class ProviderPermanentError(Exception):
-    """The provider rejected a request that should not be retried."""
-
-
-class WeatherDataInvalid(Exception):
-    """The provider response is not valid JSON data for this adapter."""
 
 
 class AsyncJsonHttpClient:
@@ -31,10 +34,14 @@ class AsyncJsonHttpClient:
         settings: Settings,
         *,
         on_retry: Callable[[], None] | None = None,
+        before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
         self._client = client
+        self._before_send = before_send
         self._additional_retries = settings.additional_retries
         self._on_retry = on_retry
+        self._max_response_bytes = settings.provider_max_response_bytes
+        self._total_timeout = settings.provider_total_timeout_seconds
         self._timeout = httpx.Timeout(
             connect=settings.connect_timeout_seconds,
             read=settings.read_timeout_seconds,
@@ -42,11 +49,46 @@ class AsyncJsonHttpClient:
             pool=settings.connect_timeout_seconds,
         )
 
-    async def get_json(self, url: str, params: Mapping[str, str | float | int]) -> dict[str, object]:
+    async def get_json(
+        self, url: str, params: Mapping[str, str | float | int]
+    ) -> dict[str, object]:
+        try:
+            async with asyncio.timeout(self._total_timeout):
+                return await self._get_json(url, params)
+        except TimeoutError:
+            raise ProviderTransientError("provider operation timed out") from None
+
+    async def _get_json(
+        self, url: str, params: Mapping[str, str | float | int]
+    ) -> dict[str, object]:
         attempts = self._additional_retries + 1
         for attempt in range(attempts):
+            if self._before_send is not None:
+                await self._before_send(url)
             try:
-                response = await self._client.get(url, params=params, timeout=self._timeout)
+                async with self._client.stream(
+                    "GET", url, params=params, timeout=self._timeout, follow_redirects=False
+                ) as response:
+                    if response.status_code >= 500:
+                        raise ProviderTransientError("provider server error")
+                    if response.status_code == 429:
+                        raise ProviderRateLimited("provider request limit reached")
+                    if response.status_code >= 400:
+                        raise ProviderPermanentError("provider rejected the request")
+                    if 300 <= response.status_code < 400:
+                        raise ProviderPermanentError("provider redirect rejected")
+                    body = bytearray()
+                    async for chunk in response.aiter_bytes():
+                        if len(body) + len(chunk) > self._max_response_bytes:
+                            raise ProviderPermanentError("provider response exceeded size limit")
+                        body.extend(chunk)
+                    try:
+                        payload: object = json.loads(body)
+                    except (ValueError, UnicodeDecodeError):
+                        raise WeatherDataInvalid("provider response is not valid JSON") from None
+                    if not isinstance(payload, dict):
+                        raise WeatherDataInvalid("provider response must be a JSON object")
+                    return payload
             except httpx.TimeoutException as error:
                 if attempt + 1 == attempts:
                     raise ProviderTransientError("provider request timed out") from error
@@ -57,22 +99,13 @@ class AsyncJsonHttpClient:
                     raise ProviderTransientError("provider request failed") from error
                 await self._backoff(attempt)
                 continue
-
-            if response.status_code >= 500:
+            except ProviderRateLimited:
+                raise
+            except ProviderTransientError:
                 if attempt + 1 == attempts:
-                    raise ProviderTransientError("provider server error")
+                    raise
                 await self._backoff(attempt)
                 continue
-            if response.status_code >= 400:
-                raise ProviderPermanentError("provider rejected the request")
-
-            try:
-                payload: object = response.json()
-            except ValueError as error:
-                raise WeatherDataInvalid("provider response is not valid JSON") from error
-            if not isinstance(payload, dict):
-                raise WeatherDataInvalid("provider response must be a JSON object")
-            return payload
 
         raise AssertionError("request retry loop must return or raise")
 

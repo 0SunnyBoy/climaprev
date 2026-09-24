@@ -45,8 +45,6 @@ def valid_forecast_payload() -> dict[str, Any]:
             "relative_humidity_2m": [70, 80, 60, 70],
             "precipitation": [0.0, 1.2, 2.5, 0.1],
             "precipitation_probability": [10, 40, 55, 20],
-            "wind_speed_10m": [5.0, 10.0, 12.0, 8.0],
-            "wind_gusts_10m": [8.0, 15.0, 19.0, 12.0],
         },
     }
 

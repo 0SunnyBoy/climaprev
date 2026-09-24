@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import TYPE_CHECKING, Protocol
 
 from climaprev.domain.models import (
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
 class CacheEntry:
     value: object
     is_stale: bool
+    expires_at: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,6 +34,11 @@ class RateLimitDecision:
 
 class GeocodingPort(Protocol):
     async def resolve(self, text: str) -> CanonicalLocation:
+        pass
+
+
+class LocationSearchPort(Protocol):
+    async def search(self, text: str) -> list[CanonicalLocation]:
         pass
 
 
@@ -112,4 +119,10 @@ class MetricsPort(Protocol):
         pass
 
     def record_missing_fields(self, fields: tuple[str, ...]) -> None:
+        pass
+
+    def record_lock_contention(self) -> None:
+        pass
+
+    def record_lock_timeout(self) -> None:
         pass

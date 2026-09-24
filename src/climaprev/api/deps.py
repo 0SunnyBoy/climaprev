@@ -6,7 +6,7 @@ from typing import Annotated, cast
 from fastapi import Depends, Request
 
 from climaprev.api.errors import RateLimitExceeded
-from climaprev.application.ports import RateLimiterPort
+from climaprev.application.ports import LocationSearchPort, RateLimiterPort
 from climaprev.application.services.forecast_query import ForecastQueryPort
 from climaprev.config import Settings
 
@@ -21,13 +21,17 @@ def get_forecast_query_service(request: Request) -> ForecastQueryPort:
     return cast(ForecastQueryPort, request.app.state.forecast_query_service)
 
 
+def get_location_search(request: Request) -> LocationSearchPort:
+    return cast(LocationSearchPort, request.app.state.location_search)
+
+
 def get_rate_limiter(request: Request) -> RateLimiterPort:
     return cast(RateLimiterPort, request.app.state.rate_limiter)
 
 
 def client_identity(request: Request, settings: Settings) -> str:
-    peer = request.client.host if request.client is not None else "unknown"
-    peer_ip = _canonical_ip(peer)
+    peer_ip = _canonical_ip(request.client.host) if request.client is not None else None
+    peer = peer_ip or "unknown"
     if peer_ip is None or peer_ip not in settings.trusted_proxy_ips:
         return peer
 
@@ -52,6 +56,8 @@ def client_identity(request: Request, settings: Settings) -> str:
 
 def _canonical_ip(value: str) -> str | None:
     try:
+        if "%" in value:
+            return None
         return str(ipaddress.ip_address(value))
     except ValueError:
         return None

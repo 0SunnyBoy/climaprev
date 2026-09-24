@@ -1,8 +1,22 @@
+x-hardened-service: &hardened-service
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
 services:
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf
+    <<: *hardened-service
+    read_only: true
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    tmpfs:
+      - /data
     networks:
-      - local
+      - backend
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -10,23 +24,59 @@ services:
       retries: 5
 
   app:
-    build: .
+    <<: *hardened-service
+    build:
+      context: .
+      target: dev
     environment:
       REDIS_URL: redis://redis:6379/0
       CLIMAPREV_ENVIRONMENT: ${CLIMAPREV_ENVIRONMENT:-development}
       CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_RATE_LIMIT:-60}
       CLIMAPREV_RATE_LIMIT_BURST: ${CLIMAPREV_RATE_LIMIT_BURST:-10}
       CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS: ${CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS:-60}
+      CLIMAPREV_HTTP_MAX_CONNECTIONS: ${CLIMAPREV_HTTP_MAX_CONNECTIONS:-20}
+      CLIMAPREV_HTTP_MAX_KEEPALIVE_CONNECTIONS: ${CLIMAPREV_HTTP_MAX_KEEPALIVE_CONNECTIONS:-10}
+      CLIMAPREV_INMET_ALERTS_BASE_URL: ${CLIMAPREV_INMET_ALERTS_BASE_URL:-https://apiprevmet3.inmet.gov.br}
+      CLIMAPREV_TRUSTED_PROXY_IPS: ${CLIMAPREV_TRUSTED_PROXY_IPS:-172.32.0.10}
     depends_on:
       redis:
         condition: service_healthy
+    tmpfs:
+      - /tmp
     networks:
-      - local
+      - edge
+      - backend
     ports:
       - "127.0.0.1:8000:8000"
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    <<: *hardened-service
+    read_only: true
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    tmpfs:
+      - /etc/nginx/conf.d
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    depends_on:
+      - app
+    networks:
+      edge:
+        ipv4_address: ${CLIMAPREV_FRONTEND_IP:-172.32.0.10}
+    ports:
+      - "127.0.0.1:8080:80"
+
   load:
-    build: .
+    <<: *hardened-service
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
@@ -35,14 +85,19 @@ services:
       app-load:
         condition: service_healthy
     networks:
-      - local
+      - load-edge
     command: ["locust", "-f", "tests/load/locustfile.py", "--host", "http://app-load:8000"]
 
   provider-mock:
-    build: .
+    <<: *hardened-service
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
+    tmpfs:
+      - /tmp
     networks:
-      - local
+      - load-edge
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
       CLIMAPREV_PROVIDER_MOCK_DELAY_MS: ${CLIMAPREV_PROVIDER_MOCK_DELAY_MS:-150}
@@ -54,31 +109,75 @@ services:
       retries: 10
 
   app-load:
-    build: .
+    <<: *hardened-service
+    build:
+      context: .
+      target: dev
     profiles: ["load"]
     environment:
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://redis-load:6379/0
       CLIMAPREV_ENVIRONMENT: load
+      CLIMAPREV_ALLOWED_HOSTS: app-load,localhost,127.0.0.1
       CLIMAPREV_GEOCODING_BASE_URL: http://provider-mock:8080
       CLIMAPREV_FORECAST_BASE_URL: http://provider-mock:8080
       CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_LOAD_RATE_LIMIT:-100000}
       CLIMAPREV_RATE_LIMIT_BURST: ${CLIMAPREV_LOAD_RATE_LIMIT_BURST:-100000}
       CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS: 60
+      CLIMAPREV_HTTP_MAX_CONNECTIONS: ${CLIMAPREV_HTTP_MAX_CONNECTIONS:-20}
+      CLIMAPREV_HTTP_MAX_KEEPALIVE_CONNECTIONS: ${CLIMAPREV_HTTP_MAX_KEEPALIVE_CONNECTIONS:-10}
+      CLIMAPREV_INMET_ALERTS_BASE_URL: ${CLIMAPREV_INMET_ALERTS_BASE_URL:-http://provider-mock:8080}
+      CLIMAPREV_PROVIDER_BUDGET_CAPACITY: ${CLIMAPREV_LOAD_PROVIDER_BUDGET_CAPACITY:-100000}
+      CLIMAPREV_PROVIDER_BUDGET_REFILL: ${CLIMAPREV_LOAD_PROVIDER_BUDGET_REFILL:-100000}
+      CLIMAPREV_PROVIDER_BUDGET_WINDOW_SECONDS: ${CLIMAPREV_LOAD_PROVIDER_BUDGET_WINDOW_SECONDS:-60}
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
       CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS: ${CLIMAPREV_LOAD_REDIS_OPERATION_DELAY_MS:-50}
     depends_on:
-      redis:
+      redis-load:
         condition: service_healthy
       provider-mock:
         condition: service_healthy
+    tmpfs:
+      - /tmp
     networks:
-      - local
-    command: ["uvicorn", "climaprev.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-proxy-headers"]
+      - load-edge
+      - load-backend
+    command: ["uvicorn", "climaprev.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-proxy-headers", "--no-access-log"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live')"]
       interval: 2s
       timeout: 2s
       retries: 10
 
+  redis-load:
+    image: redis:7-alpine@sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf
+    <<: *hardened-service
+    profiles: ["load"]
+    read_only: true
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    tmpfs:
+      - /data
+    networks:
+      - load-backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
 networks:
-  local:
+  edge:
+    ipam:
+      config:
+        - subnet: ${CLIMAPREV_LOCAL_SUBNET:-172.32.0.0/24}
+  backend:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${CLIMAPREV_BACKEND_SUBNET:-172.31.0.0/24}
+  load-edge:
+    internal: true
+  load-backend:
+    internal: true

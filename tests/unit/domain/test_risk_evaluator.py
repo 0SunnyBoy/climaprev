@@ -102,7 +102,7 @@ def test_evaluates_temperature_extreme_proxy(
     assert assessment.conditions[0].type == "temperature_extreme_proxy"
     assert assessment.conditions[0].value == value
     assert assessment.conditions[0].unit == "celsius"
-    assert "proxy" in assessment.conditions[0].reason
+    assert "indicador" in assessment.conditions[0].reason
 
 
 def test_derives_flooding_risk_proxy_from_the_highest_rain_band() -> None:
@@ -112,7 +112,7 @@ def test_derives_flooding_risk_proxy_from_the_highest_rain_band() -> None:
     assert flooding.severity == "high"
     assert flooding.value == 50.0
     assert flooding.unit == "mm/day"
-    assert "not a local hydrological assessment" in flooding.reason
+    assert "avaliação hidrológica local" in flooding.reason
 
 
 def test_high_condition_takes_precedence_over_moderate_conditions() -> None:

@@ -1,2 +1,3 @@
-class DependencyUnavailable(Exception):
-    pass
+from climaprev.application.errors import DependencyUnavailable
+
+__all__ = ["DependencyUnavailable"]
