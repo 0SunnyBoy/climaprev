@@ -218,7 +218,7 @@ def check(base_url: str, ca_file: Path | None, executable_path: Path | None) -> 
             )
             response = page.goto(base_url.rstrip("/") + "/", wait_until="networkidle")
             assert response is not None and response.status == 200
-            assert page.title() == "Clima Prev · Previsão com contexto"
+            assert page.title() == "ClimaPrev · Previsão com contexto"
             assert page.locator("link[rel='stylesheet']").count() == 1
             background = page.evaluate("getComputedStyle(document.documentElement).backgroundColor")
             assert background != "rgb(255, 255, 255)"
