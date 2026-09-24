@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 import LocationAutocomplete from '@/components/LocationAutocomplete.vue'
 import { emptyQueryForm, type QueryFormState } from '@/types/query'
 import type { LocationCandidate } from '@/types/api'
@@ -19,13 +19,25 @@ const emit = defineEmits<{
 const formRef = ref<HTMLFormElement | null>(null)
 const locationRef = ref<{ focus: () => void } | null>(null)
 const form = reactive(emptyQueryForm())
+const fieldErrors = reactive<Record<string, string>>({})
 
 function clearValidity(event: Event) {
   const target = event.target
-  if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement) target.setCustomValidity('')
+  if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement) {
+    target.setCustomValidity('')
+    delete fieldErrors[target.name]
+  }
+}
+
+function onInvalidField(event: Event) {
+  const target = event.target
+  if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return
+  fieldErrors[target.name] = target.validationMessage
+  emit('invalid')
 }
 
 function submit() {
+  Object.keys(fieldErrors).forEach((name) => delete fieldErrors[name])
   const end = formRef.value?.elements.namedItem('end_date') as HTMLInputElement | null
   if (end) {
     end.setCustomValidity('')
@@ -46,7 +58,12 @@ function focusField(name: string) {
   else (formRef.value?.elements.namedItem(name) as HTMLElement | null)?.focus()
 }
 
-defineExpose({ focusField })
+function setFieldError(name: string, message: string) {
+  fieldErrors[name] = message
+  nextTick(() => focusField(name))
+}
+
+defineExpose({ setFieldError })
 </script>
 
 <template>
@@ -59,6 +76,8 @@ defineExpose({ focusField })
     :aria-busy="loading"
     @submit.prevent="submit"
     @input="clearValidity"
+    @change="clearValidity"
+    @invalid.capture="onInvalidField"
   >
     <div class="location-row">
       <div class="field mode-field">
@@ -74,6 +93,7 @@ defineExpose({ focusField })
           v-model="form.locationText"
           :disabled="form.locationMode === 'coordinates'"
           :required="form.locationMode === 'city'"
+          :error="fieldErrors.location_text"
           @selected="emit('selected', $event)"
         />
       </div>
@@ -81,35 +101,42 @@ defineExpose({ focusField })
         <legend>Coordenadas do local</legend>
         <div class="field">
           <label for="latitude">Latitude</label>
-          <input id="latitude" v-model="form.latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="-1.4558" required />
+          <input id="latitude" v-model="form.latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="-1.4558" :aria-invalid="Boolean(fieldErrors.latitude)" :aria-describedby="fieldErrors.latitude ? 'latitude-error' : undefined" required />
+          <span v-if="fieldErrors.latitude" id="latitude-error" class="field-error">{{ fieldErrors.latitude }}</span>
         </div>
         <div class="field">
           <label for="longitude">Longitude</label>
-          <input id="longitude" v-model="form.longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-48.4902" required />
+          <input id="longitude" v-model="form.longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-48.4902" :aria-invalid="Boolean(fieldErrors.longitude)" :aria-describedby="fieldErrors.longitude ? 'longitude-error' : undefined" required />
+          <span v-if="fieldErrors.longitude" id="longitude-error" class="field-error">{{ fieldErrors.longitude }}</span>
         </div>
       </fieldset>
     </div>
     <div class="period-row">
       <div class="field">
         <label for="start_date">Data inicial</label>
-        <input id="start_date" v-model="form.startDate" name="start_date" type="date" required />
+        <input id="start_date" v-model="form.startDate" name="start_date" type="date" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'start-date-error' : undefined" required />
+        <span v-if="fieldErrors.start_date" id="start-date-error" class="field-error">{{ fieldErrors.start_date }}</span>
       </div>
       <div class="field">
         <label for="end_date">Data final <span class="optional">opcional</span></label>
-        <input id="end_date" v-model="form.endDate" name="end_date" type="date" aria-describedby="end-hint" />
+        <input id="end_date" v-model="form.endDate" name="end_date" type="date" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
         <span id="end-hint" class="field-hint">Em branco: apenas a data inicial.</span>
+        <span v-if="fieldErrors.end_date" id="end-date-error" class="field-error">{{ fieldErrors.end_date }}</span>
       </div>
       <div class="field">
         <label for="temperature_unit">Temperatura</label>
-        <select id="temperature_unit" v-model="form.temperatureUnit" name="temperature_unit">
+        <select id="temperature_unit" v-model="form.temperatureUnit" name="temperature_unit" :aria-invalid="Boolean(fieldErrors.temperature_unit)" :aria-describedby="fieldErrors.temperature_unit ? 'temperature-unit-error' : undefined">
           <option value="celsius">Celsius (°C)</option>
           <option value="fahrenheit">Fahrenheit (°F)</option>
         </select>
+        <span v-if="fieldErrors.temperature_unit" id="temperature-unit-error" class="field-error">{{ fieldErrors.temperature_unit }}</span>
       </div>
-      <button class="primary" type="submit" :disabled="cooldownSeconds > 0">
-        Consultar previsão <span aria-hidden="true">↗</span>
-      </button>
-      <button v-if="loading" id="cancel-query" class="secondary" type="button" @click="emit('cancel')">Cancelar</button>
+      <div class="form-actions">
+        <button class="primary" type="submit" :disabled="cooldownSeconds > 0">
+          Consultar previsão <span aria-hidden="true">↗</span>
+        </button>
+        <button v-if="loading" id="cancel-query" class="secondary" type="button" @click="emit('cancel')">Cancelar</button>
+      </div>
     </div>
   </form>
 </template>

@@ -10,7 +10,7 @@ defineProps<{ data: RiskResponse }>()
 </script>
 
 <template>
-  <section id="result" aria-label="Resultado da consulta">
+  <section id="result" tabindex="-1" aria-label="Resultado da consulta">
     <header class="result-heading">
       <div>
         <p class="eyebrow">02 · PREVISÃO DO TEMPO</p>

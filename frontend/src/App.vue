@@ -5,10 +5,11 @@ import QueryForm from '@/components/QueryForm.vue'
 import QueryStatus from '@/components/QueryStatus.vue'
 import { QueryError, QueryTimeoutError } from '@/services/api'
 import { useRiskQuery } from '@/composables/useRiskQuery'
+import { useTheme } from '@/composables/useTheme'
 import type { LocationCandidate } from '@/types/api'
 import type { QueryFormState } from '@/types/query'
 
-const formRef = ref<{ focusField: (name: string) => void } | null>(null)
+const formRef = ref<{ setFieldError: (name: string, message: string) => void } | null>(null)
 const statusMessage = ref('')
 const statusRole = ref<'status' | 'alert'>('status')
 const retryUntil = ref(0)
@@ -16,6 +17,7 @@ const cooldownSeconds = ref(0)
 let retryTimer: ReturnType<typeof setInterval> | undefined
 
 const { result, loading, timedOut, error, submit, cancel } = useRiskQuery()
+const { isDark, toggleTheme } = useTheme()
 const hasResult = computed(() => result.value !== null)
 
 function clearCooldown() {
@@ -25,15 +27,17 @@ function clearCooldown() {
 }
 
 function updateCooldown(requestId: string, seconds: number) {
+  clearCooldown()
   retryUntil.value = Date.now() + seconds * 1000
+  statusMessage.value = `Limite de consultas atingido. Aguarde ${seconds} s para consultar novamente.${requestId ? ` Referência: ${requestId}` : ''}`
   const update = () => {
     cooldownSeconds.value = Math.max(0, Math.ceil((retryUntil.value - Date.now()) / 1000))
-    statusMessage.value = cooldownSeconds.value > 0
-      ? `Limite de consultas atingido. Aguarde ${cooldownSeconds.value} s para consultar novamente.${requestId ? ` Referência: ${requestId}` : ''}`
-      : 'Você já pode consultar novamente. Use o botão Consultar previsão.'
-    if (cooldownSeconds.value === 0) clearCooldown()
+    if (cooldownSeconds.value === 0) {
+      clearCooldown()
+      statusRole.value = 'status'
+      statusMessage.value = 'Você já pode consultar novamente. Use o botão Consultar previsão.'
+    }
   }
-  clearCooldown()
   update()
   if (cooldownSeconds.value > 0) retryTimer = setInterval(update, 1000)
 }
@@ -75,7 +79,7 @@ function showError(caught: unknown, form: QueryFormState) {
     }
   }
   statusMessage.value = `${message}${caught.requestId ? ` Referência: ${caught.requestId}` : ''}`
-  if (field) formRef.value?.focusField(field)
+  if (field) formRef.value?.setFieldError(field, message)
 }
 
 async function runQuery(form: QueryFormState) {
@@ -100,7 +104,7 @@ async function runQuery(form: QueryFormState) {
 }
 
 function onInvalid() {
-  statusRole.value = 'status'
+  statusRole.value = 'alert'
   statusMessage.value = 'Revise os campos indicados para consultar.'
 }
 
@@ -121,8 +125,20 @@ onBeforeUnmount(clearCooldown)
 <template>
   <a class="skip-link" href="#consulta">Ir para a consulta</a>
   <header class="masthead">
-    <a class="brand" href="/" aria-label="Clima Prev, início"><span class="brand-mark" aria-hidden="true">◒</span> clima prev<span class="brand-dot">.</span></a>
-    <span class="masthead-note">TEMPO · DADOS · CONTEXTO</span>
+    <a class="brand" href="/" aria-label="Clima Prev, início"><span class="brand-mark" aria-hidden="true"><svg class="yin-yang-logo" viewBox="0 0 40 40" focusable="false"><circle cx="20" cy="20" r="18" fill="var(--earth-green)" /><path d="M20 2a18 18 0 0 1 0 36 9 9 0 0 1 0-18 9 9 0 0 0 0-18Z" fill="var(--earth-blue)" /><circle cx="20" cy="11" r="2.5" fill="var(--earth-green)" /><circle cx="20" cy="29" r="2.5" fill="var(--earth-blue)" /></svg></span> clima prev<span class="brand-dot">.</span></a>
+    <div class="masthead-tools">
+      <span class="masthead-note">TEMPO · DADOS · CONTEXTO</span>
+      <button
+        class="theme-toggle"
+        type="button"
+        :aria-pressed="isDark"
+        :aria-label="isDark ? 'Modo escuro ativo. Ativar modo claro' : 'Modo claro ativo. Ativar modo escuro'"
+        @click="toggleTheme"
+      >
+        <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb">{{ isDark ? '☾' : '☀' }}</span></span>
+        <span class="theme-toggle-text">{{ isDark ? 'Escuro' : 'Claro' }}</span>
+      </button>
+    </div>
   </header>
   <main>
     <section class="intro" aria-labelledby="page-title">
@@ -130,10 +146,10 @@ onBeforeUnmount(clearCooldown)
       <h1 id="page-title">O tempo muda.<br /><em>Planeje com contexto.</em></h1>
       <p class="intro-copy">Veja a previsão e os sinais de risco para o seu local. Entenda o que os dados dizem e o que ainda falta saber.</p>
     </section>
-    <section id="consulta" class="query-section" aria-labelledby="query-heading">
+    <section id="consulta" class="query-section" aria-labelledby="query-heading" tabindex="-1">
       <div class="section-heading"><span class="section-number" aria-hidden="true">01</span><h2 id="query-heading">Sua consulta</h2><span class="section-note">Até 7 dias por vez</span></div>
       <QueryForm ref="formRef" :loading="loading" :cooldown-seconds="cooldownSeconds" @submit="runQuery" @cancel="onCancel" @invalid="onInvalid" @selected="onLocationSelected" />
-      <QueryStatus :message="statusMessage" :role="statusRole" />
+      <QueryStatus :message="statusMessage" :role="statusRole" :show-result="hasResult" :cooldown-seconds="cooldownSeconds" />
     </section>
     <ForecastResult v-if="hasResult && result" :data="result" />
     <aside class="context-note"><span aria-hidden="true">↳</span><div><h2>Previsão é orientação, não certeza.</h2><p>A estimativa de risco ajuda a interpretar a previsão. Ela não substitui uma avaliação local nem os alertas das autoridades.</p></div></aside>

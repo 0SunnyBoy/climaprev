@@ -29,6 +29,18 @@ A interface fica em `http://localhost:8080/`, servida pelo Nginx. O serviço
 e para debug. No uso normal, o frontend encaminha as consultas para o backend
 na rede interna do Compose.
 
+Para acompanhar alterações de design ao salvar arquivos Vue/CSS, use o servidor
+de desenvolvimento do Vite dentro do Docker:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.design.yml up --build app frontend-dev
+```
+
+Abra `http://localhost:5173/`. Esse modo atualiza a página automaticamente e
+encaminha as chamadas da API para o serviço `app`. O `docker compose up --build`
+padrão continua entregando o build estático em `http://localhost:8080/`; nele,
+alterações no frontend exigem rebuild.
+
 Na cópia correta do projeto, provisionamento de homologação, inicialização do
 Git e publicação da branch são etapas separadas. Não copie `.homolog/` para o
 repositório: gere seus secrets e certificados localmente conforme o runbook.
@@ -39,10 +51,12 @@ recebem aviso. Erros mantêm o formulário e exigem nova tentativa manual.
 O campo de cidade oferece até cinco sugestões de localidade antes do envio.
 
 A consulta usa Vue 3, TypeScript estrito e assets compilados pelo Vite. Não há
-fontes externas, cookies de identidade, histórico, localStorage ou
-sessionStorage. A URL da página não recebe a localização consultada. Sem
-JavaScript, a página informa essa necessidade. O formato do campo de data
-segue o navegador; a API sempre recebe ISO `YYYY-MM-DD`.
+fontes externas, cookies de identidade, histórico ou sessionStorage. O
+`localStorage` guarda somente a preferência visual de tema claro/escuro; não
+guarda localização, consultas, credenciais ou dados de previsão. A URL da
+página não recebe a localização consultada. Sem JavaScript, a página informa
+essa necessidade. O formato do campo de data segue o navegador; a API sempre
+recebe ISO `YYYY-MM-DD`.
 
 ```bash
 curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
