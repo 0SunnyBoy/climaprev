@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref } from 'vue'
 import LocationAutocomplete from '@/components/LocationAutocomplete.vue'
+import { useLocale } from '@/composables/useLocale'
 import { emptyQueryForm, type QueryFormState } from '@/types/query'
 import type { LocationCandidate } from '@/types/api'
 
@@ -15,6 +16,8 @@ const emit = defineEmits<{
   invalid: []
   selected: [candidate: LocationCandidate]
 }>()
+
+const { t } = useLocale()
 
 const formRef = ref<HTMLFormElement | null>(null)
 const locationRef = ref<{ focus: () => void } | null>(null)
@@ -81,10 +84,10 @@ defineExpose({ setFieldError })
   >
     <div class="location-row">
       <div class="field mode-field">
-        <label for="location-mode">Buscar por</label>
+        <label for="location-mode">{{ t('searchBy') }}</label>
         <select id="location-mode" v-model="form.locationMode">
-          <option value="city">Cidade</option>
-          <option value="coordinates">Coordenadas</option>
+          <option value="city">{{ t('city') }}</option>
+          <option value="coordinates">{{ t('coordinates') }}</option>
         </select>
       </div>
       <div id="city-fields" class="field city-field" :hidden="form.locationMode === 'coordinates'">
@@ -98,14 +101,14 @@ defineExpose({ setFieldError })
         />
       </div>
       <fieldset id="coordinate-fields" class="coordinates" :hidden="form.locationMode !== 'coordinates'" :disabled="form.locationMode !== 'coordinates'">
-        <legend>Coordenadas do local</legend>
+        <legend>{{ t('coordinatesLegend') }}</legend>
         <div class="field">
-          <label for="latitude">Latitude</label>
+          <label for="latitude">{{ t('latitude') }}</label>
           <input id="latitude" v-model="form.latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="-1.4558" :aria-invalid="Boolean(fieldErrors.latitude)" :aria-describedby="fieldErrors.latitude ? 'latitude-error' : undefined" required />
           <span v-if="fieldErrors.latitude" id="latitude-error" class="field-error">{{ fieldErrors.latitude }}</span>
         </div>
         <div class="field">
-          <label for="longitude">Longitude</label>
+          <label for="longitude">{{ t('longitude') }}</label>
           <input id="longitude" v-model="form.longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-48.4902" :aria-invalid="Boolean(fieldErrors.longitude)" :aria-describedby="fieldErrors.longitude ? 'longitude-error' : undefined" required />
           <span v-if="fieldErrors.longitude" id="longitude-error" class="field-error">{{ fieldErrors.longitude }}</span>
         </div>
@@ -113,29 +116,29 @@ defineExpose({ setFieldError })
     </div>
     <div class="period-row">
       <div class="field">
-        <label for="start_date">Data inicial</label>
+        <label for="start_date">{{ t('startDate') }}</label>
         <input id="start_date" v-model="form.startDate" name="start_date" type="date" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'start-date-error' : undefined" required />
         <span v-if="fieldErrors.start_date" id="start-date-error" class="field-error">{{ fieldErrors.start_date }}</span>
       </div>
       <div class="field">
-        <label for="end_date">Data final <span class="optional">opcional</span></label>
+        <label for="end_date">{{ t('endDate') }} <span class="optional">{{ t('optional') }}</span></label>
         <input id="end_date" v-model="form.endDate" name="end_date" type="date" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
-        <span id="end-hint" class="field-hint">Em branco: apenas a data inicial.</span>
+        <span id="end-hint" class="field-hint">{{ t('endDateHint') }}</span>
         <span v-if="fieldErrors.end_date" id="end-date-error" class="field-error">{{ fieldErrors.end_date }}</span>
       </div>
       <div class="field">
-        <label for="temperature_unit">Temperatura</label>
+        <label for="temperature_unit">{{ t('temperature') }}</label>
         <select id="temperature_unit" v-model="form.temperatureUnit" name="temperature_unit" :aria-invalid="Boolean(fieldErrors.temperature_unit)" :aria-describedby="fieldErrors.temperature_unit ? 'temperature-unit-error' : undefined">
-          <option value="celsius">Celsius (°C)</option>
-          <option value="fahrenheit">Fahrenheit (°F)</option>
+          <option value="celsius">{{ t('celsius') }}</option>
+          <option value="fahrenheit">{{ t('fahrenheit') }}</option>
         </select>
         <span v-if="fieldErrors.temperature_unit" id="temperature-unit-error" class="field-error">{{ fieldErrors.temperature_unit }}</span>
       </div>
       <div class="form-actions">
         <button class="primary" type="submit" :disabled="cooldownSeconds > 0">
-          Consultar previsão <span aria-hidden="true">↗</span>
+          {{ t('submitQuery') }} <span aria-hidden="true">↗</span>
         </button>
-        <button v-if="loading" id="cancel-query" class="secondary" type="button" @click="emit('cancel')">Cancelar</button>
+        <button v-if="loading" id="cancel-query" class="secondary" type="button" @click="emit('cancel')">{{ t('cancel') }}</button>
       </div>
     </div>
   </form>

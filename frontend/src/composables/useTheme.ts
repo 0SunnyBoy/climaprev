@@ -30,12 +30,23 @@ function applyTheme(theme: Theme) {
 export function useTheme() {
   const theme = ref<Theme>(readStoredTheme() ?? systemTheme())
   let mediaQuery: MediaQueryList | undefined
+  let transitionTimer: ReturnType<typeof setTimeout> | undefined
 
   applyTheme(theme.value)
 
-  function setTheme(nextTheme: Theme, persist = true) {
+  function setTheme(nextTheme: Theme, persist = true, animate = false) {
     theme.value = nextTheme
-    applyTheme(nextTheme)
+    if (animate && typeof document !== 'undefined' && typeof window !== 'undefined') {
+      document.documentElement.classList.add('theme-transition')
+      window.requestAnimationFrame(() => applyTheme(nextTheme))
+      if (transitionTimer) clearTimeout(transitionTimer)
+      transitionTimer = setTimeout(() => {
+        document.documentElement.classList.remove('theme-transition')
+        transitionTimer = undefined
+      }, 380)
+    } else {
+      applyTheme(nextTheme)
+    }
     if (!persist || typeof window === 'undefined') return
     try {
       window.localStorage.setItem(STORAGE_KEY, nextTheme)
@@ -45,7 +56,7 @@ export function useTheme() {
   }
 
   function toggleTheme() {
-    setTheme(theme.value === 'dark' ? 'light' : 'dark')
+    setTheme(theme.value === 'dark' ? 'light' : 'dark', true, true)
   }
 
   function followSystemTheme(event: MediaQueryListEvent) {
@@ -60,6 +71,7 @@ export function useTheme() {
 
   onBeforeUnmount(() => {
     mediaQuery?.removeEventListener('change', followSystemTheme)
+    if (transitionTimer) clearTimeout(transitionTimer)
   })
 
   return {

@@ -113,6 +113,25 @@ def _check_theme_toggle(page: Page) -> None:
     page.evaluate("localStorage.clear()")
 
 
+def _check_locale_toggle(page: Page) -> None:
+    """Verify the language control changes and persists the document locale."""
+    toggle = page.locator(".locale-toggle")
+    assert page.locator("html").get_attribute("lang") == "pt-BR"
+    assert "TEMPO" in page.locator(".masthead-note").inner_text()
+
+    toggle.click()
+    assert page.locator("html").get_attribute("lang") == "en"
+    assert page.locator("#page-title").inner_text() == "Weather changes.\nPlan with context."
+    assert page.evaluate("localStorage.getItem('climaprev-locale')") == "en"
+
+    page.reload(wait_until="networkidle")
+    assert page.locator("html").get_attribute("lang") == "en"
+    toggle = page.locator(".locale-toggle")
+    toggle.click()
+    assert page.locator("html").get_attribute("lang") == "pt-BR"
+    page.evaluate("localStorage.clear()")
+
+
 def _install_ca(ca_file: Path, profile: Path) -> None:
     if os.name == "nt":
         raise RuntimeError("HTTPS browser validation requires NSS certutil on a Linux test runner")
@@ -205,6 +224,7 @@ def check(base_url: str, ca_file: Path | None, executable_path: Path | None) -> 
             assert background != "rgb(255, 255, 255)"
             _check_accessibility(page)
             _check_theme_toggle(page)
+            _check_locale_toggle(page)
 
             page.select_option("#location-mode", "coordinates")
             page.fill("#latitude", "-1.4558")

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useLocationSearch } from '@/composables/useLocationSearch'
+import { useLocale } from '@/composables/useLocale'
 import type { LocationCandidate } from '@/types/api'
 
 const props = defineProps<{
@@ -18,6 +19,7 @@ const emit = defineEmits<{
 const input = ref<HTMLInputElement | null>(null)
 const activeIndex = ref(-1)
 const { suggestions, searching, schedule, clear } = useLocationSearch()
+const { t } = useLocale()
 
 const activeDescendant = computed(() => activeIndex.value >= 0
   ? `location-option-${activeIndex.value}`
@@ -67,7 +69,7 @@ defineExpose({ focus })
 </script>
 
 <template>
-  <label for="location_text">Cidade</label>
+  <label for="location_text">{{ t('city') }}</label>
   <input
     id="location_text"
     ref="input"
@@ -75,7 +77,7 @@ defineExpose({ focus })
     type="text"
     role="combobox"
     maxlength="200"
-    placeholder="Ex.: Belém, Pará"
+    :placeholder="t('cityPlaceholder')"
     :aria-describedby="error ? 'city-hint city-error' : 'city-hint'"
     :aria-invalid="Boolean(error)"
     :aria-expanded="suggestions.length > 0"
@@ -91,14 +93,14 @@ defineExpose({ focus })
     @input="update"
     @keydown="onKeydown"
   />
-  <span id="city-hint" class="field-hint">Inclua o estado ou país para uma busca mais precisa.</span>
+  <span id="city-hint" class="field-hint">{{ t('cityHint') }}</span>
   <span v-if="error" id="city-error" class="field-error">{{ error }}</span>
-  <span class="sr-only" role="status">{{ suggestions.length ? `${suggestions.length} sugestões disponíveis após o campo de cidade.` : '' }}</span>
+  <span class="sr-only" role="status">{{ suggestions.length ? `${suggestions.length} ${t('suggestionsAvailable')}` : '' }}</span>
   <ul
     v-if="suggestions.length"
     id="location-suggestions"
     class="location-suggestions"
-    aria-label="Sugestões de localidade"
+    :aria-label="t('suggestionsLabel')"
     role="listbox"
   >
     <li
