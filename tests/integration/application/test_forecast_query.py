@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Awaitable, Callable
 from dataclasses import replace
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from time import monotonic
 
 import pytest
@@ -102,7 +102,11 @@ class InMemoryCache:
         self.set_calls: list[tuple[str, CacheEntry, int, int]] = []
 
     async def get(self, key: str) -> CacheEntry | None:
-        return self.entries.get(key)
+        entry = self.entries.get(key)
+        if entry is not None and entry.expires_at is None:
+            entry = replace(entry, expires_at=datetime.now(UTC) + timedelta(seconds=900))
+            self.entries[key] = entry
+        return entry
 
     async def set(
         self,
@@ -111,12 +115,13 @@ class InMemoryCache:
         fresh_ttl_seconds: int,
         stale_ttl_seconds: int,
     ) -> None:
-        self.entries[key] = value
+        self.entries[key] = replace(value, expires_at=datetime.now(UTC) +
+                                    timedelta(seconds=stale_ttl_seconds))
         self.set_calls.append((key, value, fresh_ttl_seconds, stale_ttl_seconds))
 
     def mark_stale(self, key: str) -> None:
         entry = self.entries[key]
-        self.entries[key] = CacheEntry(value=entry.value, is_stale=True)
+        self.entries[key] = replace(entry, is_stale=True)
 
 
 class InMemoryLock:
@@ -217,6 +222,8 @@ def service(
     provider: FakeProvider | None = None,
     alerts: object | None = None,
     metrics: RequestMetrics | None = None,
+    provider_identity: str = "https://api.open-meteo.com",
+    now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> ForecastQueryService:
     return ForecastQueryService(
         geocoder=geocoder or FakeGeocoder(),
@@ -227,6 +234,8 @@ def service(
         risk_policy=RiskPolicy(),
         official_alert_provider=alerts or OfficialAlertsNotConfiguredProvider(),
         metrics=metrics,
+        provider_identity=provider_identity,
+        now=now,
     )
 
 
@@ -299,7 +308,7 @@ async def test_refreshes_from_provider_when_cached_day_omits_a_serialized_field(
     cache = InMemoryCache()
     cached = cached_forecast()
     del cached["days"][0]["temperature_max_c"]  # type: ignore[index]
-    forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -315,8 +324,8 @@ async def test_refreshes_from_provider_when_cached_day_omits_a_serialized_field(
 async def test_refreshes_from_provider_when_cached_forecast_is_bound_to_another_request() -> None:
     cache = InMemoryCache()
     cached = cached_forecast()
-    cached["location"] = {**cached["location"], "name": "Rio de Janeiro"}  # type: ignore[arg-type]
-    forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+    cached["location"] = {**cached["location"], "latitude": -22.90642}  # type: ignore[arg-type]
+    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -336,7 +345,7 @@ async def test_rechecks_cache_after_acquiring_lock_before_calling_provider() -> 
     query_service = service(cache=cache, lock=lock, provider=provider)
 
     async def publish_forecast() -> None:
-        forecast_key = "forecast:v1:-23.5505:-46.6333:2026-08-28:2026-08-28"
+        forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
         await cache.set(forecast_key, CacheEntry(value=cached_forecast(), is_stale=False), 600, 900)
 
     lock.on_acquire = publish_forecast
@@ -362,6 +371,36 @@ async def test_concurrent_requests_share_one_provider_call() -> None:
 
     assert len(provider.calls) == 1
     assert first.forecast_risk.level == second.forecast_risk.level == "high"
+
+
+@pytest.mark.asyncio
+async def test_lock_wait_uses_bounded_backoff_and_records_contention_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    cache = InMemoryCache()
+    lock = InMemoryLock()
+    await lock.acquire("held-key", ttl_seconds=100)
+    lock.acquires.clear()
+    metrics = RequestMetrics()
+    query_service = service(cache=cache, lock=lock, metrics=metrics)
+    sleeps: list[float] = []
+
+    async def fake_sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+
+    monkeypatch.setattr(asyncio, "sleep", fake_sleep)
+    monkeypatch.setattr(forecast_query, "monotonic", lambda: 0.0)
+    monkeypatch.setattr(forecast_query, "uniform", lambda _lower, _upper: 1.0)
+    monkeypatch.setattr(forecast_query, "_LOCK_MAX_ATTEMPTS", 5)
+
+    result = await query_service._wait_for_lock("wait-key", LOCATION, PERIOD)
+
+    assert result is None
+    assert len(lock.acquires) == 5
+    assert sleeps == [0.05, 0.1, 0.2, 0.4]
+    snapshot = metrics.snapshot()
+    assert snapshot["lock_contention_total"] == 1
+    assert snapshot["lock_timeouts_total"] == 1
 
 
 @pytest.mark.asyncio
@@ -410,7 +449,7 @@ async def test_uses_stale_forecast_when_provider_has_transient_failure() -> None
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = ProviderTransientError("temporary outage")
 
@@ -428,7 +467,7 @@ async def test_records_cache_risk_missing_fields_and_stale_provider_failure_metr
     query_service = service(cache=cache, provider=provider, metrics=metrics)
 
     await query_service.execute(text_query(), "metrics-fresh")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = ProviderTransientError("temporary outage")
 
@@ -452,7 +491,7 @@ async def test_raises_unavailable_when_no_valid_stale_forecast_exists() -> None:
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     del cache.entries[forecast_key]
     provider.value = ProviderTransientError("temporary outage")
 
@@ -467,7 +506,7 @@ async def test_does_not_use_stale_forecast_when_provider_payload_is_invalid() ->
     query_service = service(cache=cache, provider=provider)
 
     await query_service.execute(text_query(), "fresh-request")
-    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v1:"))
+    forecast_key = next(key for key in cache.entries if key.startswith("forecast:v2:"))
     cache.mark_stale(forecast_key)
     provider.value = WeatherDataInvalid("invalid payload")
 
@@ -508,6 +547,20 @@ async def test_keeps_forecast_when_official_alerts_are_not_configured_or_fail() 
     assert unavailable.official_alerts.status == "unavailable"
     assert unavailable.official_alerts.items == ()
     assert unavailable.forecast_risk.level == "high"
+
+
+@pytest.mark.asyncio
+async def test_caches_successful_official_alert_lookup() -> None:
+    cache = InMemoryCache()
+    alerts = FakeAlerts()
+    query_service = service(cache=cache, alerts=alerts)
+
+    first = await query_service.execute(text_query(), "alerts-cache-one")
+    second = await query_service.execute(text_query(), "alerts-cache-two")
+
+    assert alerts.calls == 1
+    assert first.official_alerts.status == second.official_alerts.status == "available"
+    assert any(key.startswith("official-alerts:v1:") for key in cache.entries)
 
 
 @pytest.mark.asyncio

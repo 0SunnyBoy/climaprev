@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
 
 from climaprev.api.deps import enforce_rate_limit, get_forecast_query_service
@@ -75,6 +75,7 @@ class OfficialAlertsResponse(BaseModel):
 class DataQualityResponse(BaseModel):
     is_stale: bool
     missing_fields: list[str]
+    completeness: Literal["complete", "partial", "unavailable"]
 
 
 class SourceResponse(BaseModel):
@@ -156,6 +157,7 @@ class RiskQueryResponse(BaseModel):
             data_quality=DataQualityResponse(
                 is_stale=result.data_quality.is_stale,
                 missing_fields=list(result.data_quality.missing_fields),
+                completeness=result.data_quality.completeness,
             ),
             source=SourceResponse(
                 provider=result.source.provider,
@@ -165,11 +167,10 @@ class RiskQueryResponse(BaseModel):
         )
 
 
-@router.get("/risk", response_model=RiskQueryResponse, dependencies=[Depends(enforce_rate_limit)])
-async def get_risk(
+async def _execute_risk(
     request: Request,
-    query: Annotated[RiskQueryParams, Depends()],
-    service: Annotated[ForecastQueryPort, Depends(get_forecast_query_service)],
+    query: RiskQueryParams,
+    service: ForecastQueryPort,
 ) -> RiskQueryResponse:
     request.state.provider = "open-meteo"
     request.state.cache = "miss"
@@ -187,3 +188,21 @@ async def get_risk(
     request.state.provider = result.source.provider
     request.state.cache = result.cache_status
     return RiskQueryResponse.from_result(result, request.state.request_id)
+
+
+@router.get("/risk", response_model=RiskQueryResponse, dependencies=[Depends(enforce_rate_limit)])
+async def get_risk(
+    request: Request,
+    query: Annotated[RiskQueryParams, Depends()],
+    service: Annotated[ForecastQueryPort, Depends(get_forecast_query_service)],
+) -> RiskQueryResponse:
+    return await _execute_risk(request, query, service)
+
+
+@router.post("/risk", response_model=RiskQueryResponse, dependencies=[Depends(enforce_rate_limit)])
+async def post_risk(
+    request: Request,
+    query: Annotated[RiskQueryParams, Body()],
+    service: Annotated[ForecastQueryPort, Depends(get_forecast_query_service)],
+) -> RiskQueryResponse:
+    return await _execute_risk(request, query, service)

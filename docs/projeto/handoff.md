@@ -1,5 +1,26 @@
 # ClimaPrev - Handoff de retomada
 
+## Estado atual da cópia correta — 2026-09-23
+
+O trabalho atual ocorre em `climaprev-Atualizacao-Geral-V3`, na branch
+`Atualizacao-Geral-V3`, conectada a `origin/Atualizacao-Geral-V3`. O rework do
+frontend Vue 3 + TypeScript, o build Docker e a validação local integrada foram
+concluídos. As alterações ainda não foram commitadas nem enviadas.
+
+O próximo passo é revisar o diff, criar o commit e publicar a branch. A pasta
+`.homolog/` permanece local e ausente desta cópia; a homologação real exige
+provisionamento separado e não deve receber segredos do Git.
+
+O restante deste documento é um registro histórico do handoff de 2026-08-29.
+
+> Para retomar a segurança da branch `Atualizacao-Geral-V3`, leia primeiro o
+> [contexto de 2026-09-21](../planejamento/seguranca-configuracao-segredos/context.md).
+> A implementação está pausada e incompleta. O registro abaixo é histórico e
+> não representa a validação desse checkpoint.
+
+> Registro histórico de 2026-08-29. Para o estado atual, consulte [STATE](STATE.md),
+> [ROADMAP](ROADMAP.md) e [Implementations and refactoring](ImplementationsAndRefactoring.md).
+
 Data: 2026-08-29
 Estado: **Task 9 concluída e aprovada; trabalho pausado.**
 

@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Mapping
+import hashlib
+import json
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass, replace
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
+from random import uniform
 from time import monotonic, perf_counter
 from typing import TYPE_CHECKING, Literal, Protocol, cast
 from urllib.parse import quote
 
+from climaprev.application.errors import DependencyUnavailable, ProviderTransientError
 from climaprev.application.ports import (
     CacheEntry,
     CachePort,
@@ -20,6 +24,7 @@ from climaprev.application.ports import (
     WeatherProviderPort,
 )
 from climaprev.application.query import ForecastQuery
+from climaprev.domain.data_quality import Completeness, completeness
 from climaprev.domain.models import (
     CanonicalLocation,
     DailyForecast,
@@ -30,7 +35,6 @@ from climaprev.domain.models import (
 )
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit, convert_temperature
-from climaprev.infrastructure.http.client import ProviderTransientError
 
 if TYPE_CHECKING:
     from climaprev.domain.models import RiskCondition
@@ -38,10 +42,18 @@ if TYPE_CHECKING:
 _GEO_CACHE_TTL_SECONDS = 24 * 60 * 60
 _FORECAST_FRESH_TTL_SECONDS = 10 * 60
 _FORECAST_STALE_TTL_SECONDS = 15 * 60
+_OFFICIAL_ALERTS_FRESH_TTL_SECONDS = 5 * 60
+_OFFICIAL_ALERTS_STALE_TTL_SECONDS = 10 * 60
+_OFFICIAL_ALERTS_FAILURE_FRESH_TTL_SECONDS = 30
+_OFFICIAL_ALERTS_FAILURE_STALE_TTL_SECONDS = 60
 _LOCK_TTL_SECONDS = 10
 _LOCK_HEARTBEAT_SECONDS = _LOCK_TTL_SECONDS / 2
 _LOCK_WAITER_DEADLINE_SECONDS = 30
-_LOCK_POLL_SECONDS = 0.01
+_LOCK_INITIAL_BACKOFF_SECONDS = 0.05
+_LOCK_MAX_BACKOFF_SECONDS = 1.0
+_LOCK_BACKOFF_FACTOR = 2.0
+_LOCK_BACKOFF_JITTER = 0.25
+_LOCK_MAX_ATTEMPTS = 64
 _DISCLAIMER = (
     "Esta previsão é uma estimativa baseada em dados meteorológicos e não substitui alertas "
     "oficiais das autoridades competentes."
@@ -52,7 +64,7 @@ class WeatherProviderUnavailable(Exception):
     """The weather provider could not produce a forecast and no valid stale value exists."""
 
 
-class LockOwnershipLost(Exception):
+class LockOwnershipLost(WeatherProviderUnavailable):
     """The service lost the refresh lock while an upstream request was in progress."""
 
 
@@ -75,6 +87,7 @@ class ForecastDay:
 class DataQuality:
     is_stale: bool
     missing_fields: tuple[str, ...]
+    completeness: Completeness = "complete"
 
 
 @dataclass(frozen=True, slots=True)
@@ -108,6 +121,16 @@ class ForecastQueryPort(Protocol):
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult: ...
 
 
+@dataclass(frozen=True, slots=True)
+class _CachedForecast:
+    forecast: NormalizedForecast
+    expires_at: datetime
+
+    @property
+    def is_stale(self) -> bool:
+        return self.forecast.is_stale
+
+
 class ForecastQueryService:
     def __init__(
         self,
@@ -120,6 +143,8 @@ class ForecastQueryService:
         risk_policy: RiskPolicy,
         official_alert_provider: OfficialAlertPort,
         metrics: MetricsPort | None = None,
+        provider_identity: str = "https://api.open-meteo.com",
+        now: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._geocoder = geocoder
         self._weather_provider = weather_provider
@@ -129,21 +154,27 @@ class ForecastQueryService:
         self._risk_policy = risk_policy
         self._official_alert_provider = official_alert_provider
         self._metrics = metrics
+        self._provider_identity = provider_identity.rstrip("/")
+        self._now = now
 
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult:
         period = DatePeriod(start=query.start_date, end=query.end_date)
         location = await self._resolve_location(query)
-        forecast_key = _forecast_key(location, period)
-        forecast, cache_status = await self._get_forecast(forecast_key, location, period)
+        forecast_key = _forecast_key(location, period, self._provider_identity)
+        forecast, cache_status, fallback_expires_at = await self._get_forecast(
+            forecast_key, location, period
+        )
         forecast_risk = self._risk_evaluator.evaluate(forecast, self._risk_policy)
         if self._metrics is not None:
             self._metrics.record_risk_evaluation(forecast_risk)
             self._metrics.record_missing_fields(forecast.missing_fields)
         response_forecast_risk = _response_risk(forecast_risk, query.temperature_unit)
         official_alerts = await self._get_official_alerts(location, period)
+        if fallback_expires_at is not None and self._now() >= fallback_expires_at:
+            raise WeatherProviderUnavailable("cached forecast expired before delivery")
 
         return RiskQueryResult(
-            location=location,
+            location=replace(location, timezone=forecast.location.timezone),
             period=period,
             temperature_unit=query.temperature_unit,
             days=tuple(_response_day(day, query.temperature_unit) for day in forecast.days),
@@ -152,6 +183,7 @@ class ForecastQueryService:
             data_quality=DataQuality(
                 is_stale=forecast.is_stale,
                 missing_fields=forecast.missing_fields,
+                completeness=completeness(forecast),
             ),
             source=ForecastSource(provider=forecast.provider, fetched_at=forecast.fetched_at),
             disclaimer=_DISCLAIMER,
@@ -192,29 +224,30 @@ class ForecastQueryService:
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> tuple[NormalizedForecast, Literal["hit", "miss", "stale"]]:
+    ) -> tuple[NormalizedForecast, Literal["hit", "miss", "stale"], datetime | None]:
         cached = await self._read_forecast(key, location, period)
         if cached is not None and not cached.is_stale:
             self._metrics_record_cache("hit")
-            return cached, "hit"
+            return cached.forecast, "hit", None
         stale_forecast = cached if cached is not None and cached.is_stale else None
 
         lock_result = await self._wait_for_lock(key, location, period)
-        if isinstance(lock_result, NormalizedForecast):
+        if isinstance(lock_result, _CachedForecast):
             self._metrics_record_cache("hit")
-            return lock_result, "hit"
+            return lock_result.forecast, "hit", None
         token = lock_result
         if token is None:
-            if stale_forecast is not None:
+            if stale_forecast is not None and self._now() < stale_forecast.expires_at:
                 self._metrics_record_cache("stale")
-                return stale_forecast, "stale"
+                return stale_forecast.forecast, "stale", stale_forecast.expires_at
             raise WeatherProviderUnavailable("forecast refresh lock timed out")
 
+        primary_error: BaseException | None = None
         try:
             cached_after_lock = await self._read_forecast(key, location, period)
             if cached_after_lock is not None and not cached_after_lock.is_stale:
                 self._metrics_record_cache("hit")
-                return cached_after_lock, "hit"
+                return cached_after_lock.forecast, "hit", None
             if cached_after_lock is not None and cached_after_lock.is_stale:
                 stale_forecast = cached_after_lock
 
@@ -231,9 +264,9 @@ class ForecastQueryService:
                         forecast.provider, perf_counter() - started_at, "success"
                     )
             except ProviderTransientError as error:
-                if stale_forecast is not None:
+                if stale_forecast is not None and self._now() < stale_forecast.expires_at:
                     self._metrics_record_cache("stale")
-                    return stale_forecast, "stale"
+                    return stale_forecast.forecast, "stale", stale_forecast.expires_at
                 raise WeatherProviderUnavailable("weather provider is temporarily unavailable") from error
 
             canonical_forecast = replace(forecast, is_stale=False)
@@ -244,43 +277,71 @@ class ForecastQueryService:
                 stale_ttl_seconds=_FORECAST_STALE_TTL_SECONDS,
             )
             self._metrics_record_cache("miss")
-            return canonical_forecast, "miss"
+            return canonical_forecast, "miss", None
+        except BaseException as error:
+            primary_error = error
+            raise
         finally:
-            await self._lock.release(key, token)
+            try:
+                await self._lock.release(key, token)
+            except DependencyUnavailable:
+                if primary_error is None:
+                    raise
 
     async def _wait_for_lock(
         self,
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> str | NormalizedForecast | None:
+    ) -> str | _CachedForecast | None:
         deadline = monotonic() + _LOCK_WAITER_DEADLINE_SECONDS
-        while True:
+        backoff_seconds = _LOCK_INITIAL_BACKOFF_SECONDS
+        contended = False
+        for attempt in range(_LOCK_MAX_ATTEMPTS):
             token = await self._lock.acquire(key, ttl_seconds=_LOCK_TTL_SECONDS)
             if token is not None:
                 return token
+            if not contended:
+                self._metrics_record_lock_contention()
+                contended = True
 
             cached = await self._read_forecast(key, location, period)
             if cached is not None and not cached.is_stale:
                 return cached
 
-            if monotonic() >= deadline:
+            remaining_seconds = deadline - monotonic()
+            if remaining_seconds <= 0:
+                self._metrics_record_lock_timeout()
                 return None
-            await asyncio.sleep(_LOCK_POLL_SECONDS)
+            if attempt == _LOCK_MAX_ATTEMPTS - 1:
+                self._metrics_record_lock_timeout()
+                return None
+            wait_seconds = min(
+                remaining_seconds,
+                backoff_seconds
+                * uniform(1 - _LOCK_BACKOFF_JITTER, 1 + _LOCK_BACKOFF_JITTER),
+            )
+            await asyncio.sleep(wait_seconds)
+            backoff_seconds = min(
+                _LOCK_MAX_BACKOFF_SECONDS,
+                backoff_seconds * _LOCK_BACKOFF_FACTOR,
+            )
+        self._metrics_record_lock_timeout()
+        return None
 
     async def _read_forecast(
         self,
         key: str,
         location: CanonicalLocation,
         period: DatePeriod,
-    ) -> NormalizedForecast | None:
+    ) -> _CachedForecast | None:
         entry = await self._cache.get(key)
-        if entry is None:
+        if entry is None or entry.expires_at is None or self._now() >= entry.expires_at:
             return None
         forecast = _forecast_from_cache(entry.value, location, period)
         if forecast is None:
             return None
-        return replace(forecast, is_stale=entry.is_stale)
+        return _CachedForecast(replace(forecast, is_stale=entry.is_stale), entry.expires_at)
 
     async def _forecast_with_lock_heartbeat(
         self,
@@ -318,11 +379,43 @@ class ForecastQueryService:
     ) -> OfficialAlertsResult:
         if getattr(self._official_alert_provider, "status", None) == "not_configured":
             return OfficialAlertsResult(status="not_configured", items=())
+
+        cache_key = _official_alerts_key(location, period)
+        try:
+            cached = await self._cache.get(cache_key)
+        except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+            cached = None
+        if cached is not None:
+            cached_result = _official_alerts_from_cache(cached.value)
+            if cached_result is not None:
+                return cached_result
+
         try:
             alerts = await self._official_alert_provider.get_alerts(location, period)
         except Exception:  # noqa: BLE001 - optional alert providers must not block the forecast.
-            return OfficialAlertsResult(status="unavailable", items=())
-        return OfficialAlertsResult(status="available", items=tuple(alerts))
+            unavailable = OfficialAlertsResult(status="unavailable", items=())
+            try:
+                await self._cache.set(
+                    cache_key,
+                    CacheEntry(value=_official_alerts_to_cache(unavailable), is_stale=False),
+                    _OFFICIAL_ALERTS_FAILURE_FRESH_TTL_SECONDS,
+                    _OFFICIAL_ALERTS_FAILURE_STALE_TTL_SECONDS,
+                )
+            except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+                return unavailable
+            return unavailable
+        alert_items = tuple(alerts)
+        available = OfficialAlertsResult(status="available", items=alert_items)
+        try:
+            await self._cache.set(
+                cache_key,
+                CacheEntry(value=_official_alerts_to_cache(available), is_stale=False),
+                _OFFICIAL_ALERTS_FRESH_TTL_SECONDS,
+                _OFFICIAL_ALERTS_STALE_TTL_SECONDS,
+            )
+        except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
+            return available
+        return available
 
     def _metrics_record_cache(self, status: str) -> None:
         if self._metrics is not None:
@@ -336,16 +429,108 @@ class ForecastQueryService:
         if self._metrics is not None:
             self._metrics.record_upstream_error()
 
+    def _metrics_record_lock_contention(self) -> None:
+        if self._metrics is not None:
+            self._metrics.record_lock_contention()
+
+    def _metrics_record_lock_timeout(self) -> None:
+        if self._metrics is not None:
+            self._metrics.record_lock_timeout()
+
 
 def _geo_key(location_text: str) -> str:
     return f"geo:v1:{quote(location_text.casefold(), safe='')}"
 
 
-def _forecast_key(location: CanonicalLocation, period: DatePeriod) -> str:
-    return (
-        f"forecast:v1:{location.latitude:.4f}:{location.longitude:.4f}:"
-        f"{period.start.isoformat()}:{period.end.isoformat()}"
+def _forecast_key(
+    location: CanonicalLocation, period: DatePeriod,
+    provider_identity: str = "https://api.open-meteo.com",
+) -> str:
+    identity = json.dumps(
+        [location.latitude, location.longitude, period.start.isoformat(), period.end.isoformat(),
+         "normalization-v2", provider_identity.rstrip("/")],
+        separators=(",", ":"), allow_nan=False,
     )
+    return "forecast:v2:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def _official_alerts_key(location: CanonicalLocation, period: DatePeriod) -> str:
+    identity = json.dumps(
+        [
+            location.latitude,
+            location.longitude,
+            period.start.isoformat(),
+            period.end.isoformat(),
+            "inmet-alerts-v1",
+        ],
+        separators=(",", ":"),
+        allow_nan=False,
+    )
+    return "official-alerts:v1:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def _official_alerts_to_cache(result: OfficialAlertsResult) -> dict[str, object]:
+    return {
+        "status": result.status,
+        "items": [
+            {
+                "source": alert.source,
+                "event": alert.event,
+                "severity": alert.severity,
+                "effective_at": alert.effective_at.isoformat(),
+                "expires_at": alert.expires_at.isoformat() if alert.expires_at else None,
+                "geographic_scope": alert.geographic_scope,
+                "source_url": alert.source_url,
+            }
+            for alert in result.items
+        ],
+    }
+
+
+def _official_alerts_from_cache(value: object) -> OfficialAlertsResult | None:
+    if not isinstance(value, Mapping):
+        return None
+    status = value.get("status")
+    items = value.get("items")
+    if status not in {"available", "unavailable"} or not isinstance(items, list):
+        return None
+    if status == "unavailable" and items:
+        return None
+    alerts: list[OfficialAlert] = []
+    for item in items:
+        if not isinstance(item, Mapping):
+            return None
+        source = _string(item.get("source"))
+        event = _string(item.get("event"))
+        severity = _string(item.get("severity"))
+        effective_at = _datetime(item.get("effective_at"))
+        expires_at_value = item.get("expires_at")
+        expires_at = None if expires_at_value is None else _datetime(expires_at_value)
+        geographic_scope = _string(item.get("geographic_scope"))
+        source_url_value = item.get("source_url")
+        source_url = None if source_url_value is None else _string(source_url_value)
+        if (
+            source is None
+            or event is None
+            or severity is None
+            or effective_at is None
+            or (expires_at_value is not None and expires_at is None)
+            or geographic_scope is None
+            or (source_url_value is not None and source_url is None)
+        ):
+            return None
+        alerts.append(
+            OfficialAlert(
+                source=source,
+                event=event,
+                severity=severity,
+                effective_at=effective_at,
+                expires_at=expires_at,
+                geographic_scope=geographic_scope,
+                source_url=source_url,
+            )
+        )
+    return OfficialAlertsResult(status=cast(Literal["available", "unavailable"], status), items=tuple(alerts))
 
 
 def _response_day(day: DailyForecast, unit: TemperatureUnit) -> ForecastDay:
@@ -467,10 +652,11 @@ def _forecast_from_cache(
     expected_days = tuple(period.start + timedelta(days=index) for index in range(period.days))
     if tuple(day.date for day in days) != expected_days:
         return None
-    if location != expected_location or period != expected_period:
+    if (location.latitude != expected_location.latitude
+            or location.longitude != expected_location.longitude or period != expected_period):
         return None
     return NormalizedForecast(
-        location=location,
+        location=replace(expected_location, timezone=location.timezone),
         period=period,
         days=days,
         provider=provider,
@@ -622,5 +808,6 @@ def _strings(value: object) -> tuple[str, ...] | None:
 async def _cancel_and_await(task: asyncio.Task[object]) -> None:
     if not task.done():
         task.cancel()
-    with suppress(asyncio.CancelledError):
+    # Cleanup consumes task failures; the selected result above owns error propagation.
+    with suppress(asyncio.CancelledError, Exception):
         await task

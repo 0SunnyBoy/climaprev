@@ -4,6 +4,8 @@ specs/
 
 # Local configuration and generated artifacts.
 .env
+.env.*
+!/.env.example
 .venv/
 venv/
 __pycache__/
@@ -15,6 +17,8 @@ __pycache__/
 htmlcov/
 dist/
 build/
+frontend/node_modules/
+frontend/dist/
 *.egg-info/
 
 # Local IDE and OS files.
@@ -23,3 +27,8 @@ build/
 *.swp
 Thumbs.db
 Desktop.ini
+
+# Generated local homologation credentials and certificates.
+.homolog/
+
+# Arquivos .md (Removido por hora)

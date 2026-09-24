@@ -10,12 +10,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import JSONResponse
 
 from climaprev.api.errors import ApplicationError, ErrorBody, ErrorEnvelope, RateLimitExceeded
 from climaprev.api.observability import RequestMetrics, observe_request
 from climaprev.api.routes import risk_router
-from climaprev.application.official_alerts import OfficialAlertsNotConfiguredProvider
+from climaprev.api.routes.locations import router as locations_router
+from climaprev.api.routes.metrics import router as metrics_router
+from climaprev.application.errors import (
+    DependencyUnavailable,
+    LocationNotFound,
+    ProviderPermanentError,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.application.services.forecast_query import (
     ForecastQueryService,
     WeatherProviderUnavailable,
@@ -25,13 +34,12 @@ from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
-from climaprev.infrastructure.errors import DependencyUnavailable
-from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
+from climaprev.infrastructure.providers.inmet_alerts import InmetOfficialAlertsProvider
 from climaprev.infrastructure.providers.open_meteo import (
-    LocationNotFound,
     OpenMeteoForecastClient,
     OpenMeteoGeocodingClient,
 )
+from climaprev.infrastructure.rate_limit.provider_budget import ProviderBudget
 from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
 from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
 
@@ -40,10 +48,24 @@ from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings: Settings = app.state.settings
     async with AsyncExitStack() as resources:
-        http_client = httpx.AsyncClient()
+        http_client = httpx.AsyncClient(
+            follow_redirects=False,
+            trust_env=False,
+            limits=httpx.Limits(
+                max_connections=settings.http_max_connections,
+                max_keepalive_connections=settings.http_max_keepalive_connections,
+            ),
+            timeout=httpx.Timeout(
+                connect=settings.connect_timeout_seconds,
+                read=settings.read_timeout_seconds,
+                write=settings.read_timeout_seconds,
+                pool=settings.connect_timeout_seconds,
+            ),
+        )
         resources.push_async_callback(http_client.aclose)
         raw_redis = Redis.from_url(
             settings.redis_url,
+            password=settings.redis_password,
             decode_responses=True,
             socket_connect_timeout=settings.redis_socket_timeout_seconds,
             socket_timeout=settings.redis_socket_timeout_seconds,
@@ -56,42 +78,71 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
         resources.push_async_callback(redis.aclose)
         app.state.redis = redis
-        app.state.rate_limiter = RedisRateLimiter(redis, environment=settings.environment)
+        app.state.rate_limiter = RedisRateLimiter(
+            redis, environment=settings.environment, identity_key=settings.client_ip_hmac_key
+        )
+        provider_budget = ProviderBudget(redis, settings)
+        geocoder = OpenMeteoGeocodingClient(
+            http_client,
+            settings,
+            on_retry=app.state.metrics.record_upstream_retry,
+            before_send=provider_budget.consume,
+        )
+        app.state.location_search = geocoder
         app.state.forecast_query_service = ForecastQueryService(
-            geocoder=OpenMeteoGeocodingClient(
-                http_client,
-                settings,
-                on_retry=app.state.metrics.record_upstream_retry,
-            ),
+            geocoder=geocoder,
             weather_provider=OpenMeteoForecastClient(
                 http_client,
                 settings,
                 on_retry=app.state.metrics.record_upstream_retry,
+                before_send=provider_budget.consume,
             ),
-            cache=RedisCache(redis, environment=settings.environment),
+            cache=RedisCache(
+                redis,
+                environment=settings.environment,
+                on_corruption=app.state.metrics.record_cache_corruption,
+            ),
             lock=RedisLock(redis, environment=settings.environment),
             risk_evaluator=RiskEvaluator(),
             risk_policy=RiskPolicy(),
-            official_alert_provider=OfficialAlertsNotConfiguredProvider(),
+            official_alert_provider=InmetOfficialAlertsProvider(
+                http_client,
+                settings,
+                on_retry=app.state.metrics.record_upstream_retry,
+                before_send=provider_budget.consume,
+            ),
             metrics=app.state.metrics,
+            provider_identity=settings.forecast_base_url,
         )
         yield
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    app = FastAPI(lifespan=lifespan)
-    app.state.settings = settings or Settings()
+    runtime_settings = settings or Settings()
+    documentation = runtime_settings.environment == "development"
+    app = FastAPI(
+        lifespan=lifespan,
+        docs_url="/docs" if documentation else None,
+        redoc_url="/redoc" if documentation else None,
+        openapi_url="/openapi.json" if documentation else None,
+    )
+    app.state.settings = runtime_settings
     app.state.metrics = RequestMetrics()
+    app.add_middleware(
+        TrustedHostMiddleware, allowed_hosts=list(runtime_settings.allowed_hosts), www_redirect=False
+    )
     if app.state.settings.cors_allow_origins:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=list(app.state.settings.cors_allow_origins),
             allow_credentials=False,
-            allow_methods=["GET"],
+            allow_methods=["GET", "POST"],
             allow_headers=["X-Request-ID"],
         )
     app.middleware("http")(observe_request)
     app.include_router(risk_router)
+    app.include_router(locations_router)
+    app.include_router(metrics_router)
     _register_error_handlers(app)
     _register_health_routes(app)
     return app
@@ -141,6 +192,14 @@ def _register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(WeatherDataInvalid)
     async def weather_data_handler(request: Request, error: WeatherDataInvalid) -> JSONResponse:
         return _error_response(request, 502, "WEATHER_DATA_INVALID", "weather data was invalid")
+
+    @app.exception_handler(ProviderPermanentError)
+    async def provider_rejected_handler(
+        request: Request, error: ProviderPermanentError
+    ) -> JSONResponse:
+        return _error_response(
+            request, 502, "WEATHER_PROVIDER_REJECTED", "weather provider rejected the request"
+        )
 
     @app.exception_handler(ProviderTransientError)
     @app.exception_handler(WeatherProviderUnavailable)
@@ -206,7 +265,9 @@ def _error_response(
     request_id = getattr(request.state, "request_id", "unknown")
     return JSONResponse(
         status_code=status_code,
-        content=ErrorEnvelope(error=ErrorBody(code=code, message=message, request_id=request_id)).model_dump(),
+        content=ErrorEnvelope(
+            error=ErrorBody(code=code, message=message, request_id=request_id)
+        ).model_dump(),
         headers=headers,
     )
 

@@ -72,3 +72,20 @@ def test_falls_back_to_peer_when_forwarded_chain_exceeds_the_bound() -> None:
         )
         == "2001:db8::2"
     )
+
+
+def test_direct_equivalent_ipv6_and_malformed_chain_share_canonical_identity() -> None:
+    expanded = "2001:0db8:0000:0000:0000:0000:0000:0002"
+    settings = Settings(trusted_proxy_ips=(expanded,))
+    for header in (None, "invalid", ",", ",".join(["198.51.100.1"] * 21)):
+        assert client_identity(_request(expanded, header), settings) == "2001:db8::2"
+    assert client_identity(_request(expanded), Settings()) == "2001:db8::2"
+    assert client_identity(_request("2001:db8::3"), Settings()) == "2001:db8::3"
+
+
+def test_missing_invalid_or_scoped_peer_cannot_choose_identity_via_header() -> None:
+    settings = Settings(trusted_proxy_ips=("10.0.0.2",))
+    absent = Request({"type": "http", "headers": [(b"x-forwarded-for", b"198.51.100.1")]})
+    assert client_identity(absent, settings) == "unknown"
+    for peer in ("invalid", "client-controlled", "fe80::1%eth0"):
+        assert client_identity(_request(peer, "198.51.100.1"), settings) == "unknown"
