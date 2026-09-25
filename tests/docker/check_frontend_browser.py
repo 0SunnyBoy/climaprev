@@ -54,6 +54,84 @@ def _result_payload() -> dict[str, object]:
     }
 
 
+def _check_accessibility(page: Page) -> None:
+    """Run deterministic accessibility smoke checks in the real browser."""
+    assert page.locator("html").get_attribute("lang") == "pt-BR"
+    assert page.locator("main").count() == 1
+    assert page.locator(".skip-link").get_attribute("href") == "#consulta"
+    assert page.locator("#consulta").get_attribute("tabindex") == "-1"
+    assert page.locator("label[for='location-mode']").count() == 1
+    assert page.locator("label[for='location_text']").count() == 1
+    assert page.locator("#query-form input, #query-form select").count() == page.locator(
+        "#query-form label[for]"
+    ).count()
+
+    page.locator(".skip-link").focus()
+    page.locator(".skip-link").press("Enter")
+    assert page.evaluate("document.activeElement.id") == "consulta"
+
+    page.fill("#location_text", "Belem")
+    page.locator(".location-suggestion").first.wait_for(state="visible")
+    input_locator = page.locator("#location_text")
+    assert input_locator.get_attribute("role") == "combobox"
+    assert input_locator.get_attribute("aria-expanded") == "true"
+    assert input_locator.get_attribute("aria-controls") == "location-suggestions"
+    assert page.locator("#location-suggestions").get_attribute("role") == "listbox"
+    assert page.locator("#location-suggestions [role='option']").count() > 0
+
+    input_locator.press("ArrowDown")
+    active_id = input_locator.get_attribute("aria-activedescendant")
+    assert active_id is not None
+    assert page.locator(f"#{active_id}").get_attribute("aria-selected") == "true"
+    input_locator.press("Enter")
+    assert page.locator("#location-suggestions").count() == 0
+    assert input_locator.get_attribute("aria-expanded") == "false"
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+
+
+def _check_theme_toggle(page: Page) -> None:
+    """Verify the theme control changes, exposes and persists its state."""
+    toggle = page.locator(".theme-toggle")
+    assert toggle.get_attribute("aria-pressed") == "false"
+    assert page.evaluate("document.documentElement.dataset.theme") == "light"
+
+    toggle.click()
+    assert toggle.get_attribute("aria-pressed") == "true"
+    assert "modo claro" in (toggle.get_attribute("aria-label") or "")
+    assert page.evaluate("document.documentElement.dataset.theme") == "dark"
+    assert page.evaluate("localStorage.getItem('climaprev-theme')") == "dark"
+
+    page.reload(wait_until="networkidle")
+    toggle = page.locator(".theme-toggle")
+    assert toggle.get_attribute("aria-pressed") == "true"
+    assert page.evaluate("document.documentElement.dataset.theme") == "dark"
+
+    toggle.click()
+    assert toggle.get_attribute("aria-pressed") == "false"
+    assert "modo escuro" in (toggle.get_attribute("aria-label") or "")
+    assert page.evaluate("document.documentElement.dataset.theme") == "light"
+    page.evaluate("localStorage.clear()")
+
+
+def _check_locale_toggle(page: Page) -> None:
+    """Verify the language control changes and persists the document locale."""
+    toggle = page.locator(".locale-toggle")
+    assert page.locator("html").get_attribute("lang") == "pt-BR"
+    assert "TEMPO" in page.locator(".masthead-note").inner_text()
+
+    toggle.click()
+    assert page.locator("html").get_attribute("lang") == "en"
+    assert page.locator("#page-title").inner_text() == "Weather changes.\nPlan with context."
+    assert page.evaluate("localStorage.getItem('climaprev-locale')") == "en"
+
+    page.reload(wait_until="networkidle")
+    assert page.locator("html").get_attribute("lang") == "en"
+    toggle = page.locator(".locale-toggle")
+    toggle.click()
+    assert page.locator("html").get_attribute("lang") == "pt-BR"
+    page.evaluate("localStorage.clear()")
+
+
 def _install_ca(ca_file: Path, profile: Path) -> None:
     if os.name == "nt":
         raise RuntimeError("HTTPS browser validation requires NSS certutil on a Linux test runner")
@@ -123,12 +201,30 @@ def check(base_url: str, ca_file: Path | None, executable_path: Path | None) -> 
             page.route("**/api/v1/risk", lambda route: route.fulfill(
                 status=200, content_type="application/json", body=json.dumps(_result_payload())
             ))
+            page.route("**/api/v1/locations/search**", lambda route: route.fulfill(
+                status=200,
+                content_type="application/json",
+                body=json.dumps([{
+                    "name": "Belém, Pará, Brasil",
+                    "latitude": -1.4558,
+                    "longitude": -48.4902,
+                    "timezone": "America/Belem",
+                    "source": "synthetic",
+                }]),
+            ))
+            page.add_init_script(
+                "if (!window.localStorage.getItem('climaprev-theme')) "
+                "window.localStorage.setItem('climaprev-theme', 'light')"
+            )
             response = page.goto(base_url.rstrip("/") + "/", wait_until="networkidle")
             assert response is not None and response.status == 200
-            assert page.title() == "Clima Prev · Previsão com contexto"
+            assert page.title() == "ClimaPrev · Previsão com contexto"
             assert page.locator("link[rel='stylesheet']").count() == 1
             background = page.evaluate("getComputedStyle(document.documentElement).backgroundColor")
             assert background != "rgb(255, 255, 255)"
+            _check_accessibility(page)
+            _check_theme_toggle(page)
+            _check_locale_toggle(page)
 
             page.select_option("#location-mode", "coordinates")
             page.fill("#latitude", "-1.4558")
@@ -167,4 +263,4 @@ if __name__ == "__main__":
     parser.add_argument("--executable-path", type=Path)
     args = parser.parse_args()
     check(args.base_url, args.ca_file, args.executable_path)
-    print("Frontend browser acceptance: CSS, same-origin app and inert synthetic content OK.")
+    print("Frontend browser acceptance: CSS, accessibility, same-origin app and inert synthetic content OK.")

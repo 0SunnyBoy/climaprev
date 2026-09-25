@@ -3,9 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="description" content="Consulte a previsão do tempo e uma estimativa de risco climático, com fonte e qualidade dos dados." />
-    <title>Clima Prev · Previsão com contexto</title>
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('climaprev-theme')
+          const theme = stored === 'dark' || stored === 'light'
+            ? stored
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          document.documentElement.dataset.theme = theme
+        } catch {
+          document.documentElement.dataset.theme = 'light'
+        }
+      })()
+    </script>
+    <style>
+      html, body { background: #f5f3e9; color: #203b32; }
+      html[data-theme="dark"], html[data-theme="dark"] body { background: #14211e; color: #f5f3e9; }
+    </style>
+    <title>ClimaPrev · Previsão com contexto</title>
     <link rel="icon" href="data:," />
   </head>
   <body>

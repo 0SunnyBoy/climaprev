@@ -48,7 +48,7 @@ jobs:
       - name: Build pinned test-only browser runner
         run: docker build -f tests/docker/Playwright.Dockerfile -t climaprev-playwright-test:ci tests/docker
 
-      - name: Run reproducible frontend browser acceptance
+      - name: Run reproducible frontend browser and accessibility acceptance
         run: |
           docker compose up -d app frontend
           docker run --rm --network "container:$(docker compose ps -q frontend)" \
