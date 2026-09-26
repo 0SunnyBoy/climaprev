@@ -62,10 +62,14 @@ class Settings(BaseSettings):
     provider_allowed_hosts: Annotated[tuple[str, ...], NoDecode] = (
         "api.open-meteo.com",
         "geocoding-api.open-meteo.com",
+        "previous-runs-api.open-meteo.com",
+        "archive-api.open-meteo.com",
         "apiprevmet3.inmet.gov.br",
     )
     geocoding_base_url: str = "https://geocoding-api.open-meteo.com"
     forecast_base_url: str = "https://api.open-meteo.com"
+    historical_forecast_base_url: str = "https://previous-runs-api.open-meteo.com"
+    historical_weather_base_url: str = "https://archive-api.open-meteo.com"
     inmet_alerts_base_url: str = "https://apiprevmet3.inmet.gov.br"
     connect_timeout_seconds: float = Field(default=2.0, gt=0)
     read_timeout_seconds: float = Field(default=5.0, gt=0)
@@ -212,6 +216,8 @@ class Settings(BaseSettings):
         for value in (
             self.geocoding_base_url,
             self.forecast_base_url,
+            self.historical_forecast_base_url,
+            self.historical_weather_base_url,
             self.inmet_alerts_base_url,
         ):
             try:

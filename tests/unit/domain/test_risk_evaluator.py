@@ -154,3 +154,34 @@ def test_orders_conditions_deterministically_by_type() -> None:
         "strong_wind_proxy",
         "temperature_extreme_proxy",
     ]
+
+
+def test_identifies_the_day_with_the_highest_risk() -> None:
+    base = forecast_for(precipitation_max_hourly_mm=20.0)
+    second = DailyForecast(
+        date=date(2026, 8, 29),
+        temperature_min_c=18.0,
+        temperature_max_c=28.0,
+        temperature_mean_c=23.0,
+        humidity_mean_pct=70.0,
+        precipitation_sum_mm=0.0,
+        precipitation_probability_max_pct=0.0,
+        precipitation_max_hourly_mm=30.0,
+        wind_max_kmh=20.0,
+        wind_gust_max_kmh=20.0,
+        weather_code=0,
+    )
+    forecast = NormalizedForecast(
+        location=base.location,
+        period=DatePeriod(start=date(2026, 8, 28), end=date(2026, 8, 29)),
+        days=(base.days[0], second),
+        provider=base.provider,
+        fetched_at=base.fetched_at,
+        is_stale=False,
+        missing_fields=(),
+    )
+
+    assessment = RiskEvaluator().evaluate(forecast, RiskPolicy())
+
+    assert assessment.peak_days == (date(2026, 8, 29),)
+    assert [day.level for day in assessment.daily] == ["moderate", "high"]

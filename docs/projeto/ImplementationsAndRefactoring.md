@@ -1,7 +1,7 @@
 # Implementations and refactoring
 
 **Status:** P0–P2.6 concluídos; revisão independente final pendente.  
-**Última atualização:** 23 de setembro de 2026.
+**Última atualização:** 25 de setembro de 2026.
 **Projeto:** ClimaPrev
 
 ## Objetivo
@@ -225,9 +225,9 @@ DOM, foco, teclado, viewport e headers.
   passo é revisar o staging e criar o commit da atualização.
 - Os arquivos `.homolog/` não são versionados; devem ser provisionados
   localmente com secrets e certificados antes de iniciar a homologação.
-- As dependências de produção do frontend não apresentam vulnerabilidades no
-  lock atual. Há alertas somente em ferramentas de desenvolvimento e eles
-  devem ser tratados em atualização separada, sem `npm audit fix --force`.
+- As dependências do frontend foram atualizadas para corrigir as vulnerabilidades
+  encontradas no Vitest/Vite. O `npm audit` atual retorna zero vulnerabilidades;
+  a instalação continua registrada no `package-lock.json`.
 
 ### Próximo item técnico
 

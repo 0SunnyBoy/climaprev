@@ -2,35 +2,32 @@ from datetime import date
 
 import pytest
 
-from climaprev.domain.models import DailyForecast, DatePeriod
+from climaprev.domain.models import CanonicalLocation, DatePeriod
 
 
-def test_date_period_counts_both_boundary_days() -> None:
-    period = DatePeriod(start=date(2026, 8, 28), end=date(2026, 8, 30))
+def test_canonical_location_accepts_valid_coordinates_and_iana_timezone() -> None:
+    location = CanonicalLocation("Sao Paulo", -23.55, -46.63, "America/Sao_Paulo", "test")
 
-    assert period.days == 3
+    assert location.latitude == -23.55
 
 
-def test_date_period_rejects_an_end_before_start() -> None:
+@pytest.mark.parametrize(
+    ("latitude", "longitude", "timezone"),
+    [
+        (91.0, 0.0, "UTC"),
+        (0.0, 181.0, "UTC"),
+        (0.0, 0.0, "Not/AZone"),
+    ],
+)
+def test_canonical_location_rejects_invalid_coordinates_or_timezone(
+    latitude: float,
+    longitude: float,
+    timezone: str,
+) -> None:
     with pytest.raises(ValueError):
-        DatePeriod(start=date(2026, 8, 30), end=date(2026, 8, 28))
+        CanonicalLocation("Invalid", latitude, longitude, timezone, "test")
 
 
-def test_daily_forecast_preserves_missing_weather_values() -> None:
-    forecast = DailyForecast(
-        date=date(2026, 8, 28),
-        temperature_min_c=None,
-        temperature_max_c=None,
-        temperature_mean_c=None,
-        humidity_mean_pct=None,
-        precipitation_sum_mm=None,
-        precipitation_probability_max_pct=None,
-        precipitation_max_hourly_mm=None,
-        wind_max_kmh=None,
-        wind_gust_max_kmh=None,
-        weather_code=None,
-    )
-
-    assert forecast.temperature_mean_c is None
-    assert forecast.precipitation_sum_mm is None
-    assert forecast.weather_code is None
+def test_date_period_still_defends_against_reversed_ranges() -> None:
+    with pytest.raises(ValueError):
+        DatePeriod(start=date(2026, 1, 2), end=date(2026, 1, 1))

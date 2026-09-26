@@ -22,6 +22,7 @@ from climaprev.domain.models import (
     DailyForecast,
     DatePeriod,
     NormalizedForecast,
+    OfficialAlert,
 )
 from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
@@ -199,8 +200,13 @@ class FakeProvider:
 
 
 class FakeAlerts:
-    def __init__(self, error: Exception | None = None) -> None:
+    def __init__(
+        self,
+        error: Exception | None = None,
+        items: tuple[OfficialAlert, ...] = (),
+    ) -> None:
         self.error = error
+        self.items = items
         self.calls = 0
 
     async def get_alerts(
@@ -211,7 +217,7 @@ class FakeAlerts:
         self.calls += 1
         if self.error is not None:
             raise self.error
-        return []
+        return list(self.items)
 
 
 def service(
@@ -531,6 +537,8 @@ async def test_converts_temperature_output_without_changing_celsius_risk_evaluat
     assert celsius.forecast_risk.conditions[0].unit == "celsius"
     assert fahrenheit.forecast_risk.conditions[0].value == 104.0
     assert fahrenheit.forecast_risk.conditions[0].unit == "fahrenheit"
+    assert fahrenheit.forecast_risk.daily[0].conditions[0].value == 104.0
+    assert fahrenheit.forecast_risk.daily[0].conditions[0].unit == "fahrenheit"
 
 
 @pytest.mark.asyncio
@@ -547,6 +555,30 @@ async def test_keeps_forecast_when_official_alerts_are_not_configured_or_fail() 
     assert unavailable.official_alerts.status == "unavailable"
     assert unavailable.official_alerts.items == ()
     assert unavailable.forecast_risk.level == "high"
+
+
+@pytest.mark.asyncio
+async def test_official_alerts_raise_priority_and_mark_their_active_days() -> None:
+    alerts = FakeAlerts(
+        items=(
+            OfficialAlert(
+                source="INMET",
+                event="Tempestade severa",
+                severity="Severe",
+                effective_at=datetime(2026, 8, 28, 15, tzinfo=UTC),
+                expires_at=datetime(2026, 8, 29, 3, tzinfo=UTC),
+                geographic_scope="Sao Paulo",
+                source_url="https://example.test/alert",
+            ),
+        )
+    )
+
+    result = await service(alerts=alerts).execute(text_query(), "official-alert-request")
+
+    assert result.risk_overview is not None
+    assert result.risk_overview.source == "official_alert"
+    assert result.risk_overview.level == "high"
+    assert result.risk_overview.peak_days == (PERIOD.start,)
 
 
 @pytest.mark.asyncio

@@ -10,6 +10,7 @@ from climaprev.api.deps import enforce_rate_limit, get_forecast_query_service
 from climaprev.api.schemas.risk import RiskQueryParams
 from climaprev.application.query import ForecastQuery
 from climaprev.application.services.forecast_query import ForecastQueryPort, RiskQueryResult
+from climaprev.domain.models import RiskOverview
 from climaprev.domain.units import TemperatureUnit
 
 router = APIRouter(prefix="/api/v1", tags=["risk"])
@@ -55,6 +56,20 @@ class ForecastRiskResponse(BaseModel):
     method: str
     policy_version: str
     conditions: list[RiskConditionResponse]
+    peak_days: list[date]
+    daily: list[RiskDayResponse]
+
+
+class RiskDayResponse(BaseModel):
+    date: date
+    level: Literal["low", "moderate", "high"]
+    conditions: list[RiskConditionResponse]
+
+
+class RiskOverviewResponse(BaseModel):
+    level: Literal["low", "moderate", "high"]
+    source: Literal["forecast_heuristic", "official_alert"]
+    peak_days: list[date]
 
 
 class OfficialAlertResponse(BaseModel):
@@ -90,6 +105,7 @@ class RiskQueryResponse(BaseModel):
     temperature_unit: TemperatureUnit
     days: list[ForecastDayResponse]
     forecast_risk: ForecastRiskResponse
+    risk_overview: RiskOverviewResponse
     official_alerts: OfficialAlertsResponse
     data_quality: DataQualityResponse
     source: SourceResponse
@@ -97,6 +113,11 @@ class RiskQueryResponse(BaseModel):
 
     @classmethod
     def from_result(cls, result: RiskQueryResult, request_id: str) -> RiskQueryResponse:
+        overview = result.risk_overview or RiskOverview(
+            level=result.forecast_risk.level,
+            source="forecast_heuristic",
+            peak_days=result.forecast_risk.peak_days,
+        )
         return cls(
             request_id=request_id,
             location=LocationResponse(
@@ -138,6 +159,29 @@ class RiskQueryResponse(BaseModel):
                     )
                     for condition in result.forecast_risk.conditions
                 ],
+                peak_days=list(result.forecast_risk.peak_days),
+                daily=[
+                    RiskDayResponse(
+                        date=day.date,
+                        level=day.level,
+                        conditions=[
+                            RiskConditionResponse(
+                                type=condition.type,
+                                severity=condition.severity,
+                                value=condition.value,
+                                unit=condition.unit,
+                                reason=condition.reason,
+                            )
+                            for condition in day.conditions
+                        ],
+                    )
+                    for day in result.forecast_risk.daily
+                ],
+            ),
+            risk_overview=RiskOverviewResponse(
+                level=overview.level,
+                source=overview.source,
+                peak_days=list(overview.peak_days),
             ),
             official_alerts=OfficialAlertsResponse(
                 status=result.official_alerts.status,

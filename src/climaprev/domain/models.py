@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import date, datetime
+from math import isfinite
 from typing import Literal
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 @dataclass(frozen=True, slots=True)
@@ -10,6 +12,20 @@ class CanonicalLocation:
     longitude: float
     timezone: str
     source: str
+
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise ValueError("location name must not be empty")
+        if not self.source.strip():
+            raise ValueError("location source must not be empty")
+        if not isfinite(self.latitude) or not -90 <= self.latitude <= 90:
+            raise ValueError("latitude must be finite and between -90 and 90")
+        if not isfinite(self.longitude) or not -180 <= self.longitude <= 180:
+            raise ValueError("longitude must be finite and between -180 and 180")
+        try:
+            ZoneInfo(self.timezone)
+        except (ZoneInfoNotFoundError, ValueError) as error:
+            raise ValueError("timezone must be a valid IANA timezone") from error
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,11 +78,27 @@ class RiskCondition:
 
 
 @dataclass(frozen=True, slots=True)
+class RiskDayAssessment:
+    date: date
+    level: Literal["low", "moderate", "high"]
+    conditions: tuple[RiskCondition, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class RiskAssessment:
     level: Literal["low", "moderate", "high"]
     method: str
     policy_version: str
     conditions: tuple[RiskCondition, ...]
+    daily: tuple[RiskDayAssessment, ...] = ()
+    peak_days: tuple[date, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class RiskOverview:
+    level: Literal["low", "moderate", "high"]
+    source: Literal["forecast_heuristic", "official_alert"]
+    peak_days: tuple[date, ...]
 
 
 @dataclass(frozen=True, slots=True)

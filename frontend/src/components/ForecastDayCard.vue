@@ -7,6 +7,7 @@ import { formatDate, formatValue, formatWeekday } from '@/utils/formatters'
 defineProps<{
   day: ForecastDay
   unit: string
+  isPeakRisk?: boolean
 }>()
 
 const { locale, t } = useLocale()
@@ -25,7 +26,8 @@ const measurements = computed(() => [
 </script>
 
 <template>
-  <article class="day">
+  <article class="day" :class="{ 'day-peak-risk': isPeakRisk }">
+    <p v-if="isPeakRisk" class="day-risk-marker">{{ t('peakRiskDay') }}</p>
     <div class="day-main">
       <div class="day-date">
         <h4>{{ formatDate(day.date, locale) }}</h4>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useLocale } from '@/composables/useLocale'
-import type { ForecastRisk, DataCompleteness } from '@/types/api'
-import { formatValue } from '@/utils/formatters'
+import type { ForecastRisk, DataCompleteness, RiskOverview } from '@/types/api'
+import { formatDate, formatValue } from '@/utils/formatters'
 
 defineProps<{
   risk: ForecastRisk
+  overview: RiskOverview
   completeness: DataCompleteness
 }>()
 
@@ -36,6 +37,10 @@ function conditionReason(conditionType: string, original: string): string {
   if (conditionType === 'temperature_extreme_proxy') return t('reasonExtremeTemperature')
   return original
 }
+
+function peakDays(overview: RiskOverview): string {
+  return overview.peak_days.map((day) => formatDate(day, locale.value)).join(', ')
+}
 </script>
 
 <template>
@@ -47,7 +52,8 @@ function conditionReason(conditionType: string, original: string): string {
     <div class="risk-assessment">
       <p v-if="completeness === 'unavailable'" class="quality-warning">{{ t('insufficientData') }}</p>
       <template v-else>
-        <p class="risk-level" :class="`risk-${risk.level}`">{{ riskLabel(risk.level) }}</p>
+        <p class="risk-level" :class="`risk-${overview.level}`">{{ riskLabel(overview.level) }}</p>
+        <p v-if="overview.source === 'official_alert'" class="official-priority">{{ t('officialRiskPriority') }}</p>
         <p :class="completeness === 'partial' ? 'quality-warning' : 'quality-line'">
           {{ completeness === 'partial' ? t('incompleteData') : t('completeData') }}
         </p>
@@ -55,6 +61,11 @@ function conditionReason(conditionType: string, original: string): string {
       <p class="risk-explanation">{{ t('riskExplanation') }}</p>
     </div>
   </section>
+  <aside v-if="overview.peak_days.length" class="peak-risk" role="status">
+    <strong>{{ t('peakRiskTitle') }}</strong>
+    <span>{{ peakDays(overview) }}</span>
+    <p>{{ t('peakRiskBody') }}</p>
+  </aside>
   <ul v-if="completeness !== 'unavailable' && risk.conditions.length" class="conditions">
     <li v-for="condition in risk.conditions" :key="`${condition.type}-${condition.value}-${condition.reason}`">
       <strong>{{ conditionLabel(condition.type) }} · {{ formatValue(condition.value, conditionUnit(condition.unit), locale) }}</strong>

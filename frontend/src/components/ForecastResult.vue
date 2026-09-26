@@ -27,7 +27,7 @@ const { locale, t } = useLocale()
       </div>
     </header>
     <DataQualityNotice :stale="data.data_quality.is_stale" />
-    <RiskSummary :risk="data.forecast_risk" :completeness="data.data_quality.completeness" />
+    <RiskSummary :risk="data.forecast_risk" :overview="data.risk_overview" :completeness="data.data_quality.completeness" />
     <details v-if="data.data_quality.missing_fields.length" class="missing-fields">
       <summary>{{ t('missingMeasurements') }} ({{ data.data_quality.missing_fields.length }})</summary>
       <ul>
@@ -36,7 +36,7 @@ const { locale, t } = useLocale()
     </details>
     <section class="days">
       <h3>{{ t('forecastByDay') }}</h3>
-      <ForecastDayCard v-for="day in data.days" :key="day.date" :day="day" :unit="temperatureUnit(data.temperature_unit)" />
+      <ForecastDayCard v-for="day in data.days" :key="day.date" :day="day" :unit="temperatureUnit(data.temperature_unit)" :is-peak-risk="data.risk_overview.peak_days.includes(day.date)" />
     </section>
     <OfficialAlerts :alerts="data.official_alerts" :timezone="data.location.timezone" />
     <p class="disclaimer">{{ locale === 'en' ? t('forecastDisclaimer') : data.disclaimer }}</p>

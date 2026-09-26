@@ -60,6 +60,20 @@ export interface ForecastRisk {
   method: string
   policy_version: string
   conditions: RiskCondition[]
+  peak_days: string[]
+  daily: RiskDayAssessment[]
+}
+
+export interface RiskDayAssessment {
+  date: string
+  level: RiskLevel
+  conditions: RiskCondition[]
+}
+
+export interface RiskOverview {
+  level: RiskLevel
+  source: 'forecast_heuristic' | 'official_alert'
+  peak_days: string[]
 }
 
 export interface DataQuality {
@@ -95,6 +109,7 @@ export interface RiskResponse {
   temperature_unit: TemperatureUnit
   days: ForecastDay[]
   forecast_risk: ForecastRisk
+  risk_overview: RiskOverview
   data_quality: DataQuality
   source: ForecastSource
   official_alerts: OfficialAlerts

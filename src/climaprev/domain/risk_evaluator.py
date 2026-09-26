@@ -1,7 +1,13 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from climaprev.domain.models import DailyForecast, NormalizedForecast, RiskAssessment, RiskCondition
+from climaprev.domain.models import (
+    DailyForecast,
+    NormalizedForecast,
+    RiskAssessment,
+    RiskCondition,
+    RiskDayAssessment,
+)
 from climaprev.domain.risk_policy import RiskPolicy
 
 Severity = Literal["moderate", "high"]
@@ -19,50 +25,78 @@ class _Candidate:
 class RiskEvaluator:
     def evaluate(self, forecast: NormalizedForecast, policy: RiskPolicy) -> RiskAssessment:
         selected: dict[str, _Candidate] = {}
+        daily: list[RiskDayAssessment] = []
 
         for day in forecast.days:
+            day_selected: dict[str, _Candidate] = {}
             rain = _rain_candidate(day, policy)
             if rain is not None:
                 _select(selected, rain)
-                _select(
-                    selected,
-                    _Candidate(
-                        type="flooding_risk_proxy",
-                        severity=rain.severity,
-                        value=rain.value,
-                        unit=rain.unit,
-                        reason=(
-                            "A precipitação prevista indica um sinal de risco de alagamento; "
-                            "isso não representa uma avaliação hidrológica local nem um alerta oficial."
-                        ),
+                _select(day_selected, rain)
+                flooding = _Candidate(
+                    type="flooding_risk_proxy",
+                    severity=rain.severity,
+                    value=rain.value,
+                    unit=rain.unit,
+                    reason=(
+                        "A precipitação prevista indica um sinal de risco de alagamento; "
+                        "isso não representa uma avaliação hidrológica local nem um alerta oficial."
                     ),
                 )
+                _select(
+                    selected,
+                    flooding,
+                )
+                _select(day_selected, flooding)
 
             wind = _wind_candidate(day, policy)
             if wind is not None:
                 _select(selected, wind)
+                _select(day_selected, wind)
 
             temperature = _temperature_candidate(day, policy)
             if temperature is not None:
                 _select(selected, temperature)
+                _select(day_selected, temperature)
 
-        conditions = tuple(
-            RiskCondition(
-                type=candidate.type,
-                severity=candidate.severity,
-                value=candidate.value,
-                unit=candidate.unit,
-                reason=candidate.reason,
+            day_conditions = _conditions(day_selected)
+            daily.append(
+                RiskDayAssessment(
+                    date=day.date,
+                    level=_assessment_level(day_conditions),
+                    conditions=day_conditions,
+                )
             )
-            for candidate in sorted(selected.values(), key=lambda candidate: candidate.type)
-        )
+
+        conditions = _conditions(selected)
         level = _assessment_level(conditions)
+        peak_rank = _level_rank(level)
+        peak_days = tuple(
+            assessment.date
+            for assessment in daily
+            if peak_rank > 0 and _level_rank(assessment.level) == peak_rank
+        )
         return RiskAssessment(
             level=level,
             method="forecast_heuristic",
             policy_version=policy.policy_version,
             conditions=conditions,
+            daily=tuple(daily),
+            peak_days=peak_days,
         )
+
+
+def _conditions(selected: dict[str, _Candidate]) -> tuple[RiskCondition, ...]:
+    return tuple(
+        RiskCondition(
+            type=candidate.type,
+            severity=candidate.severity,
+            value=candidate.value,
+            unit=candidate.unit,
+            reason=candidate.reason,
+        )
+        for candidate in sorted(selected.values(), key=lambda candidate: candidate.type)
+    )
 
 
 def _rain_candidate(day: DailyForecast, policy: RiskPolicy) -> _Candidate | None:
@@ -205,3 +239,7 @@ def _assessment_level(
     if conditions:
         return "moderate"
     return "low"
+
+
+def _level_rank(level: str) -> int:
+    return {"low": 0, "moderate": 1, "high": 2}[level]

@@ -34,6 +34,23 @@ const isNumber = (value: unknown): value is number => typeof value === 'number' 
 const isNullableNumber = (value: unknown): value is number | null => value === null || isNumber(value)
 const isTimestamp = (value: unknown): value is string => isText(value) && Number.isFinite(Date.parse(value))
 const isStringArray = (value: unknown): value is string[] => Array.isArray(value) && value.every(isText)
+const isRiskLevel = (value: unknown): value is 'low' | 'moderate' | 'high' =>
+  ['low', 'moderate', 'high'].includes(String(value))
+
+function isRiskCondition(value: unknown): boolean {
+  return isRecord(value)
+    && ['type', 'severity', 'unit', 'reason'].every((key) => isText(value[key]))
+    && ['moderate', 'high'].includes(String(value.severity))
+    && isNumber(value.value)
+}
+
+function isRiskDayAssessment(value: unknown): boolean {
+  return isRecord(value)
+    && isTimestamp(value.date)
+    && isRiskLevel(value.level)
+    && Array.isArray(value.conditions)
+    && value.conditions.every(isRiskCondition)
+}
 
 const dayFields = [
   'temperature_min', 'temperature_max', 'temperature_mean', 'humidity_mean_pct',
@@ -57,11 +74,15 @@ export function isRiskResponse(data: unknown): data is RiskResponse {
     && ['celsius', 'fahrenheit'].includes(String(data.temperature_unit))
     && Array.isArray(days) && days.length > 0 && days.every((day) => isRecord(day)
       && isTimestamp(day.date) && dayFields.every((field) => isNullableNumber(day[field])))
-    && isRecord(risk) && ['low', 'moderate', 'high'].includes(String(risk.level))
+    && isRecord(risk) && isRiskLevel(risk.level)
     && isText(risk.method) && isText(risk.policy_version)
-    && Array.isArray(risk.conditions) && risk.conditions.every((condition) => isRecord(condition)
-      && ['type', 'severity', 'unit', 'reason'].every((key) => isText(condition[key]))
-      && isNumber(condition.value))
+    && Array.isArray(risk.conditions) && risk.conditions.every(isRiskCondition)
+    && isStringArray(risk.peak_days)
+    && Array.isArray(risk.daily) && risk.daily.every(isRiskDayAssessment)
+    && isRecord(data.risk_overview)
+    && isRiskLevel(data.risk_overview.level)
+    && ['forecast_heuristic', 'official_alert'].includes(String(data.risk_overview.source))
+    && isStringArray(data.risk_overview.peak_days)
     && isRecord(quality) && typeof quality.is_stale === 'boolean'
     && ['complete', 'partial', 'unavailable'].includes(String(quality.completeness))
     && isStringArray(quality.missing_fields)
