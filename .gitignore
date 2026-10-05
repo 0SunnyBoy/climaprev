@@ -34,3 +34,7 @@ Desktop.ini
 
 # Arquivos .md (Removido por hora)
 /tmp/
+
+# Material pessoal de entrega do Sebrae; manter apenas localmente.
+/docs/projeto/BMC-ClimaPrev.md
+/docs/projeto/BMC-ClimaPrev-Sebrae-Entrega.md
