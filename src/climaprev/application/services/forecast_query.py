@@ -11,6 +11,7 @@ from random import uniform
 from time import monotonic, perf_counter
 from typing import TYPE_CHECKING, Literal, Protocol, cast
 from urllib.parse import quote
+from zoneinfo import ZoneInfo
 
 from climaprev.application.errors import DependencyUnavailable, ProviderTransientError
 from climaprev.application.ports import (
@@ -24,6 +25,7 @@ from climaprev.application.ports import (
     WeatherProviderPort,
 )
 from climaprev.application.query import ForecastQuery
+from climaprev.domain.bias_correction import ForecastCalibration
 from climaprev.domain.data_quality import Completeness, completeness
 from climaprev.domain.models import (
     CanonicalLocation,
@@ -32,6 +34,7 @@ from climaprev.domain.models import (
     NormalizedForecast,
     OfficialAlert,
     RiskAssessment,
+    RiskOverview,
 )
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit, convert_temperature
@@ -114,6 +117,7 @@ class RiskQueryResult:
     source: ForecastSource
     disclaimer: str
     request_id: str
+    risk_overview: RiskOverview | None = None
     cache_status: Literal["hit", "miss", "stale"] = "miss"
 
 
@@ -142,6 +146,7 @@ class ForecastQueryService:
         risk_evaluator: RiskEvaluatorPort,
         risk_policy: RiskPolicy,
         official_alert_provider: OfficialAlertPort,
+        calibration: ForecastCalibration | None = None,
         metrics: MetricsPort | None = None,
         provider_identity: str = "https://api.open-meteo.com",
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
@@ -153,6 +158,7 @@ class ForecastQueryService:
         self._risk_evaluator = risk_evaluator
         self._risk_policy = risk_policy
         self._official_alert_provider = official_alert_provider
+        self._calibration = calibration or ForecastCalibration.disabled()
         self._metrics = metrics
         self._provider_identity = provider_identity.rstrip("/")
         self._now = now
@@ -160,7 +166,12 @@ class ForecastQueryService:
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult:
         period = DatePeriod(start=query.start_date, end=query.end_date)
         location = await self._resolve_location(query)
-        forecast_key = _forecast_key(location, period, self._provider_identity)
+        forecast_key = _forecast_key(
+            location,
+            period,
+            self._provider_identity,
+            self._calibration.profile_version,
+        )
         forecast, cache_status, fallback_expires_at = await self._get_forecast(
             forecast_key, location, period
         )
@@ -168,8 +179,11 @@ class ForecastQueryService:
         if self._metrics is not None:
             self._metrics.record_risk_evaluation(forecast_risk)
             self._metrics.record_missing_fields(forecast.missing_fields)
-        response_forecast_risk = _response_risk(forecast_risk, query.temperature_unit)
         official_alerts = await self._get_official_alerts(location, period)
+        response_forecast_risk = _response_risk(forecast_risk, query.temperature_unit)
+        risk_overview = _risk_overview(
+            forecast_risk, official_alerts, period, forecast.location.timezone
+        )
         if fallback_expires_at is not None and self._now() >= fallback_expires_at:
             raise WeatherProviderUnavailable("cached forecast expired before delivery")
 
@@ -179,6 +193,7 @@ class ForecastQueryService:
             temperature_unit=query.temperature_unit,
             days=tuple(_response_day(day, query.temperature_unit) for day in forecast.days),
             forecast_risk=response_forecast_risk,
+            risk_overview=risk_overview,
             official_alerts=official_alerts,
             data_quality=DataQuality(
                 is_stale=forecast.is_stale,
@@ -255,6 +270,7 @@ class ForecastQueryService:
                 started_at = perf_counter()
                 try:
                     forecast = await self._forecast_with_lock_heartbeat(key, token, location, period)
+                    forecast = self._calibration.apply(forecast)
                 except Exception:
                     self._metrics_record_provider("open-meteo", perf_counter() - started_at, "error")
                     self._metrics_record_upstream_error()
@@ -445,10 +461,11 @@ def _geo_key(location_text: str) -> str:
 def _forecast_key(
     location: CanonicalLocation, period: DatePeriod,
     provider_identity: str = "https://api.open-meteo.com",
+    calibration_profile: str = "disabled",
 ) -> str:
     identity = json.dumps(
         [location.latitude, location.longitude, period.start.isoformat(), period.end.isoformat(),
-         "normalization-v2", provider_identity.rstrip("/")],
+         "normalization-v2", provider_identity.rstrip("/"), calibration_profile],
         separators=(",", ":"), allow_nan=False,
     )
     return "forecast:v2:" + hashlib.sha256(identity.encode()).hexdigest()
@@ -556,7 +573,63 @@ def _response_risk(assessment: RiskAssessment, unit: TemperatureUnit) -> RiskAss
     conditions = tuple(
         _response_condition(condition, unit) for condition in assessment.conditions
     )
-    return replace(assessment, conditions=conditions)
+    daily = tuple(
+        replace(
+            day,
+            conditions=tuple(_response_condition(condition, unit) for condition in day.conditions),
+        )
+        for day in assessment.daily
+    )
+    return replace(assessment, conditions=conditions, daily=daily)
+
+
+def _risk_overview(
+    forecast_risk: RiskAssessment,
+    official_alerts: OfficialAlertsResult,
+    period: DatePeriod,
+    timezone: str,
+) -> RiskOverview:
+    """Build the user-facing risk priority without hiding the heuristic result."""
+
+    if not official_alerts.items:
+        return RiskOverview(
+            level=forecast_risk.level,
+            source="forecast_heuristic",
+            peak_days=forecast_risk.peak_days,
+        )
+
+    alert_level = max(
+        (_official_alert_level(alert.severity) for alert in official_alerts.items),
+        key=_risk_rank,
+    )
+    level = max((forecast_risk.level, alert_level), key=_risk_rank)
+    alert_days: set[date] = set()
+    zone = ZoneInfo(timezone)
+    for alert in official_alerts.items:
+        start = alert.effective_at.astimezone(zone).date()
+        end = (alert.expires_at.astimezone(zone).date() if alert.expires_at else start)
+        current = max(start, period.start)
+        last = min(end, period.end)
+        while current <= last:
+            alert_days.add(current)
+            current += timedelta(days=1)
+
+    return RiskOverview(
+        level=level,
+        source="official_alert",
+        peak_days=tuple(sorted(set(forecast_risk.peak_days).union(alert_days))),
+    )
+
+
+def _official_alert_level(severity: str) -> Literal["low", "moderate", "high"]:
+    normalized = severity.casefold()
+    if any(marker in normalized for marker in ("extreme", "severe", "high", "red", "grave")):
+        return "high"
+    return "moderate"
+
+
+def _risk_rank(level: str) -> int:
+    return {"low": 0, "moderate": 1, "high": 2}[level]
 
 
 def _response_condition(condition: RiskCondition, unit: TemperatureUnit) -> RiskCondition:

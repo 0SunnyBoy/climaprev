@@ -51,6 +51,10 @@ Os resultados mostram dias, qualidade, fonte/coleta, risco estimado e alertas
 oficiais em seções separadas. Dados ausentes não viram zero; dados desatualizados
 recebem aviso. Erros mantêm o formulário e exigem nova tentativa manual.
 O campo de cidade oferece até cinco sugestões de localidade antes do envio.
+Quando há risco no período, a interface destaca o dia ou os dias de maior risco
+e informa as condições que motivaram a classificação. Alertas oficiais têm
+prioridade no resumo, mas a avaliação heurística permanece visível para
+transparência.
 
 A consulta usa Vue 3, TypeScript estrito e assets compilados pelo Vite. Não há
 fontes externas, cookies de identidade, histórico ou sessionStorage. O
@@ -77,11 +81,50 @@ isso, a porta `8000` não entrega a interface.
 opcional e o período aceita até sete dias. `temperature_unit` aceita `celsius`
 ou `fahrenheit`; só temperaturas são convertidas, não chuva, vento ou umidade.
 
-O endpoint devolve `forecast_risk`, `official_alerts` do INMET, `data_quality`,
+O endpoint devolve `forecast_risk`, `risk_overview`, `official_alerts` do INMET, `data_quality`,
 fonte, `request_id` e disclaimer. `official_alerts` informa `available` quando
 há resposta válida do INMET e `unavailable` quando a dependência não pode ser
-consultada; esses alertas permanecem separados do risco heurístico. Erros usam
+consultada; `risk_overview` informa quando um alerta oficial assumiu prioridade
+no resumo. Erros usam
 o envelope estável `{ "error": { "code", "message", "request_id" } }`.
+
+A política heurística pode ser avaliada offline com casos históricos revisados
+por meio de `climaprev.domain.risk_validation`. A calibração estatística existe
+como camada opcional versionada, mas permanece desativada até haver evidência
+suficiente; `reference-v1` continua sendo o fallback seguro.
+
+Para executar uma validação histórica sem banco de dados, use o Previous Runs
+da Open-Meteo para previsões antigas e o Historical Weather para as condições
+observadas/reanalisadas:
+
+```bash
+mkdir -p .historical-reports
+docker compose run --rm -v "${PWD}/.historical-reports:/app/.historical-reports" app \
+  python -m climaprev.tools.validate_historical \
+  --latitude -1.4558 --longitude -48.5044 \
+  --start 2025-01-01 --end 2025-01-31 --lead-days 1 \
+  --output /app/.historical-reports/belem-lead-1.json
+```
+
+No PowerShell, use:
+
+```powershell
+New-Item -ItemType Directory -Force .historical-reports | Out-Null
+$reports = (Resolve-Path .historical-reports).Path
+docker compose run --rm --mount "type=bind,source=$reports,target=/app/.historical-reports" app `
+  python -m climaprev.tools.validate_historical `
+  --latitude -1.4558 --longitude -48.5044 `
+  --start 2025-01-01 --end 2025-01-31 --lead-days 1 `
+  --output /app/.historical-reports/belem-lead-1.json
+```
+
+O processo é limitado a 31 dias por execução, aceita antecedência de 1 a 7
+dias e gera somente um relatório agregado. Repita com `--lead-days 2` até `7`
+para comparar a degradação por antecedência. O histórico climático da
+Open-Meteo pode voltar a 1940, mas a avaliação de acurácia usa os históricos de
+previsões emitidas, que têm cobertura mais recente. O relatório não ativa
+calibração automaticamente e não deve ser interpretado como validação
+científica sem revisão do conjunto e dos resultados.
 Os códigos usuais são 422 (entrada), 404 (local não encontrado), 429 (limite),
 502 (dados inválidos ou requisição rejeitada pelo provedor) e 503 (dependência indisponível).
 
@@ -158,10 +201,10 @@ no HTML gerado pelo Vite; ele não depende de `/assets/styles.css`.
 
 ## Estado da branch
 
-A cópia correta está na branch `develop`, conectada a `origin/develop`. A
-implementação local e sua validação foram concluídas e o estado atual está
-publicado no commit `b671d9b`. A pasta `.homolog/` permanece local, ignorada pelo Git,
-e deve ser provisionada separadamente para validar a homologação.
+O desenvolvimento ocorre na branch `develop`; a branch `main` recebe somente
+alterações estáveis aprovadas para publicação. A pasta `.homolog/` permanece
+local, ignorada pelo Git, e deve ser provisionada separadamente para validar a
+homologação.
 
 
 ## Homologação com TLS

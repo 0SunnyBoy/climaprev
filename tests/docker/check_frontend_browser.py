@@ -44,10 +44,13 @@ def _result_payload() -> dict[str, object]:
         "forecast_risk": {
             "level": "low", "method": "reference-v1", "policy_version": "reference-v1",
             "conditions": [{
-                "type": "strong_wind_proxy", "severity": "low", "unit": "km/h",
+                "type": "strong_wind_proxy", "severity": "moderate", "unit": "km/h",
                 "value": 20, "reason": MALICIOUS_TEXT,
             }],
+            "peak_days": [],
+            "daily": [{"date": "2030-01-01", "level": "moderate", "conditions": []}],
         },
+        "risk_overview": {"level": "low", "source": "forecast_heuristic", "peak_days": []},
         "data_quality": {"is_stale": False, "completeness": "complete", "missing_fields": []},
         "source": {"provider": "synthetic", "fetched_at": "2030-01-01T12:00:00Z"},
         "official_alerts": {"status": "not_configured", "items": []},

@@ -138,6 +138,15 @@ o valor é menor ou igual ao limiar.
 4. O nível final é `high` se qualquer condição for alta, `moderate` se houver
    alguma condição moderada e nenhuma alta, ou `low` se nenhuma condição for
    gerada.
+5. `forecast_risk.daily` preserva o nível e as condições de cada dia.
+6. `forecast_risk.peak_days` lista todos os dias empatados no maior nível de
+   risco identificado. O frontend destaca essas datas ao usuário.
+7. `risk_overview` resume o risco efetivo para apresentação. Quando existem
+   alertas oficiais, sua fonte passa a ser `official_alert`; a avaliação
+   heurística continua disponível em `forecast_risk`.
+8. A chave de cache inclui a identidade do provedor, a normalização e a versão
+   do perfil de calibração. Isso impede misturar respostas produzidas por
+   configurações estatísticas diferentes.
 
 As condições retornadas usam estes tipos:
 
@@ -169,8 +178,10 @@ opção `temperature_unit`.
 - A política `reference-v1` é uma heurística de interpretação de previsão. Ela
   não substitui alerta oficial, avaliação hidrológica, orientação médica ou
   instrução de Defesa Civil.
-- `official_alerts` é uma seção separada da resposta e não altera diretamente
-  o nível calculado em `forecast_risk`.
+- `official_alerts` é uma seção separada da resposta. Sua presença altera a
+  prioridade do resumo em `risk_overview`, mas não apaga o resultado heurístico.
+- A validação histórica e o protocolo de calibração estão descritos em
+  [`validacao-e-calibracao.md`](validacao-e-calibracao.md).
 
 Qualquer alteração dos limiares, das variáveis consideradas ou da unidade de
 avaliação deve atualizar a versão da política, os testes de domínio e este

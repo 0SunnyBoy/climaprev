@@ -5,7 +5,14 @@ from climaprev.config import Settings
 
 
 @pytest.mark.parametrize(
-    "field", ["forecast_base_url", "geocoding_base_url", "inmet_alerts_base_url"]
+    "field",
+    [
+        "forecast_base_url",
+        "geocoding_base_url",
+        "historical_forecast_base_url",
+        "historical_weather_base_url",
+        "inmet_alerts_base_url",
+    ],
 )
 @pytest.mark.parametrize(
     "url",
@@ -37,6 +44,8 @@ def test_production_accepts_defaults_and_explicit_allowlist(production_config) -
         provider_allowed_hosts=("weather.example",),
         forecast_base_url="https://weather.example:443/v1",
         geocoding_base_url="https://weather.example/geo",
+        historical_forecast_base_url="https://weather.example/historical-forecast",
+        historical_weather_base_url="https://weather.example/historical-weather",
         inmet_alerts_base_url="https://weather.example/alerts",
         **production_config,
     )

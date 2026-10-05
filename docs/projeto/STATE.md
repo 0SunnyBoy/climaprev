@@ -1,35 +1,42 @@
 # STATE — Clima Prev
 
-## Auditoria da cópia correta — 2026-09-23
+## Auditoria da cópia de desenvolvimento — 2026-09-25
 
-A pasta `climaprev-Atualizacao-Geral-V3` recebeu o código, frontend Vue,
-Docker, homologação, testes e documentação sincronizados. Nesta auditoria:
+A cópia `climaprev-develop-build` contém o código, frontend Vue, Docker, testes
+e documentação sincronizados. Ela é um build sem metadados `.git`, portanto não
+é um checkout adequado para commit ou push. Nesta auditoria:
 
 - build do backend e do frontend aprovado;
 - Compose local e de homologação aprovado em modo `config`;
 - Ruff e mypy aprovados;
-- 195 testes unitários/contratuais aprovados;
+- 463 testes backend aprovados;
+- 5 testes frontend aprovados;
 - lint, typecheck, Vitest e build Vite aprovados;
 - smoke test do Nginx, assets hashados e headers aprovado;
 - dependências de produção do frontend sem vulnerabilidades conhecidas no lock.
+- dependências do frontend atualizadas para Vitest 5.0.2 e Vite 6.4.3; `npm
+  audit` retornou zero vulnerabilidades.
+- pipeline offline de validação histórica executado contra as APIs da Open-Meteo,
+  sem banco de dados e sem ativar calibração;
+- amostra real de três dias em Belém, com antecedência de um dia: 3 casos
+  comparáveis, 3 classificações corretas e nenhum falso positivo ou negativo.
 
 O workflow da CI foi corrigido para descobrir CSS e JavaScript pelo HTML do
-Vite. A validação integrada local de 23 de setembro confirmou Redis saudável,
+Vite. A validação atual confirmou Redis saudável,
 frontend HTTP 200, health check HTTP 200, assets e contratos do frontend.
-O repositório Git da cópia correta está inicializado e acompanha
-`origin/Atualizacao-Geral-V3`; as alterações ainda estão no working tree e
-não foram commitadas nem enviadas.
+As alterações desta etapa ainda não foram commitadas nem enviadas ao GitHub,
+pois a cópia não possui `.git`. Elas devem ser aplicadas em um checkout da
+branch `develop` antes da publicação.
 
 A homologação real ainda depende do provisionamento local de `.homolog/`, que
 não existe nesta cópia e não deve ser versionado.
 
-## Estado de publicação — 2026-09-23
+## Estado de publicação — 2026-09-25
 
-- Pasta correta: `climaprev-Atualizacao-Geral-V3`.
-- Branch local: `Atualizacao-Geral-V3`.
-- Branch remota acompanhada: `origin/Atualizacao-Geral-V3`.
-- Base remota atual: commit `4d4e0fb`.
-- Próximo passo Git: revisar o staging, criar o commit e executar o push.
+- Branch de desenvolvimento esperada: `develop`.
+- A pasta atual não é um checkout Git.
+- Próximo passo Git: clonar ou usar um checkout limpo de `develop`, reaplicar
+  as alterações, revisar o diff, criar o commit e executar o push.
 - Nenhum commit, push, merge ou deploy foi executado nesta etapa.
 
 ## Segurança — atualização de 2026-09-23
@@ -88,7 +95,16 @@ adicionais até P2.6, conforme o catálogo
 - Open-Meteo fornece geocodificação e previsão meteorológica.
 - O INMET fornece alertas oficiais ativos por local e período.
 - A política `reference-v1` continua heurística e orientativa.
-- Os alertas oficiais aparecem separados de `forecast_risk`.
+- Os alertas oficiais aparecem separados de `forecast_risk` e têm prioridade
+  no novo `risk_overview`.
+- `forecast_risk.daily` avalia cada dia e `peak_days` destaca todos os dias
+  empatados no maior nível do período.
+- A validação histórica está disponível como protocolo offline; a calibração
+  estatística continua desativada (`disabled`) até haver dados revisados.
+- Localidades inválidas são rejeitadas antes da consulta quando coordenadas ou
+  o fuso horário IANA não passam pela validação de domínio.
+- A chave de cache inclui a versão do perfil de calibração, evitando misturar
+  respostas calculadas com perfis diferentes.
 - A busca de localidades retorna até cinco sugestões e preserva a confirmação
   da localidade antes da consulta.
 
@@ -146,9 +162,14 @@ certificação formal por Lighthouse ou leitor de tela nesta etapa.
 
 - Executar revisão independente em uma cópia isolada, com evidência por
   requisito.
-- Calibrar a política de risco com dados históricos e avaliação especializada.
-- Executar o piloto offline de validação descrito no [plano de continuação e
-  viabilidade de escopo](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md).
+- Calibrar a política de risco com dados históricos e avaliação especializada;
+  a camada técnica já existe, mas permanece desativada até esse conjunto de
+  evidências ser aprovado.
+- Ampliar o piloto offline de validação descrito no [plano de continuação e
+  viabilidade de escopo](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md),
+  cobrindo diferentes regiões, estações, horizontes de 1 a 7 dias e revisão
+  especializada. A ferramenta técnica já está disponível; falta avaliar uma
+  amostra suficiente para qualquer decisão científica ou de calibração.
 - Consolidar cobertura, expiração, monitoramento e operação dos alertas oficiais.
 - Definir contratos de identidade antes de contas, favoritos, histórico ou
   notificações.

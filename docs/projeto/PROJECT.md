@@ -1,8 +1,9 @@
 # PROJECT — Clima Prev
 
-**Data da análise:** 2026-09-24.
-**Estado:** P0–P2.6 e rework Vue concluídos; estado atual publicado em
-`develop`; revisão independente final pendente.
+**Data da análise:** 2026-10-05.
+**Estado:** rework Vue, avaliação diária de risco, prioridade de alertas oficiais
+e contrato do maior risco implementados; o pipeline offline de validação histórica
+está disponível, mas a aprovação científica e a calibração permanecem pendentes.
 
 ## Visão
 
@@ -24,6 +25,7 @@ ciclo.
 | [Fluxos](../arquitetura/fluxos.md)                                         | Consulta, cache, concorrência, falhas e jornada web.     |
 | [Fluxos de informação](../arquitetura/fluxos-informacao.md)                | Dados enviados, recebidos, transformados e armazenados.     |
 | [Parâmetros de predição](../arquitetura/parametros-de-predicao.md)                   | Entradas, variáveis meteorológicas e limiares do risco.     |
+| [Validação e calibração](../arquitetura/validacao-e-calibracao.md)          | Protocolo histórico, pico diário e fallback estatístico.    |
 | [Continuação e escopo de previsão](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md) | Validação offline, fallback e critérios de ampliação. |
 | [Segurança](../seguranca/seguranca.md)                                   | Fronteiras de confiança, controles existentes e lacunas.    |
 | [Restrições](../operacoes/restricoes.md)                                 | Regras de entrada, limites operacionais e de interpretação. |
