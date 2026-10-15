@@ -22,15 +22,18 @@ RUN /opt/venv/bin/pip --isolated install --no-deps --no-index /wheels/*.whl
 FROM base AS dev
 ENV PATH=/opt/venv/bin:$PATH PYTHONPATH=/app/src
 COPY --from=package /opt/venv /opt/venv
-COPY requirements.lock requirements-build.lock pyproject.toml README.md .
+COPY requirements.lock requirements-build.lock requirements-dev.lock pyproject.toml README.md .
 COPY src ./src
 RUN pip --isolated install --no-cache-dir --require-hashes -r requirements-build.lock \
-    && python -c "from pathlib import Path; Path('/tmp/production.constraints').write_text(chr(10).join(line.split()[0] for line in Path('requirements.lock').read_text().splitlines() if line and line[0].isalnum()))" \
-    && pip --isolated install --no-cache-dir --no-build-isolation -c /tmp/production.constraints -e ".[dev]"
+    && pip --isolated install --no-cache-dir --no-build-isolation --require-hashes -r requirements-dev.lock \
+    && pip --isolated install --no-cache-dir --no-build-isolation --no-deps -e .
 COPY tests ./tests
 COPY docs ./docs
-COPY .env.example .
+COPY .env.example requirements-load.lock .
 CMD ["python", "-m", "climaprev.runtime"]
+
+FROM dev AS load
+RUN pip --isolated install --no-cache-dir --no-build-isolation --require-hashes -r requirements-load.lock
 
 FROM base AS runtime
 RUN mkdir -p /run/climaprev-logs /var/log/climaprev \

@@ -76,7 +76,7 @@ services:
     <<: *hardened-service
     build:
       context: .
-      target: dev
+      target: load
     profiles: ["load"]
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
