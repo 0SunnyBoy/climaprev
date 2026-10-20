@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import EmergencyPage from '@/components/EmergencyPage.vue'
 import ForecastResult from '@/components/ForecastResult.vue'
 import QueryForm from '@/components/QueryForm.vue'
 import QueryStatus from '@/components/QueryStatus.vue'
 import { QueryError, QueryTimeoutError } from '@/services/api'
 import { useRiskQuery } from '@/composables/useRiskQuery'
-import { useLocale } from '@/composables/useLocale'
+import { useLocale, type MessageKey } from '@/composables/useLocale'
 import { useTheme } from '@/composables/useTheme'
 import type { LocationCandidate } from '@/types/api'
 import type { QueryFormState } from '@/types/query'
 
-const formRef = ref<{ setFieldError: (name: string, message: string) => void } | null>(null)
-const statusMessage = ref('')
+const formRef = ref<{ setFieldError: (name: string, message: string | (() => string)) => void } | null>(null)
+const statusMessage = ref<string | (() => string)>('')
+const renderedStatusMessage = computed(() => typeof statusMessage.value === 'function'
+  ? statusMessage.value() : statusMessage.value)
 const statusRole = ref<'status' | 'alert'>('status')
 const retryUntil = ref(0)
 const cooldownSeconds = ref(0)
@@ -38,7 +40,9 @@ function updateDocumentMetadata() {
 }
 
 function syncPage() {
-  page.value = pageFromHash()
+  const nextPage = pageFromHash()
+  if (nextPage === 'emergency' && page.value !== nextPage && loading.value) onCancel()
+  page.value = nextPage
   updateDocumentMetadata()
 }
 
@@ -62,13 +66,13 @@ function clearCooldown() {
 function updateCooldown(requestId: string, seconds: number) {
   clearCooldown()
   retryUntil.value = Date.now() + seconds * 1000
-  statusMessage.value = `${t('rateLimitWait')} ${seconds} s ${locale.value === 'en' ? 'to query again.' : 'para consultar novamente.'}${requestId ? ` ${t('reference')}: ${requestId}` : ''}`
+  statusMessage.value = () => `${t('rateLimitWait')} ${cooldownSeconds.value} s.${requestId ? ` ${t('reference')}: ${requestId}` : ''}`
   const update = () => {
     cooldownSeconds.value = Math.max(0, Math.ceil((retryUntil.value - Date.now()) / 1000))
     if (cooldownSeconds.value === 0) {
       clearCooldown()
       statusRole.value = 'status'
-      statusMessage.value = t('readyToQuery')
+      statusMessage.value = () => t('readyToQuery')
     }
   }
   update()
@@ -78,48 +82,48 @@ function updateCooldown(requestId: string, seconds: number) {
 function showError(caught: unknown, form: QueryFormState) {
   statusRole.value = 'alert'
   if (caught instanceof QueryTimeoutError || timedOut.value) {
-    statusMessage.value = t('queryTimeout')
+    statusMessage.value = () => t('queryTimeout')
     return
   }
   if (!(caught instanceof QueryError)) {
-    statusMessage.value = t('genericQueryError')
+    statusMessage.value = () => t('genericQueryError')
     return
   }
   if (caught.status === 429) {
     updateCooldown(caught.requestId, caught.retryAfter)
     return
   }
-  let message = t('genericQueryError')
+  let messageKey: MessageKey = 'genericQueryError'
   let field: string | undefined
-  if (caught.code === 'NETWORK_ERROR') message = t('networkError')
+  if (caught.code === 'NETWORK_ERROR') messageKey = 'networkError'
   else if (caught.code !== 'MALFORMED_RESPONSE') {
     if (caught.status === 404) {
-      message = t('locationNotFound')
+      messageKey = 'locationNotFound'
       field = form.locationMode === 'city' ? 'location_text' : 'latitude'
     } else if (caught.status === 422) {
       if (caught.code === 'INVALID_PERIOD') {
-        message = t('invalidPeriod')
+        messageKey = 'invalidPeriod'
         field = form.endDate ? 'end_date' : 'start_date'
       } else if (caught.code === 'INVALID_TEMPERATURE_UNIT') {
-        message = t('invalidTemperature')
+        messageKey = 'invalidTemperature'
         field = 'temperature_unit'
       } else {
-        message = t('invalidLocation')
+        messageKey = 'invalidLocation'
         field = form.locationMode === 'city' ? 'location_text' : 'latitude'
       }
     } else if (caught.status === 502 || caught.status === 503) {
-      message = t('forecastUnavailable')
+      messageKey = 'forecastUnavailable'
     }
   }
-  statusMessage.value = `${message}${caught.requestId ? ` Referência: ${caught.requestId}` : ''}`
-  if (field) formRef.value?.setFieldError(field, message)
+  statusMessage.value = () => `${t(messageKey)}${caught.requestId ? ` ${t('reference')}: ${caught.requestId}` : ''}`
+  if (field) formRef.value?.setFieldError(field, () => t(messageKey))
 }
 
 async function runQuery(form: QueryFormState) {
   if (cooldownSeconds.value > 0) return
   clearCooldown()
   statusRole.value = 'status'
-  statusMessage.value = t('querying')
+  statusMessage.value = () => t('querying')
   const response = await submit({
     start_date: form.startDate,
     temperature_unit: form.temperatureUnit,
@@ -130,7 +134,7 @@ async function runQuery(form: QueryFormState) {
   })
   if (response) {
     statusRole.value = 'status'
-    statusMessage.value = `${t('queryReceived')} ${response.location.name}. ${t('checkDataQuality')}`
+    statusMessage.value = () => `${t('queryReceived')} ${response.location.name}. ${t('checkDataQuality')}`
   } else if (error.value) {
     showError(error.value, form)
   }
@@ -138,21 +142,25 @@ async function runQuery(form: QueryFormState) {
 
 function onInvalid() {
   statusRole.value = 'alert'
-  statusMessage.value = t('invalidForm')
+  statusMessage.value = () => t('invalidForm')
 }
 
 function onCancel() {
   cancel()
   statusRole.value = 'status'
-  statusMessage.value = t('queryCancelled')
+  statusMessage.value = () => t('queryCancelled')
 }
 
 function onLocationSelected(candidate: LocationCandidate) {
   statusRole.value = 'status'
-  statusMessage.value = `${t('locationSelected')}: ${candidate.name}. ${t('confirmAndQuery')}`
+  statusMessage.value = () => `${t('locationSelected')}: ${candidate.name}. ${t('confirmAndQuery')}`
 }
 
 watch([page, locale], updateDocumentMetadata)
+watch(page, async () => {
+  await nextTick()
+  document.getElementById(page.value === 'emergency' ? 'emergencia' : 'consulta')?.focus()
+})
 
 onMounted(() => window.addEventListener('hashchange', syncPage))
 onMounted(updateDocumentMetadata)
@@ -188,7 +196,7 @@ onBeforeUnmount(() => {
     </div>
   </header>
   <main>
-    <template v-if="page === 'home'">
+    <div v-show="page === 'home'" class="home-page">
       <section class="intro" aria-labelledby="page-title">
         <p class="eyebrow">{{ t('homeEyebrow') }}</p>
         <h1 id="page-title">{{ t('homeTitleFirst') }}<br /><em>{{ t('homeTitleSecond') }}</em></h1>
@@ -197,12 +205,12 @@ onBeforeUnmount(() => {
       <section id="consulta" class="query-section" aria-labelledby="query-heading" tabindex="-1">
         <div class="section-heading"><h2 id="query-heading">{{ t('queryTitle') }}</h2><span class="section-note">{{ t('queryLimit') }}</span></div>
         <QueryForm ref="formRef" :loading="loading" :cooldown-seconds="cooldownSeconds" @submit="runQuery" @cancel="onCancel" @invalid="onInvalid" @selected="onLocationSelected" />
-        <QueryStatus :message="statusMessage" :role="statusRole" :show-result="hasResult" :cooldown-seconds="cooldownSeconds" />
+        <QueryStatus :message="renderedStatusMessage" :role="statusRole" :show-result="hasResult" :cooldown-seconds="cooldownSeconds" />
       </section>
       <ForecastResult v-if="hasResult && result" :data="result" />
       <aside class="context-note"><span aria-hidden="true">↳</span><div><h2>{{ t('contextTitle') }}</h2><p>{{ t('contextBody') }}</p></div></aside>
-    </template>
-    <EmergencyPage v-else />
+    </div>
+    <EmergencyPage v-if="page === 'emergency'" />
   </main>
   <footer><span>ClimaPrev<span class="brand-dot">.</span></span><p>{{ t('anonymous') }}</p></footer>
 </template>

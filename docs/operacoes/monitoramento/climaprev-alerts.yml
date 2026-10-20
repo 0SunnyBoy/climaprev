@@ -1,0 +1,31 @@
+groups:
+  - name: climaprev-technical-proposals
+    rules:
+      - alert: ClimaPrevMetricsUnavailable
+        expr: up{job="climaprev"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'API metrics unavailable; check Redis, worker publisher and private connectivity'
+      - alert: ClimaPrevRiskErrorRatio
+        expr: sum(rate(climaprev_http_requests_total{route="/api/v1/risk",status=~"5.."}[5m])) / clamp_min(sum(rate(climaprev_http_requests_total{route="/api/v1/risk"}[5m])), 0.001) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Risk endpoint 5xx ratio above proposed 1% threshold'
+      - alert: ClimaPrevHttpLatency
+        expr: histogram_quantile(0.95, sum by (le) (rate(climaprev_http_request_duration_seconds_bucket[5m]))) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Global HTTP p95 above proposed two-second threshold'
+      - alert: ClimaPrevOfficialAlertsUnavailable
+        expr: sum(rate(climaprev_official_alert_checks_total{status="unavailable"}[5m])) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Official alert source cannot be verified; do not interpret as absence of warnings'

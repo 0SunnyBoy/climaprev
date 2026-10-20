@@ -1,0 +1,906 @@
+{
+  "schema": "climaprev-reservation-metadata-inventory-v1",
+  "scope": "current local snapshot filenames/sizes plus prior audit and collection metadata only",
+  "known_snapshots": [
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d1.inputs.json",
+      "bytes": 60088,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d3.inputs.json",
+      "bytes": 60224,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d7.inputs.json",
+      "bytes": 60523,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d1.inputs.json",
+      "bytes": 58487,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d3.inputs.json",
+      "bytes": 58445,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d7.inputs.json",
+      "bytes": 58475,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d1.inputs.json",
+      "bytes": 58377,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d3.inputs.json",
+      "bytes": 58451,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d7.inputs.json",
+      "bytes": 58455,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d1.inputs.json",
+      "bytes": 58464,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d3.inputs.json",
+      "bytes": 58462,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d7.inputs.json",
+      "bytes": 58467,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d1.inputs.json",
+      "bytes": 59867,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d3.inputs.json",
+      "bytes": 60050,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d7.inputs.json",
+      "bytes": 60396,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d1.inputs.json",
+      "bytes": 58311,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d3.inputs.json",
+      "bytes": 58326,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d7.inputs.json",
+      "bytes": 58256,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d1.inputs.json",
+      "bytes": 58330,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d3.inputs.json",
+      "bytes": 58342,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d7.inputs.json",
+      "bytes": 58367,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d1.inputs.json",
+      "bytes": 58300,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d3.inputs.json",
+      "bytes": 58366,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d7.inputs.json",
+      "bytes": 58407,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d1.inputs.json",
+      "bytes": 59920,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d3.inputs.json",
+      "bytes": 60062,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d7.inputs.json",
+      "bytes": 60343,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d1.inputs.json",
+      "bytes": 58382,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d3.inputs.json",
+      "bytes": 58385,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d7.inputs.json",
+      "bytes": 58386,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d1.inputs.json",
+      "bytes": 57968,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d3.inputs.json",
+      "bytes": 57991,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d7.inputs.json",
+      "bytes": 58003,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d1.inputs.json",
+      "bytes": 58459,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d3.inputs.json",
+      "bytes": 58423,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d7.inputs.json",
+      "bytes": 58493,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-1.inputs.json",
+      "bytes": 60723,
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-3.inputs.json",
+      "bytes": 60686,
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-7.inputs.json",
+      "bytes": 60722,
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-1.inputs.json",
+      "bytes": 5324,
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-3.inputs.json",
+      "bytes": 5324,
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-7.inputs.json",
+      "bytes": 5320,
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "basis": "prior local period audit"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 60304,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d1-station.inputs.json",
+      "bytes": 60307,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d3-municipal-control.inputs.json",
+      "bytes": 60440,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d3-station.inputs.json",
+      "bytes": 60443,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d7-municipal-control.inputs.json",
+      "bytes": 60739,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-01-d7-station.inputs.json",
+      "bytes": 60746,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d1-municipal-control.inputs.json",
+      "bytes": 58703,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d1-station.inputs.json",
+      "bytes": 58720,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d3-municipal-control.inputs.json",
+      "bytes": 58661,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d3-station.inputs.json",
+      "bytes": 58670,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d7-municipal-control.inputs.json",
+      "bytes": 58690,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-04-d7-station.inputs.json",
+      "bytes": 58717,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d1-municipal-control.inputs.json",
+      "bytes": 58594,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d1-station.inputs.json",
+      "bytes": 58600,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d3-municipal-control.inputs.json",
+      "bytes": 58665,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d3-station.inputs.json",
+      "bytes": 58669,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d7-municipal-control.inputs.json",
+      "bytes": 58670,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-07-d7-station.inputs.json",
+      "bytes": 58706,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d1-municipal-control.inputs.json",
+      "bytes": 58680,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d1-station.inputs.json",
+      "bytes": 58683,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d3-municipal-control.inputs.json",
+      "bytes": 58676,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d3-station.inputs.json",
+      "bytes": 58678,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d7-municipal-control.inputs.json",
+      "bytes": 58681,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/belem-2024-10-d7-station.inputs.json",
+      "bytes": 58687,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 60087,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d1-station.inputs.json",
+      "bytes": 60101,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d3-municipal-control.inputs.json",
+      "bytes": 60268,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d3-station.inputs.json",
+      "bytes": 60284,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d7-municipal-control.inputs.json",
+      "bytes": 60614,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-01-d7-station.inputs.json",
+      "bytes": 60629,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d1-municipal-control.inputs.json",
+      "bytes": 58530,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d1-station.inputs.json",
+      "bytes": 58545,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d3-municipal-control.inputs.json",
+      "bytes": 58545,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d3-station.inputs.json",
+      "bytes": 58559,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d7-municipal-control.inputs.json",
+      "bytes": 58476,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-04-d7-station.inputs.json",
+      "bytes": 58492,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d1-municipal-control.inputs.json",
+      "bytes": 58549,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d1-station.inputs.json",
+      "bytes": 58566,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d3-municipal-control.inputs.json",
+      "bytes": 58561,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d3-station.inputs.json",
+      "bytes": 58572,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d7-municipal-control.inputs.json",
+      "bytes": 58587,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-07-d7-station.inputs.json",
+      "bytes": 58603,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d1-municipal-control.inputs.json",
+      "bytes": 58519,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d1-station.inputs.json",
+      "bytes": 58535,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d3-municipal-control.inputs.json",
+      "bytes": 58587,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d3-station.inputs.json",
+      "bytes": 58601,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d7-municipal-control.inputs.json",
+      "bytes": 58626,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/brasilia-2024-10-d7-station.inputs.json",
+      "bytes": 58640,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 60134,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d1-station.inputs.json",
+      "bytes": 60150,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d3-municipal-control.inputs.json",
+      "bytes": 60278,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d3-station.inputs.json",
+      "bytes": 60293,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d7-municipal-control.inputs.json",
+      "bytes": 60559,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-01-d7-station.inputs.json",
+      "bytes": 60574,
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d1-municipal-control.inputs.json",
+      "bytes": 58598,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d1-station.inputs.json",
+      "bytes": 58614,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d3-municipal-control.inputs.json",
+      "bytes": 58601,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d3-station.inputs.json",
+      "bytes": 58616,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d7-municipal-control.inputs.json",
+      "bytes": 58601,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-04-d7-station.inputs.json",
+      "bytes": 58616,
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d1-municipal-control.inputs.json",
+      "bytes": 58168,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d1-station.inputs.json",
+      "bytes": 58182,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d3-municipal-control.inputs.json",
+      "bytes": 58192,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d3-station.inputs.json",
+      "bytes": 58208,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d7-municipal-control.inputs.json",
+      "bytes": 58204,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-07-d7-station.inputs.json",
+      "bytes": 58220,
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d1-municipal-control.inputs.json",
+      "bytes": 58672,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d1-station.inputs.json",
+      "bytes": 58687,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d3-municipal-control.inputs.json",
+      "bytes": 58636,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d3-station.inputs.json",
+      "bytes": 58650,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d7-municipal-control.inputs.json",
+      "bytes": 58708,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    },
+    {
+      "path": ".historical-reports/spatial-2024-2026-10-19/porto-alegre-2024-10-d7-station.inputs.json",
+      "bytes": 58721,
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "basis": "completed spatial collection manifest"
+    }
+  ],
+  "unknown_snapshot_metadata": [
+    {
+      "path": ".historical-reports/pytest-catalog-final-a/test_freeze_refuses_protocol_d0/sample.inputs.json",
+      "bytes": 17
+    },
+    {
+      "path": ".historical-reports/pytest-catalog-final-a/test_preflight_then_resume_wit0/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 3498
+    },
+    {
+      "path": ".historical-reports/pytest-catalog-final-a/test_preflight_then_resume_wit0/belem-2024-01-d1-station.inputs.json",
+      "bytes": 3470
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-all-b/test_freeze_refuses_protocol_d0/sample.inputs.json",
+      "bytes": 17
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-all-b/test_preflight_then_resume_wit0/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 3498
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-all-b/test_preflight_then_resume_wit0/belem-2024-01-d1-station.inputs.json",
+      "bytes": 3470
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-collector-a/test_preflight_then_resume_wit0/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 3498
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-collector-a/test_preflight_then_resume_wit0/belem-2024-01-d1-station.inputs.json",
+      "bytes": 3470
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-combined-d/test_freeze_refuses_protocol_d0/sample.inputs.json",
+      "bytes": 17
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-combined-d/test_preflight_then_resume_wit0/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 3498
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-combined-d/test_preflight_then_resume_wit0/belem-2024-01-d1-station.inputs.json",
+      "bytes": 3470
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-final-c/test_preflight_then_resume_wit0/belem-2024-01-d1-municipal-control.inputs.json",
+      "bytes": 3498
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-final-c/test_preflight_then_resume_wit0/belem-2024-01-d1-station.inputs.json",
+      "bytes": 3470
+    },
+    {
+      "path": ".historical-reports/pytest-spatial-plan-20261019b/test_freeze_refuses_protocol_d0/sample.inputs.json",
+      "bytes": 17
+    }
+  ],
+  "missing_previously_known_snapshots": [],
+  "known_reserved_period_matches": [],
+  "station_csv_metadata": [
+    {
+      "path": ".historical-reports/inmet/A001-2024.csv",
+      "bytes": 811646,
+      "outcomes_read_by_this_audit": false
+    },
+    {
+      "path": ".historical-reports/inmet/A201-2024.csv",
+      "bytes": 849596,
+      "outcomes_read_by_this_audit": false
+    },
+    {
+      "path": ".historical-reports/inmet/A201-2025.csv",
+      "bytes": 799077,
+      "outcomes_read_by_this_audit": false
+    },
+    {
+      "path": ".historical-reports/inmet/A801-2024.csv",
+      "bytes": 838928,
+      "outcomes_read_by_this_audit": false
+    }
+  ],
+  "previous_structural_exposure": {
+    "annual_2025_csv_obtained": true,
+    "annual_csv_parser_processes_all_rows_before_period_filter": true,
+    "distinction": "structural processing is documented; no proof of absent prior outcome review",
+    "known_reviewed_pilot": "Belém January 2025; excluded from unseen validation/test"
+  },
+  "parents": {
+    "docs\\planejamento\\reference-candidate-1\\evidence\\auditoria-periodos-locais.json": "13a8941f9a7f6f35ed30875ae841cec19f7a60a8fcac0a508a814555a7b4cb8b",
+    "docs\\planejamento\\reference-candidate-1\\evidence\\coleta-espacial-2026-10-19.json": "a9f34885aa9724013ec7e5b4cc5c8477cd0d46133d3c8b69c3cb876999a6eb80"
+  },
+  "reserved_outcomes_inspected_by_this_audit": false,
+  "unseen_status": "not_certified_requires_provenance_review",
+  "external_access_history_audited": false,
+  "candidate_fitting_executed": false,
+  "stop_before_stage": 6,
+  "limitations": [
+    "Known dates are inherited metadata; raw snapshot outcomes were not reopened.",
+    "Current local absence does not prove no deleted, remote or previous access.",
+    "Unknown snapshots require metadata-only review before any unseen claim."
+  ]
+}

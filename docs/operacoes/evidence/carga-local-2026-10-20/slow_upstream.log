@@ -1,0 +1,21 @@
+ Container climaprev-develop-load-run-8b4fbd12433e Creating 
+ Container climaprev-develop-load-run-8b4fbd12433e Created 
+[2026-10-20 16:45:50,629] 3243a386dd27/INFO/locust.main: Starting Locust 2.46.7
+[2026-10-20 16:45:50,648] 3243a386dd27/INFO/locust.main: Run time limit set to 60 seconds
+[2026-10-20 16:45:50,655] 3243a386dd27/INFO/locust.runners: Ramping to 10 users at a rate of 10.00 per second
+[2026-10-20 16:45:50,656] 3243a386dd27/INFO/locust.runners: All users spawned: {"RiskApiUser": 10} (10 total users)
+[2026-10-20 16:46:50,187] 3243a386dd27/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-20 16:46:50,225] 3243a386dd27/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /api/v1/risk [slow_upstream]                                                     600     0(0.00%) |    534     485     631    540 |   10.07        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       600     0(0.00%) |    534     485     631    540 |   10.07        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      /api/v1/risk [slow_upstream]                                                          540    550    560    560    570    580    600    610    630    630    630    600
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                            540    550    560    560    570    580    600    610    630    630    630    600
+

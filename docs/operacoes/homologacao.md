@@ -1,9 +1,21 @@
 # Homologação local
 
-O procedimento abaixo descreve uma validação separada do ambiente local. Na
-cópia atual, `.homolog/` não está presente; portanto, a stack de homologação
-não foi iniciada nesta revisão. Provisionar os arquivos somente na máquina
-responsável pela homologação e nunca adicioná-los ao Git.
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+>
+> Gate HTTPS local entre origens distintas aprovado com API real e upstream sintético. TLS CA/hostname verificados separadamente; navegador com pin SPKI restrito ao processo. Isso não é homologação do INMET ao vivo ou de DNS/TLS públicos. Campanha local limitada: 3.000 requisições sem falhas; hospedagem adiada.
+
+## Situação vigente — 20/10/2026
+
+O procedimento foi executado na stack isolada, inclusive TLS, Redis, hardening,
+logs e rotação sintética. Consulte [validação local](validacao-local-2026-10-19.md)
+para resultados, adaptação Windows/OpenSSL e limites. O diretório `.homolog/`
+existe localmente e permanece ignorado pelo Git; as credenciais mais recentes
+estão em `.homolog/next/`. As falhas anteriores de download do runner permanecem no registro histórico. Depois, o gate HTTPS local entre origens distintas passou com Edge 155, API real e upstream sintético; reprodução em [gate independente](../../tests/docker/decoupling/README.md). Isso não comprova execução do runner Python fixado nem de todos os gates do workflow Security. Leitor de tela manual, INMET real e homologação de hospedagem continuam pendentes.
+
+## Procedimento e registro anterior
+
+O procedimento abaixo descreve a stack isolada e pode ser reproduzido na máquina de homologação. `.homolog/` foi provisionado localmente, mas não é versionado. Não repetir o provisionamento sobre arquivos existentes nem incluir chaves/credenciais no Git; seguir as recusas de sobrescrita e a sequência de rotação.
 
 A stack `climaprev-homolog` é separada do desenvolvimento. API e Redis não
 publicam portas. Redis exige ACL, limita chaves ao prefixo versionado

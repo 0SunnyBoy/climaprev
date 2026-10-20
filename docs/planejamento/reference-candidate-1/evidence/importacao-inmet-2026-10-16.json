@@ -1,0 +1,25 @@
+{
+  "stage": "station_import_preparation",
+  "date": "2026-10-16",
+  "convention": "civil-day-preceding-hour-v1",
+  "module": "climaprev.tools.inmet_observations",
+  "official_station_csv_obtained": false,
+  "official_station_csv_compatibility_validated": false,
+  "fixtures": "synthetic_format_only_not_observations",
+  "verification": {
+    "pytest": {
+      "passed": 303,
+      "deselected": 1,
+      "scope": ["tests/unit", "tests/contract", "tests/integration/providers"],
+      "exclusion": "idle_receive_timeout_still_expires_logs: AF_UNIX unavailable on bundled Windows runtime"
+    },
+    "ruff": "passed_with_EXE002_ignored",
+    "mypy": {"status": "passed", "source_files": 51, "platform": "linux"},
+    "service_integration_browser_docker": "not_run"
+  },
+  "reference_v1_changed_by_this_stage": false,
+  "original_experiment_snapshots_changed": false,
+  "promotion": false,
+  "commit_or_push": false,
+  "next_dependency": "official_raw_station_data_and_metadata_validation"
+}

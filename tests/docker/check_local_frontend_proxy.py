@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def check() -> None:
-    nginx = (ROOT / "docker/frontend/nginx.conf").read_text(encoding="utf-8")
+    nginx = (ROOT / "frontend/nginx.conf").read_text(encoding="utf-8")
     compose = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
 
     assert nginx.count("proxy_set_header X-Forwarded-For $remote_addr;") == 4

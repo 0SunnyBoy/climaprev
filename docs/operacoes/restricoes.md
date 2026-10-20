@@ -1,6 +1,8 @@
 # Restrições funcionais, técnicas e de informação
 
-**Data:** 2026-09-23. Regras implementadas e lacunas estão identificadas
+Prazo do serviço público: padrão 7 s e máximo configurável 8 s; cliente 10 s. Cleanup é cooperativo; parsing/transporte/rate limit anteriores ao serviço ficam fora. Horizonte de 14 dias não ativado. [Estado](../projeto/STATE.md).
+
+**Revisão vigente:** 20/10/2026. Regras implementadas e lacunas estão identificadas
 explicitamente. [Índice](../projeto/PROJECT.md).
 
 ## Entrada e escopo
@@ -12,7 +14,7 @@ explicitamente. [Índice](../projeto/PROJECT.md).
 | RES-03 | Latitude entre -90 e 90; longitude entre -180 e 180.                         | Implementada para entrada do cliente.                                            |
 | RES-04 | Período entre um e sete dias inclusivos; fim não anterior ao início.         | Implementada no schema HTTP; `DatePeriod` no domínio só valida a ordem.          |
 | RES-05 | Unidade de temperatura: `celsius` ou `fahrenheit`.                           | Implementada; chuva, vento e umidade mantêm suas unidades.                       |
-| RES-06 | Disponibilidade das datas depende do endpoint meteorológico.                 | Não há validação de início relativo a hoje ou do horizonte aceito pelo provedor. |
+| RES-06 | Disponibilidade das datas depende do endpoint meteorológico.                 | API GET/POST exige início/fim entre hoje UTC e +6; erro 422 antes do serviço. |
 | RES-07 | Não há autenticação, histórico, mapas, app mobile, notificações ou ML. | Fora da implementação disponível.                                                |
 | RES-08 | Alertas oficiais são separados do risco heurístico.                         | INMET integrado; `available` ou `unavailable`; `not_configured` fica para fixtures. |
 
@@ -71,7 +73,7 @@ Base: [adaptador](../../src/climaprev/infrastructure/providers/open_meteo.py) e
 | Cache de previsão fresca        | 600 s                                         | Contados da gravação no cache.                                                            |
 | Expiração total da previsão     | 900 s                                         | São 15 min totais, não 10 + 15 min.                                                       |
 | Lock de previsão                | 10 s                                          | Renovado a cada 5 s.                                                                      |
-| Espera pelo lock                | Até 30 s                                      | Backoff exponencial, jitter e limite de tentativas; não é timeout global da requisição. |
+| Espera pelo lock                | Até 30 s                                      | Backoff/jitter; na rota pública é limitado pelo orçamento cooperativo global do serviço. |
 | Timeout HTTP de conexão/pool    | 2 s                                           | Por tentativa.                                                                            |
 | Timeout HTTP de leitura/escrita | 5 s                                           | Por operação; não representa deadline total da consulta.                                  |
 | Retries adicionais              | 2                                             | Até três tentativas; timeout, erro de rede e 5xx.                                         |

@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -23,6 +24,7 @@ def _origin(url: str) -> tuple[str, str | None, int | None]:
 
 
 def _result_payload() -> dict[str, object]:
+    today = datetime.now(UTC).date().isoformat()
     return {
         "request_id": "browser-synthetic",
         "disclaimer": MALICIOUS_TEXT,
@@ -33,22 +35,22 @@ def _result_payload() -> dict[str, object]:
             "timezone": "America/Belem",
             "source": "synthetic",
         },
-        "period": {"start_date": "2030-01-01", "end_date": "2030-01-01"},
+        "period": {"start_date": today, "end_date": today},
         "temperature_unit": "celsius",
         "days": [{
-            "date": "2030-01-01", "temperature_min": 20, "temperature_max": 30,
+            "date": today, "temperature_min": 20, "temperature_max": 30,
             "temperature_mean": 25, "humidity_mean_pct": 70, "precipitation_sum_mm": 0,
             "precipitation_probability_max_pct": 10, "precipitation_max_hourly_mm": 0,
             "wind_max_kmh": 15, "wind_gust_max_kmh": 20, "weather_code": 1,
         }],
         "forecast_risk": {
-            "level": "low", "method": "reference-v1", "policy_version": "reference-v1",
+            "level": "low", "method": "forecast_heuristic", "policy_version": "reference-v1",
             "conditions": [{
                 "type": "strong_wind_proxy", "severity": "moderate", "unit": "km/h",
                 "value": 20, "reason": MALICIOUS_TEXT,
             }],
             "peak_days": [],
-            "daily": [{"date": "2030-01-01", "level": "moderate", "conditions": []}],
+            "daily": [{"date": today, "level": "moderate", "conditions": []}],
         },
         "risk_overview": {"level": "low", "source": "forecast_heuristic", "peak_days": []},
         "data_quality": {"is_stale": False, "completeness": "complete", "missing_fields": []},
@@ -99,6 +101,7 @@ def _check_theme_toggle(page: Page) -> None:
     assert page.evaluate("document.documentElement.dataset.theme") == "light"
 
     toggle.click()
+    page.wait_for_function("document.documentElement.dataset.theme === 'dark'", timeout=3000)
     assert toggle.get_attribute("aria-pressed") == "true"
     assert "modo claro" in (toggle.get_attribute("aria-label") or "")
     assert page.evaluate("document.documentElement.dataset.theme") == "dark"
@@ -110,6 +113,7 @@ def _check_theme_toggle(page: Page) -> None:
     assert page.evaluate("document.documentElement.dataset.theme") == "dark"
 
     toggle.click()
+    page.wait_for_function("document.documentElement.dataset.theme === 'light'", timeout=3000)
     assert toggle.get_attribute("aria-pressed") == "false"
     assert "modo escuro" in (toggle.get_attribute("aria-label") or "")
     assert page.evaluate("document.documentElement.dataset.theme") == "light"
@@ -232,7 +236,7 @@ def check(base_url: str, ca_file: Path | None, executable_path: Path | None) -> 
             page.select_option("#location-mode", "coordinates")
             page.fill("#latitude", "-1.4558")
             page.fill("#longitude", "-48.4902")
-            page.fill("#start_date", "2030-01-01")
+            page.fill("#start_date", datetime.now(UTC).date().isoformat())
             page.click("button[type='submit']")
             page.locator("#result").wait_for(state="visible")
             result_text = page.locator("#result").inner_text()

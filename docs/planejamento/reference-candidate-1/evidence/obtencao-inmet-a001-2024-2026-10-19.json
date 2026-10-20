@@ -1,0 +1,49 @@
+{
+  "source_url": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2024.zip",
+  "zip_entry": "INMET_CO_DF_A001_BRASILIA_01-01-2024_A_31-12-2024.CSV",
+  "csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e",
+  "csv_bytes": 811646,
+  "crc32_verified": true,
+  "range_requests": [
+    {
+      "range": "bytes=-65557",
+      "content_range": "bytes 102706642-102772198/102772199",
+      "bytes": 65557
+    },
+    {
+      "range": "bytes=102701069-102772176",
+      "content_range": "bytes 102701069-102772176/102772199",
+      "bytes": 71108
+    },
+    {
+      "range": "bytes=0-29",
+      "content_range": "bytes 0-29/102772199",
+      "bytes": 30
+    },
+    {
+      "range": "bytes=111-222532",
+      "content_range": "bytes 111-222532/102772199",
+      "bytes": 222422
+    }
+  ],
+  "downloaded_zip_bytes": 359117,
+  "catalogue_url": "https://apitempo.inmet.gov.br/estacoes/T",
+  "station": {
+    "CD_OSCAR": "0-2000-0-86715",
+    "DC_NOME": "BRASILIA",
+    "FL_CAPITAL": "N",
+    "DT_FIM_OPERACAO": null,
+    "CD_SITUACAO": "Operante",
+    "TP_ESTACAO": "Automatica",
+    "VL_LATITUDE": "-15.78944444",
+    "CD_WSI": "0-76-0-5300108000000001",
+    "CD_DISTRITO": " 10",
+    "VL_ALTITUDE": "1160.96",
+    "SG_ESTADO": "DF",
+    "SG_ENTIDADE": "INMET",
+    "CD_ESTACAO": "A001",
+    "VL_LONGITUDE": "-47.92583332",
+    "DT_INICIO_OPERACAO": "2000-05-06T21:00:00.000-03:00"
+  },
+  "tls_verification": true
+}

@@ -5,6 +5,8 @@ import type { LocationCandidate } from '@/types/api'
 export function useLocationSearch() {
   const suggestions = ref<LocationCandidate[]>([])
   const searching = ref(false)
+  const failed = ref(false)
+  const completed = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
   let controller: AbortController | undefined
   let sequence = 0
@@ -17,6 +19,8 @@ export function useLocationSearch() {
     controller = undefined
     searching.value = false
     suggestions.value = []
+    failed.value = false
+    completed.value = false
   }
 
   function schedule(query: string) {
@@ -29,9 +33,16 @@ export function useLocationSearch() {
       controller = new AbortController()
       try {
         const result = await searchLocations(normalized, controller.signal)
-        if (requestSequence === sequence) suggestions.value = result
+        if (requestSequence === sequence) {
+          suggestions.value = result
+          completed.value = true
+        }
       } catch (error) {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) suggestions.value = []
+        if (requestSequence === sequence
+          && !(error instanceof DOMException && error.name === 'AbortError')) {
+          suggestions.value = []
+          failed.value = true
+        }
       } finally {
         if (requestSequence === sequence) searching.value = false
       }
@@ -39,5 +50,5 @@ export function useLocationSearch() {
   }
 
   onBeforeUnmount(clear)
-  return { suggestions, searching, schedule, clear }
+  return { suggestions, searching, failed, completed, schedule, clear }
 }

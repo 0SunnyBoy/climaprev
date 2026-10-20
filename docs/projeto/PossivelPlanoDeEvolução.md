@@ -1,8 +1,11 @@
 # Possível Plano de Evolução — ClimaPrev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 **Natureza:** plano inicial de evolução. As propostas abaixo não representam
 sozinhas o estado atual; consulte [STATE](STATE.md) e [ROADMAP](ROADMAP.md)
-para o status atualizado em 18 de setembro de 2026. Itens já implementados
+para o status vigente de 20/10/2026. Itens já implementados
 permanecem aqui como registro da origem do planejamento.
 
 Este documento consolida o plano de evolução da ClimaPrev a partir da análise atual de arquitetura, backend, frontend, segurança, performance, testes e operação.

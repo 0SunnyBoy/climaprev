@@ -1,0 +1,6 @@
+# Windows test environment; shared packages remain pinned by the existing lock.
+-r requirements-dev.lock
+colorama==0.4.6 ; sys_platform == "win32" \
+    --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
+tzdata==2026.5 ; sys_platform == "win32" \
+    --hash=sha256:b683bd1b6659ddcd810ff02ad09ba821d4bf1065072805063eb35c49617905ac

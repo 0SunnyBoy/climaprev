@@ -1,9 +1,7 @@
-"""Validate the risk policy with Open-Meteo historical forecast runs.
+"""Collect quality-checked historical inputs, or replay saved inputs without network I/O.
 
-This is an offline analysis command, not a production API route. It compares
-archived forecasts from fixed lead times with historical weather data and
-writes only an aggregate report. No database is required and no calibration is
-activated automatically.
+The observed target is frozen reference-v1 on reanalysis. Results diagnose
+meteorological agreement; they neither validate impacts nor activate a policy.
 """
 
 from __future__ import annotations
@@ -11,34 +9,34 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
-from collections.abc import Sequence
-from dataclasses import asdict, dataclass
-from datetime import UTC, date, datetime, timedelta
+from dataclasses import asdict, dataclass, field
+from datetime import date
 from math import isfinite
 from pathlib import Path
+from typing import Any
 from zoneinfo import ZoneInfo
 
 import httpx
 
+from climaprev.application.errors import (
+    ProviderPermanentError,
+    ProviderTransientError,
+    WeatherDataInvalid,
+)
 from climaprev.config import Settings
-from climaprev.domain.models import CanonicalLocation, DailyForecast, DatePeriod, NormalizedForecast
-from climaprev.domain.risk_evaluator import RiskEvaluator
-from climaprev.domain.risk_policy import RiskPolicy
-from climaprev.domain.risk_validation import (
-    HistoricalRiskCase,
-    RiskValidationReport,
-    validate_policy,
+from climaprev.domain.models import CanonicalLocation, DatePeriod
+from climaprev.domain.risk_validation import RiskValidationReport
+from climaprev.infrastructure.http.client import AsyncJsonHttpClient
+from climaprev.tools.historical_experiment import (
+    digest,
+    evaluate_snapshots,
+    load_snapshot,
+    save_snapshot,
+    snapshot,
 )
-from climaprev.infrastructure.http.client import AsyncJsonHttpClient, WeatherDataInvalid
 
-_FIELDS = (
-    "temperature_2m",
-    "relative_humidity_2m",
-    "precipitation",
-    "wind_gusts_10m",
-    "weather_code",
-)
-_MAX_PERIOD_DAYS = 31
+_FIELDS = ("temperature_2m", "relative_humidity_2m", "precipitation",
+           "wind_gusts_10m", "weather_code")
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,13 +47,23 @@ class HistoricalValidationConfig:
     end: date
     lead_days: int
     timezone: str = "auto"
+    minimum_coverage: float = 1.0
+    forecast_model: str = "gfs_global"
+    observed_model: str = "era5"
 
     def __post_init__(self) -> None:
-        period = DatePeriod(self.start, self.end)
-        if period.days > _MAX_PERIOD_DAYS:
-            raise ValueError(f"historical validation is limited to {_MAX_PERIOD_DAYS} days")
-        if not 1 <= self.lead_days <= 7:
+        if DatePeriod(self.start, self.end).days > 31:
+            raise ValueError("historical validation is limited to 31 days per collection")
+        if (isinstance(self.lead_days, bool) or not isinstance(self.lead_days, int)
+                or not 1 <= self.lead_days <= 7):
             raise ValueError("lead_days must be between 1 and 7")
+        CanonicalLocation("experiment", self.latitude, self.longitude, "UTC", "experiment")
+        if self.timezone != "auto":
+            ZoneInfo(self.timezone)
+        if not isfinite(self.minimum_coverage) or not 0 < self.minimum_coverage <= 1:
+            raise ValueError("minimum_coverage must be between zero (exclusive) and one")
+        if not self.forecast_model.strip() or not self.observed_model.strip():
+            raise ValueError("forecast and observed models must be explicit")
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,227 +75,125 @@ class HistoricalValidationResult:
     report: RiskValidationReport
     forecast_source: str
     observed_source: str
+    comparison: dict[str, Any]
+    inputs: dict[str, Any] = field(repr=False)
 
 
 async def collect_and_validate(
-    config: HistoricalValidationConfig,
-    *,
-    settings: Settings | None = None,
+    config: HistoricalValidationConfig, *, settings: Settings | None = None,
+    save_input: Path | None = None,
 ) -> HistoricalValidationResult:
-    """Collect a bounded historical sample and evaluate the current policy."""
-
-    current_settings = settings or Settings(environment="test")
-    location = CanonicalLocation(
-        name=f"{config.latitude:.4f},{config.longitude:.4f}",
-        latitude=config.latitude,
-        longitude=config.longitude,
-        timezone="UTC",
-        source="open-meteo-historical-validation",
-    )
+    """Two bounded provider calls; no Redis or public application side effects."""
+    current = settings or Settings(environment="test")
+    forecast_url = f"{current.historical_forecast_base_url.rstrip('/')}/v1/forecast"
+    observed_url = f"{current.historical_weather_base_url.rstrip('/')}/v1/archive"
+    forecast_params = _forecast_params(config)
+    observed_params = _observed_params(config)
     async with httpx.AsyncClient() as client:
-        http = AsyncJsonHttpClient(client, current_settings)
-        forecast_payload = await http.get_json(
-            f"{current_settings.historical_forecast_base_url.rstrip('/')}/v1/forecast",
-            _forecast_params(config),
-        )
-        observed_payload = await http.get_json(
-            f"{current_settings.historical_weather_base_url.rstrip('/')}/v1/archive",
-            _observed_params(config),
-        )
+        http = AsyncJsonHttpClient(client, current)
+        forecast = await http.get_json(forecast_url, forecast_params)
+        observed = await http.get_json(observed_url, observed_params)
+    configuration = asdict(config)
+    configuration["start"] = config.start.isoformat()
+    configuration["end"] = config.end.isoformat()
+    inputs = snapshot(configuration, forecast, observed, {
+        "forecast": {"url": forecast_url, "params": forecast_params},
+        "observed": {"url": observed_url, "params": observed_params},
+    })
+    if save_input is not None:
+        save_snapshot(save_input, inputs)
+    return replay(inputs)
 
-    forecast_timezone = _timezone(forecast_payload.get("timezone"))
-    observed_timezone = _timezone(observed_payload.get("timezone"))
+
+def replay(inputs: dict[str, Any]) -> HistoricalValidationResult:
+    comparison = evaluate_snapshots([inputs])
+    config = inputs["configuration"]
+    overall = comparison["variants"]["R0"]["overall"]
+    matrix = overall["confusion_matrix"]
+    over = sum(matrix[actual][predicted] for actual in range(3)
+               for predicted in range(3) if predicted > actual)
+    under = sum(matrix[actual][predicted] for actual in range(3)
+                for predicted in range(3) if predicted < actual)
+    report = RiskValidationReport(
+        overall["cases"], overall["correct"], over, under,
+        overall["accuracy"] if overall["accuracy"] is not None else 0.0, "reference-v1",
+    )
     location = CanonicalLocation(
-        name=location.name,
-        latitude=location.latitude,
-        longitude=location.longitude,
-        timezone=forecast_timezone,
-        source=location.source,
+        f"{config['latitude']:.4f},{config['longitude']:.4f}", config["latitude"],
+        config["longitude"], inputs["forecast"]["timezone"], "historical-experiment",
     )
-    forecast_days = _daily_forecasts(
-        forecast_payload, config, field_suffix=f"_previous_day{config.lead_days}",
-        timezone=forecast_timezone,
-    )
-    observed_days = _daily_forecasts(
-        observed_payload, config, field_suffix="", timezone=observed_timezone,
-    )
-    evaluator = RiskEvaluator()
-    policy = RiskPolicy()
-    cases = tuple(
-        HistoricalRiskCase(
-            forecast=_normalized_forecast(location, day, (forecast_days[day],)),
-            observed_level=evaluator.evaluate(
-                _normalized_forecast(location, day, (observed_days[day],)), policy
-            ).level,
-        )
-        for day in sorted(set(forecast_days).intersection(observed_days))
-    )
-    if not cases:
-        raise WeatherDataInvalid("historical APIs returned no aligned daily observations")
     return HistoricalValidationResult(
-        location=location,
-        period=DatePeriod(config.start, config.end),
-        lead_days=config.lead_days,
-        cases=len(cases),
-        report=validate_policy(cases, policy, evaluator),
-        forecast_source="Open-Meteo Previous Runs API",
-        observed_source="Open-Meteo Historical Weather API",
+        location, DatePeriod(date.fromisoformat(config["start"]), date.fromisoformat(config["end"])),
+        config["lead_days"], report.cases, report, "Open-Meteo Previous Runs API",
+        "Open-Meteo Historical Weather API (reanalysis)", comparison, inputs,
     )
+
+
+def _params(config: HistoricalValidationConfig, suffix: str, model: str) -> dict[str, str | float | int]:
+    return {
+        "latitude": config.latitude, "longitude": config.longitude,
+        "start_date": config.start.isoformat(), "end_date": config.end.isoformat(),
+        "timezone": config.timezone, "hourly": ",".join(field + suffix for field in _FIELDS),
+        "temperature_unit": "celsius", "wind_speed_unit": "kmh", "precipitation_unit": "mm",
+        "models": model,
+    }
 
 
 def _forecast_params(config: HistoricalValidationConfig) -> dict[str, str | float | int]:
-    return {
-        "latitude": config.latitude,
-        "longitude": config.longitude,
-        "start_date": config.start.isoformat(),
-        "end_date": config.end.isoformat(),
-        "timezone": config.timezone,
-        "hourly": ",".join(f"{field}_previous_day{config.lead_days}" for field in _FIELDS),
-    }
+    return _params(config, f"_previous_day{config.lead_days}", config.forecast_model)
 
 
 def _observed_params(config: HistoricalValidationConfig) -> dict[str, str | float | int]:
-    return {
-        "latitude": config.latitude,
-        "longitude": config.longitude,
-        "start_date": config.start.isoformat(),
-        "end_date": config.end.isoformat(),
-        "timezone": config.timezone,
-        "hourly": ",".join(_FIELDS),
-    }
-
-
-def _daily_forecasts(
-    payload: dict[str, object],
-    config: HistoricalValidationConfig,
-    *,
-    field_suffix: str,
-    timezone: str,
-) -> dict[date, DailyForecast]:
-    hourly = payload.get("hourly")
-    if not isinstance(hourly, dict):
-        raise WeatherDataInvalid("historical hourly payload must be an object")
-    raw_times = hourly.get("time")
-    if not isinstance(raw_times, list) or not raw_times or not all(isinstance(item, str) for item in raw_times):
-        raise WeatherDataInvalid("historical hourly.time must be a non-empty list")
-    times = tuple(_parse_hour(item, timezone) for item in raw_times)
-    series: dict[str, list[float | None]] = {}
-    for field in _FIELDS:
-        key = f"{field}{field_suffix}"
-        values = hourly.get(key)
-        if not isinstance(values, list) or len(values) != len(times):
-            raise WeatherDataInvalid(f"historical hourly.{key} is missing or misaligned")
-        series[field] = [_number(value) for value in values]
-
-    result: dict[date, DailyForecast] = {}
-    for day_index in range(DatePeriod(config.start, config.end).days):
-        day = config.start + timedelta(days=day_index)
-        indexes = [index for index, timestamp in enumerate(times) if timestamp.date() == day]
-        if not indexes:
-            continue
-        temperatures = _values(series["temperature_2m"], indexes)
-        precipitation = _values(series["precipitation"], indexes)
-        gusts = _values(series["wind_gusts_10m"], indexes)
-        humidity = _values(series["relative_humidity_2m"], indexes)
-        codes = [series["weather_code"][index] for index in indexes]
-        result[day] = DailyForecast(
-            date=day,
-            temperature_min_c=min(temperatures) if temperatures else None,
-            temperature_max_c=max(temperatures) if temperatures else None,
-            temperature_mean_c=_mean(temperatures),
-            humidity_mean_pct=_mean(humidity),
-            precipitation_sum_mm=sum(precipitation) if precipitation else None,
-            precipitation_probability_max_pct=None,
-            precipitation_max_hourly_mm=max(precipitation) if precipitation else None,
-            wind_max_kmh=None,
-            wind_gust_max_kmh=max(gusts) if gusts else None,
-            weather_code=next((int(code) for code in codes if code is not None), None),
-        )
-    return result
-
-
-def _normalized_forecast(
-    location: CanonicalLocation,
-    day: date,
-    days: tuple[DailyForecast, ...],
-) -> NormalizedForecast:
-    return NormalizedForecast(
-        location=location,
-        period=DatePeriod(day, day),
-        days=days,
-        provider="open-meteo-historical",
-        fetched_at=datetime.now(UTC),
-        is_stale=False,
-        missing_fields=(),
-    )
-
-
-def _timezone(value: object) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise WeatherDataInvalid("historical timezone is missing")
-    try:
-        ZoneInfo(value)
-    except (KeyError, ValueError) as error:
-        raise WeatherDataInvalid("historical timezone is invalid") from error
-    return value
-
-
-def _parse_hour(value: str, timezone: str) -> datetime:
-    try:
-        parsed = datetime.fromisoformat(value)
-    except ValueError as error:
-        raise WeatherDataInvalid("historical hourly timestamps are invalid") from error
-    return parsed if parsed.tzinfo is not None else parsed.replace(tzinfo=ZoneInfo(timezone))
-
-
-def _number(value: object) -> float | None:
-    if value is None:
-        return None
-    if isinstance(value, bool) or not isinstance(value, int | float) or not isfinite(value):
-        raise WeatherDataInvalid("historical values must be finite numbers or null")
-    return float(value)
-
-
-def _values(series: Sequence[float | None], indexes: list[int]) -> list[float]:
-    return [value for index in indexes if (value := series[index]) is not None]
-
-
-def _mean(values: list[float]) -> float | None:
-    return sum(values) / len(values) if values else None
+    return _params(config, "", config.observed_model)
 
 
 def _result_json(result: HistoricalValidationResult) -> dict[str, object]:
     return {
         "location": asdict(result.location),
         "period": {"start": result.period.start.isoformat(), "end": result.period.end.isoformat()},
-        "lead_days": result.lead_days,
-        "cases": result.cases,
-        "report": asdict(result.report),
+        "lead_days": result.lead_days, "cases": result.cases, "report": asdict(result.report),
         "sources": {"forecast": result.forecast_source, "observed": result.observed_source},
+        "dataset_sha256": digest(result.inputs), "comparison": result.comparison,
     }
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--latitude", type=float, required=True)
-    parser.add_argument("--longitude", type=float, required=True)
-    parser.add_argument("--start", type=date.fromisoformat, required=True)
-    parser.add_argument("--end", type=date.fromisoformat, required=True)
-    parser.add_argument("--lead-days", type=int, choices=range(1, 8), default=1)
+    parser.add_argument("--input", type=Path, help="replay a checksum-verified snapshot without network")
+    parser.add_argument("--save-input", type=Path, help="save immutable raw inputs and provenance")
+    parser.add_argument("--latitude", type=float)
+    parser.add_argument("--longitude", type=float)
+    parser.add_argument("--start", type=date.fromisoformat)
+    parser.add_argument("--end", type=date.fromisoformat)
+    parser.add_argument("--lead-days", type=int, choices=range(1, 8))
+    parser.add_argument("--timezone")
+    parser.add_argument("--minimum-coverage", type=float)
+    parser.add_argument("--forecast-model")
+    parser.add_argument("--observed-model")
     parser.add_argument("--output", type=Path)
     return parser
 
 
 async def _run(args: argparse.Namespace) -> int:
-    config = HistoricalValidationConfig(
-        latitude=args.latitude,
-        longitude=args.longitude,
-        start=args.start,
-        end=args.end,
-        lead_days=args.lead_days,
-    )
-    result = await collect_and_validate(config)
-    payload = json.dumps(_result_json(result), ensure_ascii=False, indent=2) + "\n"
+    if args.input is not None:
+        if args.save_input is not None or any(getattr(args, key) is not None for key in (
+            "latitude", "longitude", "start", "end", "lead_days", "timezone",
+            "minimum_coverage", "forecast_model", "observed_model",
+        )):
+            raise ValueError("replay must not be combined with collection parameters")
+        result = replay(load_snapshot(args.input))
+    else:
+        if any(getattr(args, key) is None for key in ("latitude", "longitude", "start", "end")):
+            raise ValueError("collection requires latitude, longitude, start and end")
+        result = await collect_and_validate(HistoricalValidationConfig(
+            args.latitude, args.longitude, args.start, args.end,
+            args.lead_days if args.lead_days is not None else 1,
+            args.timezone if args.timezone is not None else "auto",
+            args.minimum_coverage if args.minimum_coverage is not None else 1.0,
+            args.forecast_model if args.forecast_model is not None else "gfs_global",
+            args.observed_model if args.observed_model is not None else "era5",
+        ), save_input=args.save_input)
+    payload = json.dumps(_result_json(result), ensure_ascii=False, indent=2, allow_nan=False) + "\n"
     if args.output is None:
         print(payload, end="")
     else:
@@ -301,7 +207,8 @@ def main() -> None:
     args = _parser().parse_args()
     try:
         raise SystemExit(asyncio.run(_run(args)))
-    except (ValueError, WeatherDataInvalid) as error:
+    except (ValueError, WeatherDataInvalid, OSError, TypeError, KeyError,
+            ProviderPermanentError, ProviderTransientError) as error:
         raise SystemExit(f"historical validation failed: {error}") from error
 
 

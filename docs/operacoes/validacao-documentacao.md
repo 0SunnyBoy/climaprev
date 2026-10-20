@@ -1,5 +1,8 @@
 # Validação e rastreabilidade documental
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 **Data:** 2026-09-23. **Escopo:** rastreabilidade atualizada após a análise
 documental inicial de 2026-09-13. [Índice](../projeto/PROJECT.md).
 

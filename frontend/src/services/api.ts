@@ -3,6 +3,7 @@ import type {
   RiskQueryPayload,
   RiskResponse,
 } from '@/types/api'
+import { apiUrl } from '@/config/api'
 
 export class QueryError extends Error {
   readonly code: string
@@ -123,7 +124,7 @@ function errorFromResponse(response: Response, data: unknown): QueryError {
 export async function queryRisk(payload: RiskQueryPayload, signal?: AbortSignal): Promise<RiskResponse> {
   let response: Response
   try {
-    response = await fetch('/api/v1/risk', {
+    response = await fetch(apiUrl('/api/v1/risk'), {
       method: 'POST',
       signal,
       cache: 'no-store',
@@ -147,16 +148,18 @@ export async function queryRisk(payload: RiskQueryPayload, signal?: AbortSignal)
 }
 
 export async function searchLocations(query: string, signal?: AbortSignal): Promise<LocationCandidate[]> {
-  const response = await fetch(`/api/v1/locations/search?query=${encodeURIComponent(query)}`, {
+  const response = await fetch(apiUrl(`/api/v1/locations/search?query=${encodeURIComponent(query)}`), {
     headers: { Accept: 'application/json' },
     cache: 'no-store',
     credentials: 'omit',
     signal,
   })
-  if (!response.ok) return []
+  if (!response.ok) throw new QueryError('SEARCH_UNAVAILABLE', { status: response.status })
   const data: unknown = await response.json()
-  if (!Array.isArray(data)) return []
-  return data.filter((item): item is LocationCandidate => isRecord(item)
+  if (!Array.isArray(data)) throw new QueryError('MALFORMED_RESPONSE')
+  const candidates = data.filter((item): item is LocationCandidate => isRecord(item)
     && isText(item.name) && isNumber(item.latitude) && isNumber(item.longitude)
     && isText(item.timezone) && isText(item.source))
+  if (candidates.length !== data.length) throw new QueryError('MALFORMED_RESPONSE')
+  return candidates
 }

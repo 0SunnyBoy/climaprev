@@ -2,6 +2,8 @@ services:
   frontend-dev:
     image: node:22-alpine@sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f85
     working_dir: /app
+    environment:
+      API_PROXY_TARGET: http://app:8000
     volumes:
       - ./frontend:/app
       - frontend-dev-node-modules:/app/node_modules

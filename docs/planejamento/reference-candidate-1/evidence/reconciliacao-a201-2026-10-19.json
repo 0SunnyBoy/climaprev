@@ -1,0 +1,68 @@
+{
+  "station": {
+    "code": "A201",
+    "name": "BELEM",
+    "encoding": "cp1252",
+    "raw_metadata": {
+      "REGIAO": "N",
+      "UF": "PA",
+      "ESTACAO": "BELEM",
+      "CODIGO (WMO)": "A201",
+      "LATITUDE": "-1,41111111",
+      "LONGITUDE": "-48,43944444",
+      "ALTITUDE": "21,17",
+      "DATA DE FUNDACAO": "20/01/03"
+    },
+    "latitude": -1.41111111,
+    "longitude": -48.43944444,
+    "altitude": 21.17
+  },
+  "month": "2025-01-01",
+  "csv_sha256": "2d2b3bbac55662a9d475c141819c0935401899644b862598560d551607d41621",
+  "published_rain_mm": 417.0,
+  "windows": [
+    {
+      "convention": "utc-timestamp",
+      "start_utc": "2025-01-01T00:00:00+00:00",
+      "end_utc": "2025-02-01T00:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.0,
+      "difference_from_bulletin_mm": 10.0
+    },
+    {
+      "convention": "utc-preceding-hour",
+      "start_utc": "2025-01-01T00:00:00+00:00",
+      "end_utc": "2025-02-01T00:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.0,
+      "difference_from_bulletin_mm": 10.0
+    },
+    {
+      "convention": "belem-civil-preceding-hour",
+      "start_utc": "2025-01-01T03:00:00+00:00",
+      "end_utc": "2025-02-01T03:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.6,
+      "difference_from_bulletin_mm": 10.6
+    },
+    {
+      "convention": "12utc-preceding-hour-diagnostic",
+      "start_utc": "2025-01-01T12:00:00+00:00",
+      "end_utc": "2025-02-01T12:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.6,
+      "difference_from_bulletin_mm": 10.6
+    }
+  ],
+  "scientific_approval": false,
+  "calibration_ready": false,
+  "limitation": "Window diagnostics cannot establish source revisions, sensor quality or the bulletin aggregation convention."
+}

@@ -180,6 +180,8 @@ class ForecastQueryService:
             self._metrics.record_risk_evaluation(forecast_risk)
             self._metrics.record_missing_fields(forecast.missing_fields)
         official_alerts = await self._get_official_alerts(location, period)
+        if self._metrics is not None:
+            self._metrics.record_official_alert_status(official_alerts.status)
         response_forecast_risk = _response_risk(forecast_risk, query.temperature_unit)
         risk_overview = _risk_overview(
             forecast_risk, official_alerts, period, forecast.location.timezone
@@ -401,13 +403,19 @@ class ForecastQueryService:
             cached = await self._cache.get(cache_key)
         except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
             cached = None
-        if cached is not None:
+        if (cached is not None and not cached.is_stale and cached.expires_at is not None
+                and self._now() < cached.expires_at):
             cached_result = _official_alerts_from_cache(cached.value)
-            if cached_result is not None:
-                return cached_result
+            if cached_result is not None and all(
+                alert.expires_at is not None and self._now() < alert.expires_at
+                for alert in cached_result.items
+            ):
+                return replace(cached_result, items=_deliverable_alerts(
+                    cached_result.items, location, period, self._now()))
 
         try:
             alerts = await self._official_alert_provider.get_alerts(location, period)
+            alert_items = _deliverable_alerts(tuple(alerts), location, period, self._now())
         except Exception:  # noqa: BLE001 - optional alert providers must not block the forecast.
             unavailable = OfficialAlertsResult(status="unavailable", items=())
             try:
@@ -420,7 +428,6 @@ class ForecastQueryService:
             except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
                 return unavailable
             return unavailable
-        alert_items = tuple(alerts)
         available = OfficialAlertsResult(status="available", items=alert_items)
         try:
             await self._cache.set(
@@ -430,8 +437,10 @@ class ForecastQueryService:
                 _OFFICIAL_ALERTS_STALE_TTL_SECONDS,
             )
         except Exception:  # noqa: BLE001 - optional cache must not block the forecast.
-            return available
-        return available
+            return replace(available, items=_deliverable_alerts(
+                available.items, location, period, self._now()))
+        return replace(available, items=_deliverable_alerts(
+            available.items, location, period, self._now()))
 
     def _metrics_record_cache(self, status: str) -> None:
         if self._metrics is not None:
@@ -478,12 +487,29 @@ def _official_alerts_key(location: CanonicalLocation, period: DatePeriod) -> str
             location.longitude,
             period.start.isoformat(),
             period.end.isoformat(),
-            "inmet-alerts-v1",
+            location.timezone,
+            "inmet-alerts-v2",
         ],
         separators=(",", ":"),
         allow_nan=False,
     )
     return "official-alerts:v1:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def _deliverable_alerts(
+    alerts: tuple[OfficialAlert, ...], location: CanonicalLocation, period: DatePeriod, now: datetime,
+) -> tuple[OfficialAlert, ...]:
+    zone = ZoneInfo(location.timezone)
+    start = datetime.combine(period.start, datetime.min.time(), zone)
+    end = datetime.combine(period.end + timedelta(days=1), datetime.min.time(), zone)
+    result = []
+    for alert in alerts:
+        if (alert.effective_at.tzinfo is None or alert.expires_at is None
+                or alert.expires_at.tzinfo is None or alert.expires_at <= alert.effective_at):
+            raise ValueError("official alert has unknown or invalid validity")
+        if alert.expires_at > now and alert.effective_at < end and alert.expires_at > start:
+            result.append(alert)
+    return tuple(result)
 
 
 def _official_alerts_to_cache(result: OfficialAlertsResult) -> dict[str, object]:
@@ -531,6 +557,8 @@ def _official_alerts_from_cache(value: object) -> OfficialAlertsResult | None:
             or event is None
             or severity is None
             or effective_at is None
+            or expires_at is None
+            or (expires_at is not None and effective_at is not None and expires_at <= effective_at)
             or (expires_at_value is not None and expires_at is None)
             or geographic_scope is None
             or (source_url_value is not None and source_url is None)

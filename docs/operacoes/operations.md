@@ -1,5 +1,10 @@
 # Operação do ClimaPrev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+>
+> Operação atual: origem pública da API configurada no build do frontend, Composes próprios e modo integrado mantido; prazo cooperativo padrão de consulta 7 s. INMET real e CI remota da revisão local pendentes. Hospedagem/publicação adiada; templates de monitoramento não provisionados.
+
 ## Configuração e saúde
 
 As variáveis usam o prefixo `CLIMAPREV_`: `REDIS_URL` (também aceito por
@@ -23,9 +28,7 @@ health check; API e Redis não publicam portas diretas.
 ## Integração contínua
 
 O workflow [CI](../../.github/workflows/ci.yml) executa em cada `push`, Pull
-Request ou acionamento manual. Ele valida o Compose, constrói a imagem,
-executa testes, Ruff e mypy, testa a configuração do Nginx e verifica a
-resposta do frontend. A CI valida o código em um runner temporário e não faz
+Request ou acionamento manual. A revisão local valida Composes integrado/API-only/frontend-only, builds separados, lint/Vitest/auditoria Node, pytest, Ruff/mypy, isolamento do runtime, Nginx/HTTP e gate HTTPS entre origens distintas. O GitHub ainda usa o workflow anterior até o envio dos commits revisados; aprovação remota antiga não valida o diff local. A CI valida o código em um runner temporário e não faz
 deploy.
 
 ## Observabilidade e privacidade
@@ -76,7 +79,7 @@ Smoke curto:
 
 ```bash
 docker compose --profile load build load provider-mock app-load
-docker compose --profile load up -d provider-mock app-load
+docker compose --profile load up -d --wait provider-mock app-load
 docker compose --profile load run --rm --no-deps load locust -f tests/load/locustfile.py --host http://app-load:8000 --headless --users 2 --spawn-rate 2 --run-time 10s --only-summary
 ```
 
@@ -94,7 +97,7 @@ export CLIMAPREV_LOAD_REQUESTS_PER_SECOND_PER_USER=1
 export CLIMAPREV_LOAD_RATE_LIMIT=100000
 export CLIMAPREV_LOAD_RATE_LIMIT_BURST=100000
 docker compose --profile load build load provider-mock app-load
-docker compose --profile load up -d provider-mock app-load
+docker compose --profile load up -d --wait provider-mock app-load
 docker compose --profile load run --rm --no-deps load locust -f tests/load/locustfile.py --host http://app-load:8000 --headless --users 100 --spawn-rate 100 --run-time 10m --only-summary
 ```
 
@@ -144,3 +147,10 @@ e reposição 100000 por 60 s, exclusiva do provider mock. Os overrides são
 e `CLIMAPREV_LOAD_PROVIDER_BUDGET_WINDOW_SECONDS`. Essa configuração não muda
 a cota do app público. Separar recusas 503 por orçamento de medições de
 processamento; não interpretar o limite como capacidade do Open-Meteo.
+
+
+### Métricas e validação local — 20/10/2026
+
+Exporter privado `/internal/metrics/prometheus`, habilitado por `CLIMAPREV_METRICS_AGGREGATION_ENABLED` (false por padrão), com snapshots por worker em Redis a cada 5 s e lease de 20 s. Leitura limitada a 256 workers e 2 s; incompletude/indisponibilidade retorna 503. Nginx bloqueia acesso público a `/internal/`. Usar taxas por worker e histogramas cumulativos agregados, sem médias de percentis. Atualizar ACLs existentes de forma controlada para ZADD/ZRANGE/ZREMRANGEBYSCORE no namespace antes da habilitação; o provisionador atualizado não altera credenciais antigas automaticamente. Templates em `monitoramento/` ainda não são serviços instalados; retenção proposta de 30 dias exige armazenamento externo próprio. Destinos e limiares precisam de validação operacional futura.
+
+Prazo global do serviço público: padrão 7 s, máximo configurável 8 s, cancelamento cooperativo com cleanup; cliente aguarda 10 s. Transporte/parsing/rate limit anteriores ao serviço não estão incluídos. Carga local limitada: 3.000 requisições sem falhas em cinco cenários, não benchmark da futura hospedagem. Ver relatório `execucao-frentes-1-a-7-2026-10-20.md`. Hospedagem adiada por orientação do usuário.

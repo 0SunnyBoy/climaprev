@@ -38,6 +38,8 @@ services:
       - log-socket:/run/climaprev-logs:ro
     environment:
       CLIMAPREV_ENVIRONMENT: production
+      CLIMAPREV_METRICS_AGGREGATION_ENABLED: 'true'
+      CLIMAPREV_QUERY_TOTAL_TIMEOUT_SECONDS: ${CLIMAPREV_QUERY_TOTAL_TIMEOUT_SECONDS:-7}
       CLIMAPREV_ALLOWED_HOSTS: ${CLIMAPREV_ALLOWED_HOSTS:-localhost}
       CLIMAPREV_LOG_SOCKET: /run/climaprev-logs/request.sock
       CLIMAPREV_TRUSTED_PROXY_IPS: ${CLIMAPREV_PROXY_IP:-10.253.248.2}
@@ -86,8 +88,8 @@ services:
 
   entrada:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     image: climaprev-homolog-frontend:local
     user: "101:101"
     read_only: true

@@ -1,0 +1,83 @@
+{
+  "users": 10,
+  "seconds_per_scenario": 60,
+  "results": [
+    {
+      "scenario": "warm_cache",
+      "returncode": 0,
+      "requests": 610,
+      "failures": 0,
+      "requests_per_second": 10.324772507996162,
+      "p50_ms": 24.0,
+      "p95_ms": 61.0,
+      "p99_ms": 110.0,
+      "arrival_target_met": true,
+      "passed_local_gate": true
+    },
+    {
+      "scenario": "cold_cache",
+      "returncode": 0,
+      "requests": 600,
+      "failures": 0,
+      "requests_per_second": 10.131398547698186,
+      "p50_ms": 160.0,
+      "p95_ms": 220.0,
+      "p99_ms": 240.0,
+      "arrival_target_met": true,
+      "passed_local_gate": true
+    },
+    {
+      "scenario": "lock_contention",
+      "returncode": 0,
+      "requests": 600,
+      "failures": 0,
+      "requests_per_second": 10.164846191484479,
+      "p50_ms": 30.0,
+      "p95_ms": 63.0,
+      "p99_ms": 610.0,
+      "arrival_target_met": true,
+      "passed_local_gate": true
+    },
+    {
+      "scenario": "slow_upstream",
+      "returncode": 0,
+      "requests": 590,
+      "failures": 0,
+      "requests_per_second": 10.067173986777592,
+      "p50_ms": 540.0,
+      "p95_ms": 580.0,
+      "p99_ms": 610.0,
+      "arrival_target_met": true,
+      "passed_local_gate": true
+    },
+    {
+      "scenario": "redis_latency",
+      "returncode": 0,
+      "requests": 600,
+      "failures": 0,
+      "requests_per_second": 10.140014816306783,
+      "p50_ms": 220.0,
+      "p95_ms": 540.0,
+      "p99_ms": 760.0,
+      "arrival_target_met": true,
+      "passed_local_gate": true
+    }
+  ],
+  "all_scenarios_finished": true,
+  "production_capacity_approved": false,
+  "limitations": "Shared host with bounded containers, two API workers and mock provider; not dedicated infrastructure or real-provider availability validation.",
+  "updated_utc": "2026-10-20T16:48:03.917332+00:00",
+  "reporting_revision": "timestamp renamed from started_utc: it was a report-update timestamp, not campaign start",
+  "api_workers": 2,
+  "source_mode": "locked dependency images plus read-only source/test mounts; shared Docker Desktop host",
+  "source_sha256_at_completion": {
+    "docker-compose.yml": "e5ed9b56ddd74f168f2d25fce70c704f445ee4028d7c0f035b78d055af0d4c17",
+    "docker/load-bounded.yml": "3409cc7f12deaf821b21a4495d94e5b619f40edf012709b53a365b3ed86ba41f",
+    "tests/load/scenarios.py": "2bae18da293bd907662a6d0d7fcc04960f596071fc0cd29a92b33f383e4536eb",
+    "tests/load/mock_provider.py": "31775aeff7aa6771a3cc2a921b44e7bba9c82fc167d8d8f49f7775cf767661a9",
+    "tests/load/locustfile.py": "79119854cb767fa64083c87d79e4dc248fe5955a1bdfcd801908387665f92115",
+    "src/climaprev/config.py": "4c3fe524ec5c642ea9aabf828a5cdc18c3e9ef40e8c0d63d2fa47025dce1f019",
+    "src/climaprev/api/routes/risk.py": "c99997338950a41333f6f9b6556ddb9c80b305ed7e521dddfac5c076e47db94b",
+    "src/climaprev/application/services/forecast_query.py": "e1fa344f70667fd7b7d1473367627dab840dc454349ea2560e379ee61ace7290"
+  }
+}

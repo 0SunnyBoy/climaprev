@@ -1,127 +1,26 @@
 # ClimaPrev - Handoff de retomada
 
-## Estado atual da cópia correta — 2026-09-23
+## Atualização vigente — 20/10/2026
 
-O trabalho atual ocorre em `climaprev-Atualizacao-Geral-V3`, na branch
-`Atualizacao-Geral-V3`, conectada a `origin/Atualizacao-Geral-V3`. O rework do
-frontend Vue 3 + TypeScript, o build Docker e a validação local integrada foram
-concluídos. As alterações ainda não foram commitadas nem enviadas.
+Versão 0.1.0 de backend/frontend em desenvolvimento, branch develop na base 23bf4ce, com alterações sem commit/push. O [STATE](STATE.md) consolida implementações e evidências; o [RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md) define pendências.
 
-O próximo passo é revisar o diff, criar o commit e publicar a branch. A pasta
-`.homolog/` permanece local e ausente desta cópia; a homologação real exige
-provisionamento separado e não deve receber segredos do Git.
+Concluídos localmente: desacoplamento, janela UTC de sete datas, validade/cobertura conservadora de avisos, prazo global cooperativo, interface revisada, CI configurada, métricas por worker e campanha de carga. 644 testes backend e 27 frontend, checks estáticos/build e gate HTTPS aprovados; 3.000 requisições locais sem falhas. Resultados não aprovam produção ou candidata científica.
 
-O restante deste documento é um registro histórico do handoff de 2026-08-29.
+Ordem atual: (1) INMET real; (2) revisão/publicação do diff quando autorizada e CI remota; (3) revisão científica preparatória; (4) critérios de aprovação; (6 da lista original) acessibilidade manual. Por último, evolução da candidate-1 focada explicitamente em qualidade e precisão da previsão. Reference-v1 preservada; nenhum ajuste/calibração/promoção. Horizonte de 14 dias só planejado. Hospedagem adiada; monorepo mantido; não atualizar PDF acadêmico.
 
-> Para retomar a segurança da branch `Atualizacao-Geral-V3`, leia primeiro o
-> [contexto de 2026-09-21](../planejamento/seguranca-configuracao-segredos/context.md).
-> A implementação está pausada e incompleta. O registro abaixo é histórico e
-> não representa a validação desse checkpoint.
+GitHub: CI da base passou; Security gates falhou no teste de tema. Correção local ainda sem rerun remoto; develop sem proteção/checks obrigatórios. Preservar alterações acumuladas, não incluir segredos/.homolog/dados brutos/artefatos locais no envio. Protocolos e evidências congelados não devem ser reescritos.
 
-> Registro histórico de 2026-08-29. Para o estado atual, consulte [STATE](STATE.md),
-> [ROADMAP](ROADMAP.md) e [Implementations and refactoring](ImplementationsAndRefactoring.md).
+## Histórico
 
-Data: 2026-08-29
-Estado: **Task 9 concluída e aprovada; trabalho pausado.**
+Os registros anteriores estão no [arquivo histórico](handoff-HISTORICO-ATE-2026-10-20.md). Eles não redefinem as prioridades ou o estado vigente.
 
-## Estado técnico
 
-O backend MVP FastAPI está implementado como monólito modular stateless, com:
+## Próxima sessão de trabalho
 
-- `GET /api/v1/risk` por texto ou coordenadas, período de até sete dias;
-- seleção de `temperature_unit=celsius|fahrenheit`, com cálculo canônico em
-  Celsius;
-- adaptadores Open-Meteo protegidos por portas de aplicação;
-- política de risco determinística, versionada e explicitamente heurística;
-- `official_alerts` separado e `not_configured`;
-- Redis para cache, stale fallback, lock distribuído e rate limit;
-- request ID, logs estruturados, métricas e health checks;
-- perfil Docker de carga com app FastAPI real, Redis real e mock Open-Meteo.
+1. Conferir `git status`, preservar alterações e ler o RDP antes de staging. Não executar `git add .` sem revisar arquivos e ignorados.
+2. INMET: consultar `docs/operacoes/evidence/inmet-retomada-2026-10-20.json`; diferenciar conectividade da API de avisos e obtenção dos CSVs históricos, que já ocorreu. Não concluir causa de rede sem evidência.
+3. CI: consultar `docs/operacoes/evidence/github-estado-2026-10-20.json`; falha remota foi tema no navegador. Correção de espera já existe localmente em `tests/docker/check_frontend_browser.py`; não alegar rerun do workflow antigo nem confundir runner Python com gate JS/Edge aprovado.
+4. Manter revisão científica/aceite como preparação; não abrir outcomes reservados, escolher limiares ou ativar correção estatística.
+5. Executar acessibilidade manual quando houver leitor de tela disponível; registrar ferramenta/versão, cenários e limitações. Não encerrar essa pendência com teste DOM automatizado.
 
-## Evidências
-
-- `docker compose run --rm app pytest -q -W error`: **148 passed**.
-- `docker compose run --rm app ruff check src tests`: passou.
-- `docker compose run --rm app mypy src`: passou em 32 arquivos.
-- Suite de carga: **16 test cases passed**.
-- Baseline final: 60.000 requisições em 600 s, 100,14 req/s, p50/p95/p99
-  120/160/180 ms, 0 falhas, 0 respostas 5xx e 0 respostas 429.
-- Cenários de 30 s: `cold_cache` p95 140 ms, `lock_contention` p95 65 ms,
-  `slow_upstream` p95 410 ms e `redis_latency` p95 430 ms; todos sem falhas.
-- Revisão independente final: **APPROVED**, sem achados médios ou altos.
-
-Artefatos de evidência:
-
-- `.superpowers/sdd/climaprev-backend-mvp/task-9-baseline-20260829-final.txt`
-- `.superpowers/sdd/climaprev-backend-mvp/task-9-scenario-measurements-20260829.txt`
-- `.superpowers/sdd/climaprev-backend-mvp/task-9-report.md`
-- `.superpowers/sdd/climaprev-backend-mvp/task-9-review.md`
-
-## Documentação de referência
-
-A lista abaixo é somente para leitura e retomada de contexto; não é uma lista
-de arquivos para upload. O diretório `.specs/` fica explicitamente fora de
-qualquer staging, commit ou push.
-
-Leia, nesta ordem:
-
-1. `.specs/STATE.md`
-2. `.specs/features/climaprev-backend-mvp/context.md`
-3. `.specs/features/climaprev-backend-mvp/spec.md`
-4. `.specs/features/climaprev-backend-mvp/design.md`
-5. `.specs/features/climaprev-backend-mvp/tasks.md`
-6. `docs/superpowers/plans/climaprev-backend-mvp.md`
-7. `.superpowers/sdd/climaprev-backend-mvp/task-9-report.md`
-8. `.superpowers/sdd/climaprev-backend-mvp/task-9-review.md`
-
-## Processo na próxima retomada
-
-Siga esta sequência quando o usuário autorizar a retomada:
-
-1. Reabra o workspace `C:\Users\sammt\OneDrive\Documentos\ClimaPrev`.
-2. Leia este handoff e os documentos de referência acima.
-3. Confirme o estado pausado e o último resultado validado.
-4. Aguarde o usuário definir e aprovar o próximo escopo.
-5. Crie um brief específico antes de alterar código ou testes.
-6. Aplique TDD, implemente com subagentes e execute os testes dentro do Docker.
-7. Solicite revisão independente entre as tasks e corrija achados antes de
-   avançar.
-8. Atualize o relatório da task, `progress.md`, `.specs/STATE.md` e este
-   handoff com evidências reais.
-9. Pare containers temporários ao finalizar a sessão.
-
-Não iniciar trabalho novo nem despachar subagentes antes da confirmação
-explícita do usuário. Não remover volumes, imagens ou arquivos do projeto.
-
-## Git na próxima retomada
-
-O Git passa a fazer parte do fluxo de trabalho a partir da próxima sessão.
-Depois de reabrir o terminal, verifique a instalação e o estado do repositório:
-
-```powershell
-git --version
-git status --short --branch
-```
-
-Se `git` ainda não for reconhecido, reabra o terminal para atualizar o `PATH`
-antes de continuar. Quando houver um repositório válido, crie ou selecione uma
-branch de trabalho, revise o diff e use staging explícito por allowlist.
-
-Não usar `git add .`. O diretório `.specs/` é material de planejamento e
-contexto e não deve entrar na lista de arquivos a subir: nunca deve ser
-adicionado ao staging, commit ou push. Antes de qualquer commit, conferir:
-
-```powershell
-git diff --cached --name-only
-```
-
-Se qualquer caminho `.specs/` aparecer, removê-lo do staging e revisar a
-allowlist. A revisão e o commit devem ocorrer somente após a confirmação
-explícita do próximo escopo pelo usuário.
-
-## Limitações conhecidas
-
-O MVP ainda não inclui integração autorizada de alertas oficiais, autenticação,
-histórico persistente, notificações, mapas, frontend, aplicativo mobile ou ML.
-O baseline usa um mock determinístico e não representa disponibilidade do
-Open-Meteo público nem capacidade de produção.
+A stack principal local fica em 8080/8000; Redis não exposto publicamente. As bancadas dedicadas de navegador/carga foram encerradas após os testes. Não reprovisionar secrets sobre diretórios existentes.

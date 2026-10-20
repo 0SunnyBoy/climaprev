@@ -1,0 +1,836 @@
+{
+  "schema": "climaprev-station-expansion-execution-v1",
+  "rows": [
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 1,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d1-rain.json",
+          "sha256": "dd789bb702e0e7b8311a93d42f066650b062bd6520dcfeec3e582294c00d583a",
+          "paired_days": 9,
+          "excluded_days": 19
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d1-variables.json",
+          "sha256": "5d7ee3ec44facf96c5f95bdb34a67a1c0a0a11b5dfbf1614b85d169a4d9b451a",
+          "paired_days_by_variable": {
+            "gust_kmh": 9,
+            "temperature_max_c": 9,
+            "temperature_min_c": 9
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 1,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d3-rain.json",
+          "sha256": "48f2b4d57d96430d8feddece78d547e6a259fdba1a18144920c38071850bd3c7",
+          "paired_days": 7,
+          "excluded_days": 21
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d3-variables.json",
+          "sha256": "75c1ba22130c9821fc2f0d5f6e828937edeff9e651777aa3d10c908bab1e3751",
+          "paired_days_by_variable": {
+            "gust_kmh": 7,
+            "temperature_max_c": 7,
+            "temperature_min_c": 7
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 1,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d7-rain.json",
+          "sha256": "2b6942aa52eecac239fdcc110460df280436b98d06623759118b891e12fd3b78",
+          "paired_days": 3,
+          "excluded_days": 25
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-01-d7-variables.json",
+          "sha256": "a936b73c241fc8b63153b572761a3b83c3680b92ef39ac80cd3c1bd214873cbc",
+          "paired_days_by_variable": {
+            "gust_kmh": 3,
+            "temperature_max_c": 3,
+            "temperature_min_c": 3
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 4,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d1-rain.json",
+          "sha256": "26c12060954ab05b33cd0d9b310a55e153ac6873e8f223628621d4455979f207",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d1-variables.json",
+          "sha256": "38ebb5ec96f2c9348e4e0980ce2b3a8dd8228d081bb12e9d38664b89efd6faaf",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 4,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d3-rain.json",
+          "sha256": "3aa73e8bc475b508cfcbf8b0fe57a6dc1c445d7beec46a8f88bf9e4d8ee7f882",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d3-variables.json",
+          "sha256": "5aedd58fc2aa9ec1baef8e7357e14c810b92be1e150e88fa712344c305abc099",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 4,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d7-rain.json",
+          "sha256": "47c9f727c403eb68f3894aa7087fe3217707dbb7245782f9234db2ca404fb5be",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-04-d7-variables.json",
+          "sha256": "ced5ffca7cf74b31ec74cd38a5749a6ebb826801e054d719e3e4288d5c81b822",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 7,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d1-rain.json",
+          "sha256": "6a2ccb109ec2552c22937d5311604a369b45b16a8085b315b65db63d7770ac2a",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d1-variables.json",
+          "sha256": "e7bf1c3cffcecf5c1f7d4ba07538dc4bffe04368479d21be356ae4e81f07057d",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 7,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d3-rain.json",
+          "sha256": "a3bde22818a91718ceb423a97dd4b778bc4f44683d796eb6c40e2d966e690c13",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d3-variables.json",
+          "sha256": "ad8b94a375b1933a2d0c07d0f6753fc7550a679188ae15f3728f0f9fe4da7a34",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 7,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d7-rain.json",
+          "sha256": "8d4f2bf46df9dc545f2723bf4f2345fb7607d61a601a7b62d0125379c2307ba2",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-07-d7-variables.json",
+          "sha256": "6cbe12d2166ee2650e4ffa005d171cf88ed870c8b719b832123bf35aab1a4f0c",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 10,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d1-rain.json",
+          "sha256": "80a6b0b0d7b1ee26f28cbd3b39a89a5f8d03e0edb8a271391ce7b0892b7f24a4",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d1-variables.json",
+          "sha256": "e4b77db8ec711614d241f4720e639aac17c2778f7bfec8e442f7b8e25ceeca6d",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 10,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d3-rain.json",
+          "sha256": "a360b9d16cc9707281ca6926cd37e888e6d079b51fb95de0f2d9be4d59b730fd",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d3-variables.json",
+          "sha256": "199df2bf415e5d1bef7903c06abb9ade0ac0ce14b4fbd5bc5bc024fcdf3706ff",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "belem",
+      "station": "A201",
+      "month": 10,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d7-rain.json",
+          "sha256": "c0c9bfc35f6fdb672462aa55e139c02acd581c5ec4960c22fe1e059923ba6859",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\belem-2024-10-d7-variables.json",
+          "sha256": "3fa50f4015d74e5051975ecd71dd964aa2c26a388f2266178166479f61aafb01",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 1,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d1-rain.json",
+          "sha256": "b4ed4af905bc0986954f4f6b6232d979f7356002c6a5f21debc4365e05ab4c0c",
+          "paired_days": 9,
+          "excluded_days": 19
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d1-variables.json",
+          "sha256": "5dd3779f76c6a939d07e2468884ac002631848c4c8b22c57028029e3e5e97408",
+          "paired_days_by_variable": {
+            "gust_kmh": 9,
+            "temperature_max_c": 9,
+            "temperature_min_c": 9
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 1,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d3-rain.json",
+          "sha256": "7cb7380bacde39ed8ffa04efa916c81d1b618ecd4be4ddfaf7475e3a498492c9",
+          "paired_days": 7,
+          "excluded_days": 21
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d3-variables.json",
+          "sha256": "96dbe6d72cefb656433f920b787264650cd81b496c3e00dfb9a8afc30a47d175",
+          "paired_days_by_variable": {
+            "gust_kmh": 7,
+            "temperature_max_c": 7,
+            "temperature_min_c": 7
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 1,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d7-rain.json",
+          "sha256": "0b47549cd380d151cffef8c241921f894c1cda518adab7b341fcb12b2b065248",
+          "paired_days": 3,
+          "excluded_days": 25
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-01-d7-variables.json",
+          "sha256": "8f2558151adc96f3dc6942572f757a778c10ceeaee762dc543147671dc67617c",
+          "paired_days_by_variable": {
+            "gust_kmh": 3,
+            "temperature_max_c": 3,
+            "temperature_min_c": 3
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 4,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d1-rain.json",
+          "sha256": "cfdf184d098c9ce1183ac9af3e6b5f3042d4a8dd48b224a74e447691a5492a62",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d1-variables.json",
+          "sha256": "8a29e5976230a0889a89e2309bc8c049db12e30f84c80eb923a8de15fd5bd0b9",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 4,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d3-rain.json",
+          "sha256": "d841f5cea93e84ffa43c47f7b5e544cca704c70e75eba0c377bd50c3658b5d25",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d3-variables.json",
+          "sha256": "65efe4e135828125422157ffac81a35affbf75624531773ea223e381a26327c1",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 4,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d7-rain.json",
+          "sha256": "953194ad0719f9415a62baf7c6923455c62c4ad86f503270e9e79859be2ef108",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-04-d7-variables.json",
+          "sha256": "dc132b93061ab6874d825314d5aac7c667914f47cb3e44b7ff9b957777bc87f1",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 7,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d1-rain.json",
+          "sha256": "9a92a42d5c8c499ec11ae6decb3ffc14c45a820101595089309c5fe6d894d070",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d1-variables.json",
+          "sha256": "0d126e97464429bbca74e81ceb7d9913a763a5584ca0cbf0db68daf3ac123d12",
+          "paired_days_by_variable": {
+            "gust_kmh": 25,
+            "temperature_max_c": 24,
+            "temperature_min_c": 24
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 7,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d3-rain.json",
+          "sha256": "6812c77955ca83ea3825987c2c754c80d1c48fab9246f4790c74a070cefdeed6",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d3-variables.json",
+          "sha256": "8dd41db64b618f514c73ec1d865b6096d15a00487665b0a541a87137b5042bf9",
+          "paired_days_by_variable": {
+            "gust_kmh": 25,
+            "temperature_max_c": 24,
+            "temperature_min_c": 24
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 7,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d7-rain.json",
+          "sha256": "ef6955c1a4f1648993a6005f3406a8f94c230bd94b4248e32256572c5a28fca7",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-07-d7-variables.json",
+          "sha256": "662155e179e7691dbd28d63c5a97a06afbc2f5bd1ad655861ca49f2f6f7b2018",
+          "paired_days_by_variable": {
+            "gust_kmh": 25,
+            "temperature_max_c": 24,
+            "temperature_min_c": 24
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 10,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d1-rain.json",
+          "sha256": "9306af25e387448ec0f29af8175506f29c8a6ad2c0f9987df03caa00156ad5aa",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d1-variables.json",
+          "sha256": "ae61e52a4260a3afb2fa1e6800c2c6ef3cde5f130906dbd661624e9219443c4a",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 10,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d3-rain.json",
+          "sha256": "982ed438df61279e6750fe71d318eed8169f9eac8fdf4cd859e46eb6a762c804",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d3-variables.json",
+          "sha256": "64d45408318652115852272eadc54af7ec0d7cd8e0e9bf90ae3186d6e92c759f",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    },
+    {
+      "location": "brasilia",
+      "station": "A001",
+      "month": 10,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d7-rain.json",
+          "sha256": "57f31cede66b1b7538dfc7d3642045f0ee7a1b42ee07b8c018697744e0b5baf1",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\brasilia-2024-10-d7-variables.json",
+          "sha256": "da61366eef9be0aa391348a6336187977154219323be456c128cc99455c0cd64",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 1,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d1-rain.json",
+          "sha256": "38e783f3d694b5a3866922ab7e93f706b3270d17655fed443b2ddac14db9cd5c",
+          "paired_days": 8,
+          "excluded_days": 20
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d1-variables.json",
+          "sha256": "534cecdd3cca1fc1af3977ffa4ec870d12666cdf8f826d941f2a250ca8657256",
+          "paired_days_by_variable": {
+            "gust_kmh": 6,
+            "temperature_max_c": 6,
+            "temperature_min_c": 6
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 1,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d3-rain.json",
+          "sha256": "e067cd26de06de1488f7bf9fad8b9cc25f3e93798617706a5541123987d2d3d8",
+          "paired_days": 6,
+          "excluded_days": 22
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d3-variables.json",
+          "sha256": "a455965659c48d8a9767b069446197ceb8e8cc312b1a6477cef111ac4659ec29",
+          "paired_days_by_variable": {
+            "gust_kmh": 4,
+            "temperature_max_c": 4,
+            "temperature_min_c": 4
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 1,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d7-rain.json",
+          "sha256": "4fe56a57582a9839ba02dc1ae54b90221656bf2650fe50116b2007c5d8ac6ac6",
+          "paired_days": 2,
+          "excluded_days": 26
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-01-d7-variables.json",
+          "sha256": "1d7f25ec2b4ba923f2a25f1e7541258d42e717c3f73d517fc740d5207ab75b8f",
+          "paired_days_by_variable": {
+            "gust_kmh": 1,
+            "temperature_max_c": 1,
+            "temperature_min_c": 1
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 4,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d1-rain.json",
+          "sha256": "0761087056d29b798dfa3d234584bf2bb5031e008c8dcb64fea8e8ccb5e3e734",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d1-variables.json",
+          "sha256": "cb525ec128767295ffa82ae1befcfe931119f2365f71aa2475948a6e7eb26439",
+          "paired_days_by_variable": {
+            "gust_kmh": 23,
+            "temperature_max_c": 23,
+            "temperature_min_c": 23
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 4,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d3-rain.json",
+          "sha256": "78c82dc4155acc99cad340505005aad664818dfda69b10fa80f2a2105ff15beb",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d3-variables.json",
+          "sha256": "2342d0f77e611625ad6f99c4e2a566016de464f6dbe0f2a77f58561e974e99b8",
+          "paired_days_by_variable": {
+            "gust_kmh": 23,
+            "temperature_max_c": 23,
+            "temperature_min_c": 23
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 4,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d7-rain.json",
+          "sha256": "1c1823678aff4ae7a85ba8779a116aaeacf326ede660045d0e1e229296c29647",
+          "paired_days": 25,
+          "excluded_days": 3
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-04-d7-variables.json",
+          "sha256": "4ede19c53c64e63f89c9100b24a8150cd71ba694a0dff11f5aabbddfca8bc5eb",
+          "paired_days_by_variable": {
+            "gust_kmh": 23,
+            "temperature_max_c": 23,
+            "temperature_min_c": 23
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 7,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d1-rain.json",
+          "sha256": "470ed46a7d2e9fa542a2a938caa8889dd9efc9070f4b8bd5d9867529139dfc4e",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d1-variables.json",
+          "sha256": "66a2b69b6042cc07d4172f0d8fe1571a147f3d6fc47a781d2055c18adc5ff366",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 7,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d3-rain.json",
+          "sha256": "b4899949b4e9021cc0aa9a2975b1c48207b378b74133eccd5dc7b160787ea8d2",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d3-variables.json",
+          "sha256": "7f6453fce7c7c9d6401a40cef0b4dd5523fba6adf6a81e5677215bc0cd4d8e17",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 7,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d7-rain.json",
+          "sha256": "8eabaf0e5458c06f08e4c61b9fab9d9083ecfddaed0f7aa9c98117388b4e8226",
+          "paired_days": 28,
+          "excluded_days": 0
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-07-d7-variables.json",
+          "sha256": "f23862e5f1bbd13fdf7edb83095bff040405f438cccfb25748c328f088d8ee6d",
+          "paired_days_by_variable": {
+            "gust_kmh": 28,
+            "temperature_max_c": 28,
+            "temperature_min_c": 28
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 10,
+      "lead_days": 1,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d1-rain.json",
+          "sha256": "906f69a756aefcb85ee1c01cf8b4728e730a2f497d1e2998088ad50f3a0ffd30",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d1-variables.json",
+          "sha256": "c1b39298b0f310ab9bcdb2c07b12a5ac1f5aeb886bf0e13aa8fecec9310409b1",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 10,
+      "lead_days": 3,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d3-rain.json",
+          "sha256": "7470e535c65bbffdaa405a1b7dcb796c6663544717ba8df8c97467668f4d0a18",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d3-variables.json",
+          "sha256": "5478a8488c15de489ba20ac522cb900f6071616e68019fdf929ffe1322d074a6",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "station": "A801",
+      "month": 10,
+      "lead_days": 7,
+      "reports": {
+        "rain": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d7-rain.json",
+          "sha256": "1a4162d93f7c170b2730894c59f466bb48ce3dcb90fcac8ab2bf1eebdde6b713",
+          "paired_days": 27,
+          "excluded_days": 1
+        },
+        "variables": {
+          "path": ".historical-reports\\inmet\\expansion-2024-2026-10-19\\porto-alegre-2024-10-d7-variables.json",
+          "sha256": "d01dc1516e987a855b088df6df4f8287a9b71a3cc36acd55def24f21c3bb15e3",
+          "paired_days_by_variable": {
+            "gust_kmh": 27,
+            "temperature_max_c": 27,
+            "temperature_min_c": 27
+          }
+        }
+      }
+    }
+  ],
+  "scientific_approval": false,
+  "calibration_ready": false,
+  "execution_script_sha256": "3b4cc703954b7afdc5547c8f6b1cd452763599d0ee53b395756462eb1d9ba32e"
+}

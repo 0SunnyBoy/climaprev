@@ -1,5 +1,8 @@
 # Contexto de retomada — segurança do ClimaPrev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 > Contexto de checkpoint histórico. As referências a arquivos do frontend
 > antigo devem ser interpretadas como evidência da versão auditada naquele
 > momento; a implementação atual está em `frontend/src/` com Vue e TypeScript.

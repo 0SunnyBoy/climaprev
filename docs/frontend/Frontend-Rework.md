@@ -1,5 +1,10 @@
 # Frontend Rework
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+>
+> Frontend independente com contexto Docker/Compose/Nginx próprios e VITE_API_BASE_URL validado no build. Calendário hoje UTC até +6, contexto/foco após emergência, teclado/ARIA, tema/idioma e erros traduzidos reativos revisados. 27 testes frontend e gate HTTPS aprovados; leitor de tela manual pendente.
+
 ## Objetivo
 
 O frontend do ClimaPrev foi migrado de JavaScript nativo com manipulação

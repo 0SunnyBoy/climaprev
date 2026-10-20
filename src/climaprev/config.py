@@ -75,6 +75,9 @@ class Settings(BaseSettings):
     read_timeout_seconds: float = Field(default=5.0, gt=0)
     provider_max_response_bytes: int = Field(default=5 * 1024 * 1024, gt=0, le=64 * 1024 * 1024)
     provider_total_timeout_seconds: float = Field(default=20.0, gt=0, le=60)
+    # Entire public risk service call; client waits 10 s, leaving cleanup/transport margin.
+    query_total_timeout_seconds: float = Field(default=7.0, gt=0, le=8)
+    metrics_aggregation_enabled: bool = False
     http_max_connections: int = Field(default=20, gt=0)
     http_max_keepalive_connections: int = Field(default=10, gt=0)
     redis_socket_timeout_seconds: float = Field(default=1.0, gt=0)

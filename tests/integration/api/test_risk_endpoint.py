@@ -194,6 +194,21 @@ def valid_query(**overrides: str) -> dict[str, str]:
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("method", ["GET", "POST"])
+@pytest.mark.parametrize("day,allowed", [("2026-08-27", False), ("2026-08-28", True),
+                                        ("2026-09-03", True), ("2026-09-04", False)])
+async def test_public_forecast_window_prevents_service_calls_outside_bounds(method, day, allowed):
+    async with app_for() as (client, service, _, _):
+        data = valid_query(start_date=day)
+        response = await client.request(method, "/api/v1/risk", **(
+            {"params": data} if method == "GET" else {"json": data}))
+    assert response.status_code == (200 if allowed else 422)
+    assert len(service.calls) == int(allowed)
+    if not allowed:
+        assert response.json()["error"]["code"] == "INVALID_PERIOD"
+
+
+@pytest.mark.asyncio
 async def test_returns_complete_celsius_risk_contract_and_propagates_request_id() -> None:
     async with app_for() as (client, service, metrics, _):
         response = await client.get(
@@ -407,6 +422,7 @@ async def test_cors_uses_configured_allowlist() -> None:
             headers={
                 "Origin": "https://console.example",
                 "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type,x-request-id",
             },
         )
         denied = await client.options(
@@ -416,11 +432,14 @@ async def test_cors_uses_configured_allowlist() -> None:
                 "Access-Control-Request-Method": "GET",
             },
         )
+        actual = await client.get("/health/live", headers={"Origin": "https://console.example"})
 
     assert allowed.status_code == 200
     assert allowed.headers["access-control-allow-origin"] == "https://console.example"
     assert allowed_post.status_code == 200
     assert allowed_post.headers["access-control-allow-origin"] == "https://console.example"
+    assert "content-type" in allowed_post.headers["access-control-allow-headers"].lower()
+    assert actual.headers["access-control-expose-headers"] == "X-Request-ID, Retry-After"
     assert denied.status_code == 400
     assert "access-control-allow-origin" not in denied.headers
 

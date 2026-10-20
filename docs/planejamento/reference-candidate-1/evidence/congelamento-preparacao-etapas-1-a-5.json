@@ -1,0 +1,293 @@
+{
+  "schema": "climaprev-preparation-freeze-v1",
+  "protocol_sha256": "2859a26e6ec0c86bd576b1fec9f6398268735bb2d7f64c28aabd077793af174c",
+  "campaign_sha256": "3d8fa3d450227aaca1afb741aa2fbfe1f2be278bc919af8a44908ff8f2625607",
+  "parent_snapshots": {
+    "belem-2024-01-d1": {
+      "dataset_sha256": "2390969bf60f1dd8652ff473935fe47ef3be34aa3a33760850cebf43df5233af",
+      "file_sha256": "13dd99ed510b11fe33083344e86fd3efd500d04fadd6c97dbfe97730abff001a",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "belem-2024-01-d3": {
+      "dataset_sha256": "7ae30424a1bc7e37f0fba1908c98d3861a5fe4c0ba2a5516eeb14f466790f692",
+      "file_sha256": "c81c7448a0e9159b641c991384dfe0bc131f954cd58a913b981f2ae50d924f2a",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "belem-2024-01-d7": {
+      "dataset_sha256": "2f0c9dc18b125c659fd43c57b6673269d7c1231b65d709f70e12696a61817847",
+      "file_sha256": "bdfdd21a7f7be62f06d61bf875571cc7fd74447991c045b86cde7e618f901404",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "belem-2024-04-d1": {
+      "dataset_sha256": "a151af85020e0da9b75088da3046df9758fac79c266335ca56c983c52e81b3b2",
+      "file_sha256": "24d30b7d83105dd6270e47d47c5d959f0368d0ac78d07f169d41ace5e7f9c98c",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "belem-2024-04-d3": {
+      "dataset_sha256": "65b2a2bbe07da08e992ad76cdae8542c1bc7df95b7dd6c667d7349232094f1ff",
+      "file_sha256": "944328bcd5691c37c9c2895be49ce5e432bde183c84716185851d7e5f8a1f251",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "belem-2024-04-d7": {
+      "dataset_sha256": "f7bd4f4697304787f2c1929db3e028c84a075dd7353f6893e9ae7cd9114a755d",
+      "file_sha256": "b023e83746d6266afd9b21740f6fc68b3a0eae0a646e3d0e723d8d834513e2f4",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "belem-2024-07-d1": {
+      "dataset_sha256": "ff1b93dd42ff8fe4cf94edf4309fb81b27a07de8febd06af1b61de7598da1ef6",
+      "file_sha256": "0b818ae440e8232a36528c328711de3d19c7f0bb973e83f335514d66db74b00c",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "belem-2024-07-d3": {
+      "dataset_sha256": "c3351b56bea437db960812bd7060864a953c7272e3f3288e9b3ea46c57e9f448",
+      "file_sha256": "4c03988204f03150259e07b5599397539f33326eac7f9cd72a930d04b0a300bb",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "belem-2024-07-d7": {
+      "dataset_sha256": "5970a17cd61f11bde0181ceffb60de52a0005fbcc684599194e4ad57c5f8f6d6",
+      "file_sha256": "75641cfa911a66e7c0aa93e70561898f2503b531f7188e360816042cfb097400",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "belem-2024-10-d1": {
+      "dataset_sha256": "0b75f70f8c3f629a762804682766562d793df463e7a07a2f51ee2c69fc10ffcb",
+      "file_sha256": "1cb72aba862cb35dbae611a018dd26d27e4bf82f70509c76631bebf0bd62b52a",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "belem-2024-10-d3": {
+      "dataset_sha256": "891f08c9c456211958fee54d22c91d3ad2179dec1378e7400db7f5f12ec290f5",
+      "file_sha256": "8d032460eaa2fee626df579ab3571688e1500c2c65897061066d02b372a0c2cf",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "belem-2024-10-d7": {
+      "dataset_sha256": "f1b24a3b3e62ab912542eb3120ba6d1745f4108e4a895ed932621d7fb7bd8720",
+      "file_sha256": "9c5137dcb31a2ec8c1111a58f97c459831809bdd3f0bce42e014d9a94a366034",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "brasilia-2024-01-d1": {
+      "dataset_sha256": "3c5dca37b44ce7104b3337ec0408a9dd800c3316bc810390bbf4c8023b2348e6",
+      "file_sha256": "c8a0de852c1249fa47e91d18cbf672f9b734433b0ab1de49efa872f65938d31e",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "brasilia-2024-01-d3": {
+      "dataset_sha256": "4b4e8b9d46e81d9677f2bb509f1237c44d1c87ed7e99f86b4f027220672c2c40",
+      "file_sha256": "4768f0cc9eb6db9ec5cfb1b562113ea70b82f2e44dff4d69926a911ebce84e1c",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "brasilia-2024-01-d7": {
+      "dataset_sha256": "2861ae05429e280d400f73830bd038c54dd3a622c44b65871b7ddc6928ddedba",
+      "file_sha256": "b2db853eeb6482eca972bc6a83731bb315840132bfabd1a5f16c5f53b31a70bc",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "brasilia-2024-04-d1": {
+      "dataset_sha256": "71f590511b073e3678e5fc446b088502ea15f7d671920a76b9e357187ca857ea",
+      "file_sha256": "895577073e47ffa72b9089f9bd1d35134d332de21438ad27d7537c9cb2ff0344",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "brasilia-2024-04-d3": {
+      "dataset_sha256": "a928b3dcf85b519100cec82bf93ce757b2761ce48bed42f86289ed1b5c7baaad",
+      "file_sha256": "7039e7df0582065906808ed62bdafc347741e788c3e2bc427f596c29006b7784",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "brasilia-2024-04-d7": {
+      "dataset_sha256": "275ec46970c7a80453c6b57c2f9560695320af3d7f7ccedfdb923cfcd3b1a5c0",
+      "file_sha256": "a043267dee3cbdf6edb8ed0b1b1aabf665dff020020ebb2d41dedf9def404a87",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "brasilia-2024-07-d1": {
+      "dataset_sha256": "9b1e08706940cafb0efd49c215ba5ce2ed3bb97e0d71859b845e4497ab43078f",
+      "file_sha256": "dfc3d186ed2eb977394d404bf80ef780bcabe3af61bfc6b9e3e13fde2e8d945a",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "brasilia-2024-07-d3": {
+      "dataset_sha256": "365d2b1b45aa2fd2e1d84f891d98a58019231c68f474e64c688af9f44034c6ee",
+      "file_sha256": "e5eedbbb9fef174351c8b395c39d474ebb15eab22a79d15fac3bf7ea1ae92d7c",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "brasilia-2024-07-d7": {
+      "dataset_sha256": "5dd26ae34047433628d7fdae029134360690ded12bc7ab0f2246b429ac9feb79",
+      "file_sha256": "85f6a7014c5270857f74129af22f67d8818fac0412188af1f8564706fca05140",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "brasilia-2024-10-d1": {
+      "dataset_sha256": "93fc29593f735e4699632e2d76a46bea8aef3900707f042f653d891d8ef804ed",
+      "file_sha256": "491b8765ccbf3b9adab330530bce4e463a8e7046bad334a3ad8dbfbdbbdb72b7",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "brasilia-2024-10-d3": {
+      "dataset_sha256": "7acd38832c3da7ec630c86e73b4149a4d93fedba37dad3c12b19c0e3abb61273",
+      "file_sha256": "fdddf4faa0dd48453e7e5026d945dd8bc3f77be57d583b968c3b5412dbf1182d",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "brasilia-2024-10-d7": {
+      "dataset_sha256": "177cfdc4802d999cf0afb86ed584c45617847385a979f1d36a8d2b1d2d5396e7",
+      "file_sha256": "3ed678a5b763b29b8871d70d5e7d1e4b96c0b796898018d480108d3342c2af0e",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "porto-alegre-2024-01-d1": {
+      "dataset_sha256": "cd87cd64082d972d2845fdc7945e53c2ef44ceb2e6f7cd9afa55bd35b824b7a5",
+      "file_sha256": "6cc9f28d21e866130eb9d10ae91803feccdbd80507681c4b9aa9c6c0fc5dd293",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "porto-alegre-2024-01-d3": {
+      "dataset_sha256": "f2dd9df198c9359b98fec88716d539fee6efe1da3fe2ad57f251aaaf9813cd50",
+      "file_sha256": "c8723ffabed19def13d277bd760079629fb01b2f9253edf44f7315ad29aa9265",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "porto-alegre-2024-01-d7": {
+      "dataset_sha256": "7888e9c8455b7a5c5b95e350d791aacb2c1b0c07b44e6acf13746ad02f1c4ee3",
+      "file_sha256": "96594a0a1269b9469b1baef5f293ce1b8d27f2fb19c9eece3e463a85d0f03901",
+      "start": "2024-01-01",
+      "end": "2024-01-29"
+    },
+    "porto-alegre-2024-04-d1": {
+      "dataset_sha256": "d029f3c4a481a5d010e52aa3853113bee87eb52e39080f6918638a9161b7f76b",
+      "file_sha256": "073f6e175ba6d9004e53ea75026c1846ee2aea6e6bea73e5e862017d0977880f",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "porto-alegre-2024-04-d3": {
+      "dataset_sha256": "4907ac8f73ca6424c06233711d771058c235dfb4f16fe5a44c4b2930ffc0a783",
+      "file_sha256": "5e7db7c25a1ffea4bd2062e88ee78ff52464223384f89bca64f995bcebe08a68",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "porto-alegre-2024-04-d7": {
+      "dataset_sha256": "5578388ad56bce51ed8d7ae2a46d9ec44fb9349dafe236d317e422ff66684d85",
+      "file_sha256": "025d9c6c058937fa9c938fc0b14d1294446e5dfa6b95982253c5100f4b01eff6",
+      "start": "2024-04-01",
+      "end": "2024-04-29"
+    },
+    "porto-alegre-2024-07-d1": {
+      "dataset_sha256": "cd4a3f78a5ee3c290237edb889b2bf9bf6924808b02564fd800e58e2b8fc1d34",
+      "file_sha256": "e6858999714f0a8b9585c5336e4471c6a2d66d4454861c8b41e7874de1603cd8",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "porto-alegre-2024-07-d3": {
+      "dataset_sha256": "62002941f327f64f501e748ca4904c2bc8971368044d24ed1a65684095aefc1b",
+      "file_sha256": "50c145f47598a74c79fe18e90c85027371379f1a516f5deec94eccc254bb2747",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "porto-alegre-2024-07-d7": {
+      "dataset_sha256": "16a5617c18d1219369e3714c3de47f4264f3683f7edac0856655726044ed9e23",
+      "file_sha256": "d6bafebfb61b25051808fef03caa03091657c85d8fdf4f3dbb688396e615c3fc",
+      "start": "2024-07-01",
+      "end": "2024-07-29"
+    },
+    "porto-alegre-2024-10-d1": {
+      "dataset_sha256": "e2faa6726244583c1053abfb7c66cc6461a09efed4e0eb14508ea152cb1ef948",
+      "file_sha256": "0c70d7847de51e709b0eba1b9704ba6aaf8951c392be59aedd42e6384d78c453",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "porto-alegre-2024-10-d3": {
+      "dataset_sha256": "039b4fed6cbefaeef454a9f4547ea3b9f09a8050bd0a63c36785d90b6a77860d",
+      "file_sha256": "3e91e9c118d064a03a89f8ea6569fd9699ad21164f0cb9d2f41384ba2cd8b98e",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    },
+    "porto-alegre-2024-10-d7": {
+      "dataset_sha256": "1361c5c5eab5e246da77b292c961263f457ca1a00767694bef45aa2d6ab8b427",
+      "file_sha256": "a0c559ac71fe35f5fb4736b3c58a077bf3d16703e35a02a83d6aa7ac57ae4763",
+      "start": "2024-10-01",
+      "end": "2024-10-29"
+    }
+  },
+  "reference_policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+  "source_files_sha256": {
+    "__init__.py": "0fece849f4f03a5d1d490790a05cddcbc8bb40dc2623b4bcb8f9a6de70e1a723",
+    "api/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "api/deps.py": "41a6df49c7f135d278cf9a7c6ebbaf08aa39a3a1d0be4fd374d56e936a863fdc",
+    "api/errors.py": "e013da33b3011e4c08ff820619bb5324fafcea3d8ac3504f9c8f277e43908c88",
+    "api/observability.py": "a8825d1702d557079f38ebca5b8a122a0e14707278b78928fd6943b3304b72d2",
+    "api/routes/__init__.py": "346dc22597b019a15edb218561122e471a78072f3d0156d38d26a9cdf66159d6",
+    "api/routes/locations.py": "685f142184ffa819183a357952a750e93929ff2e9b51e026cc23d2977cf406b1",
+    "api/routes/metrics.py": "2b1c042dcd6768d176f95133ca7292a53a418865d5cda051e5807ceffeb3d51c",
+    "api/routes/risk.py": "ff122eb6b2394cda40938d2d8e25c4f7b640105d4a40a27efd7d0e9df7633b76",
+    "api/schemas/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "api/schemas/risk.py": "643ab468c4433d71c04ca26504f7028a027f8db721a8514a69bd860486cd1d6b",
+    "application/errors.py": "aefef3b3eeb965de5d2a049f2635a42ef8250eb0b4b1be9f304dea9ee6150e36",
+    "application/official_alerts.py": "bb844870b510adc9cc48acb85c5315b9edd46585280201b2039ec214ba80afd8",
+    "application/ports.py": "af202fb7586d4b1a3e479671042aa8630fb972fb2d6b5ab42374d3cff4e49acc",
+    "application/query.py": "a74757abc57fc7bb669da761e89f8e092ce1e66e985aabb0fe9aad0c9caf3420",
+    "application/services/__init__.py": "5ee368b8b403ddb926e38792d6c660d7a6ec88ea5bd628ded82a91e52931d2f1",
+    "application/services/forecast_query.py": "36b69c844306a976c49ba7ff3f560f2033bc8004c96208dca70d79333cb67048",
+    "config.py": "a8e058021baa61766272168c79b0fe0d2f2047c1dd1e93db15f72c2f18b863d7",
+    "domain/bias_correction.py": "577295382e57570b66ff9b89ec1d99d4ae97bd2f7c46593a965e2e0dd5e054e5",
+    "domain/data_quality.py": "7ae368fdfb7359e63cf568247624127be0b5ec7920903f6d78f60041271fa2e5",
+    "domain/models.py": "11ec94eaec15aad30a701e1420b75be9c835d05bc0bf8a51b74194ffaf6d65c4",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_validation.py": "1c2122a96950385fc08a71500766867afc7bdfe5847e00e2489cc37d891c3b59",
+    "domain/units.py": "e1e3081c51eb1015d16e510294cefdd1f4361efd9378660d5792e9bf56357de9",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "healthcheck.py": "b7784ef314ad3b12aa4e53315ffa35c3f67301127dc614d2f5f6e090f25df176",
+    "infrastructure/__init__.py": "703e53736691ba0ea2b2ab88bef847f037ae572bb5121e78dd3d0fe1444d0a89",
+    "infrastructure/cache/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "infrastructure/cache/redis_cache.py": "3613e2ee1396f37ee22cae3e83693db4da8399eceb5ca561f6a71f02eee2a4d4",
+    "infrastructure/cache/redis_lock.py": "07f9b6faab6c14e155ccfd6df6a047f4ce6259548617ebdd9dfaa5527ef35e5e",
+    "infrastructure/errors.py": "a2a4ffa45a53ded1767f15663ce2f38e82aaf999e548aa12f6915a02336c01b7",
+    "infrastructure/http/__init__.py": "e583341dd86f7e7c6dca3ff9cf4a37777e0366451fb483103a2a630d1285d1b2",
+    "infrastructure/http/client.py": "4cbb15bfba0784196f607e9b192177c55347ac1ca72004117560017d039055d3",
+    "infrastructure/providers/__init__.py": "9b747033e5829ed3fa5aa1263723948cb1c8c418f0469780dc05d1dc1b1f1ee1",
+    "infrastructure/providers/inmet_alerts.py": "4e7b00b41c96192589e33ce3c7db40d767fe5bea51251cdc4d09a36971b6a36a",
+    "infrastructure/providers/open_meteo.py": "538d2463a3be3b98b1501849f96db90572ced8d9cda73845d167593e1b098d3c",
+    "infrastructure/rate_limit/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "infrastructure/rate_limit/provider_budget.py": "01858617ce872d9e93b776720eff80cc79ddf292fd11328feefbdf9556c4bee2",
+    "infrastructure/rate_limit/redis_rate_limiter.py": "788bdc9845478cca5d5a8be07a4909129b44b4bc6412c65b21671b082d5d1d9f",
+    "infrastructure/redis_delay.py": "b4b0f72696ccba5f1f0cc66e047c654cf9f890c9348409a742d3fb10cab623ca",
+    "log_collector.py": "3d87fe18600a651ef4486820cadfeebb1cf223628aef8d4f59178677054c4740",
+    "main.py": "72e4f642afcbe6e31c6aea75acaec32ad6237f0b9f9d39d915e6aa4ea02e042a",
+    "runtime.py": "f025cefa7af76fe859e45aa94824347c14c6ddbe6e16fe28ecf49eb896f91777",
+    "tools/__init__.py": "52e20f8fbe3eb6c1b53a8b07186c202b975563f5e77f3888b5caac0871d5d9b8",
+    "tools/audit_historical.py": "ee7af8b5934931266744be7b427df9f2ada12b20cf4ab6abd04fc4192fe312cf",
+    "tools/collect_campaign.py": "908a7ab7419ccfcded6bb422b1c06ab10129b7f49ba26719f29c00281e99fd1d",
+    "tools/compare_historical.py": "ff4cb7ff09718d68c4ba4541a08236fb721cc9f0eb4b3d073e4077030e3b7e6e",
+    "tools/compare_rain_horizons.py": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+    "tools/compare_station.py": "8c6aa91e483b8719ae23017f30aa8e096d96fd3a6ba01930fd1415196f6a0656",
+    "tools/compare_station_variables.py": "e5b7041fbf918365b4a8bca9bebe6cacf32cda946694e090894e652a025dec69",
+    "tools/freeze_preparation.py": "3514f0b1ccbd8daa65e8ae42299392cac11686f01db6c94c00061900ca996cef",
+    "tools/historical_data.py": "00d5ed4716eed58f06a0aaa83c64311180654db20e2e782c4b03b68f02390fa3",
+    "tools/historical_experiment.py": "47e238b2bf3b27d52dd08bdbf5798e698fac08b69ebde5e4b53703ff81b3d25b",
+    "tools/inmet_observations.py": "6f84349fc386da23143abf1ca315574d0080917189188c70fd56bcaf112fa4b4",
+    "tools/validate_historical.py": "4585d3978a85c8087142b66dd91f12a8a4b256106fd8f004f589efd4d68f8543"
+  },
+  "scientific_approval": null,
+  "stage_6_authorized": false,
+  "candidate_or_calibration_fitted": false,
+  "readiness": "technical_preparation_frozen_external_validation_pending",
+  "outstanding_gates": [
+    "Official station CSV compatibility, identity and sensor quality remain unvalidated.",
+    "Real station comparisons remain unexecuted.",
+    "Primary event/metric, event sufficiency and scientific minimum gain are unresolved.",
+    "Temperature and gust sampling differences require scientific review.",
+    "User explicitly required stopping before stage 6."
+  ]
+}

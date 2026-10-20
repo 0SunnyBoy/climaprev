@@ -1,0 +1,49 @@
+{
+  "source_url": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2024.zip",
+  "zip_entry": "INMET_N_PA_A201_BELEM_01-01-2024_A_31-12-2024.CSV",
+  "csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a",
+  "csv_bytes": 849596,
+  "crc32_verified": true,
+  "range_requests": [
+    {
+      "range": "bytes=-65557",
+      "content_range": "bytes 102706642-102772198/102772199",
+      "bytes": 65557
+    },
+    {
+      "range": "bytes=102701069-102772176",
+      "content_range": "bytes 102701069-102772176/102772199",
+      "bytes": 71108
+    },
+    {
+      "range": "bytes=44555678-44555707",
+      "content_range": "bytes 44555678-44555707/102772199",
+      "bytes": 30
+    },
+    {
+      "range": "bytes=44555785-44768330",
+      "content_range": "bytes 44555785-44768330/102772199",
+      "bytes": 212546
+    }
+  ],
+  "downloaded_zip_bytes": 349241,
+  "catalogue_url": "https://apitempo.inmet.gov.br/estacoes/T",
+  "station": {
+    "CD_OSCAR": "0-2000-0-81680",
+    "DC_NOME": "BELEM",
+    "FL_CAPITAL": "N",
+    "DT_FIM_OPERACAO": null,
+    "CD_SITUACAO": "Operante",
+    "TP_ESTACAO": "Automatica",
+    "VL_LATITUDE": "-1.41111111",
+    "CD_WSI": "0-76-0-1501402000000042",
+    "CD_DISTRITO": " 02",
+    "VL_ALTITUDE": "21.17",
+    "SG_ESTADO": "PA",
+    "SG_ENTIDADE": "INMET",
+    "CD_ESTACAO": "A201",
+    "VL_LONGITUDE": "-48.43944444",
+    "DT_INICIO_OPERACAO": "2003-01-19T22:00:00.000-02:00"
+  },
+  "tls_verification": true
+}

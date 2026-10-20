@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
-from contextlib import AsyncExitStack, asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager, suppress
 
 import httpx
 from fastapi import FastAPI, Request
@@ -34,6 +35,7 @@ from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
+from climaprev.infrastructure.metrics_store import MetricsStore
 from climaprev.infrastructure.providers.inmet_alerts import InmetOfficialAlertsProvider
 from climaprev.infrastructure.providers.open_meteo import (
     OpenMeteoForecastClient,
@@ -114,7 +116,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             metrics=app.state.metrics,
             provider_identity=settings.forecast_base_url,
         )
-        yield
+        app.state.metrics_store = MetricsStore(raw_redis, settings.environment)
+        publisher = None
+        if settings.metrics_aggregation_enabled:
+            publisher = asyncio.create_task(app.state.metrics_store.run(app.state.metrics))
+        try:
+            yield
+        finally:
+            if publisher is not None:
+                publisher.cancel()
+                with suppress(asyncio.CancelledError):
+                    await publisher
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -137,7 +149,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_origins=list(app.state.settings.cors_allow_origins),
             allow_credentials=False,
             allow_methods=["GET", "POST"],
-            allow_headers=["X-Request-ID"],
+            allow_headers=["Content-Type", "X-Request-ID"],
+            expose_headers=["X-Request-ID", "Retry-After"],
         )
     app.middleware("http")(observe_request)
     app.include_router(risk_router)

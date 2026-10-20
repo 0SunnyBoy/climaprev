@@ -573,7 +573,8 @@ async def test_official_alerts_raise_priority_and_mark_their_active_days() -> No
         )
     )
 
-    result = await service(alerts=alerts).execute(text_query(), "official-alert-request")
+    result = await service(alerts=alerts, now=lambda: datetime(2026, 8, 28, 12, tzinfo=UTC)).execute(
+        text_query(), "official-alert-request")
 
     assert result.risk_overview is not None
     assert result.risk_overview.source == "official_alert"
@@ -593,6 +594,43 @@ async def test_caches_successful_official_alert_lookup() -> None:
     assert alerts.calls == 1
     assert first.official_alerts.status == second.official_alerts.status == "available"
     assert any(key.startswith("official-alerts:v1:") for key in cache.entries)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('stale', [True, False])
+async def test_refreshes_stale_or_expired_official_alert_cache(stale: bool) -> None:
+    cache = InMemoryCache()
+    alerts = FakeAlerts()
+    now = datetime(2026, 8, 28, 12, tzinfo=UTC)
+    query_service = service(cache=cache, alerts=alerts, now=lambda: now)
+    await query_service.execute(text_query(), 'alerts-first')
+    key = next(key for key in cache.entries if key.startswith('official-alerts:v1:'))
+    cache.entries[key] = replace(cache.entries[key], is_stale=stale,
+                                 expires_at=now + timedelta(seconds=60) if stale else now)
+    alerts.error = RuntimeError('source unavailable during refresh')
+    result = await query_service.execute(text_query(), 'alerts-refresh')
+    assert alerts.calls == 2
+    assert result.official_alerts.status == 'unavailable'
+    assert result.official_alerts.items == ()
+
+
+@pytest.mark.asyncio
+async def test_refreshes_alert_expiring_before_cache_entry() -> None:
+    cache = InMemoryCache()
+    clock = [datetime(2026, 8, 28, 12, tzinfo=UTC)]
+    alerts = FakeAlerts(items=(OfficialAlert(
+        source='INMET', event='Synthetic storm', severity='Severe',
+        effective_at=clock[0], expires_at=clock[0]+timedelta(minutes=1),
+        geographic_scope='Sao Paulo', source_url=None,
+    ),))
+    query_service = service(cache=cache, alerts=alerts, now=lambda: clock[0])
+    await query_service.execute(text_query(), 'alerts-before-expiry')
+    clock[0] += timedelta(minutes=2)
+    alerts.items = ()
+    result = await query_service.execute(text_query(), 'alerts-after-expiry')
+    assert alerts.calls == 2
+    assert result.official_alerts.status == 'available'
+    assert result.official_alerts.items == ()
 
 
 @pytest.mark.asyncio

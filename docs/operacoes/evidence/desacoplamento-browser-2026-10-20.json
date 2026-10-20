@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "checks": [
+    "UI date bounds match seven-date UTC window; API rejects past/outside dates as 422",
+    "city suggestions support arrow/Enter/Escape with valid ARIA state",
+    "real API geocoding + POST risk + visible result across HTTPS origins",
+    "emergency navigation preserves form/result and restores keyboard focus",
+    "theme and locale persist; semantic text contrast >=4.5; keyboard skip and 320–1280px layout pass",
+    "CORS exposes request ID to JavaScript",
+    "browser blocks API reads from an origin outside the CORS allowlist",
+    "provider failure travels through actual API as 503 and visible error/reference",
+    "real 429 exposes Retry-After/request ID and activates UI cooldown",
+    "frontend remains available and shows an error while the API process is stopped"
+  ],
+  "origins": [
+    "https://localhost:8445",
+    "https://localhost:8446"
+  ],
+  "untrustedOrigin": "https://localhost:8447",
+  "browserVersion": "155.0.4283.62",
+  "tlsBrowserTrust": "process-scoped explicit leaf SPKI pin; Node checks chain/hostname separately",
+  "tlsCaRejectionAndHostnameChecksPassed": true,
+  "apiMocked": false,
+  "upstreamWeatherProvider": "deterministic synthetic fixture",
+  "externalProductionDeploymentValidated": false,
+  "sourceSha256": {
+    "tests/docker/check_decoupled_browser.mjs": "7bba8e6288ffa02c797a7a1fd6834c1dae091ce104388efd89d134aa89825f96",
+    "tests/docker/decoupling/compose.yaml": "f14b09f368ab8f116e00b28851f456a91cc54d6dbc57b39468a01ad87370310c",
+    "tests/docker/decoupling/nginx.conf": "2401d5c50c9a7018d68b4a9cbcc77bd2c24f877077b78567a1dd3ee74a94fdb0",
+    "tests/docker/decoupling/package-lock.json": "c2c7db793e4bb943af6ea4736f0fc0d5a9c43cfbcb4b1c37c64f4cb07f7e627b",
+    "frontend/src/config/api.ts": "442f74725fac4b611d21a99f42126eebe053c2bea70cbab74758a80c85e7bb4e",
+    "frontend/src/services/api.ts": "477f3571f181abaf408f3df15cada4bda16e9edb986c79fd67401a1e47b3d521",
+    "src/climaprev/main.py": "b7d78a5077971dd5eeb01f413eafb6ae0433f6dcb1ad1cc988961d63c5ffbfdb",
+    "frontend/src/components/QueryForm.vue": "ae49ec44ec60c6ed6318ce7689e48886edac3695cb4b333d1eb6ea2c2d2bd7b1",
+    "frontend/src/utils/forecastWindow.ts": "cc8d0a6d2601dbbae512ec6e486e4555f20257e2eeab4ec062812ed108ea7b33",
+    "src/climaprev/api/forecast_window.py": "bac08bb50c1d631eb5db0020fd76ec52ace6cdebbe07e0e440f9ba4fe638a2fb",
+    "src/climaprev/api/routes/risk.py": "c99997338950a41333f6f9b6556ddb9c80b305ed7e521dddfac5c076e47db94b",
+    "frontend/src/App.vue": "81b3720b1435464290d1cc2b6ac93952eaacdc04c50a4f38971933a83122c189",
+    "frontend/styles.css": "40fcd1b5f82339e054540ca22db8378722371f9030a87156f6a3b11eafcd228e",
+    "frontend/src/components/LocationAutocomplete.vue": "541dbe619abd97920f2964ac1abe8b848f4722c078dd980589b44a2f9b175d80",
+    "frontend/src/composables/useRiskQuery.ts": "e847bf359ac7e286691aa45048f314ea588493ac8780c0894bfb5d94c85d2d60"
+  }
+}

@@ -10,12 +10,12 @@ from climaprev.tools.validate_historical import HistoricalValidationConfig, coll
 
 def _hourly(*, suffix: str, gust: list[float]) -> dict[str, object]:
     return {
-        "time": ["2026-01-01T00:00", "2026-01-01T01:00", "2026-01-01T02:00"],
-        f"temperature_2m{suffix}": [20.0, 25.0, 30.0],
-        f"relative_humidity_2m{suffix}": [70.0, 70.0, 70.0],
-        f"precipitation{suffix}": [0.0, 1.0, 0.0],
-        f"wind_gusts_10m{suffix}": gust,
-        f"weather_code{suffix}": [1.0, 1.0, 1.0],
+        "time": [f"2026-01-01T{hour:02d}:00" for hour in range(24)],
+        f"temperature_2m{suffix}": [20.0, 25.0, 30.0] + [30.0] * 21,
+        f"relative_humidity_2m{suffix}": [70.0] * 24,
+        f"precipitation{suffix}": [0.0, 1.0, 0.0] + [0.0] * 21,
+        f"wind_gusts_10m{suffix}": gust + [gust[-1]] * 21,
+        f"weather_code{suffix}": [1.0] * 24,
     }
 
 
@@ -25,13 +25,18 @@ async def test_collects_previous_run_and_observed_weather_without_database() -> 
     forecast_route = respx.get("https://previous-runs.test/v1/forecast").mock(
         return_value=httpx.Response(
             200,
-            json={"timezone": "UTC", "hourly": _hourly(suffix="_previous_day1", gust=[20, 20, 20])},
+            json={"timezone": "UTC", "hourly_units": {
+                "temperature_2m_previous_day1": "°C", "precipitation_previous_day1": "mm",
+                "wind_gusts_10m_previous_day1": "km/h",
+            }, "hourly": _hourly(suffix="_previous_day1", gust=[20, 20, 20])},
         )
     )
     observed_route = respx.get("https://archive.test/v1/archive").mock(
         return_value=httpx.Response(
             200,
-            json={"timezone": "UTC", "hourly": _hourly(suffix="", gust=[70, 70, 70])},
+            json={"timezone": "UTC", "hourly_units": {
+                "temperature_2m": "°C", "precipitation": "mm", "wind_gusts_10m": "km/h",
+            }, "hourly": _hourly(suffix="", gust=[70, 70, 70])},
         )
     )
 

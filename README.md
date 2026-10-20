@@ -1,5 +1,13 @@
 # ClimaPrev
 
+## Estado da versão — 20/10/2026
+
+Backend/frontend **0.1.0 em desenvolvimento**, branch develop, base 23bf4ce e alterações locais ainda sem commit/push; sem nova release ou publicação. Consulte [STATE](docs/projeto/STATE.md) e [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md).
+
+Desacoplamento e gate HTTPS local concluídos; janela pública de hoje UTC até +6, até sete dias por consulta; avisos com validação temporal/espacial conservadora e prazo cooperativo do serviço padrão 7 s. Interface revisada, exporter privado por worker e CI ampliada. Validação: 644 testes backend e 27 frontend aprovados; carga local sintética com 3.000 requisições sem falhas, sem certificação de produção.
+
+Faltam confirmação do INMET real, CI remota da revisão local, revisão científica/critério de aceite e acessibilidade manual. Candidate-1 evoluirá por último com foco em qualidade e precisão; reference-v1 ativa, sem calibração. 14 dias só planejado; hospedagem adiada.
+
 Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais
 nem instruções de Defesa Civil, INMET ou autoridades locais.
@@ -56,15 +64,16 @@ transparência.
 
 A consulta usa Vue 3, TypeScript estrito e assets compilados pelo Vite. Não há
 fontes externas, cookies de identidade, histórico ou sessionStorage. O
-`localStorage` guarda somente a preferência visual de tema claro/escuro; não
+`localStorage` guarda as preferências de tema claro/escuro e idioma PT-BR/EN; não
 guarda localização, consultas, credenciais ou dados de previsão. A URL da
 página não recebe a localização consultada. Sem JavaScript, a página informa
 essa necessidade. O formato do campo de data segue o navegador; a API sempre
 recebe ISO `YYYY-MM-DD`.
 
 ```bash
-curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=2026-08-28&temperature_unit=celsius"
-curl "http://localhost:8080/api/v1/risk?latitude=-23.5505&longitude=-46.6333&start_date=2026-08-28&temperature_unit=fahrenheit"
+# Substitua DATA_UTC_ATUAL por hoje UTC em YYYY-MM-DD.
+curl "http://localhost:8080/api/v1/risk?location_text=Sao%20Paulo&start_date=DATA_UTC_ATUAL&temperature_unit=celsius"
+curl "http://localhost:8080/api/v1/risk?latitude=-23.5505&longitude=-46.6333&start_date=DATA_UTC_ATUAL&temperature_unit=fahrenheit"
 ```
 
 O frontend envia a consulta principal como `POST /api/v1/risk`; o `GET`
@@ -91,9 +100,11 @@ por meio de `climaprev.domain.risk_validation`. A calibração estatística exis
 como camada opcional versionada, mas permanece desativada até haver evidência
 suficiente; `reference-v1` continua sendo o fallback seguro.
 
-Para executar uma validação histórica sem banco de dados, use o Previous Runs
-da Open-Meteo para previsões antigas e o Historical Weather para as condições
-observadas/reanalisadas:
+Reconstrua a imagem com `docker compose build app` após alterar os módulos.
+Para executar um diagnóstico histórico sem banco de dados, use o Previous Runs
+da Open-Meteo (`gfs_global`) e a reanálise Historical Weather (`era5`). A v1
+aplicada à reanálise fornece um alvo heurístico fixo, sem representar impactos
+observados. Salve as entradas para reproduzir a avaliação sem nova coleta:
 
 ```bash
 mkdir -p .historical-reports
@@ -101,6 +112,9 @@ docker compose run --rm -v "${PWD}/.historical-reports:/app/.historical-reports"
   python -m climaprev.tools.validate_historical \
   --latitude -1.4558 --longitude -48.5044 \
   --start 2025-01-01 --end 2025-01-31 --lead-days 1 \
+  --timezone America/Belem --forecast-model gfs_global --observed-model era5 \
+  --minimum-coverage 1.0 \
+  --save-input /app/.historical-reports/belem-2025-01-lead-1-input.json \
   --output /app/.historical-reports/belem-lead-1.json
 ```
 
@@ -113,16 +127,58 @@ docker compose run --rm --mount "type=bind,source=$reports,target=/app/.historic
   python -m climaprev.tools.validate_historical `
   --latitude -1.4558 --longitude -48.5044 `
   --start 2025-01-01 --end 2025-01-31 --lead-days 1 `
+  --timezone America/Belem --forecast-model gfs_global --observed-model era5 `
+  --minimum-coverage 1.0 `
+  --save-input /app/.historical-reports/belem-2025-01-lead-1-input.json `
   --output /app/.historical-reports/belem-lead-1.json
 ```
 
-O processo é limitado a 31 dias por execução, aceita antecedência de 1 a 7
-dias e gera somente um relatório agregado. Repita com `--lead-days 2` até `7`
-para comparar a degradação por antecedência. O histórico climático da
-Open-Meteo pode voltar a 1940, mas a avaliação de acurácia usa os históricos de
-previsões emitidas, que têm cobertura mais recente. O relatório não ativa
-calibração automaticamente e não deve ser interpretado como validação
-científica sem revisão do conjunto e dos resultados.
+O processo é limitado a 31 dias por coleta e aceita antecedência de 1 a 7
+dias. Para o piloto diagnóstico, repita com antecedências 3 e 7 em arquivos
+próprios. A disponibilidade de modelo, variável e período precisa ser
+verificada. Cobertura mínima de 100% da variável de cada evento exclui
+casos incompletos, em vez de substituir ausências por zero. O relatório
+inclui casos, exclusões e métricas; denominador zero resulta em `null` nas
+métricas experimentais. Unidades explícitas são verificadas. Os hashes dos
+snapshots permitem verificar consistência, sem comprovar autenticidade da
+fonte; hashes do pipeline impedem replay silencioso com algoritmos alterados.
+
+Reprodução sem rede:
+
+```powershell
+docker compose run --rm --mount "type=bind,source=$reports,target=/app/.historical-reports" app `
+  python -m climaprev.tools.validate_historical `
+  --input /app/.historical-reports/belem-2025-01-lead-1-input.json `
+  --output /app/.historical-reports/belem-lead-1-replay.json
+```
+
+Comparação da baseline sobre entradas salvas:
+
+```powershell
+docker compose run --rm --mount "type=bind,source=$reports,target=/app/.historical-reports" app `
+  python -m climaprev.tools.compare_historical `
+  --input /app/.historical-reports/belem-2025-01-lead-1-input.json `
+  --protocol docs/planejamento/reference-candidate-1/protocolo-piloto.json `
+  --partition diagnostic --output /app/.historical-reports/belem-diagnostic.json
+```
+
+O comparador aceita vários arquivos após `--input`, `--candidate` para regras
+experimentais e `--calibration` para um perfil experimental. Assim gera R0
+(v1 original), A (candidata), B (v1 calibrada) e AB (combinação), quando as
+respectivas configurações forem fornecidas. Nenhuma configuração é aprovada
+ou ativada automaticamente. O [protocolo piloto](docs/planejamento/reference-candidate-1/protocolo-piloto.md)
+contém splits apenas propostos; dados do diagnóstico não constituem teste final
+reservado. Metas científicas, suficiência amostral e revisor continuam pendentes.
+Veja formatos de configuração, partições e limites em
+[validação e calibração](docs/arquitetura/validacao-e-calibracao.md).
+
+Para executar diretamente em um ambiente Python Windows já provisionado,
+instale `python -m pip install --require-hashes -r requirements-windows-dev.lock`.
+Esse complemento mantém os pins de desenvolvimento e acrescenta dependências
+Windows (`colorama` e base IANA `tzdata`), sem substituir os locks Linux.
+Execute a partir da raiz com `$env:PYTHONPATH = (Resolve-Path src).Path` para
+disponibilizar os módulos locais.
+
 Os códigos usuais são 422 (entrada), 404 (local não encontrado), 429 (limite),
 502 (dados inválidos ou requisição rejeitada pelo provedor) e 503 (dependência indisponível).
 
@@ -165,7 +221,7 @@ usuários representam aproximadamente 100 requisições/s após o aquecimento:
 
 ```bash
 docker compose --profile load build load provider-mock app-load
-docker compose --profile load up -d provider-mock app-load
+docker compose --profile load up -d --wait provider-mock app-load
 docker compose --profile load run --rm --no-deps load locust -f tests/load/locustfile.py --host http://app-load:8000 --headless --users 2 --spawn-rate 2 --run-time 10s --only-summary
 ```
 
@@ -197,13 +253,17 @@ frontend e da saúde da API. A CI não faz deploy; apenas valida o estado do
 repositório em um runner temporário. O smoke test descobre os assets hashados
 no HTML gerado pelo Vite; ele não depende de `/assets/styles.css`.
 
+A configuração local atual também executa ESLint, Vitest e `npm audit
+--audit-level=high` em uma imagem derivada do estágio de build do frontend.
+Esses checks passam a valer no GitHub quando esta alteração for enviada;
+não representam uma nova execução remota já aprovada.
+
 ## Estado da branch
 
 O desenvolvimento ocorre na branch `develop`; a branch `main` recebe somente
-alterações estáveis aprovadas para publicação. A cópia encontrada em
-`climaprev-develop-build` é um build sem metadados `.git`, portanto alterações
-feitas nela precisam ser reaplicadas ou copiadas para um checkout Git antes de
-serem commitadas e enviadas ao GitHub. A pasta `.homolog/` permanece local,
+alterações estáveis aprovadas para publicação. O checkout atual
+`climaprev-develop` está vinculado ao histórico Git original, com alterações
+experimentais locais ainda sem commit. A pasta `.homolog/` permanece local,
 ignorada pelo Git, e deve ser provisionada separadamente para validar a
 homologação.
 
@@ -216,3 +276,25 @@ as limitações de rede em [homologação local](docs/operacoes/homologacao.md).
 confiada explicitamente; não há publicação externa. Nesse perfil os logs ficam
 no volume do coletor, sem stdout persistido pelo engine; o documento mostra
 como lê-los e diagnosticar os serviços.
+
+## Preparação da candidata
+
+Veja a [execução técnica de 19/10/2026](docs/planejamento/reference-candidate-1/execucao-2026-10-19.md)
+para os cruzamentos observacionais ampliados, a auditoria da referência e o
+estado da infraestrutura de incerteza. A reference-v1 permanece ativa e a
+preparação técnica não equivale a aprovação científica ou promoção.
+
+A [continuação da reconciliação e do suporte observacional](docs/planejamento/reference-candidate-1/reconciliacao-e-suporte-2026-10-19.md)
+explica a equivalência dos 417,0 mm do boletim com o dia encerrado às 12 UTC e
+registra as contagens de eventos nas estações, preservando os alvos civis anteriores.
+
+O [diagnóstico da baseline e a proposta de critérios](docs/planejamento/reference-candidate-1/baseline-e-criterios-propostos-2026-10-19.md)
+apresentam métricas por evento e estrato, além dos bloqueios antes de qualquer
+ajuste. Esses resultados experimentais não equivalem a reprodução integral da API.
+
+O [pareamento de máximos horários](docs/planejamento/reference-candidate-1/chuva-horaria-2026-10-19.md)
+completa a baseline diagnóstica de cinco eventos, preservando os pais e as mesmas
+datas elegíveis. A nova versão da baseline e do preflight está referenciada nesse documento.
+# Execução independente da interface e API
+
+Frontend e backend possuem builds e execução separados. Veja [guia de desacoplamento](docs/arquitetura/desacoplamento-2026-10-20.md), [frontend](frontend/README.md) e [RDP atual de 20/10](RELATORIO-PENDENCIAS-2026-10-20.md). O modo integrado por proxy permanece disponível.

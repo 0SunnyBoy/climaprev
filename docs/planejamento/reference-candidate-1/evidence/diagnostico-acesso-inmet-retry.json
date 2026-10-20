@@ -1,0 +1,115 @@
+{
+  "checked_at": "2026-10-16T23:25:22.840861+00:00",
+  "network": [
+    {
+      "host": "portal.inmet.gov.br",
+      "ipv4_addresses": [
+        "201.57.198.188"
+      ],
+      "tls_version": "TLSv1.2",
+      "certificate_verified": true
+    },
+    {
+      "host": "apitempo.inmet.gov.br",
+      "ipv4_addresses": [
+        "201.57.198.188"
+      ],
+      "tls_version": "TLSv1.2",
+      "certificate_verified": true
+    }
+  ],
+  "requests": [
+    {
+      "case": "portal_browser_agent",
+      "url": "https://portal.inmet.gov.br/dadoshistoricos",
+      "environment_proxy_settings": true,
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=UTF-8",
+        "content-length": null,
+        "content-range": null,
+        "location": null,
+        "server": null
+      },
+      "read_bytes": 4096,
+      "zip_signature": false
+    },
+    {
+      "case": "zip_browser_range",
+      "url": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2025.zip",
+      "environment_proxy_settings": true,
+      "status": 206,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "4096",
+        "content-range": "bytes 0-4095/90898634",
+        "location": null,
+        "server": null
+      },
+      "read_bytes": 4096,
+      "zip_signature": true
+    },
+    {
+      "case": "zip_browser_no_proxy",
+      "url": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2025.zip",
+      "environment_proxy_settings": false,
+      "status": 206,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "4096",
+        "content-range": "bytes 0-4095/90898634",
+        "location": null,
+        "server": null
+      },
+      "read_bytes": 4096,
+      "zip_signature": true
+    },
+    {
+      "case": "api_catalog_browser",
+      "url": "https://apitempo.inmet.gov.br/estacoes/T",
+      "environment_proxy_settings": true,
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "261406",
+        "content-range": null,
+        "location": null,
+        "server": null
+      },
+      "read_bytes": 4096,
+      "zip_signature": false
+    },
+    {
+      "case": "http_redirect",
+      "url": "http://portal.inmet.gov.br/uploads/dadoshistoricos/2025.zip",
+      "environment_proxy_settings": true,
+      "status": 302,
+      "headers": {
+        "content-type": null,
+        "content-length": "0",
+        "content-range": null,
+        "location": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2025.zip",
+        "server": null
+      },
+      "read_bytes": 0,
+      "zip_signature": false
+    },
+    {
+      "case": "control_open_meteo",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-1.4558&longitude=-48.5044&start_date=2025-01-01&end_date=2025-01-01&hourly=precipitation&models=era5",
+      "environment_proxy_settings": true,
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": null,
+        "content-range": null,
+        "location": null,
+        "server": null
+      },
+      "read_bytes": 831,
+      "zip_signature": false
+    }
+  ],
+  "download_limit_per_request_bytes": 4096,
+  "tls_verification_disabled": false
+}

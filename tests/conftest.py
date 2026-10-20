@@ -3,6 +3,12 @@ from pathlib import Path
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def isolate_host_allowlist_from_deployment(monkeypatch):
+    """ASGI fixtures own their hosts; do not inherit Compose deployment values."""
+    monkeypatch.delenv("CLIMAPREV_ALLOWED_HOSTS", raising=False)
+
+
 @pytest.fixture
 def production_config(tmp_path: Path) -> dict[str, object]:
     """Valid SEC-01 fixtures, never credentials from the operator's environment."""

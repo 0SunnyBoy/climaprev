@@ -1,0 +1,24 @@
+{
+  "schema": "climaprev-station-reference-reconciliation-v1",
+  "month_total": 417.0,
+  "through_january_30_mm": 384.4,
+  "rain_january_9_mm": 56.2,
+  "complete_hours": 744,
+  "expected_hours": 744,
+  "matches_published_month_total": true,
+  "matches_published_graph_through_january_30": true,
+  "matches_published_january_9": true,
+  "convention": "observation-day-ending-12utc-v1",
+  "source_report_sha256": "45e9fc5f97ed0b3eba67095edec78e61d2d9892ea081590dcee6c13c4be195fc",
+  "bulletin_pdf_sha256": "41580f5f6c63d44085c69de38ffc24e3fb7a304493fa4825e3078339250ce956",
+  "bulletin_url": "https://portal.inmet.gov.br/uploads/Balan%C3%A7o_Janeiro25_Bel%C3%A9m.pdf",
+  "method_reference_url": "https://portal.inmet.gov.br/uploads/normais/NORMAISCLIMATOLOGICAS.pdf",
+  "finding": "Exact numerical reconciliation with ending-date 12 UTC windows and previous-year boundary. Bulletin-specific methodology inferred from agreement, not separately confirmed by INMET.",
+  "civil_targets_changed": false,
+  "scientific_approval": false,
+  "calibration_ready": false,
+  "source_sha256": {
+    "src/climaprev/tools/reconcile_station.py": "35a17af6dff508ceb75a5fad59c9175431c0b7e72addbf45007755d18d05a1f3",
+    "src/climaprev/tools/observation_support.py": "83bfa53e17427d24ec80e2d65b2887c0e755b043342f01be9b444933036bec2b"
+  }
+}

@@ -1,5 +1,7 @@
 # Parâmetros de predição
 
+**Revisão 20/10/2026:** política reference-v1 ativa; sem calibração/promoção. As datas públicas devem estar entre hoje UTC e +6, com no máximo sete dias consecutivos. API valida antes do serviço e calendário acompanha o corte UTC; dias meteorológicos mantêm fuso local. 14 dias apenas planejado. Exemplos com datas fixas abaixo ilustram o contrato e devem ser atualizados para a janela vigente antes da execução. [Estado](../projeto/STATE.md).
+
 Este documento descreve os parâmetros usados pelo Clima Prev para consultar
 uma previsão meteorológica e produzir `forecast_risk`. Ele distingue os dados
 enviados pelo usuário dos campos meteorológicos internos e dos limiares da

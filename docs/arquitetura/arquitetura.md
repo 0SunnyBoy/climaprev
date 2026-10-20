@@ -1,7 +1,6 @@
 # Arquitetura do Clima Prev
 
-**Estado:** implementação observada em 2026-09-23; P0–P2.6 e rework Vue
-concluídos. Commit, push e revisão independente final continuam pendentes.
+**Estado vigente:** 20/10/2026, versão 0.1.0 em desenvolvimento e alterações locais ainda sem commit/push. Builds/Composes independentes para API e frontend; modo integrado mantido. [Estado detalhado](../projeto/STATE.md).
 [Índice](../projeto/PROJECT.md).
 
 ## Visão de contexto
@@ -37,7 +36,7 @@ relacional ou fila de mensagens.
 | Camada               | Evidência                                                                                                                                                                                              | Responsabilidade e limite                                         |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
 | Interface web | [Aplicação](../../frontend/src/App.vue), [serviço de API](../../frontend/src/services/api.ts) | Coletar entrada e apresentar a resposta; cálculo permanece no backend. |
-| Entrada estática e proxy | [Nginx local](../../docker/frontend/nginx.conf), [Nginx de homologação](../../docker/homolog/entrada/nginx.conf) | Servir o frontend e encaminhar somente API e health check ao backend. |
+| Entrada estática e proxy | [Nginx local](../../frontend/nginx.conf), [Nginx de homologação](../../docker/homolog/entrada/nginx.conf) | Servir o frontend e encaminhar somente API e health check ao backend. |
 | Entrada HTTP         | [Rotas](../../src/climaprev/api/routes/risk.py), [schema](../../src/climaprev/api/schemas/risk.py)                                                                                                           | Validar query e serializar resposta; não calcular risco.          |
 | Proteção de entrada  | [Dependências](../../src/climaprev/api/deps.py)                                                                                                                                                           | Resolver identidade de rede e aplicar rate limit.                 |
 | Aplicação            | [Serviço de consulta](../../src/climaprev/application/services/forecast_query.py)                                                                                                                         | Resolver local, cache, lock, previsão, avaliação e alertas.       |
@@ -80,12 +79,10 @@ fica no domínio, separado da política de risco.
   automática de proxy e sem access log bruto. A API interpreta
   `X-Forwarded-For` somente para peers explicitamente confiáveis.
 - O processo mantém clientes HTTP/Redis no lifespan e os fecha na saída.
-- Réplicas podem compartilhar Redis; métricas em memória permanecem separadas
-  por processo. O perfil `app-load` usa dois workers.
+- Réplicas compartilham Redis. Métricas locais continuam por processo; exporter Prometheus opt-in publica snapshots temporários por worker no Redis. O perfil `app-load` usa dois workers.
 - O Compose de desenvolvimento não oferece a fronteira TLS de homologação.
   [Métricas internas](../../src/climaprev/api/routes/metrics.py) expõem JSON com
-  identidade, PID e início do processo. Não são agregadas automaticamente
-  entre workers; acesso protegido é responsabilidade da stack de homologação.
+  identidade, PID e início do processo. `/internal/metrics/prometheus` exporta contadores/histogramas por worker quando habilitado, com lease de 20 s e leitura limitada. Nginx bloqueia `/internal/`; scraper deve usar rede privada. Templates externos ainda não estão instalados.
 
 ## Homologação isolada
 

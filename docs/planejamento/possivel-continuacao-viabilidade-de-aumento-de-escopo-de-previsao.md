@@ -1,5 +1,8 @@
 # Possível continuação — viabilidade de aumento de escopo de previsão
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 **Status:** etapa preparada para execução offline; `reference-v1` continua ativa.
 
 ## Objetivo

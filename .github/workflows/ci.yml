@@ -23,7 +23,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Compose configuration
-        run: docker compose config --quiet
+        run: |
+          docker compose config --quiet
+          docker compose -f docker-compose.api.yml config --quiet
+          VITE_API_BASE_URL=https://api.example docker compose -f frontend/compose.yaml config --quiet
+          python tests/docker/check_load_isolation.py
+          python tests/docker/check_local_frontend_proxy.py
+
+      - name: Build frontend validation image
+        run: docker build --target build -f frontend/Dockerfile -t climaprev-frontend-checks:ci frontend
+
+      - name: Run frontend lint and tests
+        run: |
+          docker run --rm climaprev-frontend-checks:ci npm run lint
+          docker run --rm climaprev-frontend-checks:ci npm test
+
+      - name: Audit frontend dependencies
+        run: docker run --rm climaprev-frontend-checks:ci npm audit --audit-level=high
 
       - name: Build application image
         run: docker compose build app
@@ -36,6 +52,11 @@ jobs:
 
       - name: Run mypy
         run: docker compose run --rm app mypy src
+
+      - name: Validate production package isolation
+        run: |
+          docker build --target runtime -t climaprev-runtime:ci .
+          docker run --rm -v "$PWD/tests/docker/check_runtime_image.py:/check.py:ro" climaprev-runtime:ci python /check.py
 
       - name: Start application and frontend
         run: docker compose up -d app frontend
@@ -54,3 +75,40 @@ jobs:
       - name: Stop Compose services
         if: always()
         run: docker compose down -v --remove-orphans
+
+  decoupling:
+    name: Independent frontend and API over HTTPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build API test image
+        run: docker compose build app
+      - name: Provision isolated test TLS
+        run: |
+          mkdir -p .homolog/decoupling
+          chmod 700 .homolog/decoupling
+          python docker/homolog/entrada/provision_tls.py .homolog/decoupling
+      - name: Start independent HTTPS origins
+        run: docker compose -f tests/docker/decoupling/compose.yaml up -d --build --wait
+      - name: Install locked browser runner
+        run: |
+          npm ci --ignore-scripts --prefix tests/docker/decoupling
+          node tests/docker/decoupling/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Validate actual cross-origin browser flow
+        env:
+          PLAYWRIGHT_MODULE: ${{ github.workspace }}/tests/docker/decoupling/node_modules/playwright/index.mjs
+        run: node tests/docker/check_decoupled_browser.mjs
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: decoupling-browser-evidence
+          path: docs/operacoes/evidence/desacoplamento-browser-2026-10-20.json
+          if-no-files-found: ignore
+      - name: Stop isolated test services
+        if: always()
+        run: docker compose -f tests/docker/decoupling/compose.yaml down -v --remove-orphans

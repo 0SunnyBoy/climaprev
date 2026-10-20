@@ -1,0 +1,16 @@
+{
+  "schema": "climaprev-spatial-collection-v1",
+  "plan_sha256": "c5f315d1567a518e6b1e5e3d04cae0d5407fee6ce2f8e4d3ab607c5cf9ca2b54",
+  "requested_snapshots": 2,
+  "parent_snapshots": {
+    "belem-2024-01-d1-municipal-control": "f780e50e88ab108df0896ea111597a7d54773d02a8771c071e7aced783878f2a",
+    "belem-2024-01-d1-station": "4ac325387b5e5765345122a71fca275b6e73e4a27993751be2c1f11aa2de76f9"
+  },
+  "failures": [],
+  "preflight_passed": true,
+  "complete": false,
+  "cell_selection_limitation": "nearest is submitted explicitly; provider does not echo the rule",
+  "candidate_fitting_executed": false,
+  "calibration_fitting_executed": false,
+  "stop_before_stage": 6
+}

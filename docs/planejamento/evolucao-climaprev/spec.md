@@ -1,5 +1,8 @@
 # Especificação — evolução do Clima Prev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 **Estado:** baseline implementado; P0–P2.6 adicionados; verificação independente final pendente.
 **Contexto:** [context.md](context.md). **Design:** [design.md](design.md).
 Os marcadores WHEN/IF/THEN/SHALL formalizam critérios verificáveis; SHALL

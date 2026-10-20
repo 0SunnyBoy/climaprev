@@ -106,6 +106,9 @@ class RateLimiterPort(Protocol):
 
 
 class MetricsPort(Protocol):
+    def record_official_alert_status(self, status: str) -> None:
+        pass
+
     def record_cache_status(self, status: str) -> None:
         pass
 

@@ -1,15 +1,22 @@
 from __future__ import annotations
 
+import asyncio
 from datetime import date, datetime
-from typing import Annotated, Literal
+from typing import Annotated, Literal, cast
 
 from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
 
 from climaprev.api.deps import enforce_rate_limit, get_forecast_query_service
+from climaprev.api.forecast_window import validate_public_period
 from climaprev.api.schemas.risk import RiskQueryParams
 from climaprev.application.query import ForecastQuery
-from climaprev.application.services.forecast_query import ForecastQueryPort, RiskQueryResult
+from climaprev.application.services.forecast_query import (
+    ForecastQueryPort,
+    RiskQueryResult,
+    WeatherProviderUnavailable,
+)
+from climaprev.config import Settings
 from climaprev.domain.models import RiskOverview
 from climaprev.domain.units import TemperatureUnit
 
@@ -216,19 +223,25 @@ async def _execute_risk(
     query: RiskQueryParams,
     service: ForecastQueryPort,
 ) -> RiskQueryResponse:
+    validate_public_period(query.start_date, query.end_date or query.start_date)
     request.state.provider = "open-meteo"
     request.state.cache = "miss"
-    result = await service.execute(
-        ForecastQuery(
-            location_text=query.location_text,
-            latitude=query.latitude,
-            longitude=query.longitude,
-            start_date=query.start_date,
-            end_date=query.end_date or query.start_date,
-            temperature_unit=query.temperature_unit,
-        ),
-        request.state.request_id,
-    )
+    settings = cast(Settings, request.app.state.settings)
+    try:
+        async with asyncio.timeout(settings.query_total_timeout_seconds):
+            result = await service.execute(
+                ForecastQuery(
+                    location_text=query.location_text,
+                    latitude=query.latitude,
+                    longitude=query.longitude,
+                    start_date=query.start_date,
+                    end_date=query.end_date or query.start_date,
+                    temperature_unit=query.temperature_unit,
+                ),
+                request.state.request_id,
+            )
+    except TimeoutError:
+        raise WeatherProviderUnavailable("public risk query deadline exceeded") from None
     request.state.provider = result.source.provider
     request.state.cache = result.cache_status
     return RiskQueryResponse.from_result(result, request.state.request_id)

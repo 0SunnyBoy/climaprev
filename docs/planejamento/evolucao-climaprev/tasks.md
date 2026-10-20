@@ -1,5 +1,8 @@
 # Tarefas — evolução do Clima Prev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 > Este arquivo preserva o plano e as evidências do ciclo original. A
 > implementação atual do frontend foi posteriormente migrada para Vue 3,
 > TypeScript e Vite em `frontend/src/`. Referências históricas a

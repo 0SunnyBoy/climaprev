@@ -1,0 +1,14 @@
+{
+  "checked_utc": "2026-10-20T17:03:20.832981+00:00",
+  "attempts": [
+    {
+      "url": "https://avisos.inmet.gov.br/",
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "url": "https://apiprevmet3.inmet.gov.br/avisos/ativos",
+      "error_type": "RemoteProtocolError"
+    }
+  ],
+  "live_integration_confirmed": false
+}

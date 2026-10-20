@@ -6,6 +6,9 @@ const STORAGE_KEY = 'climaprev-locale'
 
 const messages = {
   'pt-BR': {
+    locationSearchFailed: 'Não foi possível buscar cidades. Tente novamente.',
+    locationSearchEmpty: 'Nenhuma cidade encontrada. Revise o nome ou inclua o estado.',
+    retryLocationSearch: 'Tentar busca novamente',
     brandAria: 'ClimaPrev, início',
     homeDocumentTitle: 'ClimaPrev · Previsão com contexto',
     navigationNote: 'TEMPO · DADOS · CONTEXTO',
@@ -22,6 +25,7 @@ const messages = {
     homeIntro: 'Veja a previsão e os sinais de risco para o seu local. Entenda o que os dados dizem e o que ainda falta saber.',
     queryTitle: 'Sua consulta',
     queryLimit: 'Até 7 dias por vez',
+    forecastWindowHint: 'Datas disponíveis, com corte em UTC:',
     searchBy: 'Buscar por',
     city: 'Cidade',
     coordinates: 'Coordenadas',
@@ -46,7 +50,7 @@ const messages = {
     genericQueryError: 'Não foi possível concluir a consulta. Tente novamente.',
     networkError: 'Verifique sua conexão e tente novamente.',
     locationNotFound: 'Local não encontrado. Inclua o estado ou país, ou confira as coordenadas.',
-    invalidPeriod: 'Revise o período: use de 1 a 7 dias, com a data final igual ou posterior à inicial.',
+    invalidPeriod: 'Escolha de hoje até seis dias à frente (corte em UTC), com a data final igual ou posterior à inicial.',
     invalidTemperature: 'Revise a unidade de temperatura e consulte novamente.',
     invalidLocation: 'Revise a cidade ou o par de coordenadas e consulte novamente.',
     forecastUnavailable: 'Previsão indisponível no momento. Tente novamente em instantes.',
@@ -145,6 +149,10 @@ const messages = {
     stateRoadPoliceDescription: 'Atende ocorrências em rodovias estaduais, conforme a operação de cada estado.',
   },
   en: {
+    forecastWindowHint: 'Available dates, using the UTC cutoff:',
+    locationSearchFailed: 'City search is unavailable. Please try again.',
+    locationSearchEmpty: 'No cities found. Check the name or include the state.',
+    retryLocationSearch: 'Retry city search',
     brandAria: 'ClimaPrev, home',
     homeDocumentTitle: 'ClimaPrev · Context-aware forecast',
     navigationNote: 'WEATHER · DATA · CONTEXT',
@@ -185,7 +193,7 @@ const messages = {
     genericQueryError: 'The query could not be completed. Try again.',
     networkError: 'Check your connection and try again.',
     locationNotFound: 'Location not found. Include the state or country, or check the coordinates.',
-    invalidPeriod: 'Review the period: use 1 to 7 days, with the end date on or after the start date.',
+    invalidPeriod: 'Choose today through six days ahead (UTC cutoff), with the end date on or after the start date.',
     invalidTemperature: 'Review the temperature unit and try again.',
     invalidLocation: 'Review the city or coordinate pair and try again.',
     forecastUnavailable: 'Forecast unavailable right now. Try again shortly.',

@@ -1,0 +1,260 @@
+{
+  "schema": "climaprev-local-period-audit-v1",
+  "scope": "current local *.inputs.json under .historical-reports only; not a guarantee about all past access or other systems",
+  "snapshots_checked": 42,
+  "reserved_period_snapshot_matches": [],
+  "entries": [
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d1.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d3.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-01-d7.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d1.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d3.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-04-d7.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d1.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d3.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-07-d7.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d1.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d3.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/belem-2024-10-d7.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d1.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d3.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-01-d7.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d1.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d3.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-04-d7.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d1.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d3.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-07-d7.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d1.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d3.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/brasilia-2024-10-d7.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d1.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d3.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-01-d7.inputs.json",
+      "start": "2024-01-01",
+      "end": "2024-01-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d1.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d3.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-04-d7.inputs.json",
+      "start": "2024-04-01",
+      "end": "2024-04-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d1.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d3.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-07-d7.inputs.json",
+      "start": "2024-07-01",
+      "end": "2024-07-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d1.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d3.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-expansion-2024/porto-alegre-2024-10-d7.inputs.json",
+      "start": "2024-10-01",
+      "end": "2024-10-29",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-1.inputs.json",
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-3.inputs.json",
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-01-lead-7.inputs.json",
+      "start": "2025-01-01",
+      "end": "2025-01-31",
+      "lead_days": 7
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-1.inputs.json",
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "lead_days": 1
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-3.inputs.json",
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "lead_days": 3
+    },
+    {
+      "file": ".historical-reports/candidate-1-pilot/belem-2025-02-01-lead-7.inputs.json",
+      "start": "2025-02-01",
+      "end": "2025-02-01",
+      "lead_days": 7
+    }
+  ]
+}

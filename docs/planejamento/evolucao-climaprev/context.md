@@ -1,8 +1,11 @@
 # Contexto — evolução do Clima Prev
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 **Data do baseline:** 2026-09-13. **Estado do documento:** planejamento inicial;
-o estado atual está em [STATE](../../projeto/STATE.md), atualizado em 2026-09-23.
-**Branch atual:** `Atualizacao-Geral-V3`. O planejamento começou em
+o estado atual está em [STATE](../../projeto/STATE.md), atualizado em 20/10/2026.
+**Branch vigente:** `develop`; `Atualizacao-Geral-V3` pertence ao histórico. O planejamento começou em
 `docs/plano-evolucao-climaprev`, a partir de `main`, commit `a010c3b`.
 As alterações locais anteriores foram preservadas.
 

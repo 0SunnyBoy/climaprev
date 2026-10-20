@@ -1,0 +1,49 @@
+{
+  "protocol_id": "reference-candidate-1-pilot-proposal-2026-10-16",
+  "status": "proposed_pending_approval",
+  "purpose": "diagnostic_tooling_and_baseline_only",
+  "reference_kind": "reference-v1-on-reanalysis",
+  "location": {
+    "name": "Belém, PA, Brasil",
+    "latitude": -1.4558,
+    "longitude": -48.5044,
+    "timezone": "America/Belem"
+  },
+  "sources": {
+    "forecast": "Open-Meteo Previous Runs API",
+    "forecast_model": "gfs_global",
+    "reference": "Open-Meteo Historical Weather API (reanalysis)",
+    "observed_model": "era5"
+  },
+  "lead_days": [1, 3, 7],
+  "minimum_coverage": 1.0,
+  "events": ["rain_hourly", "rain_daily", "wind_gust", "heat", "cold"],
+  "diagnostic": {
+    "partition": "diagnostic",
+    "proposed_windows": [
+      {"start": "2025-01-01", "end": "2025-01-31"}
+    ],
+    "results_not_declared": true,
+    "reserved_test": false
+  },
+  "splits_status": "illustrative_only_not_approved_not_reserved",
+  "splits": {
+    "adjustment": {"start": "2024-01-01", "end": "2024-12-31"},
+    "validation": {"start": "2025-01-01", "end": "2025-06-30"},
+    "test": {"start": "2025-07-01", "end": "2025-12-31"}
+  },
+  "promotion_criteria": null,
+  "sample_sufficiency": null,
+  "scientific_reviewer": null,
+  "candidate_thresholds": null,
+  "calibration_coefficients": null,
+  "automatic_promotion": false,
+  "limitations": [
+    "The reference is a frozen heuristic on reanalysis, not independently observed impact.",
+    "Diagnostic windows are a tooling pilot, not a representative or reserved final test.",
+    "Splits are examples pending approval and source-availability checks; no final test has been reserved.",
+    "Coverage is evaluated per variable supporting each event; missing values are not zero.",
+    "Hashes verify consistency, not source authenticity.",
+    "The CLI reads chronological splits but does not enforce approval metadata, sample sufficiency or scientific acceptance."
+  ]
+}

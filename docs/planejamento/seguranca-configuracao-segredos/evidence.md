@@ -1,5 +1,8 @@
 # Evidências de execução da segurança
 
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 Estado em 2026-09-23: T14–T19 com gates locais aprovados; T17 também
 aprovado no GitHub Actions. T19 concluiu com decisão condicional. Sem
 aprovação de release.
