@@ -25,7 +25,7 @@
   "externalProductionDeploymentValidated": false,
   "sourceSha256": {
     "tests/docker/check_decoupled_browser.mjs": "7bba8e6288ffa02c797a7a1fd6834c1dae091ce104388efd89d134aa89825f96",
-    "tests/docker/decoupling/compose.yaml": "f14b09f368ab8f116e00b28851f456a91cc54d6dbc57b39468a01ad87370310c",
+    "tests/docker/decoupling/compose.yaml": "b684917b077819429423e789f55c04c1e070568ee4d9ef498193678f85395a2e",
     "tests/docker/decoupling/nginx.conf": "2401d5c50c9a7018d68b4a9cbcc77bd2c24f877077b78567a1dd3ee74a94fdb0",
     "tests/docker/decoupling/package-lock.json": "c2c7db793e4bb943af6ea4736f0fc0d5a9c43cfbcb4b1c37c64f4cb07f7e627b",
     "frontend/src/config/api.ts": "442f74725fac4b611d21a99f42126eebe053c2bea70cbab74758a80c85e7bb4e",
