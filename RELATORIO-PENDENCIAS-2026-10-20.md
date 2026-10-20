@@ -1,5 +1,11 @@
 # RDP — 20/10/2026
 
+## Incremento local posterior ao checkpoint remoto c5408a0
+
+INMET real agora verificado em amostra controlada, inclusive de dentro do Docker, após identificação explícita no User-Agent; bugs de repetição por teclado e resposta vazia da geocodificação corrigidos. Previsão real recebida no Edge após um timeout e repetição controlada. Revisão preparatória e critérios concretos prontos para o aceite do usuário, que confirmou ser o responsável. Inspeção interativa no Edge concluída parcialmente; ensaio auditivo com leitor de tela pendente. Validação atual: **651 backend e 28 frontend**, build/tipagem/lint aprovados. Este incremento ainda não foi enviado; aprovação remota de c5408a0 não cobre o diff local. [Relatório completo](docs/operacoes/frentes-1-a-4-2026-10-20.md).
+
+A ordem restante passa a ser: aceite da revisão/fontes/proveniência; definição e aprovação das escolhas quantitativas; leitor de tela e cenários de resultado; revisão/envio do novo lote e CI. INMET sai da condição de acesso não confirmado, mas permanece sujeito a acompanhamento de disponibilidade e cobertura. As tabelas abaixo registram o checkpoint anterior quando conflitarem com este incremento.
+
 ## Versão e situação da aplicação
 
 Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce`, atualizada no GitHub em `edb81b0`, sem merge em main ou nova release; correções funcionais qualificadas em f0eab5e com CI e Security gates aprovados. Aplicação funciona localmente com Docker, API, frontend e Redis. Estado detalhado e evidências em [STATE](docs/projeto/STATE.md).

@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-20",
+  "mode": "interactive_connected_edge_keyboard_and_accessibility_tree",
+  "screen_reader_audio_verified": false,
+  "checks": [
+    "skip_link_and_focus",
+    "retry_error_tab_enter_focus",
+    "emergency_form_and_result_preservation",
+    "pt_en_existing_error_translation",
+    "theme_keyboard_toggle_restored",
+    "required_date_focus_and_describedby",
+    "empty_real_search_shape",
+    "real_suggestions_arrow_enter",
+    "real_forecast_timeout_then_recovery",
+    "result_anchor_focus"
+  ],
+  "backend_tests": 651,
+  "frontend_tests": 28,
+  "remote_checkpoint": "c5408a0",
+  "current_changes_pushed": false,
+  "raw_weather_snapshots_added_to_scientific_reserve": false
+}

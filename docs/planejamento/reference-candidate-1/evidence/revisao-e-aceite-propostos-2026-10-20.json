@@ -1,0 +1,19 @@
+{
+  "schema": "climaprev-preparation-review-v1",
+  "date": "2026-10-20",
+  "acceptance_owner": {
+    "identity": "requesting_user",
+    "confirmed_in_conversation": true
+  },
+  "review_status": "technical_review_ready_for_owner",
+  "criteria_status": "proposed_not_approved",
+  "reserved_independence": "not_demonstrated",
+  "new_reserved_outcomes_read": false,
+  "primary_variable": null,
+  "primary_lead_days": null,
+  "proposed_minimum_relative_mae_gain": 0.05,
+  "minimum_gain_approved": false,
+  "candidate_fitting_authorized": false,
+  "scientific_approval": false,
+  "active_policy": "reference-v1"
+}

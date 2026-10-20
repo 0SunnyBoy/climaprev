@@ -1,0 +1,14 @@
+{
+  "checks": [
+    {
+      "query": "Bel\u00e9m Par\u00e1",
+      "status": 200,
+      "candidates": 0
+    },
+    {
+      "query": "Bel\u00e9m, Par\u00e1",
+      "status": 200,
+      "candidates": 2
+    }
+  ]
+}

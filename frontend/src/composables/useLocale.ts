@@ -7,7 +7,7 @@ const STORAGE_KEY = 'climaprev-locale'
 const messages = {
   'pt-BR': {
     locationSearchFailed: 'Não foi possível buscar cidades. Tente novamente.',
-    locationSearchEmpty: 'Nenhuma cidade encontrada. Revise o nome ou inclua o estado.',
+    locationSearchEmpty: 'Nenhuma cidade encontrada. Revise o nome ou use Cidade, Estado com vírgula.',
     retryLocationSearch: 'Tentar busca novamente',
     brandAria: 'ClimaPrev, início',
     homeDocumentTitle: 'ClimaPrev · Previsão com contexto',
@@ -32,7 +32,7 @@ const messages = {
     coordinatesLegend: 'Coordenadas do local',
     latitude: 'Latitude',
     longitude: 'Longitude',
-    cityHint: 'Inclua o estado ou país para uma busca mais precisa.',
+    cityHint: 'Para refinar, use Cidade, Estado ou Cidade, País, separados por vírgula.',
     cityPlaceholder: 'Ex.: Belém, Pará',
     startDate: 'Data inicial',
     endDate: 'Data final',
@@ -151,7 +151,7 @@ const messages = {
   en: {
     forecastWindowHint: 'Available dates, using the UTC cutoff:',
     locationSearchFailed: 'City search is unavailable. Please try again.',
-    locationSearchEmpty: 'No cities found. Check the name or include the state.',
+    locationSearchEmpty: 'No cities found. Check the name or use City, State with a comma.',
     retryLocationSearch: 'Retry city search',
     brandAria: 'ClimaPrev, home',
     homeDocumentTitle: 'ClimaPrev · Context-aware forecast',
@@ -175,7 +175,7 @@ const messages = {
     coordinatesLegend: 'Location coordinates',
     latitude: 'Latitude',
     longitude: 'Longitude',
-    cityHint: 'Include the state or country for a more precise search.',
+    cityHint: 'To refine, use City, State or City, Country, separated by a comma.',
     cityPlaceholder: 'E.g. Belém, Pará',
     startDate: 'Start date',
     endDate: 'End date',

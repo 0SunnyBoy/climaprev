@@ -26,3 +26,8 @@ Os registros anteriores estão no [arquivo histórico](handoff-HISTORICO-ATE-202
 5. Executar acessibilidade manual quando houver leitor de tela disponível; registrar ferramenta/versão, cenários e limitações. Não encerrar essa pendência com teste DOM automatizado.
 
 A stack principal local fica em 8080/8000; Redis não exposto publicamente. As bancadas dedicadas de navegador/carga foram encerradas após os testes. Não reprovisionar secrets sobre diretórios existentes.
+
+
+## Continuação local das quatro frentes
+
+INMET real acessível com identificação explícita, confirmado no adaptador e Docker. Busca por teclado corrigida e inspecionada no Edge; leitor de tela ainda pendente. Revisão preparatória/critério aguardam aceite do usuário responsável. 651 testes backend e 28 frontend aprovados, sem ajuste de candidata. Incremento local ainda não enviado; [relatório vigente](../operacoes/frentes-1-a-4-2026-10-20.md).

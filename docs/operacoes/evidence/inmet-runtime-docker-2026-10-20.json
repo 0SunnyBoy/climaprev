@@ -1,0 +1,9 @@
+{
+  "checked_utc": "2026-10-20T17:56:35.710824+00:00",
+  "runtime": "docker compose exec app",
+  "point": "public alert boundary, same point as adapter check",
+  "alerts_count": 1,
+  "live_adapter_confirmed": true,
+  "tls_validation_disabled": false,
+  "scope": "one controlled real response, not continuous availability"
+}

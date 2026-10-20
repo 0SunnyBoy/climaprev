@@ -33,7 +33,11 @@ class InmetOfficialAlertsProvider:
         before_send: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
         self._http = AsyncJsonHttpClient(
-            client, settings, on_retry=on_retry, before_send=before_send
+            client, settings, on_retry=on_retry, before_send=before_send,
+            headers={
+                "User-Agent": "ClimaPrev/0.1.0 (+https://github.com/0SunnyBoy/climaprev)",
+                "Accept": "application/json",
+            },
         )
         self._base_url = settings.inmet_alerts_base_url.rstrip("/")
         try:

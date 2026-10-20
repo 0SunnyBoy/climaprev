@@ -49,6 +49,22 @@ def _settings() -> Settings:
 
 
 @pytest.mark.asyncio
+async def test_inmet_headers_do_not_modify_the_shared_http_client() -> None:
+    async with httpx.AsyncClient(headers={"User-Agent": "SharedClientFixture"}) as client:
+        provider = InmetOfficialAlertsProvider(client, _settings())
+        with respx.mock(assert_all_called=True) as mock:
+            inmet = mock.get(f"{BASE_URL}/avisos/ativos").respond(
+                200, json={"hoje": [], "futuro": []}
+            )
+            other = mock.get("https://other.test/").respond(200)
+            await provider.get_alerts(LOCATION, PERIOD)
+            await client.get("https://other.test/")
+        assert inmet.calls[0].request.headers["user-agent"].startswith("ClimaPrev/")
+        assert other.calls[0].request.headers["user-agent"] == "SharedClientFixture"
+        assert client.headers["user-agent"] == "SharedClientFixture"
+
+
+@pytest.mark.asyncio
 async def test_inmet_provider_filters_active_alerts_by_point_and_period() -> None:
     payload = {"hoje": [_alert()], "futuro": [_alert(identifier=54321, inside=False)]}
     async with httpx.AsyncClient() as client:
@@ -59,6 +75,8 @@ async def test_inmet_provider_filters_active_alerts_by_point_and_period() -> Non
             alerts = await provider.get_alerts(LOCATION, PERIOD)
 
     assert route.called
+    assert route.calls[0].request.headers["user-agent"].startswith("ClimaPrev/0.1.0")
+    assert route.calls[0].request.headers["accept"] == "application/json"
     assert len(alerts) == 1
     assert alerts[0].source == "INMET"
     assert alerts[0].event == "Tempestade"

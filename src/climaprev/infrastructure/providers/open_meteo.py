@@ -76,6 +76,14 @@ class OpenMeteoGeocodingClient:
             {"name": text, "language": "pt"},
         )
         results = payload.get("results")
+        # Open-Meteo omits empty fields: a real no-match response carries only
+        # finite generation timing. Do not reinterpret arbitrary malformed data.
+        generation_time = _number_or_none(payload.get("generationtime_ms"))
+        if (
+            set(payload) == {"generationtime_ms"}
+            and generation_time is not None and generation_time >= 0
+        ):
+            return []
         if results is None:
             raise WeatherDataInvalid("geocoding results must be a list")
         if not isinstance(results, list):

@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "query": "Belem",
+      "status": 200,
+      "candidates": 5,
+      "error_code": null
+    },
+    {
+      "query": "Bel\u00e9m Par\u00e1",
+      "status": 502,
+      "candidates": null,
+      "error_code": "WEATHER_DATA_INVALID"
+    }
+  ]
+}

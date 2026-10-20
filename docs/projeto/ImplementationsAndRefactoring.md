@@ -34,3 +34,8 @@ Os registros anteriores estão no [arquivo histórico](ImplementationsAndRefacto
 | Ciência | CSVs oficiais, bootstrap, baseline, comparação espacial, catálogo e diagnóstico horário | Preparação concluída tecnicamente; sem candidata calibrada/promovida ou ganho comprovado |
 
 Ver [execução técnica](../operacoes/execucao-frentes-1-a-7-2026-10-20.md) para tempos, cenários e limites, e [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) para pendências.
+
+
+## Continuação local das quatro frentes
+
+INMET real acessível com identificação explícita, confirmado no adaptador e Docker. Busca por teclado corrigida e inspecionada no Edge; leitor de tela ainda pendente. Revisão preparatória/critério aguardam aceite do usuário responsável. 651 testes backend e 28 frontend aprovados, sem ajuste de candidata. Incremento local ainda não enviado; [relatório vigente](../operacoes/frentes-1-a-4-2026-10-20.md).

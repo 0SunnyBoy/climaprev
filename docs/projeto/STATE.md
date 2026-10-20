@@ -16,6 +16,10 @@
 - **GitHub — qualificação funcional f0eab5e:** CI e Security gates concluídos com sucesso, incluindo Validate application, HTTPS independente, navegador/CSP, rotação sintética, scanner de imagem e regressão. As duas falhas de edb81b0 foram corrigidas sem relaxar CSP. Evidência em [aprovação dos gates](../operacoes/evidence/github-gates-aprovados-2026-10-20.json). develop sem proteção/checks obrigatórios; nenhuma regra administrativa alterada.
 - **Ciência:** reference-v1 ativa, sem calibração/promoção. CSVs oficiais de três estações, baseline de cinco eventos, 72 snapshots espaciais, 3.747 casos catalogados e diagnóstico horário preparados. Resultados mistos, sem ganho substancial comprovado nem recuperação dos altos observados. Preparação mais completa não significa candidata superior.
 
+## Incremento local posterior — frentes 1 a 4
+
+INMET: identificação por requisição resolveu o acesso nesta amostra; parser de oito avisos reais, controle de borda e externo e consulta dentro do Docker aprovados. Sem desligar TLS ou alterar cliente compartilhado. Busca: correção de foco/repetição após blur e do formato vazio real do provedor; resultado meteorológico real recebido após timeout e repetição; Edge conectado e inspecionado interativamente. Revisão científica e critérios preparados para o usuário responsável pelo aceite, ainda não aprovados; independência das reservas não comprovada. Leitor de tela auditivo pendente. **651 testes backend e 28 frontend** aprovados, build/lint/tipagem aprovados. Alterações locais sem commit/push; não confundir com o checkpoint remoto c5408a0. [Relatório e evidências](../operacoes/frentes-1-a-4-2026-10-20.md).
+
 ## Prioridades e decisões vigentes
 
 1. Confirmar acesso/contrato real dos avisos INMET, sem mascarar falha como ausência.

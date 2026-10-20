@@ -35,9 +35,14 @@ watch(() => props.disabled, (disabled) => {
   if (disabled) dismiss()
 })
 
-function dismiss() {
+function dismiss(preserveFailure = false) {
   activeIndex.value = -1
-  clear()
+  clear({ preserveFailure })
+}
+
+function retry() {
+  input.value?.focus()
+  schedule(props.modelValue)
 }
 
 function update(event: Event) {
@@ -104,13 +109,13 @@ defineExpose({ focus })
     :required="required"
     @input="update"
     @keydown="onKeydown"
-    @blur="dismiss"
+    @blur="dismiss(true)"
   />
   <span id="city-hint" class="field-hint">{{ t('cityHint') }}</span>
   <span v-if="error" id="city-error" class="field-error">{{ error }}</span>
   <div v-if="failed || completed && !suggestions.length" id="city-search-status" role="status">
     <span>{{ failed ? t('locationSearchFailed') : t('locationSearchEmpty') }}</span>
-    <button v-if="failed" type="button" :disabled="disabled" @click="schedule(modelValue)">{{ t('retryLocationSearch') }}</button>
+    <button v-if="failed" type="button" :disabled="disabled" @click="retry">{{ t('retryLocationSearch') }}</button>
   </div>
   <span class="sr-only" role="status">{{ suggestions.length ? `${suggestions.length} ${t('suggestionsAvailable')}` : '' }}</span>
   <ul

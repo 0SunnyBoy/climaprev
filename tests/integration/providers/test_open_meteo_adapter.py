@@ -103,6 +103,37 @@ async def test_geocoding_search_returns_context_for_ambiguous_candidates() -> No
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("generation_time", [0, 0.12981892])
+async def test_geocoding_accepts_the_real_omitted_empty_results_shape(
+    generation_time: float,
+) -> None:
+    async with httpx.AsyncClient() as client:
+        adapter = OpenMeteoGeocodingClient(client, settings())
+        with respx.mock:
+            respx.get(f"{GEOCODING_BASE_URL}/v1/search").respond(
+                200, json={"generationtime_ms": generation_time}
+            )
+            assert await adapter.search("Lugar inexistente") == []
+            with pytest.raises(LocationNotFound):
+                await adapter.resolve("Lugar inexistente")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("generation_time", [None, True, -1, "0.1"])
+async def test_geocoding_does_not_hide_invalid_timing_as_empty_results(
+    generation_time: object,
+) -> None:
+    async with httpx.AsyncClient() as client:
+        adapter = OpenMeteoGeocodingClient(client, settings())
+        with respx.mock:
+            respx.get(f"{GEOCODING_BASE_URL}/v1/search").respond(
+                200, json={"generationtime_ms": generation_time}
+            )
+            with pytest.raises(WeatherDataInvalid):
+                await adapter.search("Lugar inexistente")
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("payload", [{}, {"results": None}], ids=["missing", "null"])
 async def test_geocoding_rejects_missing_or_null_results_as_invalid_weather_data(
     payload: dict[str, object],

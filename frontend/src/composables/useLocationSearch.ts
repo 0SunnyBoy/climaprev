@@ -11,7 +11,7 @@ export function useLocationSearch() {
   let controller: AbortController | undefined
   let sequence = 0
 
-  function clear() {
+  function clear({ preserveFailure = false }: { preserveFailure?: boolean } = {}) {
     sequence += 1
     if (timer) clearTimeout(timer)
     controller?.abort()
@@ -19,7 +19,7 @@ export function useLocationSearch() {
     controller = undefined
     searching.value = false
     suggestions.value = []
-    failed.value = false
+    failed.value = preserveFailure && failed.value
     completed.value = false
   }
 
