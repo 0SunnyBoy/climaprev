@@ -3,7 +3,7 @@
 ## Estado vigente — 20/10/2026
 
 - **Versão dos pacotes:** backend 0.1.0 e frontend 0.1.0; desenvolvimento local sem nova release/tag. Não confundir versão do pacote, identidade da política e versão de integração.
-- **Git:** branch `develop`, base `23bf4cee997bc825e76028f99eefd6160f699ee5`, com alterações locais acumuladas ainda sem commit/push. O estado descrito não está integralmente no GitHub.
+- **Git:** branch `develop`, base `23bf4cee997bc825e76028f99eefd6160f699ee5`, atualizada no GitHub pelo commit `edb81b0` (20/10). Correções dos gates remotos estão em validação neste lote; não há merge em main nem release.
 - **Aplicação:** frontend Vue/TypeScript/Vite em `http://localhost:8080`, API FastAPI em `http://localhost:8000` e Redis local. Readiness e contratos HTTP/proxy foram verificados no lote atual; não existe ambiente de hospedagem definido.
 - **Desacoplamento:** builds e Composes próprios para frontend e API; origem HTTP(S) configurada no build, CSP/CORS explícitos; modo integrado preservado. Gate HTTPS local entre origens distintas aprovado. Monorepo mantido.
 - **Datas:** sete datas elegíveis, hoje UTC até +6, até sete dias consecutivos por consulta. API GET/POST valida antes do serviço; calendário atualiza na virada do dia/foco. Horizonte de 14 dias somente planejado.
@@ -13,13 +13,13 @@
 - **Métricas:** exporter privado Prometheus, opt-in, com snapshots por worker em Redis (publicação 5 s, lease 20 s), histogramas e leitura limitada; dois workers reais verificados. Prometheus/Grafana/Alertmanager não instalados; templates não representam monitoramento operacional ativo.
 - **Validação local:** 644 testes backend e 27 frontend aprovados, build/typecheck/ESLint/Ruff/mypy/actionlint aprovados; runtime UID 10001 sem testes/docs/env/ferramentas de desenvolvimento. Gate HTTPS de navegador com API real e upstream sintético aprovado. Acessibilidade automática não equivale a certificação WCAG.
 - **Carga local:** cinco cenários de 60 s, dez usuários, aproximadamente dez req/s, 3.000 requisições sem falhas; maior p95 580 ms. Recursos limitados em Docker Desktop compartilhado e provedor sintético; não certifica capacidade de produção.
-- **GitHub consultado em 20/10:** último commit remoto conhecido é a base acima. CI de 15/10 passou; Security gates falhou na asserção de tema do navegador. A espera pelo estado observável foi corrigida localmente, sem rerun remoto desta revisão. A API de branch confirmou `protected=false`, checks vazios; rulesets retornaram lista vazia. Endpoint administrativo deu 403 pela limitação da integração, sem impedir as leituras alternativas.
+- **GitHub — lote edb81b0:** job Validate application aprovado; gate HTTPS falhou por imagem dependente do nome da pasta, e Security gates por `wait_for_function` incompatível com CSP. Correções: imagem explícita construída pela própria bancada e asserção Playwright de atributo. Artefato HTTPS só é enviado quando o gate desta execução passa, evitando apresentar evidência antiga. Testes locais direcionados aprovados; nova execução remota pendente. develop sem proteção/checks, sem alteração administrativa. [Diagnóstico](../operacoes/correcao-ci-2026-10-20.md).
 - **Ciência:** reference-v1 ativa, sem calibração/promoção. CSVs oficiais de três estações, baseline de cinco eventos, 72 snapshots espaciais, 3.747 casos catalogados e diagnóstico horário preparados. Resultados mistos, sem ganho substancial comprovado nem recuperação dos altos observados. Preparação mais completa não significa candidata superior.
 
 ## Prioridades e decisões vigentes
 
 1. Confirmar acesso/contrato real dos avisos INMET, sem mascarar falha como ausência.
-2. Revisar/selecionar alterações locais, preparar commits e publicar quando autorizado; executar CI e Security gates para o SHA enviado. Avaliar proteção/checks da develop com o proprietário; nenhuma regra foi alterada nesta revisão.
+2. Enviar as correções autorizadas dos gates e confirmar CI e Security gates para o mesmo SHA antes de recomendar merge em main. Avaliar proteção/checks da develop com o proprietário; nenhuma regra foi alterada nesta revisão.
 3. Consolidar revisão científica das fontes, semântica temporal, suficiência e proveniência das reservas, sem abrir novos outcomes ou ajustar política.
 4. Fechar critérios de aprovação e nova versão prospectiva do protocolo com revisão científica: métrica/evento principal, suporte mínimo, ganho mínimo e tradeoffs ainda não aprovados.
 5. Concluir revisão manual de acessibilidade com leitor de tela e registrar problemas e retestes.

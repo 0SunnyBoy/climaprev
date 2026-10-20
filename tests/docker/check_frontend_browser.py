@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
-from playwright.sync_api import Dialog, Page, sync_playwright
+from playwright.sync_api import Dialog, Page, expect, sync_playwright
 
 MALICIOUS_TEXT = "<img src=x onerror=alert('SYNTHETIC-XSS')>"
 
@@ -101,7 +101,7 @@ def _check_theme_toggle(page: Page) -> None:
     assert page.evaluate("document.documentElement.dataset.theme") == "light"
 
     toggle.click()
-    page.wait_for_function("document.documentElement.dataset.theme === 'dark'", timeout=3000)
+    expect(page.locator("html")).to_have_attribute("data-theme", "dark", timeout=3000)
     assert toggle.get_attribute("aria-pressed") == "true"
     assert "modo claro" in (toggle.get_attribute("aria-label") or "")
     assert page.evaluate("document.documentElement.dataset.theme") == "dark"
@@ -113,7 +113,7 @@ def _check_theme_toggle(page: Page) -> None:
     assert page.evaluate("document.documentElement.dataset.theme") == "dark"
 
     toggle.click()
-    page.wait_for_function("document.documentElement.dataset.theme === 'light'", timeout=3000)
+    expect(page.locator("html")).to_have_attribute("data-theme", "light", timeout=3000)
     assert toggle.get_attribute("aria-pressed") == "false"
     assert "modo escuro" in (toggle.get_attribute("aria-label") or "")
     assert page.evaluate("document.documentElement.dataset.theme") == "light"

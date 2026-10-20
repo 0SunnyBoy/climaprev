@@ -8,10 +8,15 @@ services:
       timeout: 2s
       retries: 10
   provider:
-    image: climaprev-develop-app:latest
+    image: climaprev-api:decoupling-e2e
+    pull_policy: never
     command: [uvicorn, tests.load.mock_provider:app, --host, 0.0.0.0, --port, '8080']
   api:
-    image: climaprev-develop-app:latest
+    image: climaprev-api:decoupling-e2e
+    pull_policy: never
+    build:
+      context: ../../..
+      target: dev
     volumes:
       - ../../../src:/app/src:ro
     environment:

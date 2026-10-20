@@ -86,7 +86,7 @@ jobs:
         with:
           node-version: '22'
       - name: Build API test image
-        run: docker compose build app
+        run: docker compose -f tests/docker/decoupling/compose.yaml build api
       - name: Provision isolated test TLS
         run: |
           mkdir -p .homolog/decoupling
@@ -99,11 +99,12 @@ jobs:
           npm ci --ignore-scripts --prefix tests/docker/decoupling
           node tests/docker/decoupling/node_modules/playwright/cli.js install --with-deps chromium
       - name: Validate actual cross-origin browser flow
+        id: browser
         env:
           PLAYWRIGHT_MODULE: ${{ github.workspace }}/tests/docker/decoupling/node_modules/playwright/index.mjs
         run: node tests/docker/check_decoupled_browser.mjs
       - name: Save browser evidence
-        if: always()
+        if: steps.browser.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: decoupling-browser-evidence

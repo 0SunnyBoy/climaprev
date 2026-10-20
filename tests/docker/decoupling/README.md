@@ -9,7 +9,7 @@ Bancada exclusiva de teste: frontend estático, backend FastAPI real, Redis pró
 
 Na raiz do projeto:
 
-1. `docker compose build app`
+1. `docker compose -f tests/docker/decoupling/compose.yaml build api`. A bancada usa a imagem explícita `climaprev-api:decoupling-e2e` para API/provedor, sem depender do nome da pasta ou do projeto Compose principal.
 2. Criar `.homolog/decoupling/` (0700 em Linux). Gerar certificados com `python docker/homolog/entrada/provision_tls.py .homolog/decoupling` se OpenSSL estiver instalado. No Windows, pode-se usar o wrapper `python docs/operacoes/scripts/provision_tls_with_container.py .homolog/decoupling`, com a imagem `climaprev-openssl-test:local` previamente construída pelo Dockerfile operacional existente. O provisionador protege ACL e recusa sobrescrever certificados.
 3. `docker compose -f tests/docker/decoupling/compose.yaml up -d --build --wait`
 4. `npm ci --ignore-scripts --prefix tests/docker/decoupling`

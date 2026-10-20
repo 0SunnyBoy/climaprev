@@ -2,7 +2,7 @@
 
 ## Versão e situação da aplicação
 
-Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce`, alterações locais sem commit/push e sem nova release. Aplicação funciona localmente com Docker, API, frontend e Redis. Estado detalhado e evidências em [STATE](docs/projeto/STATE.md).
+Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce`, atualizada no GitHub em `edb81b0`, sem merge em main ou nova release; correções dos gates em validação. Aplicação funciona localmente com Docker, API, frontend e Redis. Estado detalhado e evidências em [STATE](docs/projeto/STATE.md).
 
 ## Implementações concluídas no escopo local
 
@@ -30,7 +30,7 @@ Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce
 | 4 | Critérios de aprovação | Fechar evento/métrica principal, suporte/ganho mínimo, tradeoffs, multiplicidade, revisor e protocolo prospectivo antes de ajuste; não inventar aceite |
 | 6 da lista original | Acessibilidade manual | Testar leitor de tela, teclado, foco, erros, resultados e emergência em PT/EN; registrar ambiente e achados, corrigir e retestar |
 
-**Estado remoto confirmado:** CI do commit-base em 15/10 passou; Security gates falhou no teste de tema. Há correção local da sincronização desse teste, ainda sem execução remota. `develop` está sem proteção e checks obrigatórios; rulesets retornaram vazios. A leitura administrativa retornou 403, mas a leitura de branch permitiu confirmar esse estado. Definir proteção é decisão administrativa, não realizada automaticamente. [Evidência](docs/operacoes/evidence/github-estado-2026-10-20.json).
+**Estado remoto confirmado em edb81b0:** Validate application passou. Gate HTTPS falhou por nome de imagem dependente do checkout; Security gates falhou porque a espera do tema usa avaliação bloqueada pela CSP. Ambos corrigidos neste lote, sem relaxar CSP, com validação local direcionada; execução remota da correção ainda pendente. Artefato HTTPS não será enviado quando o gate falhar ou não executar. develop sem proteção/checks obrigatórios; nenhuma regra administrativa foi modificada. [Diagnóstico e validação](docs/operacoes/correcao-ci-2026-10-20.md).
 
 ## Evolução da candidata — por último
 
