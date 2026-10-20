@@ -2,7 +2,7 @@
 
 ## Versão e situação da aplicação
 
-Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce`, atualizada no GitHub em `edb81b0`, sem merge em main ou nova release; correções dos gates em validação. Aplicação funciona localmente com Docker, API, frontend e Redis. Estado detalhado e evidências em [STATE](docs/projeto/STATE.md).
+Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce`, atualizada no GitHub em `edb81b0`, sem merge em main ou nova release; correções funcionais qualificadas em f0eab5e com CI e Security gates aprovados. Aplicação funciona localmente com Docker, API, frontend e Redis. Estado detalhado e evidências em [STATE](docs/projeto/STATE.md).
 
 ## Implementações concluídas no escopo local
 
@@ -13,7 +13,7 @@ Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce
 | Alertas | Validade, expiração/cache, intervalo local, Polygon/MultiPolygon/furos e falha conservadora | Acesso ao INMET real ainda não homologado |
 | Consulta | Prazo cooperativo padrão 7 s, máximo 8 s, cleanup e timer do cliente corrigido | Não é limite absoluto de transporte/cleanup |
 | Interface | Contexto/foco após emergência, teclado/ARIA, tema/idioma, erros reativos e responsividade | Leitor de tela manual pendente |
-| CI | Lint/testes/build/tipagem/auditoria, Composes, runtime e gate HTTPS configurados | Revisão local ainda não enviada/executada remotamente |
+| CI | Lint/testes/build/tipagem/auditoria, Composes, runtime e gate HTTPS configurados | CI e Security gates aprovados em f0eab5e; sem deploy |
 | Observabilidade | Exporter privado por worker, Redis temporário e histogramas; templates | Serviços de monitoramento não instalados |
 | Carga | 3.000 requisições, cinco cenários, zero falhas, cerca de dez req/s; maior p95 580 ms | Bancada local sintética, sem certificação de produção |
 | Preparação científica | CSVs, bootstrap, baseline, comparação espacial, catálogo e diagnóstico horário | Sem aprovação científica ou ganho substancial comprovado |
@@ -25,12 +25,12 @@ Backend e frontend **0.1.0 em desenvolvimento**, branch `develop`, base `23bf4ce
 | Prioridade | Pendência | Próxima ação / critério de conclusão |
 |---|---|---|
 | 1 | Avisos INMET reais | Diagnosticar resets/RemoteProtocolError, confirmar origem/contrato e validar avisos reais. HTTP 000 não é ausência de avisos; causa ainda desconhecida |
-| 2 | CI remota | Revisar diff e artefatos, organizar commits, enviar quando autorizado e acompanhar CI + Security gates do SHA enviado; corrigir falhas sem enfraquecer checks |
+| 2 | CI remota — concluída para o lote funcional | CI e Security gates aprovados em f0eab5e. Confirmar checks do HEAD antes de merge; publicação do código não é deploy |
 | 3 | Revisão científica preparatória | Revisar fontes, convenções temporais, comparabilidade, suporte raro e proveniência/independência das reservas; registrar conclusão e limitações |
 | 4 | Critérios de aprovação | Fechar evento/métrica principal, suporte/ganho mínimo, tradeoffs, multiplicidade, revisor e protocolo prospectivo antes de ajuste; não inventar aceite |
 | 6 da lista original | Acessibilidade manual | Testar leitor de tela, teclado, foco, erros, resultados e emergência em PT/EN; registrar ambiente e achados, corrigir e retestar |
 
-**Estado remoto confirmado em edb81b0:** Validate application passou. Gate HTTPS falhou por nome de imagem dependente do checkout; Security gates falhou porque a espera do tema usa avaliação bloqueada pela CSP. Ambos corrigidos neste lote, sem relaxar CSP, com validação local direcionada; execução remota da correção ainda pendente. Artefato HTTPS não será enviado quando o gate falhar ou não executar. develop sem proteção/checks obrigatórios; nenhuma regra administrativa foi modificada. [Diagnóstico e validação](docs/operacoes/correcao-ci-2026-10-20.md).
+**Estado remoto confirmado:** CI e Security gates aprovados no mesmo commit funcional `f0eab5e`, após corrigir o nome da imagem da bancada e a asserção de tema incompatível com CSP. Qualificação funcional para merge concluída, sem realizar o merge. Revisão do diff e checks do HEAD continuam necessários antes de integrar. [Evidência](docs/operacoes/evidence/github-gates-aprovados-2026-10-20.json). develop permanece sem proteção/checks obrigatórios; nenhuma regra administrativa modificada.
 
 ## Evolução da candidata — por último
 

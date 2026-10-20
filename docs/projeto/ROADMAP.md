@@ -1,5 +1,7 @@
 # ROADMAP — Clima Prev
 
+**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
+
 ## Atualização vigente — 20/10/2026
 
 Versão 0.1.0 de backend/frontend em desenvolvimento, branch develop na base 23bf4ce, com alterações sem commit/push. O [STATE](STATE.md) consolida implementações e evidências; o [RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md) define pendências.

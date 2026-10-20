@@ -1,5 +1,7 @@
 # Contexto de retomada — ClimaPrev
 
+**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
+
 Atualizado em 20/10/2026. Branch `develop`, base `23bf4cee997bc825e76028f99eefd6160f699ee5`; backend/frontend 0.1.0 em desenvolvimento, alterações locais acumuladas sem commit/push, sem nova release.
 
 Ler [STATE](docs/projeto/STATE.md), [RDP](RELATORIO-PENDENCIAS-2026-10-20.md), [handoff](docs/projeto/handoff.md) e [catálogo](docs/projeto/ImplementationsAndRefactoring.md). Preservar o diff e revisar artefatos antes de qualquer staging/publicação. Não versionar .homolog, segredos ou dados brutos locais.

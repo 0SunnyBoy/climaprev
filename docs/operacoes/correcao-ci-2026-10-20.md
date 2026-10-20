@@ -17,3 +17,7 @@ O upload da evidência HTTPS exige sucesso do passo de navegador da execução a
 Compose válido e actionlint local aprovados. Bancada HTTPS construída/iniciada pela própria configuração, sem tag derivada do checkout. Gate Python de navegador aprovado com Playwright 1.63 e Edge 155 em HTTP local (CSS, teclado/ARIA, tema/idioma, conteúdo sintético inerte). Gate JS entre origens HTTPS aprovado com API real e upstream sintético. Ambiente de teste local não substitui o runner Linux remoto ou a revisão manual com leitor de tela.
 
 A suíte funcional anterior não foi repetida apenas por mudanças na bancada: aplicação backend/frontend não alterada. Aprovação para merge requer CI e Security gates concluídos com sucesso no mesmo commit. Não foi feito merge em main, deploy, ajuste de candidata ou ativação de 14 dias.
+
+## Resultado remoto
+
+Commit funcional `f0eab5eec1d7747142b6fa7fcf65d1cfe2c72af6`: [CI aprovada](https://github.com/0SunnyBoy/climaprev/actions/runs/39466814396) e [Security gates aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/39466814467). Todos os jobs concluídos com sucesso, incluindo runner Python fixado e homologação TLS/rotação/scanner/regressão. O diagnóstico anterior permanece histórico. Acesso real ao INMET e leitor de tela manual não são certificados por esses workflows. Nenhum merge/deploy realizado.

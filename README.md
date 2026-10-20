@@ -1,5 +1,7 @@
 # ClimaPrev
 
+**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
+
 ## Estado da versão — 20/10/2026
 
 Backend/frontend **0.1.0 em desenvolvimento**, branch develop, base 23bf4ce e alterações locais ainda sem commit/push; sem nova release ou publicação. Consulte [STATE](docs/projeto/STATE.md) e [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md).
