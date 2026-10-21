@@ -6,6 +6,8 @@ Refatoração publicada na develop em `e448afc`. A primeira execução remota ap
 
 Lote de responsividade, refatoração transversal e redução de linhas preparado para publicação na develop por solicitação do usuário. Validação local mais recente: 659 testes backend, 32 frontend, build/lint/tipagem e contrato preservados. O estado Git/SHA e a aprovação remota devem ser conferidos no commit e nos Actions correspondentes; resultados locais não substituem os checks desse SHA. Os registros de 20/10 abaixo descrevem o checkpoint anterior ao envio e não devem ser interpretados como confirmação de alterações ainda não commitadas após a publicação.
 
+Na execução de `432294a`, o CI completo passou; o Security gates avançou até a imagem de runtime e identificou GHSA-6q48-6c7w-9gw2 em certifi. Atualizados os locks de produção, desenvolvimento e carga para certifi 2026.10.19, com hashes dos dois artefatos oficiais do PyPI. Referência: https://github.com/advisories/GHSA-6q48-6c7w-9gw2. A confirmação final de segurança depende da nova execução sobre o commit dessa correção.
+
 ## Estado vigente — 20/10/2026
 
 - **Versão/Git:** backend e frontend 0.1.0 em desenvolvimento; develop, HEAD e referência local origin/develop em `451d845`. Esse lote INMET/busca foi enviado anteriormente. Responsividade e refatoração posteriores locais, sem commit/push, merge em main, release ou deploy. CI desse diff não executado remotamente; aprovação antiga não cobre o novo código.
