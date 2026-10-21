@@ -1,8 +1,13 @@
 # Keep all pinned default detection rules enabled.
-# Exact verified public provider host and source-file SHA256 values only.
+# Exact verified public provider host and public SHA256 metadata values only.
 # No path or rule is excluded; synthetic credentials remain detectable.
 [extend]
 useDefault = true
+
+[[allowlists]]
+description = "Verified public canonical OpenAPI SHA256; not an authentication credential"
+regexTarget = "secret"
+regexes = ['''^dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f$''']
 
 [[allowlists]]
 description = "Verified public metadata value 1; exact value only"

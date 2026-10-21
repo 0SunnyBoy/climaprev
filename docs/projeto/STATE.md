@@ -2,6 +2,8 @@
 
 ## Qualificação do lote refatorado — 21/10/2026
 
+Refatoração publicada na develop em `e448afc`. A primeira execução remota aprovou a integração independente por HTTPS, mas bloqueou a auditoria de dependências (Vite) e a varredura histórica (hash público do contrato OpenAPI). Correção: Vite 6.4.5 e exceção Gitleaks restrita ao valor exato do SHA256 público, sem desativar regras. Verificações locais da correção: 32 testes frontend, lint, build/tipagem, auditoria sem vulnerabilidades, política sintética de segredos e histórico de 53 commits sem achados. A aprovação remota da correção deve ser consultada nos Actions do novo commit.
+
 Lote de responsividade, refatoração transversal e redução de linhas preparado para publicação na develop por solicitação do usuário. Validação local mais recente: 659 testes backend, 32 frontend, build/lint/tipagem e contrato preservados. O estado Git/SHA e a aprovação remota devem ser conferidos no commit e nos Actions correspondentes; resultados locais não substituem os checks desse SHA. Os registros de 20/10 abaixo descrevem o checkpoint anterior ao envio e não devem ser interpretados como confirmação de alterações ainda não commitadas após a publicação.
 
 ## Estado vigente — 20/10/2026
