@@ -1,18 +1,12 @@
 # ClimaPrev
 
-**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
-
-## Incremento local — quatro frentes
-
-Após o checkpoint remoto aprovado c5408a0, o acesso real ao INMET foi confirmado com identificação explícita por requisição, inclusive no Docker. Corrigidos foco do botão de repetir busca e tratamento da resposta vazia real da geocodificação. Inspeção interativa no Edge confirmou teclado, erros, idioma, tema, emergência e resultado real com recuperação após timeout. **651 testes backend e 28 frontend** aprovados, build/lint/tipagem aprovados. Revisão científica/critério de aceite aguardam o usuário responsável; teste auditivo com leitor de tela pendente. Este incremento é local, ainda sem commit/push. [Relatório](docs/operacoes/frentes-1-a-4-2026-10-20.md).
-
 ## Estado da versão — 20/10/2026
 
-Backend/frontend **0.1.0 em desenvolvimento**, branch develop, base 23bf4ce e alterações locais ainda sem commit/push; sem nova release ou publicação. Consulte [STATE](docs/projeto/STATE.md) e [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md).
+Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`, HEAD e referência local origin/develop em `451d845`; sem merge em main, nova release ou deploy. Responsividade e refatoração posteriores são alterações locais, sem commit/push. Checks desse novo diff ainda não executados remotamente. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
 
-Desacoplamento e gate HTTPS local concluídos; janela pública de hoje UTC até +6, até sete dias por consulta; avisos com validação temporal/espacial conservadora e prazo cooperativo do serviço padrão 7 s. Interface revisada, exporter privado por worker e CI ampliada. Validação: 644 testes backend e 27 frontend aprovados; carga local sintética com 3.000 requisições sem falhas, sem certificação de produção.
+Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +6, até sete dias por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Etapa local de responsividade concluída; 32 testes frontend, build/tipagem/lint aprovados. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
 
-Faltam confirmação do INMET real, CI remota da revisão local, revisão científica/critério de aceite e acessibilidade manual. Candidate-1 evoluirá por último com foco em qualidade e precisão; reference-v1 ativa, sem calibração. 14 dias só planejado; hospedagem adiada.
+Pendências: leitor de tela, aceite/desenho científico e evolução da candidate-1 com comparação de múltiplos modelos/fontes. A prioridade atual é aplicação, qualidade e velocidade; a candidata não está mais adiada para o final. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte de 14 dias e hospedagem continuam adiados. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
 
 Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais
@@ -261,7 +255,7 @@ no HTML gerado pelo Vite; ele não depende de `/assets/styles.css`.
 
 A configuração local atual também executa ESLint, Vitest e `npm audit
 --audit-level=high` em uma imagem derivada do estágio de build do frontend.
-Esses checks passam a valer no GitHub quando esta alteração for enviada;
+Os checks devem ser executados para cada lote enviado; resultados locais
 não representam uma nova execução remota já aprovada.
 
 ## Estado da branch

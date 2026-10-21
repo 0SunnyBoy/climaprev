@@ -1,0 +1,88 @@
+{
+  "schema": "climaprev-line-review-accounting-v1",
+  "baseline_commit": "451d845",
+  "counting": "Physical lines including comments/blanks and new/deleted files; same scope as earlier 18104/18408 count. Documentation and configuration excluded. Frontend tests now shown separately.",
+  "groups": {
+    "docker_scripts": {
+      "head": 142,
+      "before_review": 142,
+      "after_review": 142,
+      "review_delta": 0,
+      "delta_from_head": 0
+    },
+    "frontend_tests": {
+      "head": 450,
+      "before_review": 524,
+      "after_review": 524,
+      "review_delta": 0,
+      "delta_from_head": 74
+    },
+    "frontend_production": {
+      "head": 1770,
+      "before_review": 1801,
+      "after_review": 1795,
+      "review_delta": -6,
+      "delta_from_head": 25
+    },
+    "css": {
+      "head": 128,
+      "before_review": 128,
+      "after_review": 128,
+      "review_delta": 0,
+      "delta_from_head": 0
+    },
+    "backend_production": {
+      "head": 7060,
+      "before_review": 7165,
+      "after_review": 7062,
+      "review_delta": -103,
+      "delta_from_head": 2
+    },
+    "backend_tests_and_gates": {
+      "head": 8554,
+      "before_review": 8648,
+      "after_review": 8648,
+      "review_delta": 0,
+      "delta_from_head": 94
+    }
+  },
+  "total": {
+    "head": 18104,
+    "before_review": 18408,
+    "after_review": 18299,
+    "review_delta": -109,
+    "delta_from_head": 195
+  },
+  "attribution_limit": "All backend changes since HEAD are structural in intent. Frontend production mixes timeout recovery and structural extraction; no isolated intermediate commit exists to assign every line to one intent. Test/gate additions are reported separately, not attributed to production savings.",
+  "retained": "Tests, timeout/cancellation recovery, scientific code/evidence, typed API schemas and independent application/domain/HTTP boundaries.",
+  "files_changed_in_this_review": [
+    {
+      "path": "frontend/src/types/api.ts",
+      "group": "frontend_production",
+      "head": 124,
+      "before_review": 117,
+      "after_review": 111
+    },
+    {
+      "path": "src/climaprev/api/schemas/risk_response.py",
+      "group": "backend_production",
+      "head": 0,
+      "before_review": 209,
+      "after_review": 129
+    },
+    {
+      "path": "src/climaprev/application/services/alert_query.py",
+      "group": "backend_production",
+      "head": 0,
+      "before_review": 111,
+      "after_review": 107
+    },
+    {
+      "path": "src/climaprev/application/services/forecast_cache.py",
+      "group": "backend_production",
+      "head": 0,
+      "before_review": 269,
+      "after_review": 250
+    }
+  ]
+}

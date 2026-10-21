@@ -6,15 +6,17 @@ import httpx
 import pytest
 import respx
 
-from climaprev.config import Settings
-from climaprev.domain.models import CanonicalLocation, DatePeriod
-from climaprev.infrastructure.providers.open_meteo import (
+from climaprev.application.errors import (
     LocationNotFound,
-    OpenMeteoForecastClient,
-    OpenMeteoGeocodingClient,
     ProviderPermanentError,
     ProviderTransientError,
     WeatherDataInvalid,
+)
+from climaprev.config import Settings
+from climaprev.domain.models import CanonicalLocation, DatePeriod
+from climaprev.infrastructure.providers.open_meteo import (
+    OpenMeteoForecastClient,
+    OpenMeteoGeocodingClient,
 )
 from tests.contract.providers.test_open_meteo_payload import (
     valid_forecast_payload,

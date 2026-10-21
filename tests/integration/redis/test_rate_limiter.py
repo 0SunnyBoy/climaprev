@@ -8,7 +8,7 @@ from uuid import uuid4
 import pytest
 from redis.asyncio import Redis
 
-from climaprev.infrastructure.errors import DependencyUnavailable
+from climaprev.application.errors import DependencyUnavailable
 from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
 
 

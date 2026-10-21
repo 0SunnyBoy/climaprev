@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 from pydantic import ValidationError
 from starlette.requests import Request
-from tests.integration.application.test_forecast_query import (
+from tests.support.forecast import (
     FakeProvider,
     InMemoryCache,
     InMemoryLock,
@@ -15,7 +15,7 @@ from tests.integration.application.test_forecast_query import (
 
 from climaprev.api.routes.risk import _execute_risk
 from climaprev.api.schemas.risk import RiskQueryParams
-from climaprev.application.services.forecast_query import WeatherProviderUnavailable
+from climaprev.application.errors import WeatherProviderUnavailable
 from climaprev.config import Settings
 
 

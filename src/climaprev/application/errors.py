@@ -20,3 +20,11 @@ class LocationNotFound(Exception):
 
 class DependencyUnavailable(Exception):
     """An infrastructure dependency is unavailable."""
+
+
+class WeatherProviderUnavailable(Exception):
+    """The weather provider could not produce a forecast and no valid stale value exists."""
+
+
+class LockOwnershipLost(WeatherProviderUnavailable):
+    """The service lost the refresh lock while an upstream request was in progress."""

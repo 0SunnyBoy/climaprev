@@ -29,6 +29,7 @@ jobs:
           VITE_API_BASE_URL=https://api.example docker compose -f frontend/compose.yaml config --quiet
           python tests/docker/check_load_isolation.py
           python tests/docker/check_local_frontend_proxy.py
+          python tests/docker/check_local_container_hardening.py
 
       - name: Build frontend validation image
         run: docker build --target build -f frontend/Dockerfile -t climaprev-frontend-checks:ci frontend

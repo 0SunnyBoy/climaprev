@@ -1,0 +1,10 @@
+{
+  "schema": "climaprev-refactor-contract-v1",
+  "baseline_commit": "451d8459b45b584573bba1d808383101420c3493",
+  "openapi_sha256": {
+    "baseline": "dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f",
+    "refactored": "dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f"
+  },
+  "identical": true,
+  "scope": "Same local Python environment; canonical JSON OpenAPI before/after structural extraction. No API requests or reserved outcomes accessed."
+}

@@ -5,6 +5,14 @@
 
 ## Visão de contexto
 
+## Responsabilidades após a refatoração
+
+O serviço de consulta coordena três colaboradores: `location_resolver.py` resolve/cacha locais; `forecast_cache.py` mantém previsão, freshness, locks e heartbeat; `alert_query.py` consulta e valida avisos na entrega. Todos ficam em `application/services/` e usam as portas da aplicação.
+
+DTOs/conversões estão em `application/query_result.py`; formato validado do cache em `application/cache_codec.py`; saída HTTP em `api/schemas/risk_response.py`. `main.py` monta recursos e rotas, delegando erros HTTP a `api/exception_handlers.py` e saúde a `api/routes/health.py`. Frontend separa transporte, validação JSON e controle de prazo; suporte reutilizável dos testes fica em `tests/support/`.
+
+A refatoração preserva contratos/TTLs e execução no monorepo; não adiciona modelos ou altera política científica. [Execução e verificações](../operacoes/refatoracao-2026-10-20.md).
+
 ```mermaid
 flowchart LR
     Cliente["Navegador: Vue/TypeScript compilado ou cliente HTTP"] --> Entrada["Nginx local ou entrada TLS"]
@@ -39,7 +47,7 @@ relacional ou fila de mensagens.
 | Entrada estática e proxy | [Nginx local](../../frontend/nginx.conf), [Nginx de homologação](../../docker/homolog/entrada/nginx.conf) | Servir o frontend e encaminhar somente API e health check ao backend. |
 | Entrada HTTP         | [Rotas](../../src/climaprev/api/routes/risk.py), [schema](../../src/climaprev/api/schemas/risk.py)                                                                                                           | Validar query e serializar resposta; não calcular risco.          |
 | Proteção de entrada  | [Dependências](../../src/climaprev/api/deps.py)                                                                                                                                                           | Resolver identidade de rede e aplicar rate limit.                 |
-| Aplicação            | [Serviço de consulta](../../src/climaprev/application/services/forecast_query.py)                                                                                                                         | Resolver local, cache, lock, previsão, avaliação e alertas.       |
+| Aplicação            | [Serviço de consulta](../../src/climaprev/application/services/forecast_query.py)                                                                                                                         | Orquestrar local, previsão, avaliação e avisos.       |
 | Contratos internos   | [Portas](../../src/climaprev/application/ports.py), [query](../../src/climaprev/application/query.py)                                                                                                        | Separar operações de suas implementações.                         |
 | Domínio              | [Modelos](../../src/climaprev/domain/models.py), [avaliador](../../src/climaprev/domain/risk_evaluator.py), [política](../../src/climaprev/domain/risk_policy.py)                                               | Regras determinísticas sem acesso à rede.                         |
 | Meteorologia         | [Open-Meteo](../../src/climaprev/infrastructure/providers/open_meteo.py), [INMET](../../src/climaprev/infrastructure/providers/inmet_alerts.py), [HTTP](../../src/climaprev/infrastructure/http/client.py) | Consultar e normalizar previsão e alertas externos. |

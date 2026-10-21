@@ -14,22 +14,25 @@ import pytest
 from climaprev.api.deps import get_forecast_query_service, get_rate_limiter
 from climaprev.api.errors import ApplicationError
 from climaprev.api.observability import RequestMetrics
+from climaprev.application.errors import (
+    DependencyUnavailable,
+    LocationNotFound,
+    ProviderTransientError,
+    WeatherDataInvalid,
+    WeatherProviderUnavailable,
+)
 from climaprev.application.ports import RateLimitDecision
 from climaprev.application.query import ForecastQuery
-from climaprev.application.services.forecast_query import (
+from climaprev.application.query_result import (
     DataQuality,
     ForecastDay,
     ForecastSource,
     OfficialAlertsResult,
     RiskQueryResult,
-    WeatherProviderUnavailable,
 )
 from climaprev.config import Settings
 from climaprev.domain.models import CanonicalLocation, DatePeriod, OfficialAlert, RiskAssessment
 from climaprev.domain.units import TemperatureUnit
-from climaprev.infrastructure.errors import DependencyUnavailable
-from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
-from climaprev.infrastructure.providers.open_meteo import LocationNotFound
 from climaprev.main import create_app, lifespan
 from tests.security_fixtures import isolated_settings
 

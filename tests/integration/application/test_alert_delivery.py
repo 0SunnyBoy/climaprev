@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 from climaprev.domain.models import OfficialAlert
-from tests.integration.application.test_forecast_query import (
+from tests.support.forecast import (
     FakeAlerts,
     InMemoryCache,
     service,

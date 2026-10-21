@@ -1,13 +1,6 @@
-# PROJECT — Clima Prev
+# PROJECT — ClimaPrev
 
-**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
-
-**Atualização vigente (20/10/2026):** backend e frontend 0.1.0 em desenvolvimento; develop, base 23bf4ce, alterações locais sem commit/push. Desacoplamento, datas/fusos, avisos, prazo, interface, CI local, métricas e carga revisados. 644 testes backend e 27 frontend aprovados. [STATE](STATE.md) e [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) são as fontes do estado vigente. Prioridades: INMET real, CI remota, revisão científica preparatória, critérios de aprovação e acessibilidade manual. Evolução da candidate-1 por último, focada em qualidade/precisão; reference-v1 preservada. Hospedagem adiada; horizonte de 14 dias só planejado. A análise datada abaixo é histórica.
-
-**Revisão vigente:** 20/10/2026; análise original de 25/09 preservada nas referências históricas.
-**Estado:** rework Vue, avaliação diária de risco, prioridade de alertas oficiais
-e contrato do maior risco implementados; o pipeline offline de validação histórica
-está disponível, mas a aprovação científica e a calibração permanecem pendentes.
+Documento de visão e navegação. Estado observado em [STATE](STATE.md), fila no [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) e responsabilidades no [catálogo](ImplementationsAndRefactoring.md). Não duplica contagens/execuções; relatórios datados registram checkpoints históricos.
 
 ## Visão
 

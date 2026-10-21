@@ -1,15 +1,17 @@
 # Contexto de retomada — ClimaPrev
 
-**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
+Atualizado em 20/10/2026. Repositório monolítico, branch develop, backend/frontend 0.1.0 em desenvolvimento. HEAD e referência local origin/develop: `451d845`; responsividade e refatoração posteriores ainda locais, sem commit/push. Não há merge em main ou deploy.
 
-Atualizado em 20/10/2026. Branch `develop`, base `23bf4cee997bc825e76028f99eefd6160f699ee5`; backend/frontend 0.1.0 em desenvolvimento, alterações locais acumuladas sem commit/push, sem nova release.
+## Fontes de referência
 
-Ler [STATE](docs/projeto/STATE.md), [RDP](RELATORIO-PENDENCIAS-2026-10-20.md), [handoff](docs/projeto/handoff.md) e [catálogo](docs/projeto/ImplementationsAndRefactoring.md). Preservar o diff e revisar artefatos antes de qualquer staging/publicação. Não versionar .homolog, segredos ou dados brutos locais.
+- [STATE](docs/projeto/STATE.md): estado observado e validações.
+- [RDP](RELATORIO-PENDENCIAS-2026-10-20.md): fila e decisões vigentes.
+- [Handoff](docs/projeto/handoff.md): retomada operacional.
+- [Catálogo técnico](docs/projeto/ImplementationsAndRefactoring.md): responsabilidades e caminhos atuais.
+- [Refatoração](docs/operacoes/refatoracao-2026-10-20.md): mudanças, limpeza e limites.
 
-Aplicação local com frontend/API/Redis, desacoplamento concluído no monorepo, janela pública de sete datas UTC, alertas conservadores, prazo cooperativo, interface e métricas revisados. Último lote: 644 testes backend e 27 frontend aprovados, gate HTTPS local aprovado; carga sintética de 3.000 requisições sem falhas. Detalhes/limites no STATE.
+Prioridade do usuário: responsividade, qualidade e velocidade da aplicação, com evolução da candidata por comparação entre modelos/fontes. Reference-v1 permanece ativa; candidata sem superioridade comprovada ou promoção. Protocolo e critérios aguardam aceite. Horizonte de 14 dias e hospedagem continuam adiados; sem separar repositórios ou atualizar PDF acadêmico.
 
-Ordem: INMET real; CI remota; revisão científica preparatória; critérios de aprovação; acessibilidade manual. Por último, evolução da candidate-1 com foco em qualidade e precisão da previsão. Reference-v1 ativa; sem fitting/calibração/promoção. Horizonte de 14 dias só planejado. Hospedagem adiada, sem separar repositórios e sem atualizar o PDF acadêmico.
+Preservar alterações locais, dados científicos, protocolos/evidências e segredos locais fora do versionamento. Não confundir aprovação do código antigo com CI do diff atual. O estado técnico detalhado é mantido no STATE para evitar resumos duplicados divergentes.
 
-GitHub: CI antiga passou; Security gates antigo falhou na asserção de tema. Correção local ainda sem rerun remoto. develop sem proteção/checks obrigatórios, confirmado por leitura alternativa; 403 administrativo não bloqueia leitura do código. Nenhuma regra remota foi alterada.
-
-[Contexto anterior](CONTEXTO-HISTORICO-ATE-2026-10-20.md) é apenas histórico.
+[Contexto histórico](CONTEXTO-HISTORICO-ATE-2026-10-20.md).

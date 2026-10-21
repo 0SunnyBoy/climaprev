@@ -31,6 +31,7 @@ jobs:
           test "$(git check-ignore --no-index -q .homolog/redis.password; echo $?)" = "0"
           test "$(git check-ignore --no-index -q .env.example; echo $?)" = "1"
           python tests/docker/check_local_frontend_proxy.py
+          python tests/docker/check_local_container_hardening.py
           python tests/docker/check_load_isolation.py
           python tests/docker/check_frontend_security.py
           python tests/docker/check_secret_rotation.py

@@ -1,33 +1,23 @@
-# ClimaPrev - Handoff de retomada
+# Handoff de retomada — ClimaPrev
 
-**Publicação e qualificação em 20/10/2026:** atualização enviada à develop; lote funcional `f0eab5e` aprovado em CI e Security gates. As correções de imagem/CSP passaram remotamente. Não houve merge em main ou deploy. Estado e pendências vigentes no [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md); descrições de alterações não enviadas/CI pendente abaixo pertencem aos lotes anteriores.
+## Ler primeiro
 
-## Atualização vigente — 20/10/2026
+[STATE](STATE.md) para validações e estado; [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) para fila; [catálogo](ImplementationsAndRefactoring.md) para caminhos; [refatoração](../operacoes/refatoracao-2026-10-20.md) para o diff transversal.
 
-Versão 0.1.0 de backend/frontend em desenvolvimento, branch develop na base 23bf4ce, com alterações sem commit/push. O [STATE](STATE.md) consolida implementações e evidências; o [RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md) define pendências.
+## Checkout e execução
 
-Concluídos localmente: desacoplamento, janela UTC de sete datas, validade/cobertura conservadora de avisos, prazo global cooperativo, interface revisada, CI configurada, métricas por worker e campanha de carga. 644 testes backend e 27 frontend, checks estáticos/build e gate HTTPS aprovados; 3.000 requisições locais sem falhas. Resultados não aprovam produção ou candidata científica.
+Branch develop, HEAD/referência local origin/develop em `451d845`; incrementos de responsividade e refatoração ainda locais. Preservar alterações acumuladas e revisar arquivos antes de staging. Não confundir imagem antiga ou CI antigo com o código local atual. Não houve merge/release/deploy.
 
-Ordem atual: (1) INMET real; (2) revisão/publicação do diff quando autorizada e CI remota; (3) revisão científica preparatória; (4) critérios de aprovação; (6 da lista original) acessibilidade manual. Por último, evolução da candidate-1 focada explicitamente em qualidade e precisão da previsão. Reference-v1 preservada; nenhum ajuste/calibração/promoção. Horizonte de 14 dias só planejado. Hospedagem adiada; monorepo mantido; não atualizar PDF acadêmico.
+API/frontend possuem Dockerfiles e Composes próprios; modo integrado local usa `docker compose up -d --build`. Aguardar readiness real, não apenas containers iniciados. Comandos e ambientes estão no README e documentação operacional. Para regressão com Redis usar ambiente isolado de teste, sem flush no banco da aplicação.
 
-GitHub: CI da base passou; Security gates falhou no teste de tema. Correção local ainda sem rerun remoto; develop sem proteção/checks obrigatórios. Preservar alterações acumuladas, não incluir segredos/.homolog/dados brutos/artefatos locais no envio. Protocolos e evidências congelados não devem ser reescritos.
+## Retomada funcional
 
-## Histórico
+O acesso real INMET já foi verificado; acompanhar disponibilidade não equivale a repetir a investigação como bloqueio atual. Leitor de tela aguarda disponibilidade do usuário. Candidate-1 foi retomada no planejamento, com foco em precisão e múltiplos modelos; ainda depende de critérios/proveniência e avaliação independentes. Usuário responsável pelo aceite; responsabilidade não significa aprovação registrada.
 
-Os registros anteriores estão no [arquivo histórico](handoff-HISTORICO-ATE-2026-10-20.md). Eles não redefinem as prioridades ou o estado vigente.
+Não abrir reservas para escolher ajuste, não promover automaticamente a candidata e não reescrever evidências congeladas. Horizonte de 14 dias e hospedagem adiados. Sem separação de repositórios ou atualização do PDF acadêmico.
 
+## Próximo envio
 
-## Próxima sessão de trabalho
+Revisar diff e arquivos novos, manter .homolog/segredos/dados brutos locais fora do versionamento e executar os gates pertinentes. Conferir CI e Security gates do commit efetivamente enviado. Sem alterações administrativas remotas neste lote.
 
-1. Conferir `git status`, preservar alterações e ler o RDP antes de staging. Não executar `git add .` sem revisar arquivos e ignorados.
-2. INMET: consultar `docs/operacoes/evidence/inmet-retomada-2026-10-20.json`; diferenciar conectividade da API de avisos e obtenção dos CSVs históricos, que já ocorreu. Não concluir causa de rede sem evidência.
-3. CI: consultar `docs/operacoes/evidence/github-estado-2026-10-20.json`; falha remota foi tema no navegador. Correção de espera já existe localmente em `tests/docker/check_frontend_browser.py`; não alegar rerun do workflow antigo nem confundir runner Python com gate JS/Edge aprovado.
-4. Manter revisão científica/aceite como preparação; não abrir outcomes reservados, escolher limiares ou ativar correção estatística.
-5. Executar acessibilidade manual quando houver leitor de tela disponível; registrar ferramenta/versão, cenários e limitações. Não encerrar essa pendência com teste DOM automatizado.
-
-A stack principal local fica em 8080/8000; Redis não exposto publicamente. As bancadas dedicadas de navegador/carga foram encerradas após os testes. Não reprovisionar secrets sobre diretórios existentes.
-
-
-## Continuação local das quatro frentes
-
-INMET real acessível com identificação explícita, confirmado no adaptador e Docker. Busca por teclado corrigida e inspecionada no Edge; leitor de tela ainda pendente. Revisão preparatória/critério aguardam aceite do usuário responsável. 651 testes backend e 28 frontend aprovados, sem ajuste de candidata. Incremento local ainda não enviado; [relatório vigente](../operacoes/frentes-1-a-4-2026-10-20.md).
+[Histórico](handoff-HISTORICO-ATE-2026-10-20.md).

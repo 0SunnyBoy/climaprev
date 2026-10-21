@@ -7,6 +7,29 @@ vi.mock('@/services/api', () => ({ searchLocations: vi.fn() }))
 afterEach(() => { vi.useRealTimers(); vi.resetAllMocks() })
 
 describe('recuperação da busca de cidades', () => {
+  it('encerra busca travada, permite repetir e ignora resultado tardio', async () => {
+    vi.useFakeTimers()
+    let resolveOld!: (value: []) => void
+    vi.mocked(searchLocations)
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveOld = resolve }))
+      .mockResolvedValueOnce([])
+    const wrapper = mount(LocationAutocomplete, { props: { modelValue: 'Belém' } })
+    try {
+      await wrapper.get('input').trigger('input')
+      await vi.advanceTimersByTimeAsync(250)
+      const signal = vi.mocked(searchLocations).mock.calls[0]![1]!
+      await vi.advanceTimersByTimeAsync(5000)
+      expect(signal.aborted).toBe(true)
+      expect(wrapper.get('input').attributes('aria-busy')).toBe('false')
+      expect(wrapper.get('#city-search-status').text()).toContain('Não foi possível')
+      await wrapper.get('button').trigger('click')
+      await vi.advanceTimersByTimeAsync(250)
+      resolveOld([])
+      await flushPromises()
+      expect(wrapper.get('#city-search-status').text()).toContain('Nenhuma cidade')
+      expect(wrapper.find('button').exists()).toBe(false)
+    } finally { wrapper.unmount() }
+  })
   it('mantém a repetição alcançável após blur e devolve foco ao campo', async () => {
     vi.useFakeTimers()
     vi.mocked(searchLocations).mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce([])

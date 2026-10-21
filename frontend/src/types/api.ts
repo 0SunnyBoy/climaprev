@@ -20,13 +20,7 @@ export interface LocationCandidate {
   source: string
 }
 
-export interface Location {
-  name: string
-  latitude: number
-  longitude: number
-  timezone: string
-  source: string
-}
+export type Location = LocationCandidate
 
 export interface ForecastPeriod {
   start_date: string
@@ -114,11 +108,4 @@ export interface RiskResponse {
   source: ForecastSource
   official_alerts: OfficialAlerts
   disclaimer: string
-}
-
-export interface ErrorEnvelope {
-  error?: {
-    code?: unknown
-    request_id?: unknown
-  }
 }

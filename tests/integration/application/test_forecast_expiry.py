@@ -5,12 +5,11 @@ from uuid import uuid4
 import pytest
 from redis.asyncio import Redis
 
+from climaprev.application.errors import ProviderTransientError, WeatherProviderUnavailable
 from climaprev.application.ports import CacheEntry
-from climaprev.application.services import forecast_query
-from climaprev.application.services.forecast_query import WeatherProviderUnavailable
+from climaprev.application.services import forecast_cache
 from climaprev.infrastructure.cache.redis_cache import RedisCache
-from climaprev.infrastructure.http.client import ProviderTransientError
-from tests.integration.application.test_forecast_query import (
+from tests.support.forecast import (
     LOCATION,
     PERIOD,
     FakeAlerts,
@@ -28,7 +27,7 @@ async def clock_cache():
     clock = [1_800_000_000.0]
     environment = f"expiry-{uuid4().hex}"
     cache = RedisCache(redis, environment=environment, clock=lambda: clock[0])
-    key = forecast_query._forecast_key(LOCATION, PERIOD)
+    key = forecast_cache.forecast_cache_key(LOCATION, PERIOD)
     await cache.set(key, CacheEntry(cached_forecast(), False), 600, 900)
     try:
         yield clock, cache, redis, f"climaprev:{environment}:{key}"
@@ -68,7 +67,7 @@ async def test_stale_expiring_during_wait_is_never_delivered(clock_cache, monkey
         async def no_lock(*args, **kwargs):
             clock[0] += 1
         monkeypatch.setattr(lock, "acquire", no_lock)
-        monkeypatch.setattr(forecast_query, "_LOCK_WAITER_DEADLINE_SECONDS", 0)
+        monkeypatch.setattr(forecast_cache, "_LOCK_WAITER_DEADLINE_SECONDS", 0)
     elif during == "retry":
         async def fail_after_retry(*args, **kwargs):
             clock[0] += 1

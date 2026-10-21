@@ -1,27 +1,42 @@
-"""Validate the local Compose container-hardening contract."""
+"""Validate effective local Compose hardening, independent of service counts."""
 
+import ipaddress
+import json
+import re
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def check() -> None:
-    compose = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
+    # Keep expanded configuration in memory: it may contain local environment values.
+    compose = json.loads(subprocess.check_output(
+        ["docker", "compose", "--profile", "*", "config", "--format", "json"],
+        cwd=ROOT, text=True,
+    ))
+    services = compose["services"]
+    assert re.fullmatch(r"redis:7-alpine@sha256:[0-9a-f]{64}", services["redis"]["image"])
+    frontend = (ROOT / "frontend/Dockerfile").read_text(encoding="utf-8")
+    assert re.search(r"(?m)^FROM nginx:[^\s]+@sha256:[0-9a-f]{64}$", frontend)
 
-    assert "redis:7-alpine@sha256:" in compose
-    assert "nginx:1.27-alpine@sha256:" in compose
-    assert compose.count("<<: *hardened-service") == 6
-    assert compose.count("no-new-privileges:true") == 1
-    assert compose.count("- ALL") == 1
-    assert "- CHOWN" in compose
-    assert "- SETGID" in compose
-    assert "- SETUID" in compose
-    assert compose.count("read_only: true") == 2
-    assert "- /etc/nginx/conf.d" in compose
-    assert "- /var/cache/nginx" in compose
-    assert "- /data" in compose
-    assert "internal: true" in compose
-    assert "${CLIMAPREV_BACKEND_SUBNET:-172.31.0.0/24}" in compose
+    for service in services.values():
+        assert "no-new-privileges:true" in service.get("security_opt", [])
+        assert service.get("cap_drop") == ["ALL"]
+
+    for name in ("redis", "frontend", "redis-load"):
+        service = services[name]
+        assert service.get("read_only") is True
+        assert set(service.get("cap_add", [])) == {"CHOWN", "SETGID", "SETUID"}
+    for name in ("redis", "redis-load"):
+        assert "/data" in services[name]["tmpfs"]
+    assert {"/etc/nginx/conf.d", "/var/cache/nginx"} <= set(services["frontend"]["tmpfs"])
+
+    backend = compose["networks"]["backend"]
+    assert backend.get("internal") is True
+    assert backend["ipam"]["config"]
+    assert all(ipaddress.ip_network(item["subnet"]).is_private
+               for item in backend["ipam"]["config"])
 
 
 if __name__ == "__main__":

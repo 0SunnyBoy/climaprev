@@ -1,0 +1,48 @@
+{
+  "schema": "climaprev-project-refactor-validation-v1",
+  "recorded_at": "2026-10-20T22:18:09.196772+00:00",
+  "backend_main_suite": {
+    "passed": 651,
+    "warnings_as_errors": true,
+    "duration_seconds": 66.59
+  },
+  "backend_hardening_regressions": {
+    "passed": 8,
+    "duration_seconds": 0.17,
+    "separate_run": true
+  },
+  "frontend": {
+    "passed": 32,
+    "build": true,
+    "typecheck": true,
+    "eslint": true,
+    "no_unused_locals_and_parameters": true
+  },
+  "mypy_linux": {
+    "source_modules": 75,
+    "passed": true
+  },
+  "ruff": true,
+  "actionlint": true,
+  "compose_config": [
+    "integrated",
+    "api",
+    "standalone-frontend",
+    "design-overlay"
+  ],
+  "static_gates": [
+    "local-container-hardening",
+    "load-isolation",
+    "local-frontend-proxy",
+    "frontend-security"
+  ],
+  "gitleaks": {
+    "scope": "repository-visible working snapshot; ignored files excluded; not Git history",
+    "bytes_scanned_approx": 17563638,
+    "leaks_found": 0
+  },
+  "openapi_identical": true,
+  "scientific_code_changed": false,
+  "remote_ci_run": false,
+  "commit_or_push": false
+}

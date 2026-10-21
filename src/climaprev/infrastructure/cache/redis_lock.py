@@ -5,7 +5,7 @@ from typing import cast
 
 from redis.exceptions import RedisError
 
-from climaprev.infrastructure.errors import DependencyUnavailable
+from climaprev.application.errors import DependencyUnavailable
 from climaprev.infrastructure.redis_delay import RedisConnection
 
 _RELEASE_SCRIPT = """

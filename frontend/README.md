@@ -1,9 +1,6 @@
 # ClimaPrev — frontend
 
-<!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../docs/projeto/STATE.md) e o [RDP atualizado](../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
->
-> Revisão atual: versão 0.1.0 em desenvolvimento, 27 testes aprovados, build/typecheck/ESLint e gate HTTPS local aprovados. Janela hoje UTC até +6; sete dias por consulta. Erros PT/EN reativos, contexto/foco após emergência e layout 320–1280 px verificados. Avaliação manual com leitor de tela pendente. Sem hospedagem e sem ativar 14 dias.
+Versão 0.1.0 em desenvolvimento. Estado e validações no [STATE](../docs/projeto/STATE.md), pendências no [RDP](../RELATORIO-PENDENCIAS-2026-10-20.md). Transporte e validação runtime separados; prazo/cancelamento compartilhado entre busca e consulta. Acessibilidade auditiva continua pendente.
 
 Aplicação Vue/TypeScript independente, que consome a API HTTP/JSON `/api/v1`. Esta pasta contém dependências, testes, build, Dockerfile, configuração Nginx e Compose próprios. O código Python não é necessário para construir a interface.
 

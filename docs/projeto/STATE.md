@@ -1,43 +1,33 @@
-# STATE — Clima Prev
+# STATE — ClimaPrev
+
+## Qualificação do lote refatorado — 21/10/2026
+
+Lote de responsividade, refatoração transversal e redução de linhas preparado para publicação na develop por solicitação do usuário. Validação local mais recente: 659 testes backend, 32 frontend, build/lint/tipagem e contrato preservados. O estado Git/SHA e a aprovação remota devem ser conferidos no commit e nos Actions correspondentes; resultados locais não substituem os checks desse SHA. Os registros de 20/10 abaixo descrevem o checkpoint anterior ao envio e não devem ser interpretados como confirmação de alterações ainda não commitadas após a publicação.
 
 ## Estado vigente — 20/10/2026
 
-- **Versão dos pacotes:** backend 0.1.0 e frontend 0.1.0; desenvolvimento local sem nova release/tag. Não confundir versão do pacote, identidade da política e versão de integração.
-- **Git:** branch `develop`, atualização enviada em `edb81b0` e correções funcionais consolidadas em `f0eab5e`. Último lote funcional com CI e Security gates aprovados no mesmo SHA. Registro documental posterior não altera a aplicação; sem merge em main ou release.
-- **Aplicação:** frontend Vue/TypeScript/Vite em `http://localhost:8080`, API FastAPI em `http://localhost:8000` e Redis local. Readiness e contratos HTTP/proxy foram verificados no lote atual; não existe ambiente de hospedagem definido.
-- **Desacoplamento:** builds e Composes próprios para frontend e API; origem HTTP(S) configurada no build, CSP/CORS explícitos; modo integrado preservado. Gate HTTPS local entre origens distintas aprovado. Monorepo mantido.
-- **Datas:** sete datas elegíveis, hoje UTC até +6, até sete dias consecutivos por consulta. API GET/POST valida antes do serviço; calendário atualiza na virada do dia/foco. Horizonte de 14 dias somente planejado.
-- **Alertas:** validade/expiração reavaliadas na entrega e cache; interseção temporal no fuso local e geometria Polygon/MultiPolygon com furos; registros inválidos e formatos não suportados resultam em indisponibilidade conservadora. Identidade do adaptador `inmet-alerts-v2`, sem mudar a política `reference-v1`. INMET ao vivo não confirmado: HTTPX falhou com RemoteProtocolError e curl com conexão resetada/HTTP 000, sem prova da causa ou de indisponibilidade global.
-- **Prazo:** orçamento cooperativo do serviço de consulta padrão 7 s, configurável até 8 s; cliente 10 s. Parsing/transporte/rate limit anteriores ao serviço ficam fora; cleanup pode ultrapassar o orçamento. Corrida de timers do cliente corrigida.
-- **Interface:** contexto mantido após emergência, foco, busca por teclado/ARIA, tema/idioma persistidos e tradução reativa de erros; contraste de seis pares semânticos e layout 320–1280 px verificados automaticamente. Revisão manual com leitor de tela continua pendente.
-- **Métricas:** exporter privado Prometheus, opt-in, com snapshots por worker em Redis (publicação 5 s, lease 20 s), histogramas e leitura limitada; dois workers reais verificados. Prometheus/Grafana/Alertmanager não instalados; templates não representam monitoramento operacional ativo.
-- **Validação local:** 644 testes backend e 27 frontend aprovados, build/typecheck/ESLint/Ruff/mypy/actionlint aprovados; runtime UID 10001 sem testes/docs/env/ferramentas de desenvolvimento. Gate HTTPS de navegador com API real e upstream sintético aprovado. Acessibilidade automática não equivale a certificação WCAG.
-- **Carga local:** cinco cenários de 60 s, dez usuários, aproximadamente dez req/s, 3.000 requisições sem falhas; maior p95 580 ms. Recursos limitados em Docker Desktop compartilhado e provedor sintético; não certifica capacidade de produção.
-- **GitHub — qualificação funcional f0eab5e:** CI e Security gates concluídos com sucesso, incluindo Validate application, HTTPS independente, navegador/CSP, rotação sintética, scanner de imagem e regressão. As duas falhas de edb81b0 foram corrigidas sem relaxar CSP. Evidência em [aprovação dos gates](../operacoes/evidence/github-gates-aprovados-2026-10-20.json). develop sem proteção/checks obrigatórios; nenhuma regra administrativa alterada.
-- **Ciência:** reference-v1 ativa, sem calibração/promoção. CSVs oficiais de três estações, baseline de cinco eventos, 72 snapshots espaciais, 3.747 casos catalogados e diagnóstico horário preparados. Resultados mistos, sem ganho substancial comprovado nem recuperação dos altos observados. Preparação mais completa não significa candidata superior.
+- **Versão/Git:** backend e frontend 0.1.0 em desenvolvimento; develop, HEAD e referência local origin/develop em `451d845`. Esse lote INMET/busca foi enviado anteriormente. Responsividade e refatoração posteriores locais, sem commit/push, merge em main, release ou deploy. CI desse diff não executado remotamente; aprovação antiga não cobre o novo código.
+- **Aplicação:** API FastAPI, frontend Vue/TypeScript/Vite e Redis. Builds e Composes distintos, CORS/CSP e gate HTTPS local existentes; monorepo preservado. Sem hospedagem definida.
+- **Datas/prazos:** hoje UTC até +6, até sete dias por consulta. Orçamento cooperativo do serviço 7 s, máximo configurável 8 s; cliente 10 s, busca de cidades 5 s após debounce. Transporte/validação anteriores ao serviço e cleanup limitam a interpretação do orçamento. Cancelamento encerra a espera mesmo se o transporte ignorar abort, com isolamento de resposta tardia.
+- **Alertas:** filtro temporal/geográfico conservador, cache/expiração na entrega, Polygon/MultiPolygon com furos. INMET ao vivo verificado em amostra controlada, inclusive Docker; não é garantia de cobertura/uptime. Política reference-v1 preservada.
+- **Responsividade:** etapa 1 concluída localmente; telas 320/375/768/1280 px, PT/EN, consulta real de sete dias e foco do resultado verificados. Medição isolada de três cidades: frias 1,20–2,16 s e repetidas 3,57–4,21 ms; falha e travamento injetados tratados. Não é capacidade de produção. [Evidências e limites](../operacoes/responsividade-2026-10-20.md).
+- **Refatoração:** utilitário de prazo compartilhado; DTOs/conversões em query_result, codecs em cache_codec e schemas/mapper HTTP em risk_response. Resolução de local, cache/lock/heartbeat e consulta de avisos em serviços próprios; tratamento de erros/saúde fora do main. Validadores frontend separados, configuração ESLint consolidada, flags de código sem uso e gate de hardening efetivo ativos. Doubles de testes em suporte próprio, exceções canônicas na aplicação e shim redundante removido. Serviço e rota menores; removidos imports e alias Any dispensáveis. OpenAPI canônico idêntico ao HEAD anterior; sem alteração de política, cache ou algoritmos científicos. [Execução](../operacoes/refatoracao-2026-10-20.md).
+- **Validação:** 32 testes frontend, build/tipagem/ESLint/Ruff e mypy Linux (75 módulos) aprovados. Suíte completa mais recente de **659 testes backend aprovada em 55,18 s**, com warnings tratados como erros, incluindo as oito regressões do gate de hardening. Tentativa Windows interrompida não é aprovação.
+- **Acessibilidade:** teclado/ARIA/contraste/layout e inspeção interativa realizados; ensaio auditivo com leitor de tela ainda pendente por indisponibilidade informada pelo usuário. Não declarar certificação WCAG.
+- **Ciência:** CSVs oficiais, baseline, comparação espacial e catálogo preparados; resultados mistos, sem superioridade substancial comprovada. Reservas com independência não demonstrada. Usuário responsável pelo aceite; critérios/fontes/protocolo aguardam decisão. Nenhuma calibração, combinação de modelos ou promoção implementada.
+- **Múltiplas fontes:** planejadas comparação e normalização por modelo/rodada/antecedência e avaliação com INMET; pesquisar Open-Meteo explícita e MET Norway. APIs distintas podem repetir o modelo de origem. Código aberto e possível serviço comercial exigem licença, atribuições e acesso compatíveis; endpoint gratuito não é autorização comercial automática.
+- **Operação:** exporter privado por worker/Redis e templates existentes; Prometheus/Grafana/Alertmanager não instalados. Carga sintética anterior: 3.000 requisições, zero falhas e maior p95 580 ms, sem certificação de capacidade. develop sem proteção/checks obrigatórios registrados; nenhuma regra administrativa alterada.
 
-## Incremento local posterior — frentes 1 a 4
+## Revisão de linhas e abstrações
 
-INMET: identificação por requisição resolveu o acesso nesta amostra; parser de oito avisos reais, controle de borda e externo e consulta dentro do Docker aprovados. Sem desligar TLS ou alterar cliente compartilhado. Busca: correção de foco/repetição após blur e do formato vazio real do provedor; resultado meteorológico real recebido após timeout e repetição; Edge conectado e inspecionado interativamente. Revisão científica e critérios preparados para o usuário responsável pelo aceite, ainda não aprovados; independência das reservas não comprovada. Leitor de tela auditivo pendente. **651 testes backend e 28 frontend** aprovados, build/lint/tipagem aprovados. Alterações locais sem commit/push; não confundir com o checkpoint remoto c5408a0. [Relatório e evidências](../operacoes/frentes-1-a-4-2026-10-20.md).
+Redução desta revisão: 109 linhas físicas (18.408 → 18.299), sem apagar testes. Saldo contra o commit: +195, dos quais +168 testes/gates e +27 código executável; a contagem anterior misturava essas categorias. Mapeamento HTTP, wrappers e tipo duplicado simplificados; contrato preservado em 24 cenários JSON e OpenAPI. [Análise e método](../operacoes/reducao-linhas-2026-10-20.md).
 
-## Prioridades e decisões vigentes
+## Próximos trabalhos
 
-1. Confirmar acesso/contrato real dos avisos INMET, sem mascarar falha como ausência.
-2. Correções enviadas e qualificação funcional aprovada em f0eab5e. Antes do merge, confirmar os checks do HEAD e revisar o diff final; merge depende de autorização própria. Acesso real INMET continua como limitação conhecida. Avaliar proteção/checks da develop com o proprietário; nenhuma regra foi alterada nesta revisão.
-3. Consolidar revisão científica das fontes, semântica temporal, suficiência e proveniência das reservas, sem abrir novos outcomes ou ajustar política.
-4. Fechar critérios de aprovação e nova versão prospectiva do protocolo com revisão científica: métrica/evento principal, suporte mínimo, ganho mínimo e tradeoffs ainda não aprovados.
-5. Concluir revisão manual de acessibilidade com leitor de tela e registrar problemas e retestes.
-6. **Por último:** retomar evolução da reference-candidate-1 com objetivo explícito de melhorar qualidade e precisão da previsão, comparando valores meteorológicos e detecção/falsos alarmes contra a v1 em dados independentes. Não basta reorganizar ferramentas ou mudar classificação. Fitting/calibração/promoção não autorizados nesta atualização.
+Seguir [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md): concluir acessibilidade quando possível, fechar protocolo científico, selecionar fontes, coletar/normalizar, comparar, refinar e integrar candidata qualificada. Serviços de cache/locks/avisos já separados nesta refatoração; identidade de modelo e cache antecede integração operacional de múltiplas fontes. Não bloquear o desenho científico com reorganização cosmética.
 
-A ordem acima corresponde às pendências 1, 2, 3, 4 e 6 da conversa; o item de evolução da candidata ficou para depois. Hospedagem/publicação operacional e provisionamento externo adiados pelo usuário. Monitoramento instalado e carga no ambiente definitivo dependem desse ambiente. Oferta da API a terceiros exige escopo próprio de autenticação/consumidores/quotas; separação de repositórios não solicitada. PDF acadêmico não deve ser atualizado.
+Adiadas: hospedagem/monitoramento no ambiente definitivo, horizonte de 14 dias (somente planejado) e separação de repositórios. PDF acadêmico fora do escopo. Documentos correntes consolidados sem apagar protocolos, resultados ou evidências históricas.
 
-## Evidências e navegação
+## Histórico e evidências
 
-[RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md) · [execução técnica](../operacoes/execucao-frentes-1-a-7-2026-10-20.md) · [estado GitHub](../operacoes/evidence/github-estado-2026-10-20.json) · [nova tentativa INMET](../operacoes/evidence/inmet-retomada-2026-10-20.json) · [diagnóstico científico](../planejamento/reference-candidate-1/diagnostico-horario-e-reservas-2026-10-19.md).
-
-## Histórico
-
-Os registros anteriores estão no [arquivo histórico](STATE-HISTORICO-ATE-2026-10-20.md). Eles não redefinem as prioridades ou o estado vigente.
-
-
-[Estado atual dos protocolos científicos](../planejamento/reference-candidate-1/estado-dos-protocolos-2026-10-20.md): implementação técnica posterior e decisões ainda abertas, sem reescrever os originais congelados.
+[Arquivo histórico](STATE-HISTORICO-ATE-2026-10-20.md) · [frentes 1–4](../operacoes/frentes-1-a-4-2026-10-20.md) · [frentes 1–7](../operacoes/execucao-frentes-1-a-7-2026-10-20.md) · [estado dos protocolos](../planejamento/reference-candidate-1/estado-dos-protocolos-2026-10-20.md). Esses relatórios registram checkpoints; não redefinem o estado vigente acima.

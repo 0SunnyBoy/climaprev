@@ -1,0 +1,58 @@
+{
+  "schema": "climaprev-interactive-latency-sample-v1",
+  "captured_at": "2026-10-20T18:24:01.911420+00:00",
+  "limit": "Four sequential requests inside existing app container; cache not purged; no cold-cache, capacity or before/after claim.",
+  "initial_attempt_samples": [
+    {
+      "path": "/api/v1/locations/search?query=Belem",
+      "duration_ms": 46.91,
+      "error": "<urlopen error [WinError 10013] Foi feita uma tentativa de acesso a um soquete de uma maneira que é proibida pelas permissões de acesso>"
+    },
+    {
+      "path": "/api/v1/locations/search?query=Belem",
+      "duration_ms": 33.26,
+      "error": "<urlopen error [WinError 10013] Foi feita uma tentativa de acesso a um soquete de uma maneira que é proibida pelas permissões de acesso>"
+    },
+    {
+      "path": "/api/v1/risk",
+      "duration_ms": 16.79,
+      "error": "<urlopen error [WinError 10013] Foi feita uma tentativa de acesso a um soquete de uma maneira que é proibida pelas permissões de acesso>"
+    },
+    {
+      "path": "/api/v1/risk",
+      "duration_ms": 35.23,
+      "error": "<urlopen error [WinError 10013] Foi feita uma tentativa de acesso a um soquete de uma maneira que é proibida pelas permissões de acesso>"
+    }
+  ],
+  "initial_attempt_limit": "Host socket blocked by sandbox; these durations do not measure application latency.",
+  "samples": [
+    {
+      "kind": "geocoding",
+      "status": 200,
+      "duration_ms": 965.77
+    },
+    {
+      "kind": "geocoding",
+      "status": 200,
+      "duration_ms": 234.28
+    },
+    {
+      "kind": "risk",
+      "status": 200,
+      "duration_ms": 2330.32,
+      "completeness": "complete",
+      "is_stale": false,
+      "provider": "open-meteo",
+      "fetched_at": "2026-10-20T18:24:00.221024Z"
+    },
+    {
+      "kind": "risk",
+      "status": 200,
+      "duration_ms": 6.91,
+      "completeness": "complete",
+      "is_stale": false,
+      "provider": "open-meteo",
+      "fetched_at": "2026-10-20T18:24:00.221024Z"
+    }
+  ]
+}

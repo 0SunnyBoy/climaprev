@@ -7,8 +7,8 @@ from typing import cast
 
 from redis.exceptions import RedisError
 
+from climaprev.application.errors import DependencyUnavailable
 from climaprev.application.ports import RateLimitDecision
-from climaprev.infrastructure.errors import DependencyUnavailable
 from climaprev.infrastructure.redis_delay import RedisConnection
 
 _ALLOW_SCRIPT = """

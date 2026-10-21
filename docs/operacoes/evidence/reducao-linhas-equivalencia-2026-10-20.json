@@ -1,0 +1,31 @@
+{
+  "schema": "climaprev-line-review-equivalence-v1",
+  "equivalent_payload_cases": 24,
+  "openapi_identical": true,
+  "openapi_digest": "dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f",
+  "benchmarks": [
+    {
+      "days": 1,
+      "median_microseconds_per_mapping": {
+        "before": 16.29,
+        "after": 19.11
+      }
+    },
+    {
+      "days": 7,
+      "median_microseconds_per_mapping": {
+        "before": 34.11,
+        "after": 32.5
+      }
+    }
+  ],
+  "benchmark_scope": "Local Windows mapper only, five batches of 200 calls, alternating order. Not HTTP latency or production capacity.",
+  "final_validation": {
+    "backend_passed": 659,
+    "backend_duration_seconds": 55.18,
+    "frontend_passed": 32,
+    "mypy_linux_modules": 75,
+    "lint_and_build_passed": true,
+    "initial_backend_run_interrupted": "Redis was stopped; restarted and full suite passed."
+  }
+}
