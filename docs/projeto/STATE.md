@@ -1,5 +1,55 @@
 # STATE — ClimaPrev
 
+## Consolidação em 27/10/2026
+
+Regressão integral local aprovada: **748 testes backend** (warnings como erros), mypy em **82 módulos**, Ruff e hardening local. O lote inclui coleta/comparação experimental, regressões dos avisos e melhoria da mensagem acessível de limite de requisições. Lockfile do frontend atualizado para corrigir os dois achados moderados do Vitest; auditoria após correção sem vulnerabilidades. Publicação e qualificação remota serão registradas no relatório desta consolidação.
+
+Permanecem pendentes: teste auditivo real PT/EN; aceite dos parâmetros/calendário científicos e controle D+7; pareamento das demais variáveis; cobertura do calendário e incerteza estatística; coleta recorrente após aceite; refinamento e integração condicionados à evidência. Reference-v1 permanece ativa, sem campanha confirmatória iniciada ou ganho comprovado da candidate-1. Horizonte de 14 dias e hospedagem adiados.
+
+## Comparador exploratório e elegibilidade — 26/10/2026
+
+Entrada da baseline diária, pareamento v2 com tempos explícitos e comparação consolidada de chuva implementados. Interseção justa de casos, cobertura/exclusões, métricas numéricas e detecção diagnóstica, estratos por estação/dia após coleta e D+7 sem controle explicitamente indefinido. [Relatório](../operacoes/comparacao-experimental-2026-10-26.md). 75 testes direcionados, mypy dos três módulos e Ruff aprovados; sem nova suite completa, resultados sobre dados reais ou push. Padrão exige rodada informada; modo de coleta/retrospectivo requer opção explícita. Nenhuma aprovação científica ou promoção automática. Controle científico de D+7 e parâmetros finais continuam pendentes.
+
+## Verificação dos avisos — 26/10/2026
+
+Confirmada a entrega de chuva, vento, calor/frio e condições simultâneas em cenários controlados, do caso de uso à rota e nos componentes Vue. Corrigida exibição de `celsius`/`fahrenheit` para °C/°F no resumo, sem alterar cálculo. **32 testes backend selecionados e 48 frontend, lint/tipagem/build aprovados.** [Relatório e alcance](../operacoes/verificacao-avisos-2026-10-26.md). Sem consulta INMET ao vivo ou diagnóstico da consulta original. Sem novo push; a regressão completa anterior de 714 backend continua identificada como checkpoint separado.
+
+## Incremento vigente — 26/10/2026
+
+Baseline pelo adaptador e política atuais arquivável, seleção automática preservada como origem desconhecida, Single Runs com inicialização explícita, manifestos com versões de pipeline, ledger SQLite com cotas/deduplicação entre executores locais e runner por slot desativado por padrão. Pareamento exploratório de chuva por estação/intervalo implementado e exercitado em dados já conhecidos de 2024. [Relatório de implementação](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md).
+
+Qualificação local final: **714 testes backend, 33 frontend, mypy Linux em 81 módulos, Ruff e hardening local aprovados**. Baseline/rodadas GFS e IFS verificadas pontualmente ao vivo. Replay exploratório A201: 28 datas, nove pares completos, 19 incompletos; coleta retrospectiva, sem métrica de ganho ou aceite confirmatório. Sem novos outcomes reservados ou fitting.
+
+Base publicada permanece `5a6fc9c`; novos incrementos sem commit/push ou CI remoto. Reference-v1 e janela pública preservadas. A baseline cobre adaptador/política, sem cache/alertas, e não fornece D+7 fora da janela pública. Rodada solicitada não é primeira publicação comprovada. Pareamento de outras variáveis, parâmetros finais e acionador da campanha continuam pendentes; nenhum agendamento recorrente foi criado. Registros anteriores de ausência desses componentes são históricos.
+
+## Coletores e normalização experimental — 23/10/2026
+
+Implementados coletores pontuais GFS/IFS025/ICON e MET Norway com HTTP limitado e sem retries, junto de medições UTC/unidades/intervalos e soma de chuva por cobertura exata, sem sobreposição/prorrateio. Independentes da API pública. [Execução e limites](../operacoes/coleta-experimental-2026-10-23.md).
+
+Preflight Docker nos três pontos municipais: 11 de 12 combinações aceitas; IFS/Porto Alegre rejeitado por chuva negativa. GFS/IFS válidos cobrem os dias após coleta D+1/D+3/D+7; ICON D+7 e MET D+3/D+7 incompletos nesta amostra, explicitamente sem totais elegíveis. Rodada de inicialização desconhecida; não declarar essas etiquetas como antecedências científicas comprovadas. TLS ativo. 57 testes selecionados, mypy dos três módulos e Ruff no host aprovados. Sem suíte completa ou CI remoto do novo lote.
+
+Permanecem pendentes baseline automática, identificação comprovada de rodada, pareamento observacional, orçamento compartilhado/agendamento e parâmetros finais da campanha. Sem coleta recorrente, fitting ou promoção; alterações locais sem commit/push. Os registros abaixo de "sem HTTP/normalização" descrevem o incremento anterior, agora superado por este protótipo.
+
+## Preparação da coleta experimental — 23/10/2026
+
+[Catálogo de fontes e sequência de coleta](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md): GFS/IFS/ICON explícitos priorizados e MET Norway exploratório, com restrições de origem, horizonte e acesso verificadas documentalmente. Preflight ao vivo e integração dos novos adaptadores ainda pendentes.
+
+Implementado `tools/experimental_archive.py`: envelope de JSON bruto com origem/local, horário UTC de coleta/rodada/validade, hashes, escrita sem sobrescrita e flags para rodada desconhecida/coleta tardia. Separado da aplicação pública, sem HTTP, normalização meteorológica ou agendamento. Docker: 34 testes selecionados e mypy do módulo aprovados; Ruff dos arquivos novos aprovado. Não representa execução integral de regressões ou ganho de previsão. Alterações locais sem commit/push.
+
+[Parâmetros de campanha propostos](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md) preparados para revisão: três estações, ensaio técnico de 14 dias e teste de um ciclo anual, com margens físicas/estatísticas explicitamente não aprovadas. O ensaio técnico não amplia o horizonte público. Coleta confirmatória e promoção aguardam fechamento do desenho.
+
+## Direção científica aprovada — 23/10/2026
+
+Usuário aprovou a direção após esclarecer o escopo multivariável: chuva diária D+1 como objetivo inicial, D+3/D+7 e temperatura/vento/umidade/risco como avaliações complementares, meta inicial de 5% de redução de MAE com evidência favorável, teste independente e proteção de extremos. [Registro de aceite e limites](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md). Campanha, equivalência instrumental, margens, suporte e desenho estatístico ainda precisam ser fechados antes do teste confirmatório. Não equivale a aprovação final do experimento ou da candidata; reference-v1 preservada. Registro local sem commit/push nesta atualização.
+
+## Continuação vigente — 21/10/2026
+
+Base publicada: `5a6fc9c`, CI [39645243749](https://github.com/0SunnyBoy/climaprev/actions/runs/39645243749) e Security gates [39645243757](https://github.com/0SunnyBoy/climaprev/actions/runs/39645243757) aprovados. Os registros de qualificação abaixo preservam o histórico das tentativas anteriores.
+
+Incremento local posterior: aviso 429 estabilizado para impedir alteração da região de alerta a cada segundo; contador visual separado e mensagem de liberação preservados. Regressão no App, 33 testes frontend, lint, tipagem e build aprovados. Ensaio auditivo ainda pendente; sem commit/push deste incremento e sem nova qualificação remota. [Execução e roteiro](../operacoes/acessibilidade-continuacao-2026-10-21.md).
+
+Usuário escolheu revisar a proposta científica detalhada antes de aprovar. [Proposta para revisão](../planejamento/reference-candidate-1/proposta-cientifica-para-revisao-2026-10-21.md): objetivo, comparadores, semântica das variáveis, dados prospectivos, métricas e condições de promoção. Status proposto/não aprovado, sem objetivo primário escolhido, fitting ou nova leitura de outcomes reservados. Reference-v1 preservada.
+
 ## Qualificação do lote refatorado — 21/10/2026
 
 Refatoração publicada na develop em `e448afc`. A primeira execução remota aprovou a integração independente por HTTPS, mas bloqueou a auditoria de dependências (Vite) e a varredura histórica (hash público do contrato OpenAPI). Correção: Vite 6.4.5 e exceção Gitleaks restrita ao valor exato do SHA256 público, sem desativar regras. Verificações locais da correção: 32 testes frontend, lint, build/tipagem, auditoria sem vulnerabilidades, política sintética de segredos e histórico de 53 commits sem achados. A aprovação remota da correção deve ser consultada nos Actions do novo commit.

@@ -66,7 +66,7 @@ function clearCooldown() {
 function updateCooldown(requestId: string, seconds: number) {
   clearCooldown()
   retryUntil.value = Date.now() + seconds * 1000
-  statusMessage.value = () => `${t('rateLimitWait')} ${cooldownSeconds.value} s.${requestId ? ` ${t('reference')}: ${requestId}` : ''}`
+  statusMessage.value = () => `${t('rateLimitWait')} ${seconds} s.${requestId ? ` ${t('reference')}: ${requestId}` : ''}`
   const update = () => {
     cooldownSeconds.value = Math.max(0, Math.ceil((retryUntil.value - Date.now()) / 1000))
     if (cooldownSeconds.value === 0) {

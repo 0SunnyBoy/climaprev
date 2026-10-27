@@ -1,6 +1,8 @@
 # Contexto de retomada — ClimaPrev
 
-Atualizado em 20/10/2026. Repositório monolítico, branch develop, backend/frontend 0.1.0 em desenvolvimento. HEAD e referência local origin/develop: `451d845`; responsividade e refatoração posteriores ainda locais, sem commit/push. Não há merge em main ou deploy.
+Continuação de 26/10: [comparador exploratório de chuva e elegibilidade](docs/operacoes/comparacao-experimental-2026-10-26.md) implementados, 75 testes direcionados e tipagem/lint aprovados. Sem nova avaliação de ganho real ou campanha; última suíte integral backend de 714 é checkpoint anterior. Consultar STATE/RDP para o estado vigente.
+
+Atualizado em 26/10/2026. Monorepo, develop, backend/frontend 0.1.0. Base publicada `5a6fc9c` qualificada remotamente; incrementos posteriores locais, sem novo push. Baseline por adaptador/política, rodadas explícitas, manifesto/ledger local e pareamento exploratório de chuva implementados. 714 testes backend, 33 frontend, mypy Linux, Ruff, build e hardening aprovados localmente. Campanha desativada, parâmetros finais pendentes, reference-v1 preservada. Sem merge/deploy. [Relatório vigente](RELATORIO-IMPLEMENTACAO-2026-10-26.md). Checkpoints antigos abaixo não substituem o STATE atual.
 
 ## Fontes de referência
 

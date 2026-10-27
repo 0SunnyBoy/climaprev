@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useLocale } from '@/composables/useLocale'
 import type { ForecastRisk, DataCompleteness, RiskOverview } from '@/types/api'
-import { formatDate, formatValue } from '@/utils/formatters'
+import { formatDate, formatValue, temperatureUnit } from '@/utils/formatters'
 
 defineProps<{
   risk: ForecastRisk
@@ -26,6 +26,7 @@ function conditionLabel(type: string): string {
 }
 
 function conditionUnit(unit: string): string {
+  if (unit === 'celsius' || unit === 'fahrenheit') return temperatureUnit(unit)
   return unit === 'mm/day' ? (locale.value === 'en' ? 'mm/day' : 'mm/dia') : unit
 }
 

@@ -1,18 +1,26 @@
 # ClimaPrev
 
-## Estado da versão — 20/10/2026
+## Estado da versão — 26/10/2026
 
-Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`, HEAD e referência local origin/develop em `451d845`; sem merge em main, nova release ou deploy. Responsividade e refatoração posteriores são alterações locais, sem commit/push. Checks desse novo diff ainda não executados remotamente. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
+Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`, base publicada `5a6fc9c`, com CI e Security gates aprovados para essa base. Incrementos locais posteriores de acessibilidade e pesquisa experimental: **714 testes backend, 33 frontend, mypy Linux, Ruff, hardening e build aprovados**, ainda sem commit/push ou CI remoto do novo lote. Sem merge em main, release ou deploy. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
 
-Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +6, até sete dias por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Etapa local de responsividade concluída; 32 testes frontend, build/tipagem/lint aprovados. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
+Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +6, até sete dias por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Responsividade revisada e alerta 429 estabilizado. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
 
-Pendências: leitor de tela, aceite/desenho científico e evolução da candidate-1 com comparação de múltiplos modelos/fontes. A prioridade atual é aplicação, qualidade e velocidade; a candidata não está mais adiada para o final. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte de 14 dias e hospedagem continuam adiados. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
+Direção científica aprovada; parâmetros finais da campanha ainda pendentes. Baseline, rodadas explícitas, controles locais e pareamento exploratório de chuva implementados, sem campanha iniciada. Leitor de tela, equivalência das outras variáveis e evolução da candidate-1 continuam pendentes. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte de 14 dias e hospedagem adiados. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
 
 Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais
 nem instruções de Defesa Civil, INMET ou autoridades locais.
 
 ## Documentação do projeto
+
+[Comparação exploratória de chuva](docs/operacoes/comparacao-experimental-2026-10-26.md): métricas, detecção diagnóstica, cobertura e elegibilidade temporal implementadas localmente. Sem campanha ou ganho real novo; parâmetros confirmatórios pendentes.
+
+[Verificação de avisos](docs/operacoes/verificacao-avisos-2026-10-26.md): condições de chuva, vento, calor/frio verificadas em cenários controlados; resumo mostra °C/°F. Última rodada frontend: 48 testes e build aprovados; backend direcionado: 32 testes. Não confundir com o checkpoint integral anterior abaixo.
+
+[Incremento de 26/10 e validação local](RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline por adaptador/política, rodada explícita, controles locais de campanha e pareamento exploratório de chuva. Campanha desativada e parâmetros finais pendentes; sem promoção da candidata ou novo push.
+
+Evolução científica: [direção aprovada em 23/10](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md), [coletores e normalização experimental](docs/operacoes/coleta-experimental-2026-10-23.md) e [parâmetros ainda propostos](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md). Implementação local com preflight pontual; sem novos provedores na consulta pública ou promoção da candidata.
 
 Comece por [PROJECT — visão geral e índice](docs/projeto/PROJECT.md). Os documentos
 detalham [arquitetura](docs/arquitetura/arquitetura.md), [fluxos](docs/arquitetura/fluxos.md),

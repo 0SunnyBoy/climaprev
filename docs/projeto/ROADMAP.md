@@ -6,10 +6,10 @@ O [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) mantém a lista detalhada e o 
 
 1. Responsividade local: concluída; acompanhar provedores e regressões. Refatoração transversal/limpeza concluída no lote local, antes de integrar várias fontes.
 2. Acessibilidade auditiva: ensaio manual pendente por indisponibilidade do usuário; não substituído por teste automatizado.
-3. Fechar desenho científico, adequação de variáveis, independência de reservas, métricas e critérios com o usuário responsável pelo aceite.
-4. Selecionar fontes/modelos e confirmar cobertura, histórico, licença e uso comercial.
-5. Coletar/normalizar previsões experimentais com origem, rodada e antecedência rastreáveis, preservando dados de avaliação.
-6. Comparar cada modelo e combinações com observações, por variável, cidade e horizonte.
+3. Direção científica aprovada em 23/10; fechar parâmetros de campanha, equivalência instrumental, margens e independência dos dados. [Proposta concreta](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
+4. Catálogo e preflight pontual de quatro fontes/modelos em três pontos realizados; fechar identidade de rodada, qualidade e seleção final. [Preflight](../operacoes/coleta-experimental-2026-10-23.md).
+5. Arquivo, coletores, normalização inicial, baseline por adaptador/política, rodada explícita, manifesto/ledger local e pareamento exploratório de chuva implementados. [Entrega de 26/10](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md). Fechar desenho, controle de D+7, equivalência das outras variáveis e acionador antes da campanha; runner permanece desativado.
+6. Comparador exploratório de chuva, baseline diária e elegibilidade implementados; integrar calendário à cobertura global, completar outras variáveis e inferência estatística após fechar o protocolo. [Entrega](../operacoes/comparacao-experimental-2026-10-26.md). Sem novo ganho real calculado ou promoção.
 7. Refinar candidate-1 com ganho demonstrado fora dos dados de ajuste.
 8. Integrar candidata qualificada com rastreabilidade, falhas explícitas e desempenho verificado; promoção não automática.
 9. Definir distribuição aberta, licença e escopo de serviços comerciais, autenticação/quotas e suporte quando aplicável.

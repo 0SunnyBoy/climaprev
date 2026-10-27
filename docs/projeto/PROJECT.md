@@ -16,6 +16,10 @@ ciclo.
 
 ## Documentação do projeto
 
+[Relatório de implementação de 26/10](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline, rodada, manifesto/ledger local, pareamento exploratório e validações. Não representa campanha confirmatória ou implantação.
+
+Continuação científica de 23/10: [direção aprovada](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes e arquivo experimental](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md) e [parâmetros propostos para revisão](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
+
 Estado consolidado: [STATE](STATE.md). Pendências atuais: [RDP 20/10](../../RELATORIO-PENDENCIAS-2026-10-20.md). Cobertura da revisão: [sincronização documental](SINCRONIZACAO-DOCUMENTAL-2026-10-20.md).
 
 

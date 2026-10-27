@@ -22,6 +22,10 @@ Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../
 | Interface e estados | `frontend/src/components/`, `frontend/src/composables/` |
 | Doubles/builders de testes reutilizados | `tests/support/forecast.py` |
 | Experimentos offline e reprodução | `src/climaprev/tools/`, `docs/planejamento/reference-candidate-1/scripts/` |
+| Baseline e rodada experimental | `tools/experimental_baseline.py`, `tools/experimental_collection.py` sob `src/climaprev/` |
+| Manifesto, orçamento local e execução por slot | `src/climaprev/tools/experimental_campaign.py` |
+| Comparação consolidada exploratória de chuva | `src/climaprev/tools/experimental_comparison.py` |
+| Arquivo, medições e pareamento exploratório INMET | `src/climaprev/tools/experimental_archive.py`, `experimental_normalization.py`, `experimental_pairing.py` |
 
 A estrutura preserva independência de frontend/backend no monorepo. Extrações não alteram automaticamente identidade de cache, critérios científicos ou publicação. Avisos oficiais e risco heurístico continuam distintos. Scripts de reprodução e arquivos fingerprintados não são conteúdo descartável.
 

@@ -1,0 +1,243 @@
+{
+  "schema": "climaprev-experimental-preflight-v1",
+  "report_date": "2026-10-23",
+  "scope": "point samples; not a campaign or skill evaluation",
+  "tls_verification": true,
+  "locations_are": "municipal coordinates, not validated station coordinates",
+  "run_leads": "unknown; D labels are local days after collection",
+  "results": [
+    {
+      "location": "belem",
+      "model": "gfs_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:46:11.337238+00:00",
+      "sample_count": 1080,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      }
+    },
+    {
+      "location": "belem",
+      "model": "ecmwf_ifs025",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:46:11.542362+00:00",
+      "sample_count": 1080,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      }
+    },
+    {
+      "location": "belem",
+      "model": "icon_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:45:22.979168+00:00",
+      "sample_count": 960,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      }
+    },
+    {
+      "location": "belem",
+      "model": "met-norway",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:45:23.693699+00:00",
+      "sample_count": 355,
+      "variables": [
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      }
+    },
+    {
+      "location": "brasilia",
+      "model": "gfs_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:09.233116+00:00",
+      "sample_count": 1080,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      }
+    },
+    {
+      "location": "brasilia",
+      "model": "ecmwf_ifs025",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:09.470613+00:00",
+      "sample_count": 1080,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      }
+    },
+    {
+      "location": "brasilia",
+      "model": "icon_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:09.681972+00:00",
+      "sample_count": 960,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      }
+    },
+    {
+      "location": "brasilia",
+      "model": "met-norway",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:10.527079+00:00",
+      "sample_count": 355,
+      "variables": [
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "model": "gfs_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:13.387380+00:00",
+      "sample_count": 1080,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "model": "ecmwf_ifs025",
+      "normalization_status": "rejected",
+      "model_run_verified": false,
+      "error": "ValueError",
+      "diagnostic": "negative precipitation: -0.1 mm in three hourly values; not clipped"
+    },
+    {
+      "location": "porto-alegre",
+      "model": "icon_global",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:13.798509+00:00",
+      "sample_count": 960,
+      "variables": [
+        "gust_kmh",
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      }
+    },
+    {
+      "location": "porto-alegre",
+      "model": "met-norway",
+      "normalization_status": "accepted",
+      "model_run_verified": false,
+      "collected_at": "2026-10-23T17:48:14.616841+00:00",
+      "sample_count": 355,
+      "variables": [
+        "humidity_pct",
+        "precipitation_mm",
+        "temperature_c",
+        "wind_kmh"
+      ],
+      "complete_local_rain_days": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      }
+    }
+  ],
+  "validation": {
+    "selected_tests_passed": 57,
+    "mypy_modules": 3,
+    "host_ruff": "passed",
+    "full_suite_run": false
+  },
+  "scientific_approval": false,
+  "public_api_changed": false
+}

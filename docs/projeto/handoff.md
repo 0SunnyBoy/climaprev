@@ -1,5 +1,11 @@
 # Handoff de retomada — ClimaPrev
 
+Última continuação: [comparador de chuva e elegibilidade](../operacoes/comparacao-experimental-2026-10-26.md), com 75 testes direcionados e checks estáticos aprovados. Entradas v2, baseline diária, cobertura/exclusões e D+7 ausente explícitos. Sem novo ganho real, campanha ou publicação; checkpoints integrais abaixo são anteriores.
+
+## Continuação de 26/10/2026
+
+Ler o [relatório de implementação](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md). Base remota `5a6fc9c`; lote experimental e alerta 429 ainda locais. 714 testes backend, 33 frontend e checks locais aprovados. Baseline/rodadas, manifesto/ledger e pareamento exploratório de chuva prontos no escopo descrito; campanha e promoção desativadas. Parâmetros finais, outras variáveis, acessibilidade auditiva e publicação do lote continuam pendentes. Registros anteriores são históricos.
+
 ## Ler primeiro
 
 [STATE](STATE.md) para validações e estado; [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) para fila; [catálogo](ImplementationsAndRefactoring.md) para caminhos; [refatoração](../operacoes/refatoracao-2026-10-20.md) para o diff transversal.
