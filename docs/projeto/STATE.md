@@ -1,5 +1,9 @@
 # STATE — ClimaPrev
 
+## Qualificação remota e Actions — 27/10/2026
+
+CI e Security do commit publicado `7b09fe6` concluídos com sucesso. A pendência de qualificação desse SHA está encerrada. Build do frontend reexecutada com Node.js 22.23.2 e aprovada; artefatos em frontend/dist. Avisos de Node 20 referem-se às ações do CI: atualização local de checkout/setup-node/upload-artifact para releases oficiais com node24 e runner fixado em Ubuntu 24.04. Esse novo diff ainda requer commit/push e qualificação própria. Ver `docs/operacoes/atualizacao-actions-2026-10-27.md` a partir da raiz. Demais pendências científicas e de acessibilidade permanecem.
+
 Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
 
 ## Complemento de cobertura operacional — 27/10/2026
