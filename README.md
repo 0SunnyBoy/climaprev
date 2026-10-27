@@ -1,8 +1,10 @@
 # ClimaPrev
 
-## Estado da versão — 26/10/2026
+Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
 
-Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`, base publicada `5a6fc9c`, com CI e Security gates aprovados para essa base. Incrementos locais posteriores de acessibilidade e pesquisa experimental: **714 testes backend, 33 frontend, mypy Linux, Ruff, hardening e build aprovados**, ainda sem commit/push ou CI remoto do novo lote. Sem merge em main, release ou deploy. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
+## Estado da versão — 27/10/2026
+
+Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`. Lote experimental e correções da interface publicados em `4525202`; CI e Security desse lote em acompanhamento. Regressão local: **748 testes backend**, mypy em 82 módulos, **48 testes frontend**, lint, build e hardening aprovados. Vitest atualizado no lockfile e auditoria sem vulnerabilidades. Complemento de diagnóstico de calendário descrito no [relatório de consolidação](docs/operacoes/consolidacao-2026-10-27.md). Sem merge em main, release ou deploy. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
 
 Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +6, até sete dias por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Responsividade revisada e alerta 429 estabilizado. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
 
@@ -14,13 +16,13 @@ nem instruções de Defesa Civil, INMET ou autoridades locais.
 
 ## Documentação do projeto
 
-[Comparação exploratória de chuva](docs/operacoes/comparacao-experimental-2026-10-26.md): métricas, detecção diagnóstica, cobertura e elegibilidade temporal implementadas localmente. Sem campanha ou ganho real novo; parâmetros confirmatórios pendentes.
+[Comparação exploratória de chuva](docs/operacoes/comparacao-experimental-2026-10-26.md): métricas, detecção diagnóstica, cobertura e elegibilidade temporal implementadas e incluídas no lote publicado. Sem campanha ou ganho real novo; parâmetros confirmatórios pendentes.
 
 [Verificação de avisos](docs/operacoes/verificacao-avisos-2026-10-26.md): condições de chuva, vento, calor/frio verificadas em cenários controlados; resumo mostra °C/°F. Última rodada frontend: 48 testes e build aprovados; backend direcionado: 32 testes. Não confundir com o checkpoint integral anterior abaixo.
 
-[Incremento de 26/10 e validação local](RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline por adaptador/política, rodada explícita, controles locais de campanha e pareamento exploratório de chuva. Campanha desativada e parâmetros finais pendentes; sem promoção da candidata ou novo push.
+[Incremento de 26/10 e validação local](RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline por adaptador/política, rodada explícita, controles locais de campanha e pareamento exploratório de chuva. Campanha desativada e parâmetros finais pendentes; sem promoção da candidata; incluído no lote publicado em 27/10.
 
-Evolução científica: [direção aprovada em 23/10](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md), [coletores e normalização experimental](docs/operacoes/coleta-experimental-2026-10-23.md) e [parâmetros ainda propostos](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md). Implementação local com preflight pontual; sem novos provedores na consulta pública ou promoção da candidata.
+Evolução científica: [direção aprovada em 23/10](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md), [coletores e normalização experimental](docs/operacoes/coleta-experimental-2026-10-23.md) e [parâmetros ainda propostos](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md). Implementação experimental com preflight pontual; sem novos provedores na consulta pública ou promoção da candidata.
 
 Comece por [PROJECT — visão geral e índice](docs/projeto/PROJECT.md). Os documentos
 detalham [arquitetura](docs/arquitetura/arquitetura.md), [fluxos](docs/arquitetura/fluxos.md),

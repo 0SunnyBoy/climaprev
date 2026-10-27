@@ -1,5 +1,11 @@
 # RDP — 20/10/2026
 
+Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
+
+## Complemento de cobertura operacional — 27/10/2026
+
+Lote consolidado publicado em `4525202`; CI e Security em acompanhamento, sem aprovação remota presumida. Adicionado diagnóstico somente leitura de jobs contra calendário explícito, inclusive slots inteiros ausentes e reservas vencidas; planos inativos não contam como falha. 43 testes direcionados, mypy do módulo e Ruff aprovados. Cobertura por alvo meteorológico/variável continua pendente. Usuário escolheu revisar parâmetros antes de aprovar; campanha segue desativada. Ver `docs/operacoes/consolidacao-2026-10-27.md` e `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md` (caminhos a partir da raiz).
+
 ## Consolidação em 27/10/2026
 
 Regressão integral local aprovada: **748 testes backend** (warnings como erros), mypy em **82 módulos**, Ruff e hardening local. O lote inclui coleta/comparação experimental, regressões dos avisos e melhoria da mensagem acessível de limite de requisições. Lockfile do frontend atualizado para corrigir os dois achados moderados do Vitest; auditoria após correção sem vulnerabilidades. Publicação e qualificação remota serão registradas no relatório desta consolidação.

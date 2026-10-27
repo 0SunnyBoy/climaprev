@@ -1,5 +1,11 @@
 # Handoff de retomada — ClimaPrev
 
+Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
+
+## Retomada vigente — 27/10/2026
+
+Lote consolidado publicado na develop em `4525202`: 748 testes backend, mypy 82 módulos, 48 frontend, lint/build/hardening aprovados localmente. Vitest corrigido, auditoria sem vulnerabilidades; Gitleaks em 56 commits sem achados. CI e Security em acompanhamento. Complemento: auditoria somente leitura contra calendário explícito e revisão dos parâmetros solicitada pelo usuário. Ver relatório `docs/operacoes/consolidacao-2026-10-27.md` e revisão `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md` (raiz do projeto). Campanha segue desativada, reference-v1 ativa. Parágrafos abaixo de ausência de push ou de qualificações antigas são checkpoints históricos.
+
 Última continuação: [comparador de chuva e elegibilidade](../operacoes/comparacao-experimental-2026-10-26.md), com 75 testes direcionados e checks estáticos aprovados. Entradas v2, baseline diária, cobertura/exclusões e D+7 ausente explícitos. Sem novo ganho real, campanha ou publicação; checkpoints integrais abaixo são anteriores.
 
 ## Continuação de 26/10/2026

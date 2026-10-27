@@ -1,5 +1,11 @@
 # Contexto de retomada — ClimaPrev
 
+Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
+
+## Retomada vigente — 27/10/2026
+
+Lote consolidado publicado na develop em `4525202`: 748 testes backend, mypy 82 módulos, 48 frontend, lint/build/hardening aprovados localmente. Vitest corrigido, auditoria sem vulnerabilidades; Gitleaks em 56 commits sem achados. CI e Security em acompanhamento. Complemento: auditoria somente leitura contra calendário explícito e revisão dos parâmetros solicitada pelo usuário. Ver relatório `docs/operacoes/consolidacao-2026-10-27.md` e revisão `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md` (raiz do projeto). Campanha segue desativada, reference-v1 ativa. Parágrafos abaixo de ausência de push ou de qualificações antigas são checkpoints históricos.
+
 Continuação de 26/10: [comparador exploratório de chuva e elegibilidade](docs/operacoes/comparacao-experimental-2026-10-26.md) implementados, 75 testes direcionados e tipagem/lint aprovados. Sem nova avaliação de ganho real ou campanha; última suíte integral backend de 714 é checkpoint anterior. Consultar STATE/RDP para o estado vigente.
 
 Atualizado em 26/10/2026. Monorepo, develop, backend/frontend 0.1.0. Base publicada `5a6fc9c` qualificada remotamente; incrementos posteriores locais, sem novo push. Baseline por adaptador/política, rodadas explícitas, manifesto/ledger local e pareamento exploratório de chuva implementados. 714 testes backend, 33 frontend, mypy Linux, Ruff, build e hardening aprovados localmente. Campanha desativada, parâmetros finais pendentes, reference-v1 preservada. Sem merge/deploy. [Relatório vigente](RELATORIO-IMPLEMENTACAO-2026-10-26.md). Checkpoints antigos abaixo não substituem o STATE atual.

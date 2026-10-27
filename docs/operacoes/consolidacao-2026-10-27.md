@@ -19,3 +19,17 @@ Auditoria identificou dois achados moderados no Vitest 5.0.2. Lockfile atualizad
 Publicação e resultado de CI/Security devem ser conferidos para o SHA consolidado; execução local não certifica os checks remotos. Sem merge em main ou implantação. Reference-v1 permanece ativa, sem promoção ou ganho científico comprovado da candidate-1.
 
 Próximos: teste auditivo real PT/EN; fechar parâmetros/calendário e controle D+7; equivalência e pareamento das demais variáveis; cobertura contra calendário e incerteza; coleta recorrente somente após aceite; avaliação independente, refinamento e integração condicionada. A aprovação da direção não aprova automaticamente parâmetros quantitativos propostos.
+
+## Complemento operacional
+
+Implementado `audit_calendar` em `tools/experimental_coverage.py`: lê ledger SQLite em modo somente leitura e confronta todos os jobs dos manifestos fornecidos. Distingue futuro, aberto, perdido, concluído, falho e reserva vencida; planos inativos ficam fora do denominador devido. Rejeita duplicatas, adulteração do manifesto e intervalos inválidos. Detecta jobs de outras campanhas sem adicioná-los ao denominador.
+
+43 testes direcionados (calendário, campanha e comparador), mypy do novo módulo e Ruff aprovados. O calendário fornecido precisa ser completo: manifestos omitidos não podem ser detectados. Job concluído não comprova integridade do arquivo, pontualidade da entrega ou dia meteorológico elegível. A cobertura por alvo/variável e sua ligação aos pares científicos continuam pendentes. Não foi criada rotina recorrente.
+
+Usuário solicitou revisão dos parâmetros antes do aceite; resumo em `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md`. Campanha não iniciada.
+
+## Qualificação integral do complemento
+
+757 testes backend aprovados em 58,27 s; mypy em 83 módulos e Ruff aprovados. Os 48 testes frontend/build/lint/auditoria são da mesma versão de frontend, sem alterações posteriores. Nove novos testes de calendário cobrem slots ausentes, estado inativo, denominadores, reservas, duplicação e integridade; nenhum dado meteorológico real novo foi avaliado.
+
+Security do primeiro commit 4525202 aprovado: https://github.com/0SunnyBoy/climaprev/actions/runs/40541368589. CI desse commit ainda aguardava a etapa de navegador na última consulta; o complemento requer seus próprios checks remotos. Não inferir aprovação do SHA seguinte a partir do anterior.
