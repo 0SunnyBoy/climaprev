@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     client_ip_hmac_key_file: Path | None = Field(default=None, repr=False, exclude=True)
     _redis_password: SecretStr | None = PrivateAttr(default=None)
     _client_ip_hmac_key: bytes | None = PrivateAttr(default=None)
+    candidate_bundle_file: Path | None = None
     environment: Environment = Environment.DEVELOPMENT
     allowed_hosts: Annotated[tuple[str, ...], NoDecode] = ()
     rate_limit: int = Field(default=60, gt=0)
