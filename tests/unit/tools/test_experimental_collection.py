@@ -251,3 +251,25 @@ def test_initialization_after_collection_and_unreferenced_verification_are_rejec
         describe_run(now, requested_run=now + timedelta(seconds=1))
     with pytest.raises(ValueError, match="reference"):
         describe_run(now, verified_run=now)
+
+
+@pytest.mark.parametrize("model,family", [
+    ("gfs_global", "NOAA-GFS"), ("icon_global", "DWD-ICON"),
+    ("ecmwf_ifs025", "ECMWF-IFS"), ("met-norway", "ECMWF-IFS"),
+    ("operational-baseline", "automatic-unknown"),
+])
+def test_catalog_preserves_source_family_per_adapter(model, family):
+    from climaprev.tools.experimental_collection import source_catalog
+
+    result = source_catalog([model])
+    assert result["models"] == [{"model": model, "origin_family": family}]
+
+
+def test_catalog_does_not_count_shared_or_unknown_origin_as_independent_models():
+    from climaprev.tools.experimental_collection import source_catalog
+
+    result = source_catalog(["ecmwf_ifs025", "met-norway", "operational-baseline", "met-norway"])
+    assert len(result["models"]) == 3
+    assert result["known_family_count"] == 1
+    assert result["unknown_origin_models"] == ["operational-baseline"]
+    assert result["independence_proven"] is False

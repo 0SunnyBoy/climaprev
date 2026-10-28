@@ -17,12 +17,10 @@ from climaprev.application.errors import (
 )
 from climaprev.domain.models import CanonicalLocation, DatePeriod
 from climaprev.tools.experimental_baseline import collect_baseline
-from climaprev.tools.experimental_collection import MODELS, collect_once
+from climaprev.tools.experimental_collection import MODEL_ORIGINS, MODELS, collect_once
 from climaprev.tools.historical_experiment import digest
 
-_ORIGINS = {"gfs_global": "NOAA-GFS", "ecmwf_ifs025": "ECMWF-IFS",
-            "icon_global": "DWD-ICON", "met-norway": "ECMWF-IFS",
-            "operational-baseline": "automatic-unknown"}
+_ORIGINS = MODEL_ORIGINS
 
 
 class CampaignLimitExceeded(RuntimeError):

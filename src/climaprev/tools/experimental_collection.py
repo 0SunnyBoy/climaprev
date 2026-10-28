@@ -30,8 +30,24 @@ from climaprev.tools.experimental_normalization import (
 from climaprev.tools.historical_experiment import canonical_json
 
 MODELS = ("gfs_global", "ecmwf_ifs025", "icon_global", "met-norway")
+MODEL_ORIGINS = {"gfs_global": "NOAA-GFS", "ecmwf_ifs025": "ECMWF-IFS",
+                 "icon_global": "DWD-ICON", "met-norway": "ECMWF-IFS",
+                 "operational-baseline": "automatic-unknown"}
 _FIELDS = "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,wind_gusts_10m"
 _USER_AGENT = "ClimaPrev/0.1.0 https://github.com/0SunnyBoy/climaprev"
+
+
+def source_catalog(models: list[str]) -> dict[str, Any]:
+    if any(model not in MODEL_ORIGINS for model in models):
+        raise ValueError("unsupported source catalog model")
+    entries = [{"model": model, "origin_family": MODEL_ORIGINS[model]}
+               for model in dict.fromkeys(models)]
+    return {"models": entries,
+            "known_family_count": len({entry["origin_family"] for entry in entries
+                                       if entry["origin_family"] != "automatic-unknown"}),
+            "unknown_origin_models": [entry["model"] for entry in entries
+                                      if entry["origin_family"] == "automatic-unknown"],
+            "independence_proven": False}
 
 
 def describe_run(
