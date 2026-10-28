@@ -26,6 +26,7 @@ from climaprev.tools.experimental_normalization import (
     complete_rain_total,
     met_norway_measurements,
     open_meteo_measurements,
+    validate_measurements,
 )
 from climaprev.tools.historical_experiment import canonical_json
 
@@ -96,6 +97,10 @@ def assess_capability(
         reasons.append("unit_mismatch")
     if any(sample.semantics != semantics for sample in relevant):
         reasons.append("semantics_mismatch")
+    try:
+        validate_measurements(relevant, unit=unit, semantics=semantics)
+    except ValueError:
+        reasons.append("invalid_measurement_contract")
     cursor = start.astimezone(UTC)
     complete = bool(relevant)
     for sample in relevant:

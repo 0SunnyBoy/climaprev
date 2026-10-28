@@ -273,3 +273,47 @@ def test_catalog_does_not_count_shared_or_unknown_origin_as_independent_models()
     assert result["known_family_count"] == 1
     assert result["unknown_origin_models"] == ["operational-baseline"]
     assert result["independence_proven"] is False
+
+
+@pytest.mark.parametrize("kind", ["instant", "interval", "null", "empty", "gap"])
+def test_measurement_contract_preserves_instants_intervals_and_missing_values(kind):
+    from climaprev.tools.experimental_normalization import validate_measurements
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    if kind == "instant":
+        samples = [Measurement("temperature_c", start, None, 25, "°C", "instant")]
+        unit, semantics = "°C", "instant"
+    else:
+        samples = [Measurement("precipitation_mm", start, start + timedelta(hours=1),
+                               None if kind == "null" else 1, "mm", "previous_hour_sum")]
+        unit, semantics = "mm", "previous_hour_sum"
+    if kind == "empty":
+        samples = []
+    assert validate_measurements(samples, unit=unit, semantics=semantics) == samples
+    if kind == "null":
+        assert samples[0].value is None
+    if kind == "gap":
+        assert complete_rain_total(samples, start, start + timedelta(hours=2)) is None
+
+
+@pytest.mark.parametrize("kind", ["unit", "semantics", "naive", "instant_interval", "nan", "duplicate"])
+def test_measurement_contract_rejects_false_equivalence(kind):
+    from climaprev.tools.experimental_normalization import validate_measurements
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    sample = Measurement("temperature_c", start, None, 25, "°C", "instant")
+    from dataclasses import replace
+
+    if kind == "unit":
+        sample = replace(sample, unit="°F")
+    elif kind == "semantics":
+        sample = replace(sample, semantics="previous_hour_max")
+    elif kind == "naive":
+        sample = replace(sample, start=datetime(2030, 1, 1))
+    elif kind == "instant_interval":
+        sample = replace(sample, end=start + timedelta(hours=1))
+    elif kind == "nan":
+        sample = replace(sample, value=float("nan"))
+    with pytest.raises(ValueError, match="measurement|contract"):
+        validate_measurements([sample, sample] if kind == "duplicate" else [sample],
+                              unit="°C", semantics="instant")

@@ -35,6 +35,28 @@ def _number(value: Any, variable: str) -> float | None:
     return float(value)
 
 
+def validate_measurements(
+    samples: list[Measurement], *, unit: str, semantics: str,
+) -> list[Measurement]:
+    """Require the declared measurement contract without manufacturing coverage."""
+    seen = set()
+    for sample in samples:
+        if sample.unit != unit or sample.semantics != semantics:
+            raise ValueError("measurement contract unit or semantics differ")
+        if sample.start.utcoffset() is None or (sample.end is not None
+                                               and sample.end.utcoffset() is None):
+            raise ValueError("measurement timestamps need UTC offsets")
+        if (semantics == "instant" and sample.end is not None
+                or semantics != "instant" and (sample.end is None or sample.end <= sample.start)):
+            raise ValueError("measurement interval differs from its semantics")
+        _number(sample.value, sample.variable)
+        key = (sample.variable, sample.start, sample.end)
+        if key in seen:
+            raise ValueError("duplicate measurement interval")
+        seen.add(key)
+    return list(samples)
+
+
 def open_meteo_measurements(payload: dict[str, Any]) -> list[Measurement]:
     hourly, units = _object(payload.get("hourly")), _object(payload.get("hourly_units"))
     times = hourly.get("time")
