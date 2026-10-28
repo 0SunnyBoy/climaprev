@@ -23,6 +23,8 @@ _EXTRA_FIELDS = {
                  "observed_previous_10_minute_mean", timedelta(minutes=10), 3.6),
     "gust_kmh": ("VENTO, RAJADA MAXIMA (m/s)", "km/h",
                  "observed_previous_hour_max", timedelta(hours=1), 3.6),
+    "humidity_pct": ("UMIDADE RELATIVA DO AR, HORARIA (%)", "%",
+                     "observed_hourly_humidity", timedelta(hours=1), 1.0),
 }
 
 

@@ -90,3 +90,30 @@ def test_missing_or_unknown_wind_unit_excludes_wind_only(headers):
     result = parse_observations(raw, expected_station="SYN", variables=["wind_kmh", "gust_kmh"])
     assert result["missing_fields"] == ["wind_kmh"]
     assert [row["variable"] for row in result["measurements"]] == ["gust_kmh"]
+
+
+@pytest.mark.parametrize("text,expected", [("0", 0), ("100", 100), ("-9999", None)])
+def test_observed_humidity_preserves_limits_sentinel_and_source(text, expected):
+    field = "UMIDADE RELATIVA DO AR, HORARIA (%)"
+    result = parse_observations(station_csv([field], [[text]]), expected_station="SYN",
+                                variables=["humidity_pct"])
+    assert result["measurements"][0]["value"] == expected
+    assert result["measurements"][0]["unit"] == "%"
+    assert result["measurements"][0]["semantics"] == "observed_hourly_humidity"
+    assert result["source_fields"]["humidity_pct"] == field
+
+
+@pytest.mark.parametrize("text", ["-1", "101"])
+def test_out_of_range_humidity_is_rejected_after_sentinel_handling(text):
+    field = "UMIDADE RELATIVA DO AR, HORARIA (%)"
+    with pytest.raises(ValueError, match="negative|humidity"):
+        parse_observations(station_csv([field], [[text]]), expected_station="SYN",
+                           variables=["humidity_pct"])
+
+
+@pytest.mark.parametrize("headers", [[], ["UMIDADE RELATIVA DO AR, HORARIA (fraction)"]])
+def test_missing_or_unknown_humidity_unit_does_not_erase_other_variable(headers):
+    raw = station_csv(headers, [["0.5"]] if headers else [[]])
+    result = parse_observations(raw, expected_station="SYN", variables=["humidity_pct", "gust_kmh"])
+    assert result["missing_fields"] == ["humidity_pct"]
+    assert [row["variable"] for row in result["measurements"]] == ["gust_kmh"]
