@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from climaprev.domain.bootstrap import bootstrap_dates
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.verification import classify_pairs, numerical_pairs
 from climaprev.tools.experimental_normalization import _number
@@ -351,6 +352,56 @@ def compare_variable_models(
             "limitations": ["Slot/collection timing is not verified model-run lead time.",
                             "The reported union omits targets absent from every arm; read calendar coverage.",
                             "Point estimates are diagnostic, not independent scientific acceptance."]}
+
+
+def paired_uncertainty(
+    comparison: dict[str, Any], *, block_days: int, repetitions: int, seed: int, confidence: float,
+) -> dict[str, Any]:
+    """Resample whole dates within each variable/slot-lead cohort; never approve a study."""
+    if comparison.get("schema") != "climaprev-variable-comparison-v1":
+        raise ValueError("uncertainty requires a versioned comparison")
+    if (any(isinstance(v, bool) or not isinstance(v, int) for v in (block_days, repetitions, seed))
+            or block_days < 1 or repetitions < 2 or not 0 < confidence < 1):
+        raise ValueError("invalid explicit uncertainty parameters")
+    groups = []
+    baseline = comparison["baseline"]
+    for group in comparison["groups"]:
+        for lead in sorted({s["slot_lead_days"] for s in group["strata"]}):
+            cases = [c for c in group["paired_cases"] if c["lead_days"] == lead]
+            results = {}
+            for model in comparison["models"]:
+                def gain(sample: Sequence[dict[str, Any]], model: str = model) -> float | None:
+                    base = numerical_pairs([(c["observed"], c["forecasts"][baseline]) for c in sample]).mae
+                    candidate = numerical_pairs([(c["observed"], c["forecasts"][model]) for c in sample]).mae
+                    return 1 - candidate / base if base not in (None, 0) and candidate is not None else None
+
+                if not cases:
+                    results[model] = {"estimate": None, "interval": None,
+                                      "interval_reasons": ["no_common_cases"], "calendar_dates": 0}
+                    continue
+                score = asdict(bootstrap_dates(cases, day=lambda c: date.fromisoformat(c["date"]),
+                                               statistic=gain, block_days=block_days,
+                                               repetitions=repetitions, seed=seed, confidence=confidence))
+                reasons = []
+                if score["estimate"] is None:
+                    reasons.append("undefined_point_estimate")
+                if score["undefined_repetitions"]:
+                    reasons.append("undefined_repetitions")
+                if any(size < block_days for size in score["effective_block_days"]):
+                    reasons.append("short_calendar_segment")
+                if score["interval"] is None and not reasons:
+                    reasons.append("degenerate_sampling_distribution")
+                score.update(interval_reasons=reasons,
+                             segment_lengths=list(score["segment_lengths"]),
+                             effective_block_days=list(score["effective_block_days"]))
+                results[model] = score
+            groups.append({"variable": group["variable"], "unit": group["unit"],
+                           "aggregation": group["aggregation"], "slot_lead_days": lead,
+                           "paired_cases": len(cases), "models": results})
+    return {"schema": "climaprev-paired-uncertainty-v1", "comparison_sha256": digest(comparison),
+            "parameters": {"block_days": block_days, "repetitions": repetitions,
+                           "seed": seed, "confidence": confidence},
+            "groups": groups, "scientific_approval": False, "promotion_allowed": False}
 
 
 if __name__ == "__main__":
