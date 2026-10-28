@@ -20,4 +20,3 @@ def station_variables_csv(*, humidity=True, missing=False):
             header += ("-9999" if missing and i == 4 else "50") + ";"
         header += "\n"
     return header.encode()
-
