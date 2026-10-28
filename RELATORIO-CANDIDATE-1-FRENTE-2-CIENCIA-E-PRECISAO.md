@@ -1,6 +1,82 @@
 # Candidate-1 — Frente 2: Ciência, precisão e integração
 
-Atualizado em 27/10/2026. Este relatório distribui responsabilidades de implementação; os parâmetros finais continuam em revisão por escolha expressa do usuário.
+## Continuidade vigente — observações e comparação em 28/10/2026
+
+[Relatório da rodada](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md) · [qualificação do piloto](docs/planejamento/reference-candidate-1/evidence/qualificacao-observacoes-piloto-2026-10-28.json) · [benefícios esperados](docs/planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md).
+
+- **Observações:** três CSVs públicos de 2026 obtidos pela versão oficial até setembro, com CRC/hashes; janela publicada conferida com cobertura de 100% nos quatro alvos importados. Não são dados atuais de outubro. A interface oficial de dados recentes exige reCAPTCHA e mostrou cota excedida; nenhum controle foi contornado.
+- **Belém:** coordenadas do CSV 2026 coincidem com o catálogo atual; reconciliação resolvida por versão para essa fonte, preservando o CSV 2024. Ainda não há prova de mudança física ou equivalência instrumental integral.
+- **Piloto:** preflight pontual 15/15 concluído (cinco braços, três estações), com arquivos e ledger próprios. D+7 de ICON e D+3/D+7 de MET sem cobertura diária completa. Piloto recorrente permanece desativado por falta de observações atuais verificadas e condições instrumentais; não houve ativação silenciosa.
+- **Comparação:** novos parser/pareamento/comparador experimentais para temperatura amostrada, umidade e rajada; contratos de extrema térmica não fabricam máximas/mínimas a partir de instantâneos. Comparação na mesma janela/caso, fonte observacional e slot de meia hora, com denominador planejado incluindo omissões de todos os modelos. Vento sustentado bloqueado por semântica de média não comprovada.
+
+**Qualificação:** 845 testes backend completos, mypy Linux em 88 módulos, Ruff e whitespace aprovados. Frontend e reference-v1 sem alteração; sem ajuste da candidata, incerteza nova, confirmação ou ganho real de precisão. Incremento local sem commit/push/CI próprio. Calendários anteriores precisam de nova versão deliberada após mudanças de pipeline; não modificar seus hashes para habilitar execução.
+
+**Retomada:** obter dados oficiais de outubro por fluxo legítimo, verificar instrumento/altura/período, requalificar prontidão e só então decidir ativação de calendário atualizado. Análise estatística e refinamento seguem para etapas posteriores. Os estados abaixo são históricos quando conflitarem.
+
+## Retomada vigente — preparação das etapas 1 a 4 em 28/10/2026
+
+[Relatório detalhado](docs/operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md), [evidências](docs/planejamento/reference-candidate-1/evidence/preparacao-frente-2-2026-10-28.json), [partições](docs/planejamento/reference-candidate-1/particoes-temporais-2026-10-28.json) e [critérios preparados](docs/planejamento/reference-candidate-1/criterios-preparados-2026-10-28.json).
+
+1. **Estações:** catálogo oficial atual validado; A201/A001/A801 operantes. Diagnóstico dos CSVs de 2024 já conhecidos: chuva completa em 365/342/349 de 366 dias, respectivamente; 8/2/9 dias de pelo menos 50 mm, sem alegar independência. Observações recentes retornaram 204 nos acessos tentados; qualidade atual não comprovada. Belém exige reconciliação entre coordenadas históricas e atuais, sem alterar o CSV congelado.
+2. **Calendário/rodadas:** piloto desativado de 29/10 a 11/11/2026, às 18 UTC (15h Brasília), 210 jobs planejados; rodada 00 UTC para modelos explícitos, baseline/MET com identidade desconhecida preservada. Preflight GFS/IFS/ICON em Belém normalizado; ICON D+7 incompleto. Slot perdido não é preenchido retroativamente.
+3. **Partições:** allowlist de desenvolvimento conhecido, demais arquivos em quarentena. Seleção planejada para alvos 03–31/12/2026; confirmação condicional 15/01/2027–14/01/2028. Congelamentos antes das primeiras emissões D+7 e embargo também sobre emissões, sem alegar independência comprovada ou congelamento já efetuado. Datas precisam ser invalidadas e pré-registradas novamente se os marcos forem perdidos.
+4. **Critérios:** desenho conservador registrado por delegação, com cobertura operacional mínima de 90%, meta relativa de 5%, proteção sem tolerância automática à piora de extremos e exigência de precisão dos intervalos. Limites não são evidência de suficiência dos dados. Cálculo de incerteza e bloco final permanecem para validação na etapa estatística; avaliador segue apenas diagnóstico e não promove.
+
+**Ponto de retomada:** obter observações oficiais atuais com dados/unidades e reconciliar Belém; satisfazer esses bloqueios antes de ativar coleta/pareamento científico. Suporte efetivo e bloco temporal dependem de desenvolvimento, não de nova aprovação rotineira. Preparação entregue, sem declarar as quatro etapas empiricamente encerradas. Campanha desativada, sem fitting, abertura de resultados reservados ou promoção. Alterações locais sem push; reference-v1 ativa. Checkpoints abaixo são históricos onde conflitarem com este estado.
+
+## Aceite delegado — 28/10/2026
+
+Usuário delegou aceite de parâmetros fundamentados. Desenho aceito com condições: três estações iniciais, piloto técnico de 14 dias, referência de planejamento confirmatório de 12 meses após congelamento, confiança reportada de 95%, separação de dados e D+7 secundário exploratório. Metadados, calendário/rodadas, suporte, cobertura mínima e validade estatística ainda dependem de dados; margem de 0,5 mm, tolerâncias de cinco pontos percentuais e blocos de sete dias não são critérios confirmatórios validados. Não repetir pedidos rotineiros de aceite; documentar decisões e evidências. Sem ativação de campanha ou promoção e sem ampliar o escopo além das ordens 1 a 4. Registro: `docs/planejamento/reference-candidate-1/aceite-delegado-parametros-2026-10-28.md` (raiz). Este estado supera a pendência de aceite individual nos checkpoints abaixo, não suas limitações técnicas.
+
+Atualizado em 28/10/2026. Este relatório distribui responsabilidades de implementação; os parâmetros finais continuam em revisão por escolha expressa do usuário.
+
+## Execução autorizada até a ordem 4 — 28/10/2026
+
+[Relatório desta rodada](docs/operacoes/frente-2-ordens-1-a-4-2026-10-28.md) e [quadro estruturado de parâmetros para revisão](docs/planejamento/reference-candidate-1/frente-2-protocolo-proposto-2026-10-28.json).
+
+- **F2-01:** protocolo organizado em direção aceita, propostas e decisões ausentes. Fechamento científico ainda depende de revisão/aceite; o JSON não inicia coleta.
+- **F2-02:** verificador ligado ao pareamento de chuva; contratos inválidos geram exclusões explícitas. Observações de horas reais podem ser somadas no intervalo exato de uma previsão de seis horas, sem prorrateio. Instrumentação/representatividade/antecedência e demais variáveis continuam pendentes. O fingerprint do pipeline inclui a dependência de equivalência; não alterar manifestos antigos para contornar divergência.
+- **F2-03:** comparador identifica controle operacional ou referência experimental e sinaliza ausência do controle por estrato. Sem baseline em D+7, não há comparação de ganho contra a v1. Recomendação científica ainda proposta.
+- **F2-04:** `experimental_criteria.py` avalia limites explícitos e evidências declaradas, com estados `met`, `not_met` e `inconclusive`. Sem intervalos/suporte/independência/cobertura suficientes não há sucesso aparente; nenhum estado autoriza promoção. Limites finais continuam pendentes. Cálculo dos intervalos não foi implementado nesta ordem.
+
+**Qualificação local:** 815 testes backend completos aprovados (58,96 s), warnings como erros; mypy Linux em 85 módulos e Ruff aprovados. Frontend sem alteração nesta rodada. Incremento local sem commit/push ou CI próprio. Não houve coleta de campanha, fitting, novos resultados reservados, promoção ou merge em main.
+
+**Limite da rodada:** não avançar às ordens 5 a 9 nesta autorização. As ordens 1 a 4 têm entregas técnicas, mas não estão cientificamente encerradas enquanto faltarem decisões. Próxima retomada: revisar/aceitar parâmetros pendentes e verificar os dados/contratos com a Frente 1.
+
+## Pendências para retomada — 28/10/2026
+
+Este é o ponto de retomada solicitado pelo usuário. A lista abaixo descreve trabalho ainda necessário; não registra aceite dos parâmetros nem autoriza ativação da campanha.
+
+- [ ] **F2-01 — Fechar o protocolo:** revisar com o usuário e registrar decisões sobre estações, calendário, duração, cobertura mínima, suporte e partições de desenvolvimento, validação de seleção e confirmação.
+- [ ] **F2-02 — Concluir equivalência e elegibilidade:** concluir a ligação aos demais alvos/comparador (chuva já integrada) e validar significado instrumental, ponto de previsão/estação, alturas/períodos pertinentes, qualidade e antecedência. O verificador atual não comprova essas condições externas.
+- [ ] **F2-03 — Definir controle de D+7:** deliberar sobre a proposta secundária exploratória; manter a ausência da baseline pública explícita e não extrapolar valores para fabricar uma comparação com reference-v1.
+- [ ] **F2-04 — Fechar critérios de aprovação:** justificar relevância física, proteção dos extremos, suporte e critérios próprios de temperatura, vento/rajada e umidade. A direção de 5% de redução no MAE da chuva D+1 não aprova os demais valores propostos.
+- [ ] **F2-05 — Completar comparação científica:** ampliar o comparador para variáveis e horizontes elegíveis, ligar cobertura aos alvos planejados e expor casos ausentes, exclusões e indisponibilidade por modelo. Coordenar dados/pareamento com a Frente 1.
+- [ ] **F2-06 — Implementar incerteza:** integrar e verificar o método estatístico escolhido, com dependência temporal, agrupamento, estratos, suporte e tratamento de múltiplas análises quando aplicável. Existe utilitário histórico de bootstrap; sua existência não significa integração ou aprovação do desenho atual.
+- [ ] **F2-07 — Desenvolver refinamento:** testar correções e combinações somente em desenvolvimento/seleção, comparando com baseline e modelos individuais; congelar versão e parâmetros antes da confirmação.
+- [ ] **F2-08 — Validar independentemente:** executar o calendário confirmatório aprovado com candidata congelada; avaliar ganho, extremos e indisponibilidade, registrar limitações e obter aceite final do usuário.
+- [ ] **F2-09 — Integrar a versão aprovada:** implementar versionamento, rastreabilidade, dados parciais/divergências, contrato, desempenho, regressão e retorno à versão anterior. Somente após evidência e aceite.
+
+### Estado preservado
+
+- Reference-v1 ativa; sem superioridade comprovada, promoção ou integração pública da candidate-1.
+- Protocolo consolidado pronto para revisão: [documento de trabalho](docs/planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md).
+- Verificador `src/climaprev/tools/experimental_equivalence.py` e testes em `tests/unit/tools/test_experimental_equivalence.py` preparados localmente: **21 testes novos, Ruff e mypy do módulo aprovados em 27/10**; checkpoint superado pela regressão integral de 815 testes na rodada de 28/10 descrita acima.
+- Verificador integrado ao pareamento experimental de chuva nesta rodada; demais alvos ainda isolados, sem pareamento multivariável completo e sem autorização científica.
+- Incremento da Frente 2 e seus documentos ainda locais, sem commit/push. Não descartar arquivos novos ao retomar. A aprovação remota do commit publicado `6576dd6` não cobre esse incremento local.
+- Parâmetros quantitativos continuam propostos; campanha recorrente não iniciada, sem fitting ou nova leitura de resultados reservados.
+
+### Primeiro passo na retomada
+
+Ler este registro e o protocolo consolidado; conferir `git status` para preservar o incremento local. Retomar a revisão F2-01/F2-04 e a decisão F2-03 com o usuário. Enquanto o aceite estiver pendente, avançar apenas na preparação técnica de F2-02/F2-05 que não dependa dessas escolhas. Planejar dados e contratos com a Frente 1 sem iniciar a campanha ou promover a candidata.
+
+## Checkpoint histórico — início da execução em 27/10/2026
+
+Preparado o [protocolo consolidado para revisão](docs/planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md), com etapas separadas, decisões pendentes, recomendação de controle D+7 e contratos de observações para a Frente 1. F2-01 e F2-03 seguem aguardando decisões; a proposta não foi considerada aprovada.
+
+F2-02 avançou com `experimental_equivalence.check_equivalence`: diagnóstico de valores, unidades, intervalo e semântica declarada de pares de chuva, rajada e temperatura/umidade. Não integrado aos coletores/comparador, sem pareamento multivariável completo. Temperatura instantânea contra extrema horária e chuva de seis horas contra observação de uma hora são rejeitadas. Aprovação científica, representatividade, instrumento e antecedência continuam fora do diagnóstico. Verificação local: 21 testes novos, Ruff e mypy do módulo aprovados; não equivale a nova execução da suíte integral.
+
+Alterações desta etapa locais, sem commit/push, fitting, novos outcomes reservados, coleta recorrente ou promoção. A reference-v1 permanece ativa.
 
 ## Objetivo
 
@@ -10,11 +86,11 @@ Definir e executar uma avaliação que permita desenvolver o refinamento da cand
 
 | ID | Implementação | Estado atual | Entrega necessária para conclusão |
 |---|---|---|---|
-| F2-01 | Fechar protocolo, localidades e calendário | Direção aprovada; parâmetros finais em revisão | Definir estações, datas, duração, suporte e separação entre desenvolvimento, validação de seleção e confirmação. Registrar aceite do usuário antes de iniciar a campanha correspondente |
-| F2-02 | Definir equivalência instrumental e elegibilidade | Chuva possui pareamento exploratório; demais variáveis pendentes | Especificar alvos, intervalos, unidades, qualidade e representatividade da estação frente à grade. Não equiparar automaticamente temperatura instantânea a extrema horária nem vento sustentado a rajada |
-| F2-03 | Definir o controle científico de D+7 | Pendente; ausência da baseline já aparece no comparador | Aprovar comparador e interpretação para D+7. A baseline pública atual cobre hoje UTC até +6; não inventar seu valor em D+7. Comparar outros modelos entre si não demonstra ganho contra a baseline ausente |
-| F2-04 | Fixar métricas e critérios de aprovação | Direção inicial aceita; detalhes ainda propostos | Chuva diária D+1 como objetivo inicial e meta direcional de redução de pelo menos 5% no MAE. Fechar relevância física, cobertura mínima, proteção dos extremos, suporte e critérios próprios das demais variáveis |
-| F2-05 | Completar o comparador de modelos e baseline | Comparador exploratório de chuva implementado | Ampliar a análise para demais variáveis e horizontes elegíveis; manter casos comuns, exclusões, cobertura por braço e limitações explícitas. Valores ausentes não viram zero |
+| F2-01 | Fechar protocolo, localidades e calendário | Direção aprovada; protocolo consolidado para revisão preparado, sem aceite final | Definir estações, datas, duração, suporte e separação entre desenvolvimento, validação de seleção e confirmação. Registrar aceite do usuário antes de iniciar a campanha correspondente |
+| F2-02 | Definir equivalência instrumental e elegibilidade | Chuva possui pareamento exploratório; verificador integrado à chuva; pareamento multivariável pendente | Especificar alvos, intervalos, unidades, qualidade e representatividade da estação frente à grade. Não equiparar automaticamente temperatura instantânea a extrema horária nem vento sustentado a rajada |
+| F2-03 | Definir o controle científico de D+7 | Controle por estrato explícito; recomendação documentada, sem aceite | Aprovar comparador e interpretação para D+7. A baseline pública atual cobre hoje UTC até +6; não inventar seu valor em D+7. Comparar outros modelos entre si não demonstra ganho contra a baseline ausente |
+| F2-04 | Fixar métricas e critérios de aprovação | Direção inicial aceita; avaliador diagnóstico implementado, limites finais pendentes | Chuva diária D+1 como objetivo inicial e meta direcional de redução de pelo menos 5% no MAE. Fechar relevância física, cobertura mínima, proteção dos extremos, suporte e critérios próprios das demais variáveis |
+| F2-05 | Completar o comparador de modelos e baseline | Comparadores experimentais de chuva e variáveis adicionais implementados; integração/estratos finais pendentes | Ampliar a análise para demais variáveis e horizontes elegíveis; manter casos comuns, exclusões, cobertura por braço e limitações explícitas. Valores ausentes não viram zero |
 | F2-06 | Implementar incerteza e avaliação independente | Pendente; comparador atual fornece estimativas pontuais | Fechar e implementar método pareado, dependência temporal, agrupamento entre locais, estratos e comparações múltiplas quando aplicável. Verificar suporte e registrar resultados inconclusivos sem promoção |
 | F2-07 | Desenvolver correções e combinações da candidata | Pendente | Testar alternativas somente em desenvolvimento e seleção, comparando com baseline e modelos individuais. Congelar parâmetros e versão antes do teste confirmatório; concordância entre fontes não vira probabilidade calibrada automaticamente |
 | F2-08 | Executar confirmação e obter aceite final | Não iniciada; sem superioridade comprovada | Avaliar a candidata congelada nos dados independentes do calendário aprovado, incluindo extremos e indisponibilidade. Produzir relatório de ganho, regressões e limitações para decisão do usuário |

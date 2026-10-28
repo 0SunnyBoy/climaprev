@@ -1,0 +1,522 @@
+{
+  "schema": "climaprev-front2-observations-pilot-qualification-v1",
+  "checked_at": "2026-10-28T17:02:02.466815+00:00",
+  "annual_csv_source": {
+    "source": "https://portal.inmet.gov.br/uploads/dadoshistoricos/2026.zip",
+    "checked_at": "2026-10-28T16:50:30.223772+00:00",
+    "archive_bytes": 136911232,
+    "downloaded_range_bytes": 635434,
+    "range_requests": 12,
+    "selected_publication_cutoff": "2026-09-30",
+    "selection_basis": "exact publication date advertised by official index, not outcome quality",
+    "files": [
+      {
+        "station": "A201",
+        "entry": "INMET_N_PA_A201_BELEM_01-01-2026_A_30-09-2026.CSV",
+        "crc32": "bc35316f",
+        "bytes": 617161,
+        "sha256": "4a3169fbfc9c53cc555448d193be8ae05eeb3d1fc825c04f4d94d389eb22c9ce",
+        "path": ".report-work/front2-observations-2026-10-28/A201-2026-public.csv"
+      },
+      {
+        "station": "A001",
+        "entry": "INMET_CO_DF_A001_BRASILIA_01-01-2026_A_30-09-2026.CSV",
+        "crc32": "6aa93590",
+        "bytes": 608345,
+        "sha256": "3610f36b96c71a4ccba276dd18a31fd46bece3bddc67e1b8a74ebc5d98893dc9",
+        "path": ".report-work/front2-observations-2026-10-28/A001-2026-public.csv"
+      },
+      {
+        "station": "A801",
+        "entry": "INMET_S_RS_A801_PORTO ALEGRE - JARDIM BOTANICO_01-01-2026_A_30-09-2026.CSV",
+        "crc32": "55e7a5cc",
+        "bytes": 602465,
+        "sha256": "c32be28add78765f2f19d656826242d0d9936c45e6470fca1d395f1b755888b1",
+        "path": ".report-work/front2-observations-2026-10-28/A801-2026-public.csv"
+      }
+    ]
+  },
+  "station_reports": [
+    {
+      "station": "A201",
+      "source_sha256": "4a3169fbfc9c53cc555448d193be8ae05eeb3d1fc825c04f4d94d389eb22c9ce",
+      "source_metadata": {
+        "name": "BELEM",
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "altitude": 21.17
+      },
+      "latest_observation_utc": "2026-09-30T23:00:00+00:00",
+      "measurement_count": 39312,
+      "optional_fields_missing": [],
+      "published_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A201",
+        "start_utc": "2026-09-23T03:00:00+00:00",
+        "end_utc": "2026-09-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "technical_pairing_ready": true,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A201",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "technical_pairing_ready": false,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "station_version_reconciled_with_current_catalogue": true,
+      "historical_2024_left_unchanged": true,
+      "instrumental_calibration_verified": false,
+      "sensor_averaging_and_height_equivalence_verified": false
+    },
+    {
+      "station": "A001",
+      "source_sha256": "3610f36b96c71a4ccba276dd18a31fd46bece3bddc67e1b8a74ebc5d98893dc9",
+      "source_metadata": {
+        "name": "BRASILIA",
+        "latitude": -15.78944444,
+        "longitude": -47.92583332,
+        "altitude": 1160.96
+      },
+      "latest_observation_utc": "2026-09-30T23:00:00+00:00",
+      "measurement_count": 39312,
+      "optional_fields_missing": [],
+      "published_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A001",
+        "start_utc": "2026-09-23T03:00:00+00:00",
+        "end_utc": "2026-09-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "technical_pairing_ready": true,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A001",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "technical_pairing_ready": false,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "station_version_reconciled_with_current_catalogue": true,
+      "historical_2024_left_unchanged": true,
+      "instrumental_calibration_verified": false,
+      "sensor_averaging_and_height_equivalence_verified": false
+    },
+    {
+      "station": "A801",
+      "source_sha256": "c32be28add78765f2f19d656826242d0d9936c45e6470fca1d395f1b755888b1",
+      "source_metadata": {
+        "name": "PORTO ALEGRE - JARDIM BOTANICO",
+        "latitude": -30.05361111,
+        "longitude": -51.17472221,
+        "altitude": 41.18
+      },
+      "latest_observation_utc": "2026-09-30T23:00:00+00:00",
+      "measurement_count": 39312,
+      "optional_fields_missing": [],
+      "published_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A801",
+        "start_utc": "2026-09-23T03:00:00+00:00",
+        "end_utc": "2026-09-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "technical_pairing_ready": true,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A801",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "technical_pairing_ready": false,
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "station_version_reconciled_with_current_catalogue": true,
+      "historical_2024_left_unchanged": true,
+      "instrumental_calibration_verified": false,
+      "sensor_averaging_and_height_equivalence_verified": false
+    }
+  ],
+  "forecast_preflight": [
+    {
+      "latitude": -1.41111111,
+      "longitude": -48.43944444,
+      "model": "gfs_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\8767b77c5babeca23f513d27d817386532de7e8ad937057029b9342b018abf63.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -1.41111111,
+      "longitude": -48.43944444,
+      "model": "ecmwf_ifs025",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\cb91dc1a24e3393ad0e829f018c2e98c020a53f1ab07275da11f1ac9061748b3.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -1.41111111,
+      "longitude": -48.43944444,
+      "model": "icon_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\0ec6398a2441cab86b15569683b05d6c5ed59c6dc84b4dade8643da9080db810.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -1.41111111,
+      "longitude": -48.43944444,
+      "model": "met-norway",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\33c0e203eafb5f0d6b3860dcd0974218f00fc0814c81df94d88f6c47c6f7cbbd.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      },
+      "run_at": null,
+      "baseline_scope": null
+    },
+    {
+      "latitude": -1.41111111,
+      "longitude": -48.43944444,
+      "model": "operational-baseline",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\38e2d39cee9a5c075add180d168b5806446b1add2e573824e932731570aaf167.json",
+      "rain_complete": {},
+      "run_at": null,
+      "baseline_scope": "production_adapter_and_policy_not_public_cache_or_alerts"
+    },
+    {
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "model": "gfs_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\aa9eaa68ca70a60692fb3ebdd56660f18cd9cf9b149dd2ed805d9b1fa1bac0ac.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "model": "ecmwf_ifs025",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\873f6ad3fc57798cff8fa11c9b109c3391d0cfc9c47a1ff23ee6c096946650aa.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "model": "icon_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\6f24e48b8d65a1938c989f4730266b26f48795953269dc4073f4175513680cb8.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "model": "met-norway",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\2c60487911ee534b5f6db27c62c3a6541422fe0d14cffe71bbcca817f82f6647.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      },
+      "run_at": null,
+      "baseline_scope": null
+    },
+    {
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "model": "operational-baseline",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\2ee686e21b19d335f1081bda37d6ee5a971d1a45a154843493e4cd477454fc10.json",
+      "rain_complete": {},
+      "run_at": null,
+      "baseline_scope": "production_adapter_and_policy_not_public_cache_or_alerts"
+    },
+    {
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "model": "gfs_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\a9886a87ceb74287e463d0b4ea99e756853a62f85ad7861a194d0fea0fbccd38.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "model": "ecmwf_ifs025",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\80a225617386e9fb8bc593c7789584c4f54401bc0358d28e198f2ae381f95c9e.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": true
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "model": "icon_global",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\975940d1cdf285fbd67701de532a85f8d4c612ae334925a656d22ab815da4ff6.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": true,
+        "D+7": false
+      },
+      "run_at": "2026-10-28T00:00:00+00:00",
+      "baseline_scope": null
+    },
+    {
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "model": "met-norway",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\ff668cd8f80785c4196a20c5a5133882bd266bf2e364b28aa6549f92fc1388a8.json",
+      "rain_complete": {
+        "D+1": true,
+        "D+3": false,
+        "D+7": false
+      },
+      "run_at": null,
+      "baseline_scope": null
+    },
+    {
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "model": "operational-baseline",
+      "status": "completed",
+      "error": null,
+      "archive": ".report-work\\front2-observations-2026-10-28\\preflight-archives\\cd67430802d0f601c6be487ecc9043ee2a708cf106042f7c86cc2ca284ab37dc.json",
+      "rain_complete": {},
+      "run_at": null,
+      "baseline_scope": "production_adapter_and_policy_not_public_cache_or_alerts"
+    }
+  ],
+  "preflight_completed": 15,
+  "preflight_total": 15,
+  "source_access_diagnostic": {
+    "official_ui_observation_route": "POST /estacao/front/ with reCAPTCHA token",
+    "ui_message": "Este site está excedendo a cota gratuita do reCAPTCHA Enterprise",
+    "ui_screenshot_local": ".report-work/front2-observations-2026-10-28/inmet-recaptcha-quota.png",
+    "legacy_204_cause_not_proven": true,
+    "protected_request_not_replayed_or_bypassed": true
+  },
+  "pilot_ready_for_full_execution": false,
+  "pilot_activated": false,
+  "activation_blockers": [
+    "official_observations_current_window_not_available_in_verified_public_dataset",
+    "instrument_height_and_averaging_equivalence_not_certified"
+  ],
+  "scientific_approval": false,
+  "promotion_allowed": false
+}

@@ -30,3 +30,15 @@ Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../
 A estrutura preserva independência de frontend/backend no monorepo. Extrações não alteram automaticamente identidade de cache, critérios científicos ou publicação. Avisos oficiais e risco heurístico continuam distintos. Scripts de reprodução e arquivos fingerprintados não são conteúdo descartável.
 
 [Execução da refatoração](../operacoes/refatoracao-2026-10-20.md) · [Catálogo histórico](ImplementationsAndRefactoring-HISTORICO-ATE-2026-10-20.md).
+
+## Frente 2 — preparação científica em 28/10/2026
+
+`tools/experimental_equivalence.py` valida contratos declarados de medições e é consultado pelo pareamento de chuva. `tools/experimental_criteria.py` recebe critérios explícitos/evidências e retorna diagnóstico, sem cálculo de intervalos ou promoção. `experimental_comparison.py` explicita controles por estrato. Ver [relatório da rodada](../operacoes/frente-2-ordens-1-a-4-2026-10-28.md). Incremento local, 815 testes backend e mypy 85 módulos/Ruff aprovados; ordens científicas 1 a 4 seguem parcialmente dependentes de decisões.
+
+## Preparação reproduzível da Frente 2 — 28/10/2026
+
+`tools/experimental_preparation.py` reconcilia catálogo/versão histórica, prepara calendários desativados e verifica partições/embargos/congelamento antes das emissões de confirmação. `experimental_campaign.py` congela e encaminha inicialização explícita aos modelos compatíveis. `experimental_criteria.py` admite condição de precisão para intervalos de extremos e suporte previsto. Nenhum componente ativa campanha ou demonstra independência sozinho. Ver [relatório de preparação](../operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md).
+
+## Continuidade multivariável da Frente 2 — 28/10/2026
+
+`tools/experimental_observations.py` acrescenta temperatura/umidade horárias declaradas e prontidão por janela, sem alterar o importador histórico congelado. `tools/experimental_multivariable.py` pareia janelas exatas por alvo e compara casos comuns contra denominador planejado, com exclusões e sem promoção. Ambos têm identidade congelada no pipeline experimental. 845 testes backend/mypy 88 módulos/Ruff aprovados; ver [relatório](../operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md).

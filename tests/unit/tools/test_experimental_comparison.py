@@ -41,6 +41,19 @@ def test_known_errors_are_paired_and_stratified_without_promoting():
     assert len(result["strata"]) == 2
     assert not result["scientific_approval"]
     assert not result["promotion_allowed"]
+    assert result["strata"][0]["control"]["kind"] == "experimental_reference"
+    assert not result["strata"][0]["control"]["public_v1_superiority_established"]
+
+
+def test_d7_without_operational_baseline_cannot_be_presented_as_v1_control():
+    baseline = report("operational-baseline", [1] * 6, [1] * 6)
+    candidate = report("candidate", [1] * 7, [1] * 7)
+    result = compare_rain_models([baseline, candidate], "operational-baseline")
+    d7 = next(s for s in result["strata"] if s["collection_lead_days"] == 7)
+    assert d7["control"]["status"] == "absent"
+    assert not d7["control"]["public_v1_superiority_established"]
+    assert d7["common_cases"] == 0
+    assert d7["models"]["candidate"]["numerical"]["mae"] is None
 
 
 def test_coverage_and_absent_rows_are_visible_on_the_common_sample():

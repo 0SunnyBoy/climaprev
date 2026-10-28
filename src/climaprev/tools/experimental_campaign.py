@@ -36,7 +36,8 @@ def pipeline_versions() -> dict[str, str]:
              "tools/experimental_campaign.py", "tools/experimental_pairing.py",
              "tools/inmet_observations.py", "infrastructure/providers/open_meteo.py",
              "domain/risk_policy.py", "domain/risk_evaluator.py", "domain/verification.py",
-             "tools/experimental_comparison.py")
+             "tools/experimental_comparison.py", "tools/experimental_equivalence.py",
+             "tools/experimental_observations.py", "tools/experimental_multivariable.py")
     return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in files}
 
 
@@ -78,6 +79,7 @@ class CampaignLedger:
 def build_manifest(
     campaign: str, locations: list[CanonicalLocation], models: list[str], slot: datetime,
     *, enabled: bool = False, collection_authorized: bool = False, call_limit: int = 30,
+    run_at: datetime | None = None,
 ) -> dict[str, Any]:
     if (not campaign.strip() or slot.utcoffset() is None or not locations or not models
             or isinstance(call_limit, bool) or not isinstance(call_limit, int) or call_limit < 1):
@@ -85,12 +87,21 @@ def build_manifest(
     if any(model not in {*MODELS, "operational-baseline"} for model in models):
         raise ValueError("unsupported campaign model")
     slot = slot.astimezone(UTC)
+    if run_at is not None:
+        if run_at.utcoffset() is None:
+            raise ValueError("model run needs an offset")
+        run_at = run_at.astimezone(UTC)
+        if (run_at > slot or run_at.hour not in {0, 6, 12, 18}
+                or run_at.minute or run_at.second or run_at.microsecond):
+            raise ValueError("unsupported run or run after collection slot")
     jobs: dict[str, dict[str, Any]] = {}
     for location in locations:
         for model in models:
             identity = {"campaign": campaign, "slot": slot.isoformat(), "model": model,
                         "latitude": location.latitude, "longitude": location.longitude,
                         "timezone": location.timezone}
+            if run_at is not None and model not in {"met-norway", "operational-baseline"}:
+                identity["run_at"] = run_at.isoformat()
             key = digest(identity)
             jobs.setdefault(key, {"key": key, "identity": identity,
                                   "location": asdict(location), "origin_family": _ORIGINS[model]})
@@ -139,7 +150,8 @@ async def run_manifest(
                 result = await collect_baseline(client, location,
                                                 DatePeriod(first, first + timedelta(days=6)), directory)
             else:
-                result = await collect_once(client, location, model, directory)
+                run = datetime.fromisoformat(identity["run_at"]) if identity.get("run_at") else None
+                result = await collect_once(client, location, model, directory, run_at=run)
         except (ValueError, TypeError, OverflowError, httpx.HTTPError, ProviderPermanentError,
                 ProviderTransientError, WeatherDataInvalid) as error:
             ledger.finish(key, None, type(error).__name__)

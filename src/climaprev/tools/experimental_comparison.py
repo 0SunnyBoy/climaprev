@@ -135,6 +135,15 @@ def compare_rain_models(
         "models": comparisons,
         "strata": [{"station": station, "collection_lead_days": lead,
                     "common_cases": len(keys & common), "reported_union_cases": len(keys),
+                    "control": {
+                        "reference_model": baseline,
+                        "kind": ("operational_adapter" if baseline == "operational-baseline"
+                                 else "experimental_reference"),
+                        "status": ("absent" if not keys & seen[baseline]
+                                   else "no_common_eligible_cases" if not keys & common
+                                   else "exploratory_paired_cases"),
+                        "public_v1_superiority_established": False,
+                    },
                     "models": {m: {**score(m, keys & common),
                                    "reported_cases": len(keys & seen[m]),
                                    "eligible_cases": len(keys & set(arms[m])),
@@ -149,6 +158,7 @@ def compare_rain_models(
                         "Reason counters overlap; they are not a count of unique excluded cases.",
                         "The reported union does not include targets omitted by every arm.",
                         "Pair counts are not counts of independent weather events.",
+                        "A secondary model reference cannot replace an absent operational baseline.",
                         "Common-case scores must be read with per-model coverage and exclusions."],
     }
 

@@ -177,6 +177,26 @@ async def test_pipeline_drift_cannot_reuse_a_frozen_manifest(tmp_path, monkeypat
                                 tmp_path, now=now)
 
 
+@pytest.mark.asyncio
+async def test_runner_forwards_frozen_run_without_falling_back_to_latest(tmp_path, monkeypatch):
+    now = datetime(2026, 10, 20, 18, tzinfo=UTC)
+    run = now.replace(hour=0)
+    received = []
+
+    async def collect(client, location, model, directory, *, run_at=None):
+        received.append(run_at)
+        return {"archive": "synthetic-archive"}
+
+    monkeypatch.setattr("climaprev.tools.experimental_campaign.collect_once", collect)
+    manifest = build_manifest("synthetic", [LOCATION], ["gfs_global"], now,
+                              run_at=run, enabled=True, collection_authorized=True)
+    async with httpx.AsyncClient(transport=httpx.MockTransport(lambda r: pytest.fail("no HTTP"))) as c:
+        result = await run_manifest(manifest, CampaignLedger(tmp_path / "ledger.sqlite"), c,
+                                    tmp_path, now=now)
+    assert received == [run]
+    assert result[0]["status"] == "completed"
+
+
 def synthetic_csv(day):
     header = ("REGIAO:;N\nUF:;PA\nESTACAO:;SYNTHETIC\nCODIGO (WMO):;A201\n"
               "LATITUDE:;-1,4\nLONGITUDE:;-48,4\nALTITUDE:;10\n"
@@ -195,7 +215,8 @@ def test_station_pairing_preserves_day_boundary_and_rejects_municipal_substituti
     day = date(2024, 1, 1)
     start = datetime(2024, 1, 1, 3, tzinfo=UTC)
     samples = [Measurement("precipitation_mm", start + timedelta(hours=i),
-                            start + timedelta(hours=i+1), 2, "mm", "sum") for i in range(24)]
+                            start + timedelta(hours=i+1), 2, "mm", "previous_hour_sum")
+               for i in range(24)]
     report = pair_station_rain(samples, LOCATION, synthetic_csv(day), "A201", DatePeriod(day, day),
                                collected_at=start - timedelta(days=1), model="synthetic")
     assert report["rows"][0]["observed_mm"] == 24
@@ -210,6 +231,44 @@ def test_station_pairing_preserves_day_boundary_and_rejects_municipal_substituti
     assert missing["rows"][0]["forecast_mm"] is None
     assert not missing["rows"][0]["eligible_exploratory"]
     assert not missing["rows"][0]["collected_before_target"]
+
+
+@pytest.mark.parametrize("changes,reason", [
+    ({"semantics": "instant"}, "forecast_semantics"),
+    ({"unit": "m"}, "forecast_unit"),
+    ({"value": True}, "forecast_invalid_value"),
+    ({"value": -1}, "forecast_invalid_value"),
+])
+def test_rain_pairing_rejects_incompatible_forecast_measurements(changes, reason):
+    day = date(2024, 1, 1)
+    start = datetime(2024, 1, 1, 3, tzinfo=UTC)
+    samples = [Measurement("precipitation_mm", start + timedelta(hours=i),
+                            start + timedelta(hours=i+1), 2, "mm", "previous_hour_sum")
+               for i in range(24)]
+    samples[0] = replace(samples[0], **changes)
+    result = pair_station_rain(samples, LOCATION, synthetic_csv(day), "A201", DatePeriod(day, day),
+                               collected_at=start - timedelta(days=1), model="synthetic")
+    row = result["rows"][0]
+    assert row["forecast_mm"] is None
+    assert row["observed_mm"] == 24
+    assert reason in row["measurement_contract_exclusions"]
+    assert "incompatible_measurement_contract" in row["exclusions"]
+    assert not row["eligible_exploratory"]
+
+
+def test_six_hour_forecast_pairs_with_real_observation_sums_without_proration():
+    day = date(2024, 1, 1)
+    start = datetime(2024, 1, 1, 3, tzinfo=UTC)
+    samples = [Measurement("precipitation_mm", start + timedelta(hours=i),
+                            start + timedelta(hours=i+6), 12, "mm", "next_6_hours_sum")
+               for i in range(0, 24, 6)]
+    result = pair_station_rain(samples, LOCATION, synthetic_csv(day), "A201", DatePeriod(day, day),
+                               collected_at=start - timedelta(days=1), model="synthetic")
+    row = result["rows"][0]
+    assert row["forecast_mm"] == 48
+    assert row["observed_mm"] == 24
+    assert not row["measurement_contract_exclusions"]
+    assert row["eligible_exploratory"]
 
 
 @pytest.mark.parametrize("missing", [False, True])

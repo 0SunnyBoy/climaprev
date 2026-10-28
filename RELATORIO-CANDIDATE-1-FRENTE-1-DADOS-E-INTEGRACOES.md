@@ -2,6 +2,10 @@
 
 Atualizado em 27/10/2026. Este relatório distribui responsabilidades de implementação; não autoriza início da campanha científica nem promoção da candidata.
 
+## Handoff da Frente 2 em 28/10/2026
+
+Parser e pareamento experimental de temperatura/umidade/rajada, comparação com cobertura planejada e prontidão observacional entregues. Fonte oficial anual de 2026 até setembro obtida para as três estações; Belém coincide com o catálogo nessa versão. Outubro e equivalência instrumental ainda pendentes; piloto desativado, preflight pontual 15/15. Ler [relatório da continuidade](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md). São entregas experimentais, não conclusão científica ou integração pública. Esse estado atualiza os registros de ausência de parser/pareamento adicional abaixo.
+
 ## Objetivo
 
 Fornecer previsões e observações comparáveis, rastreáveis e com qualidade explícita para a avaliação da candidate-1. Esta frente responde pela engenharia dos dados e pela operação experimental da coleta.
