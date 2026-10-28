@@ -92,3 +92,47 @@ def test_invalid_partition_layout_is_rejected_before_case_selection(change):
     envelope["sha256"] = digest(envelope["protocol"])
     with pytest.raises(ValueError, match="partition"):
         partition_for(envelope, date(2029, 1, 1))
+
+
+@pytest.mark.parametrize("mode", ["collection", "development", "confirmatory", "operational"])
+def test_unauthorized_mode_never_loads_outcomes_or_calls_provider(mode):
+    from climaprev.tools.experimental_protocol import execute_authorized
+
+    effects = []
+
+    def operation(protocol):
+        effects.extend(["reserved_outcome_read", "HTTP"])
+        pytest.fail("blocked operation must not execute")
+
+    with pytest.raises(ValueError, match="approval"):
+        execute_authorized(protocol_fixture(), mode, operation)
+    assert effects == []
+
+
+def test_diagnostic_can_execute_fixture_without_real_campaign_approval():
+    from climaprev.tools.experimental_protocol import execute_authorized
+
+    result = execute_authorized(protocol_fixture(), "diagnostic",
+                                lambda protocol: {"id": protocol["id"], "fixture": 42})
+    assert result == {"id": "synthetic", "fixture": 42}
+
+
+def test_approval_must_match_protocol_identity_before_operation():
+    from climaprev.tools.experimental_protocol import execute_authorized
+
+    envelope = protocol_fixture()
+    approval = {"gate": "E1", "protocol_sha256": "other-hash", "reviewer": "synthetic",
+                "recorded_at": "2026-10-28T00:00:00+00:00", "reference": "synthetic-record"}
+    with pytest.raises(ValueError, match="approval"):
+        execute_authorized(envelope, "collection", lambda _: pytest.fail("no effects"),
+                           approvals=[approval])
+    approval["protocol_sha256"] = envelope["sha256"]
+    assert execute_authorized(envelope, "collection", lambda p: p["id"],
+                              approvals=[approval]) == "synthetic"
+
+
+def test_unknown_mode_is_rejected_without_effects():
+    from climaprev.tools.experimental_protocol import execute_authorized
+
+    with pytest.raises(ValueError, match="mode"):
+        execute_authorized(protocol_fixture(), "typo", lambda _: pytest.fail("no effects"))

@@ -1,6 +1,7 @@
 """Versioned local experiment contracts; validation never reads outcomes or uses HTTP."""
 
 import json
+from collections.abc import Callable, Sequence
 from datetime import UTC, date, datetime
 from math import isfinite
 from typing import Any, cast
@@ -115,3 +116,32 @@ def partition_for(envelope: dict[str, Any], target: date) -> str | None:
     protocol = validate_protocol(envelope)
     return next((name for name, (start, end) in _partition_bounds(protocol).items()
                  if start <= target <= end), None)
+
+
+def execute_authorized[T](
+    envelope: dict[str, Any], mode: str, operation: Callable[[dict[str, Any]], T],
+    *, approvals: Sequence[dict[str, Any]] = (),
+) -> T:
+    """Check approval before invoking a lazy operation that may load data or call HTTP.
+
+    Records provide local traceability, not cryptographic human authentication.
+    Real collection must always request collection mode, never diagnostic mode.
+    """
+    protocol = validate_protocol(envelope)
+    required = {"diagnostic": None, "collection": "E1", "development": "E2",
+                "confirmatory": "E2", "operational": "E3"}
+    if mode not in required:
+        raise ValueError("unknown experiment execution mode")
+    gate = required[mode]
+    accepted = gate is None
+    for approval in approvals:
+        if (approval.get("gate") != gate
+                or approval.get("protocol_sha256") != envelope["sha256"]):
+            continue
+        if not all(_text(approval.get(key)) for key in ("reviewer", "reference", "recorded_at")):
+            continue
+        aware_timestamp(approval["recorded_at"])
+        accepted = True
+    if not accepted:
+        raise ValueError(f"{gate} approval for this protocol is required before {mode}")
+    return operation(protocol)
