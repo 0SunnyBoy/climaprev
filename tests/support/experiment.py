@@ -36,3 +36,8 @@ def station_csv(extra_headers: list[str], extra_rows: list[list[str]]) -> bytes:
         text += f"{endpoint:%Y/%m/%d};{endpoint:%H%M} UTC;0;10;30;-10"
         text += (";" + ";".join(values) if values else "") + "\n"
     return text.encode()
+
+
+def approval_fixture(envelope: dict[str, Any], gate: str = "E1") -> dict[str, Any]:
+    return {"gate": gate, "protocol_sha256": envelope["sha256"], "reviewer": "synthetic-reviewer",
+            "recorded_at": "2026-10-28T00:00:00+00:00", "reference": "synthetic-test-only"}

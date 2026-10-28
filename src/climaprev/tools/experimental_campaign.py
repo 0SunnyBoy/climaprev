@@ -2,11 +2,13 @@
 
 import hashlib
 import sqlite3
+from collections.abc import Sequence
 from contextlib import closing
 from dataclasses import asdict
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -18,6 +20,11 @@ from climaprev.application.errors import (
 from climaprev.domain.models import CanonicalLocation, DatePeriod
 from climaprev.tools.experimental_baseline import collect_baseline
 from climaprev.tools.experimental_collection import MODEL_ORIGINS, MODELS, collect_once
+from climaprev.tools.experimental_protocol import (
+    aware_timestamp,
+    execute_authorized,
+    validate_protocol,
+)
 from climaprev.tools.historical_experiment import digest
 
 _ORIGINS = MODEL_ORIGINS
@@ -34,7 +41,8 @@ def pipeline_versions() -> dict[str, str]:
              "tools/experimental_campaign.py", "tools/experimental_pairing.py",
              "tools/inmet_observations.py", "infrastructure/providers/open_meteo.py",
              "domain/risk_policy.py", "domain/risk_evaluator.py", "domain/verification.py",
-             "tools/experimental_comparison.py")
+             "tools/experimental_comparison.py", "tools/experimental_protocol.py",
+             "tools/experimental_observations.py")
     return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in files}
 
 
@@ -76,12 +84,15 @@ class CampaignLedger:
 def build_manifest(
     campaign: str, locations: list[CanonicalLocation], models: list[str], slot: datetime,
     *, enabled: bool = False, collection_authorized: bool = False, call_limit: int = 30,
+    window_minutes: int = 30,
 ) -> dict[str, Any]:
     if (not campaign.strip() or slot.utcoffset() is None or not locations or not models
             or isinstance(call_limit, bool) or not isinstance(call_limit, int) or call_limit < 1):
         raise ValueError("campaign, points, models, aware slot and positive budget required")
     if any(model not in {*MODELS, "operational-baseline"} for model in models):
         raise ValueError("unsupported campaign model")
+    if isinstance(window_minutes, bool) or not isinstance(window_minutes, int) or window_minutes < 1:
+        raise ValueError("positive slot window required")
     slot = slot.astimezone(UTC)
     jobs: dict[str, dict[str, Any]] = {}
     for location in locations:
@@ -93,7 +104,7 @@ def build_manifest(
             jobs.setdefault(key, {"key": key, "identity": identity,
                                   "location": asdict(location), "origin_family": _ORIGINS[model]})
     plan = {"schema": "climaprev-campaign-manifest-v1", "jobs": list(jobs.values()),
-            "slot": slot.isoformat(), "expires": (slot + timedelta(minutes=30)).isoformat(),
+            "slot": slot.isoformat(), "expires": (slot + timedelta(minutes=window_minutes)).isoformat(),
             "enabled": enabled, "collection_authorized": collection_authorized,
             "provider_daily_call_limit": call_limit, "scientific_approval": False,
             "pipeline_versions": pipeline_versions()}
@@ -146,3 +157,66 @@ async def run_manifest(
             ledger.finish(key, result["archive"], None)
             reports.append({"job": key, "status": "completed", "result": result})
     return reports
+
+
+def build_target_calendar(
+    envelope: dict[str, Any], *, enabled: bool = False,
+    approvals: Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Expand the complete protocol universe without collecting data or reading outcomes."""
+    protocol = validate_protocol(envelope)
+    if not isinstance(enabled, bool):
+        raise TypeError("calendar enabled must be boolean")
+    if enabled:
+        execute_authorized(envelope, "collection", lambda _: None, approvals=approvals)
+    slots = [aware_timestamp(value) for value in protocol["slots"]]
+    if len(set(slots)) != len(slots):
+        raise ValueError("duplicate calendar slots")
+    locations = [CanonicalLocation(station["name"], station["latitude"], station["longitude"],
+                                   station["timezone"], "explicit-station-registry")
+                 for station in protocol["stations"]]
+    manifests, targets = [], []
+    for slot in sorted(slots):
+        manifest = build_manifest(
+            protocol["id"], locations, protocol["models"], slot, enabled=enabled,
+            collection_authorized=enabled, call_limit=protocol["provider_daily_call_limit"],
+            window_minutes=protocol["slot_window_minutes"],
+        )
+        manifests.append(manifest)
+        for station, location in zip(protocol["stations"], locations, strict=True):
+            zone = ZoneInfo(location.timezone)
+            for model in protocol["models"]:
+                job = next(job for job in manifest["plan"]["jobs"]
+                           if job["identity"]["model"] == model
+                           and job["identity"]["latitude"] == location.latitude
+                           and job["identity"]["longitude"] == location.longitude
+                           and job["identity"]["timezone"] == location.timezone)
+                for variable in protocol["variables"]:
+                    for lead in protocol["horizons"]:
+                        day = slot.astimezone(zone).date() + timedelta(days=lead)
+                        start = datetime.combine(day, time.min, zone).astimezone(UTC)
+                        end = datetime.combine(day + timedelta(days=1), time.min, zone).astimezone(UTC)
+                        identity = {"protocol_sha256": envelope["sha256"], "job": job["key"],
+                                    "station": station["code"], "variable": variable["name"],
+                                    "unit": variable["unit"], "semantics": variable["semantics"],
+                                    "aggregation": variable["aggregation"],
+                                    "start_utc": start.isoformat(), "end_utc": end.isoformat()}
+                        targets.append({"key": digest(identity), **identity, "model": model,
+                                        "slot": slot.isoformat(), "date": day.isoformat(),
+                                        "collection_lead_days": lead, "active": enabled})
+    data = {"schema": "climaprev-target-calendar-v1", "protocol": envelope,
+            "enabled": enabled, "approvals": list(approvals),
+            "manifests": manifests, "targets": targets}
+    return {"calendar": data, "sha256": digest(data)}
+
+
+def validate_target_calendar(envelope: dict[str, Any]) -> dict[str, Any]:
+    data = envelope.get("calendar")
+    if (not isinstance(data, dict) or data.get("schema") != "climaprev-target-calendar-v1"
+            or envelope.get("sha256") != digest(data)):
+        raise ValueError("invalid calendar schema or hash")
+    expected = build_target_calendar(data["protocol"], enabled=data["enabled"],
+                                     approvals=data["approvals"])
+    if expected != envelope:
+        raise ValueError("calendar differs from the complete frozen targets or pipeline")
+    return data
