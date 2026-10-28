@@ -263,3 +263,76 @@ def test_missing_partition_or_rule_cannot_fall_back_to_test():
     protocol, candidates, _ = development_fixture()
     with pytest.raises(ValueError, match="loaders"):
         select_development(protocol, candidates, loaders={"test": lambda: [dataset()]}, mode="diagnostic")
+
+
+def test_frozen_independent_evaluation_records_only_test_population():
+    from climaprev.tools.historical_experiment import evaluate_frozen_test
+
+    protocol, candidates, _ = development_fixture()
+    test = dataset()
+    test["configuration"].update(start="2027-01-01", end="2027-01-01")
+    test["forecast"] = payload(suffix="_previous_day1", day=date(2027, 1, 1), gust=40)
+    test["observed"] = payload(day=date(2027, 1, 1), gust=70)
+    result = evaluate_frozen_test(protocol, candidates[1], loader=lambda: [test],
+                                  frozen_protocol_sha256=protocol["sha256"],
+                                  frozen_candidate_sha256=candidates[1]["sha256"], mode="diagnostic")
+    assert result["population"]["requested_unique_days"] == 1
+    assert result["population"]["eligible_overall_days"] == 1
+    assert result["report"]["partition"] == "test"
+    assert result["candidate_sha256"] == candidates[1]["sha256"]
+    assert result["promotion_allowed"] is False
+
+
+@pytest.mark.parametrize("mutation", ["candidate", "protocol", "during_load", "wrong_partition", "fitting"])
+def test_independent_evaluation_refuses_changed_inputs_wrong_partition_and_fitting(mutation):
+    from climaprev.tools.historical_experiment import digest, evaluate_frozen_test
+
+    protocol, candidates, _ = development_fixture()
+    candidate = candidates[1]
+    expected_protocol, expected_candidate = protocol["sha256"], candidate["sha256"]
+    reads = []
+    def loader():
+        reads.append("test")
+        if mutation == "during_load":
+            candidate["candidate"]["code_version"] = "changed-during-load"
+            candidate["sha256"] = digest(candidate["candidate"])
+        return [dataset()]
+    if mutation == "candidate":
+        candidate["candidate"]["code_version"] = "changed-before-load"
+        candidate["sha256"] = digest(candidate["candidate"])
+    elif mutation == "protocol":
+        protocol["protocol"]["id"] = "changed"
+        protocol["sha256"] = digest(protocol["protocol"])
+    kwargs = {"fit": lambda: pytest.fail("fitting is forbidden")} if mutation == "fitting" else {}
+    with pytest.raises((ValueError, TypeError), match="frozen|test|fit"):
+        evaluate_frozen_test(protocol, candidate, loader=loader,
+                             frozen_protocol_sha256=expected_protocol,
+                             frozen_candidate_sha256=expected_candidate, mode="diagnostic", **kwargs)
+    assert reads == (["test"] if mutation in {"during_load", "wrong_partition"} else [])
+
+
+def test_confirmatory_evaluation_requires_e2_before_test_read():
+    from climaprev.tools.historical_experiment import evaluate_frozen_test
+
+    protocol, candidates, _ = development_fixture()
+    with pytest.raises(ValueError, match="E2"):
+        evaluate_frozen_test(protocol, candidates[1], loader=lambda: pytest.fail("test accessed"),
+                             frozen_protocol_sha256=protocol["sha256"],
+                             frozen_candidate_sha256=candidates[1]["sha256"])
+
+
+def test_mutation_during_independent_scoring_cannot_escape_final_hash_check(monkeypatch):
+    from climaprev.tools import historical_experiment as experiment
+
+    protocol, candidates, _ = development_fixture()
+    test = dataset()
+    test["configuration"].update(start="2027-01-01", end="2027-01-01")
+    def changed_score(*args, **kwargs):
+        protocol["protocol"]["id"] = "changed-during-scoring"
+        protocol["sha256"] = experiment.digest(protocol["protocol"])
+        return {}
+    monkeypatch.setattr(experiment, "evaluate_snapshots", changed_score)
+    with pytest.raises(ValueError, match="frozen"):
+        experiment.evaluate_frozen_test(protocol, candidates[0], loader=lambda: [test],
+                                        frozen_protocol_sha256=protocol["sha256"],
+                                        frozen_candidate_sha256=candidates[0]["sha256"], mode="diagnostic")
