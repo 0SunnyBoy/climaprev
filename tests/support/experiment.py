@@ -96,3 +96,23 @@ def review_fixture(protocol: dict[str, Any], candidate: dict[str, Any], evaluati
     return {"outcome": outcome, "reviewer": "synthetic-reviewer", "reference": "synthetic-only",
             "recorded_at": "2030-02-01T00:00:00+00:00", "protocol_sha256": protocol["sha256"],
             "candidate_sha256": candidate["sha256"], "evaluation_sha256": digest(evaluation)}
+
+
+def accepted_bundle_fixture() -> dict[str, Any]:
+    """A synthetic E2/E3 bundle, solely for delivery and rollback tests."""
+    from dataclasses import asdict
+
+    from climaprev.domain.risk_policy import ExperimentalRiskPolicy
+    from climaprev.infrastructure.providers.candidate_forecast import normalization_identity
+    from climaprev.tools.experimental_candidate import record_decision, register_candidate
+
+    protocol = protocol_fixture()
+    candidate = register_candidate(protocol=protocol, policy=asdict(ExperimentalRiskPolicy()),
+                                    normalization=normalization_identity(), models={"gfs_global": "b" * 64},
+                                    code_version="synthetic-only")
+    evaluation = independent_evaluation_fixture(protocol, candidate)
+    decision = record_decision(protocol, candidate, evaluation,
+                               opinion=review_fixture(protocol, candidate, evaluation),
+                               approvals=[approval_fixture(protocol, "E3")])
+    return {"schema": "climaprev-accepted-bundle-v1", "protocol": protocol, "candidate": candidate,
+            "evaluation": evaluation, "decision": decision, "forecasts": []}
