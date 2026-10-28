@@ -13,8 +13,10 @@ from zoneinfo import ZoneInfo
 from climaprev.domain.bootstrap import bootstrap_dates
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.verification import classify_pairs, numerical_pairs
+from climaprev.tools.experimental_archive import save_evidence
+from climaprev.tools.experimental_campaign import validate_target_calendar
 from climaprev.tools.experimental_normalization import _number
-from climaprev.tools.experimental_protocol import aware_timestamp
+from climaprev.tools.experimental_protocol import aware_timestamp, validate_protocol
 from climaprev.tools.historical_experiment import canonical_json, digest, read_json
 from climaprev.tools.station_baseline import event_level
 
@@ -433,6 +435,56 @@ def paired_uncertainty(
             "parameters": {"block_days": block_days, "repetitions": repetitions,
                            "seed": seed, "confidence": confidence},
             "groups": groups, "scientific_approval": False, "promotion_allowed": False}
+
+
+def export_study_report(
+    path: Path, *, protocol_path: Path, calendar_path: Path, coverage_path: Path,
+    comparison_path: Path, uncertainty_path: Path, pair_paths: Sequence[Path], code_version: str,
+) -> dict[str, Any]:
+    """Export existing results with a complete calendar denominator and frozen parents."""
+    protocol, calendar = read_json(protocol_path), read_json(calendar_path)
+    validate_protocol(protocol)
+    data = validate_target_calendar(calendar)
+    coverage, comparison = read_json(coverage_path), read_json(comparison_path)
+    uncertainty = read_json(uncertainty_path)
+    pair_hashes = sorted(digest(read_json(parent)) for parent in pair_paths)
+    if (data["protocol"] != protocol
+            or coverage.get("schema") != "climaprev-target-coverage-v1"
+            or comparison.get("schema") != "climaprev-variable-comparison-v1"
+            or uncertainty.get("schema") != "climaprev-paired-uncertainty-v1"
+            or coverage["calendar_sha256"] != calendar["sha256"]
+            or coverage["protocol_sha256"] != protocol["sha256"]
+            or sorted(coverage["input_reports_sha256"]) != pair_hashes
+            or comparison["input_reports_sha256"] != pair_hashes
+            or uncertainty["comparison_sha256"] != digest(comparison)):
+        raise ValueError("consolidated input identity differs")
+    targets = {target["key"]: target for target in data["targets"]}
+    rows = coverage["rows"]
+    if (len(rows) != len(targets) or {row["key"] for row in rows} != set(targets)
+            or any(row["target"] != targets[row["key"]] for row in rows)):
+        raise ValueError("coverage identity omits or changes frozen targets")
+    due = [row for row in rows if row["target"]["active"]
+           and "target_not_due" not in row["reasons"]]
+    eligible = [row for row in due if row["eligible_exploratory"] is True]
+    population = {"planned_targets": len(rows), "due_targets": len(due),
+                  "eligible_targets": len(eligible),
+                  "excluded_unique_targets": len(due) - len(eligible),
+                  "not_due_targets": len(rows) - len(due),
+                  "overlapping_reason_counts": dict(sorted(Counter(
+                      reason for row in due for reason in row["reasons"]).items()))}
+    parents = {"protocol": protocol_path, "calendar": calendar_path, "coverage": coverage_path,
+               "comparison": comparison_path, "uncertainty": uncertainty_path}
+    for parent in pair_paths:
+        name = "pair-" + digest(read_json(parent))
+        if name in parents:
+            raise ValueError("duplicate pair parent")
+        parents[name] = parent
+    return save_evidence(path, protocol_sha256=protocol["sha256"], parents=parents,
+                         code_version=code_version,
+                         payload={"schema": "climaprev-study-report-v1", "population": population,
+                                  "comparison": comparison, "uncertainty": uncertainty,
+                                  "coverage": coverage, "scientific_approval": False,
+                                  "promotion_allowed": False})
 
 
 if __name__ == "__main__":
