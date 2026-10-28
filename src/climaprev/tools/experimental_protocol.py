@@ -1,7 +1,7 @@
 """Versioned local experiment contracts; validation never reads outcomes or uses HTTP."""
 
 import json
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from math import isfinite
 from typing import Any, cast
 from zoneinfo import ZoneInfo
@@ -89,4 +89,29 @@ def validate_protocol(envelope: dict[str, Any]) -> dict[str, Any]:
         variables.add(variable["name"])
     if not isinstance(protocol["splits"], dict) or not isinstance(protocol["criteria"], dict):
         raise TypeError("protocol splits and criteria must be objects")
+    _partition_bounds(protocol)
     return cast(dict[str, Any], json.loads(canonical_json(protocol)))
+
+
+def _partition_bounds(protocol: dict[str, Any]) -> dict[str, tuple[date, date]]:
+    splits = protocol["splits"]
+    if set(splits) != {"adjustment", "validation", "test"}:
+        raise ValueError("protocol requires adjustment, validation and test partitions")
+    previous: date | None = None
+    result = {}
+    for name in ("adjustment", "validation", "test"):
+        bounds = splits[name]
+        if not isinstance(bounds, dict) or set(bounds) != {"start", "end"}:
+            raise ValueError("partition requires start and end")
+        start, end = date.fromisoformat(bounds["start"]), date.fromisoformat(bounds["end"])
+        if start > end or (previous is not None and start <= previous):
+            raise ValueError("partitions must be chronological and disjoint")
+        result[name] = (start, end)
+        previous = end
+    return result
+
+
+def partition_for(envelope: dict[str, Any], target: date) -> str | None:
+    protocol = validate_protocol(envelope)
+    return next((name for name, (start, end) in _partition_bounds(protocol).items()
+                 if start <= target <= end), None)

@@ -60,3 +60,35 @@ def test_invalid_protocol_bounds_are_rejected(field, value):
     envelope["sha256"] = digest(envelope["protocol"])
     with pytest.raises(ValueError):
         validate_protocol(envelope)
+
+
+@pytest.mark.parametrize("target,expected", [
+    ("2029-01-01", "adjustment"), ("2029-03-31", "adjustment"),
+    ("2029-04-01", "validation"), ("2029-06-30", "validation"),
+    ("2030-01-01", "test"), ("2030-12-31", "test"), ("2029-07-01", None),
+])
+def test_partition_membership_includes_bounds_and_exposes_absent_cases(target, expected):
+    from datetime import date
+
+    from climaprev.tools.experimental_protocol import partition_for
+
+    assert partition_for(protocol_fixture(), date.fromisoformat(target)) == expected
+
+
+@pytest.mark.parametrize("change", ["overlap", "inverted", "missing"])
+def test_invalid_partition_layout_is_rejected_before_case_selection(change):
+    from datetime import date
+
+    from climaprev.tools.experimental_protocol import partition_for
+
+    envelope = protocol_fixture()
+    splits = envelope["protocol"]["splits"]
+    if change == "overlap":
+        splits["validation"]["start"] = splits["adjustment"]["end"]
+    elif change == "inverted":
+        splits["test"]["end"] = "2029-01-01"
+    else:
+        del splits["test"]
+    envelope["sha256"] = digest(envelope["protocol"])
+    with pytest.raises(ValueError, match="partition"):
+        partition_for(envelope, date(2029, 1, 1))
