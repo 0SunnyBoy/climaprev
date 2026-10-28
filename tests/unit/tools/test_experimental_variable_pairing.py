@@ -104,3 +104,23 @@ def test_negative_temperature_minimum_remains_valid_in_both_sources():
     assert row["forecast"] == -3
     assert row["observed"] == -5
     assert row["eligible_exploratory"] is True
+
+
+@pytest.mark.parametrize("aggregation,expected", [("max", None), ("sum", 24)])
+def test_six_hour_rain_can_form_daily_total_but_never_an_hourly_maximum(aggregation, expected):
+    _, observation, location, period, start, _ = inputs()
+    forecast = [Measurement("precipitation_mm", start + timedelta(hours=i),
+                            start + timedelta(hours=i + 6), 6, "mm", "next_6_hours_sum")
+                for i in range(0, 24, 6)]
+    observation["measurements"] = [asdict(Measurement("precipitation_mm", start + timedelta(hours=i),
+                                                      start + timedelta(hours=i + 1), 1, "mm",
+                                                      "observed_previous_hour_sum")) for i in range(24)]
+    observation["source_fields"] = {"precipitation_mm": "synthetic-hourly-rain"}
+    row = pair_variable_days(
+        forecast, observation, location, period, variable="precipitation_mm", unit="mm",
+        aggregation=aggregation, forecast_semantics="next_6_hours_sum",
+        observed_semantics="observed_previous_hour_sum", model="synthetic-six-hour",
+        collected_at=start - timedelta(days=1),
+    )["rows"][0]
+    assert row["forecast"] == expected
+    assert row["eligible_exploratory"] is (expected is not None)

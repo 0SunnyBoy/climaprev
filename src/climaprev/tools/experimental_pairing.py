@@ -138,6 +138,10 @@ def _daily_value(
                        or m.end is not None and m.start < end and m.end > start)),
                       key=lambda m: m.start)
     validate_measurements(selected, unit=unit, semantics=semantics)
+    if aggregation == "max" and any(sample.variable == "precipitation_mm"
+            and (sample.end is None or sample.end - sample.start != timedelta(hours=1))
+            for sample in selected):
+        return None  # A six-hour amount cannot establish an hourly rain maximum.
     cursor, values, weights = start, [], []
     for sample in selected:
         stop = sample.end or sample.start + timedelta(hours=1)
@@ -318,5 +322,9 @@ def pair_calendar_captures(
                 target["variable"]),
         )
         report["target_key"] = target["key"]
+        report["collection_slot"] = target["slot"]
+        report["collection_deadline"] = (datetime.fromisoformat(target["slot"]) + timedelta(
+            minutes=protocol["slot_window_minutes"])).isoformat()
+        report["protocol_sha256"] = data["protocol"]["sha256"]
         reports.append(report)
     return reports

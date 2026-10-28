@@ -180,3 +180,20 @@ def test_pairing_refuses_a_capture_changed_after_ledger_completion(tmp_path):
         pair_capture(path, source_csv(), location, DatePeriod(DAY.date(), DAY.date()),
                      station="SYN", model="operational-baseline",
                      contract=protocol_fixture()["protocol"]["variables"][0])
+
+
+@pytest.mark.asyncio
+async def test_multivariable_comparison_consumes_the_actual_offline_pipeline_output(tmp_path, monkeypatch):
+    from climaprev.tools.experimental_comparison import compare_variable_models
+
+    _, pairs, _, _, _ = await pilot(tmp_path / "comparison", monkeypatch)
+    result = compare_variable_models(pairs, "gfs_global")
+    assert len(result["groups"]) == 5
+    assert all(group["common_cases"] == 1 for group in result["groups"])
+    rain = next(group for group in result["groups"] if group["variable"] == "precipitation_mm")
+    assert rain["models"]["gfs_global"]["numerical"]["mae"] == 24
+    assert rain["models"]["icon_global"]["relative_mae_gain"] == 0
+    for variable in ("humidity_pct", "wind_kmh"):
+        group = next(group for group in result["groups"] if group["variable"] == variable)
+        assert group["models"]["gfs_global"]["classification"] is None
+    assert result["promotion_allowed"] is False

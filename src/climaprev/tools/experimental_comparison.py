@@ -3,7 +3,7 @@
 import argparse
 from collections import Counter, defaultdict
 from collections.abc import Sequence
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from math import isfinite
 from pathlib import Path
@@ -12,7 +12,10 @@ from zoneinfo import ZoneInfo
 
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.verification import classify_pairs, numerical_pairs
+from climaprev.tools.experimental_normalization import _number
+from climaprev.tools.experimental_protocol import aware_timestamp
 from climaprev.tools.historical_experiment import canonical_json, digest, read_json
+from climaprev.tools.station_baseline import event_level
 
 Case = tuple[str, float, float, str, str, str, int]
 
@@ -171,6 +174,183 @@ def main() -> None:
             output.write(encoded + "\n")
     except (ValueError, TypeError, KeyError, OSError, OverflowError) as error:
         parser.exit(2, f"experimental comparison failed: {error}\n")
+
+
+
+@dataclass(frozen=True, slots=True, order=True)
+class VariableCase:
+    station: str
+    latitude: float
+    longitude: float
+    timezone: str
+    variable: str
+    unit: str
+    aggregation: str
+    start_utc: str
+    end_utc: str
+    slot_utc: str
+
+
+def _variable_event(variable: str, aggregation: str) -> str | None:
+    return {("precipitation_mm", "sum"): "daily_rain", ("precipitation_mm", "max"): "hourly_rain",
+            ("gust_kmh", "max"): "gust", ("temperature_max_c", "max"): "heat",
+            ("temperature_min_c", "min"): "cold"}.get((variable, aggregation))
+
+
+def _variable_score(
+    pairs: list[tuple[float, float]], variable: str, aggregation: str,
+) -> dict[str, Any]:
+    event = _variable_event(variable, aggregation)
+    classification = (asdict(classify_pairs([(event_level(event, obs), event_level(event, pred))
+                                            for obs, pred in pairs])) if event else None)
+    return {"numerical": asdict(numerical_pairs(pairs)), "classification": classification,
+            "diagnostic_event": event}
+
+
+def _case_day(case: VariableCase) -> date:
+    return aware_timestamp(case.start_utc).astimezone(ZoneInfo(case.timezone)).date()
+
+
+def _case_lead(case: VariableCase) -> int:
+    return (_case_day(case) - aware_timestamp(case.slot_utc).astimezone(ZoneInfo(case.timezone)).date()).days
+
+
+def compare_variable_models(
+    reports: Sequence[dict[str, Any]], baseline: str, *, models: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Compare declared arms on identical units, observations, slots and target intervals."""
+    declared = sorted({report["model"] for report in reports} if models is None else set(models))
+    if baseline not in declared or len(declared) < 2 or any(not isinstance(m, str) or not m.strip()
+                                                          for m in declared):
+        raise ValueError("baseline and at least one declared comparator are required")
+    axes: set[tuple[str, str, str]] = set()
+    arms: dict[tuple[str, str, str], dict[str, dict[VariableCase, tuple[float, float]]]] = defaultdict(
+        lambda: defaultdict(dict))
+    seen: dict[tuple[str, str, str], dict[str, set[VariableCase]]] = defaultdict(
+        lambda: defaultdict(set))
+    excluded: dict[tuple[str, str, str], dict[str, dict[VariableCase, list[str]]]] = defaultdict(
+        lambda: defaultdict(dict))
+    reference: dict[VariableCase, tuple[float | None, str, str, str | None]] = {}
+    units: dict[tuple[str, str], str] = {}
+    for report in reports:
+        if report.get("schema") != "climaprev-variable-pairs-v1" or report["model"] not in declared:
+            raise ValueError("comparison requires versioned pairs for declared models")
+        model, variable, unit, aggregation = (report[key] for key in ("model", "variable", "unit", "aggregation"))
+        if not all(isinstance(value, str) and value.strip() for value in (variable, unit, aggregation)):
+            raise ValueError("comparison requires explicit variable, unit and aggregation")
+        canonical_units = {"precipitation_mm": "mm", "temperature_c": "°C",
+                           "temperature_min_c": "°C", "temperature_max_c": "°C",
+                           "wind_kmh": "km/h", "gust_kmh": "km/h", "humidity_pct": "%"}
+        if variable not in canonical_units or unit != canonical_units[variable]:
+            raise ValueError("variable unit is not the canonical measurement unit")
+        if not all(isinstance(report.get(key), str) and report[key].strip()
+                   for key in ("source_sha256", "observed_semantics")):
+            raise ValueError("observed reference provenance is required")
+        axis = (variable, unit, aggregation)
+        axes.add(axis)
+        if (variable, aggregation) in units and units[variable, aggregation] != unit:
+            raise ValueError("variable unit contracts differ across models")
+        units[variable, aggregation] = unit
+        location, station = report["location"], report["station"]
+        zone = ZoneInfo(location["timezone"])
+        for field, bound in (("latitude", 90), ("longitude", 180)):
+            for value in (location[field], station[field]):
+                if (isinstance(value, bool) or not isinstance(value, (int, float))
+                        or not isfinite(value) or abs(value) > bound):
+                    raise ValueError("invalid comparison coordinates")
+            if abs(location[field] - station[field]) > 0.0001:
+                raise ValueError("comparison point differs from station")
+        slot = aware_timestamp(report["collection_slot"])
+        deadline = aware_timestamp(report["collection_deadline"])
+        collected = aware_timestamp(report["collected_at"])
+        if slot >= deadline:
+            raise ValueError("collection slot must precede its deadline")
+        for row in report["rows"]:
+            start, end = aware_timestamp(row["start_utc"]), aware_timestamp(row["end_utc"])
+            day = date.fromisoformat(row["date"])
+            if (start != datetime.combine(day, time.min, zone).astimezone(UTC)
+                    or end != datetime.combine(day + timedelta(days=1), time.min, zone).astimezone(UTC)):
+                raise ValueError("comparison target differs from its local day")
+            key = VariableCase(station["code"], float(location["latitude"]), float(location["longitude"]),
+                               location["timezone"], variable, unit, aggregation,
+                               start.isoformat(), end.isoformat(), slot.isoformat())
+            if key in seen[axis][model]:
+                raise ValueError("duplicate comparison case within a model")
+            seen[axis][model].add(key)
+            observed, forecast = _number(row["observed"], variable), _number(row["forecast"], variable)
+            identity = (observed, report["source_sha256"], report["observed_semantics"],
+                        report.get("source_field"))
+            if key in reference and reference[key] != identity:
+                raise ValueError("models do not share the same observed reference")
+            reference[key] = identity
+            reasons = []
+            if observed is None:
+                reasons.append("observation_missing_or_incomplete")
+            if forecast is None:
+                reasons.append("forecast_missing_or_incomplete")
+            if row.get("eligible_exploratory") is not True or row.get("exclusions") != []:
+                reasons.append("upstream_quality_exclusion")
+            if collected < slot or collected >= deadline:
+                reasons.append("collection_outside_slot")
+            if collected >= start:
+                reasons.append("collected_not_before_target")
+            excluded[axis][model][key] = reasons
+            if not reasons and observed is not None and forecast is not None:
+                arms[axis][model][key] = (observed, forecast)
+    output = []
+    for axis in sorted(axes):
+        variable, unit, aggregation = axis
+        for model in declared:
+            arms[axis].setdefault(model, {})
+            seen[axis].setdefault(model, set())
+        common = set.intersection(*(set(arms[axis][m]) for m in declared))
+        universe = set.union(*(seen[axis][m] for m in declared))
+
+        def scores(
+            keys: set[VariableCase], common: set[VariableCase] = common,
+            axis: tuple[str, str, str] = axis, variable: str = variable,
+            aggregation: str = aggregation,
+        ) -> dict[str, Any]:
+            shared = sorted(keys & common)
+            result = {m: _variable_score([arms[axis][m][key] for key in shared], variable, aggregation)
+                      for m in declared}
+            baseline_mae = result[baseline]["numerical"]["mae"]
+            for m in declared:
+                mae = result[m]["numerical"]["mae"]
+                reported = seen[axis][m] & keys
+                eligible = set(arms[axis][m]) & keys
+                result[m].update({"relative_mae_gain": 1 - mae / baseline_mae
+                                  if baseline_mae not in (None, 0) and mae is not None else None,
+                                  "reported_cases": len(reported), "eligible_cases": len(eligible),
+                                  "excluded_unique_cases": len(reported - eligible),
+                                  "excluded_reasons": dict(Counter(reason for key in reported
+                                      for reason in excluded[axis][m].get(key, []))),
+                                  "absent_from_reported_union": len(keys - seen[axis][m]),
+                                  "eligible_outside_common": len(eligible - common)})
+            return result
+
+        strata: dict[tuple[str, int], set[VariableCase]] = defaultdict(set)
+        for case in universe:
+            strata[case.station, _case_lead(case)].add(case)
+        output.append({"variable": variable, "unit": unit, "aggregation": aggregation,
+                       "common_cases": len(common), "reported_union_cases": len(universe),
+                       "models": scores(universe),
+                       "paired_cases": [{"identity": asdict(case), "date": _case_day(case).isoformat(),
+                                         "lead_days": _case_lead(case),
+                                         "observed": arms[axis][baseline][case][0],
+                                         "forecasts": {m: arms[axis][m][case][1] for m in declared}}
+                                        for case in sorted(common)],
+                       "strata": [{"station": station, "slot_lead_days": lead,
+                                   "common_cases": len(keys & common),
+                                   "reported_union_cases": len(keys), "models": scores(keys)}
+                                  for (station, lead), keys in sorted(strata.items())]})
+    return {"schema": "climaprev-variable-comparison-v1", "baseline": baseline, "models": declared,
+            "groups": output, "input_reports_sha256": sorted(digest(report) for report in reports),
+            "cohort": "collection_slot", "classification_policy": "reference-v1-diagnostic",
+            "scientific_approval": False, "promotion_allowed": False,
+            "limitations": ["Slot/collection timing is not verified model-run lead time.",
+                            "The reported union omits targets absent from every arm; read calendar coverage.",
+                            "Point estimates are diagnostic, not independent scientific acceptance."]}
 
 
 if __name__ == "__main__":

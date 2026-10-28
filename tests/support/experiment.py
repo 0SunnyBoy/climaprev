@@ -43,3 +43,29 @@ def station_csv(
 def approval_fixture(envelope: dict[str, Any], gate: str = "E1") -> dict[str, Any]:
     return {"gate": gate, "protocol_sha256": envelope["sha256"], "reviewer": "synthetic-reviewer",
             "recorded_at": "2026-10-28T00:00:00+00:00", "reference": "synthetic-test-only"}
+
+
+def variable_report(
+    model: str, predictions: list[float | None], observations: list[float | None],
+    *, variable: str = "precipitation_mm", unit: str = "mm", aggregation: str = "sum",
+) -> dict[str, Any]:
+    slot = datetime(2029, 12, 31, tzinfo=UTC)
+    rows = []
+    for index, (predicted, observed) in enumerate(zip(predictions, observations, strict=True)):
+        start = datetime(2030, 1, 1, tzinfo=UTC) + timedelta(days=index)
+        rows.append({"date": start.date().isoformat(), "start_utc": start.isoformat(),
+                     "end_utc": (start + timedelta(days=1)).isoformat(),
+                     "forecast": predicted, "observed": observed, "exclusions": [],
+                     "eligible_exploratory": True, "eligible_confirmatory": True,
+                     "comparable_as_identical_measurement": True})
+    return {"schema": "climaprev-variable-pairs-v1", "model": model, "variable": variable,
+            "unit": unit, "aggregation": aggregation,
+            "forecast_semantics": "previous_hour_sum", "observed_semantics": "observed_previous_hour_sum",
+            "station": {"code": "SYN", "latitude": 0, "longitude": 0},
+            "location": {"name": "Synthetic", "latitude": 0, "longitude": 0,
+                         "timezone": "UTC", "source": "fixture"},
+            "source_sha256": "synthetic-common-observation", "source_field": "synthetic-field",
+            "collected_at": (slot + timedelta(minutes=5)).isoformat(),
+            "collection_slot": slot.isoformat(),
+            "collection_deadline": (slot + timedelta(minutes=30)).isoformat(),
+            "run_evidence": None, "rows": rows}
