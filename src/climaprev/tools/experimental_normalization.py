@@ -28,7 +28,7 @@ def _number(value: Any, variable: str) -> float | None:
         return None
     if isinstance(value, bool) or not isinstance(value, (float, int)) or not isfinite(value):
         raise ValueError("measurement must be finite or null")
-    if variable != "temperature_c" and value < 0:
+    if variable not in {"temperature_c", "temperature_min_c", "temperature_max_c"} and value < 0:
         raise ValueError("negative non-temperature measurement")
     if variable == "humidity_pct" and value > 100:
         raise ValueError("humidity must be between zero and 100")

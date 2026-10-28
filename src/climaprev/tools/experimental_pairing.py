@@ -8,7 +8,12 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from climaprev.domain.models import CanonicalLocation, DatePeriod
-from climaprev.tools.experimental_normalization import Measurement, complete_rain_total
+from climaprev.tools.experimental_normalization import (
+    Measurement,
+    complete_rain_total,
+    validate_measurements,
+)
+from climaprev.tools.experimental_observations import _measurement
 from climaprev.tools.historical_experiment import digest
 from climaprev.tools.inmet_observations import StationHour, parse_station_csv
 
@@ -109,3 +114,91 @@ def pair_baseline_rain(baseline: dict[str, Any], raw_csv: bytes, station: str) -
     result["baseline_sha256"] = digest(baseline)
     result["forecast_aggregation"] = "production_adapter_daily_sum_without_hourly_reconstruction"
     return result
+
+
+def _daily_value(
+    samples: list[Measurement], start: datetime, end: datetime, *, unit: str,
+    semantics: str, aggregation: str,
+) -> float | None:
+    selected = sorted((m for m in samples if (m.end is None and start <= m.start < end
+                       or m.end is not None and m.start < end and m.end > start)),
+                      key=lambda m: m.start)
+    validate_measurements(selected, unit=unit, semantics=semantics)
+    cursor, values, weights = start, [], []
+    for sample in selected:
+        stop = sample.end or sample.start + timedelta(hours=1)
+        if sample.start != cursor or stop > end or sample.value is None:
+            return None
+        values.append(sample.value)
+        weights.append((stop - sample.start).total_seconds())
+        cursor = stop
+    if not values or cursor != end:
+        return None
+    if aggregation == "max":
+        return max(values)
+    if aggregation == "min":
+        return min(values)
+    if aggregation == "sum":
+        return sum(values)
+    if aggregation == "mean":
+        return sum(value * weight for value, weight in zip(values, weights, strict=True))/sum(weights)
+    raise ValueError("unsupported daily aggregation")
+
+
+def pair_variable_days(
+    forecast: list[Measurement], observations: dict[str, Any], location: CanonicalLocation,
+    period: DatePeriod, *, variable: str, unit: str, aggregation: str,
+    forecast_semantics: str, observed_semantics: str, model: str, collected_at: datetime,
+    forecast_variable: str | None = None, equivalence_reference: str | None = None,
+    run_evidence: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Pair daily values while distinguishing instrument equivalence from support."""
+    if (period.days > 366 or collected_at.utcoffset() is None or not model.strip()
+            or aggregation not in {"min", "max", "sum", "mean"}):
+        raise ValueError("bounded period, aware collection, model and aggregation required")
+    station = observations["station"]
+    for field, bound in (("latitude", 90), ("longitude", 180)):
+        for value in (getattr(location, field), station[field]):
+            if (isinstance(value, bool) or not isinstance(value, (int, float))
+                    or not isfinite(value) or abs(value) > bound):
+                raise ValueError("invalid pairing coordinates")
+        if abs(getattr(location, field) - station[field]) > 0.0001:
+            raise ValueError("pairing point differs from station")
+    predicted = [m for m in forecast if m.variable == (forecast_variable or variable)]
+    observed = [_measurement(row) for row in observations["measurements"]
+                if row["variable"] == variable]
+    equivalent = (forecast_semantics.removeprefix("observed_")
+                  == observed_semantics.removeprefix("observed_")) or bool(equivalence_reference)
+    zone = ZoneInfo(location.timezone)
+    rows = []
+    for index in range(period.days):
+        day = period.start + timedelta(days=index)
+        start = datetime.combine(day, time.min, zone).astimezone(UTC)
+        end = datetime.combine(day + timedelta(days=1), time.min, zone).astimezone(UTC)
+        predicted_value = _daily_value(predicted, start, end, unit=unit,
+                                       semantics=forecast_semantics, aggregation=aggregation)
+        observed_value = _daily_value(observed, start, end, unit=unit,
+                                      semantics=observed_semantics, aggregation=aggregation)
+        reasons = []
+        if predicted_value is None:
+            reasons.append("incomplete_forecast_interval")
+        if observed_value is None:
+            reasons.append("incomplete_observation_interval")
+        rows.append({"date": day.isoformat(), "start_utc": start.isoformat(),
+                     "end_utc": end.isoformat(), "forecast": predicted_value,
+                     "observed": observed_value, "exclusions": reasons,
+                     "eligible_exploratory": not reasons,
+                     "eligible_confirmatory": not reasons and equivalent and collected_at < start,
+                     "comparable_as_identical_measurement": equivalent,
+                     "diagnostic_reasons": [] if equivalent else ["measurement_semantics_not_equivalent"],
+                     "collection_lead_days": (day - collected_at.astimezone(zone).date()).days})
+    return {"schema": "climaprev-variable-pairs-v1", "model": model,
+            "variable": variable, "unit": unit, "aggregation": aggregation,
+            "forecast_semantics": forecast_semantics, "observed_semantics": observed_semantics,
+            "station": station, "location": asdict(location), "rows": rows,
+            "collected_at": collected_at.astimezone(UTC).isoformat(),
+            "run_evidence": run_evidence,
+            "source_sha256": observations["source_sha256"],
+            "source_field": observations["source_fields"].get(variable),
+            "forecast_samples_sha256": digest([asdict(m) for m in forecast]),
+            "equivalence_reference": equivalence_reference, "scientific_approval": False}
