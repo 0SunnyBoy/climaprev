@@ -2,12 +2,17 @@
 
 import json
 import re
+from collections.abc import Sequence
 from dataclasses import asdict
 from typing import Any, cast
 
 from climaprev.domain.bias_correction import ForecastCalibration
 from climaprev.domain.risk_policy import ExperimentalRiskPolicy, RiskPolicy, policy_fingerprint
-from climaprev.tools.experimental_protocol import validate_protocol
+from climaprev.tools.experimental_protocol import (
+    aware_timestamp,
+    execute_authorized,
+    validate_protocol,
+)
 from climaprev.tools.historical_experiment import canonical_json, digest
 
 
@@ -77,3 +82,61 @@ def validate_candidate(envelope: dict[str, Any]) -> dict[str, Any]:
             or value["operational_eligible"] is not False):
         raise ValueError("invalid candidate component hash or identity")
     return cast(dict[str, Any], json.loads(canonical_json(value)))
+
+
+def record_decision(
+    protocol: dict[str, Any], candidate: dict[str, Any], evaluation: dict[str, Any] | None,
+    *, opinion: dict[str, Any] | None = None, approvals: Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Record a human conclusion against exact inputs, without inventing an opinion."""
+    validate_protocol(protocol)
+    value = validate_candidate(candidate)
+    if value["protocol_sha256"] != protocol["sha256"]:
+        raise ValueError("candidate protocol identity differs")
+    evaluation_sha = digest(evaluation) if evaluation is not None else None
+    if evaluation is not None and (evaluation.get("schema") != "climaprev-independent-evaluation-v1"
+                                   or evaluation.get("protocol_sha256") != protocol["sha256"]
+                                   or evaluation.get("candidate_sha256") != candidate["sha256"]):
+        raise ValueError("evaluation identity differs")
+    outcome = "pending"
+    if opinion is not None:
+        outcome = opinion.get("outcome", "")
+        if (outcome not in {"keep_v1", "reject", "inconclusive", "promote"}
+                or any(not isinstance(opinion.get(k), str) or not opinion[k].strip()
+                       for k in ("reviewer", "reference", "recorded_at"))
+                or opinion.get("protocol_sha256") != protocol["sha256"]
+                or opinion.get("candidate_sha256") != candidate["sha256"]
+                or opinion.get("evaluation_sha256") != evaluation_sha):
+            raise ValueError("human opinion identity or conclusion is invalid")
+        aware_timestamp(opinion["recorded_at"])
+    if outcome == "promote":
+        if evaluation is None or evaluation.get("mode") != "confirmatory":
+            raise ValueError("promotion needs an independent confirmatory evaluation")
+        report = evaluation["report"]
+        if (report.get("partition") != "test" or report.get("protocol_sha256") != digest(protocol["protocol"])
+                or evaluation["population"]["eligible_overall_days"] < 1
+                or any(evaluation["population"][key] != report[key] for key in evaluation["population"])
+                or not any(v["policy_sha256"] == value["policy_sha256"]
+                           and v["calibration_sha256"] == value["calibration_sha256"]
+                           for v in report["variants"].values())):
+            raise ValueError("promotion evaluation lacks the frozen strategy or test population")
+        execute_authorized(protocol, "operational", lambda _: None, approvals=approvals)
+    decision = {"schema": "climaprev-candidate-decision-v1", "outcome": outcome,
+                "protocol_sha256": protocol["sha256"], "candidate_sha256": candidate["sha256"],
+                "evaluation_sha256": evaluation_sha, "opinion": opinion,
+                "approvals": list(approvals), "operational_eligible": outcome == "promote"}
+    return cast(dict[str, Any], json.loads(canonical_json({"decision": decision, "sha256": digest(decision)})))
+
+
+def accepted_candidate(
+    protocol: dict[str, Any], candidate: dict[str, Any], evaluation: dict[str, Any] | None,
+    decision: dict[str, Any],
+) -> dict[str, Any]:
+    value = decision.get("decision", {})
+    expected = record_decision(protocol, candidate, evaluation, opinion=value.get("opinion"),
+                               approvals=value.get("approvals", ()))
+    if decision != expected:
+        raise ValueError("decision differs from its evidence-bound outcome")
+    if expected["decision"]["operational_eligible"] is not True:
+        raise ValueError("candidate is not operationally eligible")
+    return validate_candidate(candidate)

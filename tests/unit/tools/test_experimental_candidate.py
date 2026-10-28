@@ -67,3 +67,61 @@ def test_rehashed_invalid_candidate_still_checks_internal_component_hashes():
     result["sha256"] = digest(result["candidate"])
     with pytest.raises(ValueError, match="hash"):
         validate_candidate(result)
+
+
+def test_absent_opinion_stays_pending_without_scientific_conclusion():
+    from climaprev.tools.experimental_candidate import record_decision
+
+    result = record_decision(protocol_fixture(), candidate(), None)
+    assert result["decision"]["outcome"] == "pending"
+    assert result["decision"]["operational_eligible"] is False
+
+
+@pytest.mark.parametrize("outcome", ["keep_v1", "reject", "inconclusive", "promote"])
+def test_review_outcomes_bind_exact_evaluation_and_only_promotion_is_eligible(outcome):
+    from tests.support.experiment import (
+        approval_fixture,
+        independent_evaluation_fixture,
+        review_fixture,
+    )
+
+    from climaprev.tools.experimental_candidate import accepted_candidate, record_decision
+
+    protocol, strategy = protocol_fixture(), candidate()
+    evaluation = independent_evaluation_fixture(protocol, strategy)
+    decision = record_decision(protocol, strategy, evaluation,
+                               opinion=review_fixture(protocol, strategy, evaluation, outcome),
+                               approvals=[approval_fixture(protocol, "E3")])
+    assert decision["decision"]["outcome"] == outcome
+    assert decision["decision"]["operational_eligible"] is (outcome == "promote")
+    if outcome == "promote":
+        assert accepted_candidate(protocol, strategy, evaluation, decision) == strategy["candidate"]
+    else:
+        with pytest.raises(ValueError, match="eligible"):
+            accepted_candidate(protocol, strategy, evaluation, decision)
+
+
+def test_other_hash_and_missing_e3_cannot_make_a_strategy_eligible():
+    from tests.support.experiment import independent_evaluation_fixture, review_fixture
+
+    from climaprev.tools.experimental_candidate import record_decision
+
+    protocol, strategy = protocol_fixture(), candidate()
+    evaluation = independent_evaluation_fixture(protocol, strategy)
+    opinion = review_fixture(protocol, strategy, evaluation)
+    with pytest.raises(ValueError, match="E3"):
+        record_decision(protocol, strategy, evaluation, opinion=opinion)
+    opinion["candidate_sha256"] = "c" * 64
+    with pytest.raises(ValueError, match="identity"):
+        record_decision(protocol, strategy, evaluation, opinion=opinion)
+
+
+def test_rehashed_decision_cannot_change_a_pending_outcome_to_promote():
+    from climaprev.tools.experimental_candidate import accepted_candidate, record_decision
+
+    protocol, strategy = protocol_fixture(), candidate()
+    decision = record_decision(protocol, strategy, None)
+    decision["decision"].update(outcome="promote", operational_eligible=True)
+    decision["sha256"] = digest(decision["decision"])
+    with pytest.raises(ValueError, match="decision"):
+        accepted_candidate(protocol, strategy, None, decision)

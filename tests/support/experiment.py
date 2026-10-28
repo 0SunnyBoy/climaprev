@@ -69,3 +69,30 @@ def variable_report(
             "collection_slot": slot.isoformat(),
             "collection_deadline": (slot + timedelta(minutes=30)).isoformat(),
             "run_evidence": None, "rows": rows}
+
+
+def independent_evaluation_fixture(protocol: dict[str, Any], candidate: dict[str, Any]) -> dict[str, Any]:
+    """Run a real evaluator on fabricated weather, with a clearly synthetic E2 record."""
+    from climaprev.tools.historical_experiment import evaluate_frozen_test, snapshot
+
+    times = [f"2030-01-01T{hour:02d}:00" for hour in range(24)]
+    def payload(suffix: str, gust: float) -> dict[str, Any]:
+        return {"timezone": "UTC", "hourly_units": {"temperature_2m" + suffix: "°C",
+                "precipitation" + suffix: "mm", "wind_gusts_10m" + suffix: "km/h"},
+                "hourly": {"time": times, "temperature_2m" + suffix: [25] * 24,
+                           "precipitation" + suffix: [0] * 24, "wind_gusts_10m" + suffix: [gust] * 24}}
+    data = snapshot({"latitude": 0.0, "longitude": 0.0, "start": "2030-01-01", "end": "2030-01-01",
+                     "lead_days": 1, "minimum_coverage": 1.0, "forecast_model": "gfs_global",
+                     "observed_model": "era5"}, payload("_previous_day1", 40), payload("", 70), {},
+                    collected_at=datetime(2030, 2, 1, tzinfo=UTC))
+    return evaluate_frozen_test(protocol, candidate, loader=lambda: [data],
+                                frozen_protocol_sha256=protocol["sha256"],
+                                frozen_candidate_sha256=candidate["sha256"],
+                                approvals=[approval_fixture(protocol, "E2")])
+
+
+def review_fixture(protocol: dict[str, Any], candidate: dict[str, Any], evaluation: dict[str, Any],
+                   outcome: str = "promote") -> dict[str, Any]:
+    return {"outcome": outcome, "reviewer": "synthetic-reviewer", "reference": "synthetic-only",
+            "recorded_at": "2030-02-01T00:00:00+00:00", "protocol_sha256": protocol["sha256"],
+            "candidate_sha256": candidate["sha256"], "evaluation_sha256": digest(evaluation)}
