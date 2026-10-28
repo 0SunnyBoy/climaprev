@@ -21,9 +21,12 @@ def _sha(value: Any) -> bool:
 
 
 def _components(policy: dict[str, Any], calibration: dict[str, Any]) -> tuple[RiskPolicy, ForecastCalibration]:
+    if not isinstance(policy, dict) or not isinstance(calibration, dict):
+        raise TypeError("strategy components must be objects")
     if set(policy) != set(asdict(RiskPolicy())) or set(calibration) != set(asdict(ForecastCalibration())):
         raise ValueError("strategy components require every explicit field")
     if policy["policy_version"] == "reference-v1":
+        ExperimentalRiskPolicy(**{key: value for key, value in policy.items() if key != "policy_version"})
         if policy != asdict(RiskPolicy()):
             raise ValueError("reference-v1 parameters are frozen")
         risk: RiskPolicy = RiskPolicy()
@@ -48,8 +51,8 @@ def register_candidate(
     calibration: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     frozen_protocol = validate_protocol(protocol)
-    risk, profile = _components(policy or asdict(RiskPolicy()),
-                                calibration or asdict(ForecastCalibration.disabled()))
+    risk, profile = _components(policy if policy is not None else asdict(RiskPolicy()),
+                                calibration if calibration is not None else asdict(ForecastCalibration.disabled()))
     if (not code_version.strip() or set(normalization) != {"version", "sha256"}
             or not normalization["version"].strip() or not _sha(normalization["sha256"])
             or not models or not set(models) <= set(frozen_protocol["models"])

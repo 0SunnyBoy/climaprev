@@ -125,3 +125,33 @@ def test_rehashed_decision_cannot_change_a_pending_outcome_to_promote():
     decision["sha256"] = digest(decision["decision"])
     with pytest.raises(ValueError, match="decision"):
         accepted_candidate(protocol, strategy, None, decision)
+
+
+@pytest.mark.parametrize("component", ["policy", "calibration"])
+@pytest.mark.parametrize("invalid", [{}, [], False, 0, ""])
+def test_explicit_falsy_component_is_not_an_omitted_default(component, invalid):
+    with pytest.raises((ValueError, TypeError)):
+        candidate(**{component: invalid})
+
+
+def test_explicit_none_retains_the_documented_baseline_defaults():
+    result = candidate(policy=None, calibration=None)
+    assert result["candidate"]["policy"]["policy_version"] == "reference-v1"
+    assert result["candidate"]["calibration"] == asdict(ForecastCalibration.disabled())
+
+
+@pytest.mark.parametrize("entry_point", ["register", "rehashed_envelope"])
+def test_reference_v1_boolean_threshold_is_rejected_at_every_entry_point(entry_point):
+    from climaprev.domain.risk_policy import RiskPolicy
+
+    policy = asdict(RiskPolicy())
+    policy["temperature_min_high_c"] = False
+    if entry_point == "register":
+        with pytest.raises(ValueError, match="finite numbers"):
+            candidate(policy=policy)
+    else:
+        result = candidate(policy=None)
+        result["candidate"]["policy"] = policy
+        result["sha256"] = digest(result["candidate"])
+        with pytest.raises(ValueError, match="finite numbers"):
+            validate_candidate(result)
