@@ -169,3 +169,49 @@ def test_met_rejects_malformed_measurements(kind):
         props["timeseries"][1]["time"] = props["timeseries"][0]["time"]
     with pytest.raises(ValueError):
         met_norway_measurements(payload)
+
+
+@pytest.mark.parametrize("problem,reason", [
+    ("none", None), ("missing", "variable_absent"),
+    ("d7", "interval_incomplete"), ("partial", "interval_incomplete"),
+    ("unit", "unit_mismatch"),
+])
+def test_capability_is_per_variable_and_complete_target_interval(problem, reason):
+    from climaprev.tools.experimental_collection import assess_capability
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    samples = [Measurement("precipitation_mm", start + timedelta(hours=i),
+                           start + timedelta(hours=i + 1), 1, "mm", "previous_hour_sum")
+               for i in range(24)]
+    target = start
+    if problem == "missing":
+        samples = []
+    elif problem == "d7":
+        target += timedelta(days=7)
+    elif problem == "partial":
+        samples.pop()
+    elif problem == "unit":
+        samples[0] = Measurement(samples[0].variable, samples[0].start, samples[0].end,
+                                 1, "inch", samples[0].semantics)
+    result = assess_capability("gfs_global", samples, variable="precipitation_mm", unit="mm",
+                               semantics="previous_hour_sum", start=target,
+                               end=target + timedelta(days=1))
+    assert result["declared_supported"] is True
+    assert result["eligible"] is (reason is None)
+    assert result["variable"] == "precipitation_mm"
+    if reason:
+        assert reason in result["reasons"]
+    else:
+        assert result["reasons"] == []
+
+
+def test_unsupported_gust_is_not_invented_for_met_adapter():
+    from climaprev.tools.experimental_collection import assess_capability
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    result = assess_capability("met-norway", [], variable="gust_kmh", unit="km/h",
+                               semantics="previous_hour_max", start=start,
+                               end=start + timedelta(days=1))
+    assert result["declared_supported"] is False
+    assert result["eligible"] is False
+    assert "variable_not_supported_by_adapter" in result["reasons"]
