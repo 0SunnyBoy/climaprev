@@ -155,3 +155,29 @@ def test_reference_v1_boolean_threshold_is_rejected_at_every_entry_point(entry_p
         result["sha256"] = digest(result["candidate"])
         with pytest.raises(ValueError, match="finite numbers"):
             validate_candidate(result)
+
+
+@pytest.mark.parametrize("mutation", ["missing", "incomplete", "risk", "calibration"])
+def test_promotion_requires_complete_fingerprints_matching_installed_algorithms(mutation):
+    from tests.support.experiment import (
+        approval_fixture,
+        independent_evaluation_fixture,
+        review_fixture,
+    )
+
+    from climaprev.tools.experimental_candidate import record_decision
+
+    protocol, strategy = protocol_fixture(), candidate()
+    evaluation = independent_evaluation_fixture(protocol, strategy)
+    report = evaluation["report"]
+    if mutation == "missing":
+        report.pop("algorithms_sha256")
+    elif mutation == "incomplete":
+        report["algorithms_sha256"].pop("domain/risk_evaluator.py")
+    else:
+        algorithm = "domain/risk_evaluator.py" if mutation == "risk" else "domain/bias_correction.py"
+        report["algorithms_sha256"][algorithm] = "0" * 64
+    opinion = review_fixture(protocol, strategy, evaluation)
+    with pytest.raises(ValueError, match="algorithms"):
+        record_decision(protocol, strategy, evaluation, opinion=opinion,
+                        approvals=[approval_fixture(protocol, "E3")])

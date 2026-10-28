@@ -54,15 +54,23 @@ tarefa e do requisito. Os testes abaixo estão versionados.
 
 Para obter a revisão deste documento, execute
 `git log -1 --format=%h -- docs/operacoes/reference-candidate-1-encerramento.md`.
-A revisão independente final tem relatório local em
+A revisão independente identificou dois reparos adicionais: validação estrita
+dos componentes explícitos (incluindo booleanos na V1) e confronto completo dos
+fingerprints da avaliação com os algoritmos instalados na promoção e no startup.
+As regressões desses reparos integram a contagem atual. O relatório final fica em
 `.specs/features/reference-candidate-1-tecnica/validation.md`; sua conclusão
 não deve ser inferida apenas das contagens abaixo.
+
+| Reparo da revisão | Rastreabilidade | Commit |
+| --- | --- | --- |
+| F1 / G2: componentes explícitos inválidos | RCT-21; 13 casos adicionais | `57db079` |
+| F2 / G1: algoritmos instalados | RCT-24/25/26; 6 casos adicionais | Revisão de correção deste documento |
 
 ## Verificações executadas
 
 | Gate | Resultado observado |
 | --- | --- |
-| Backend completo, com warnings tratados como erro | 963 testes aprovados; baseline anterior de 757 testes. |
+| Backend completo, com warnings tratados como erro | 982 testes aprovados; baseline anterior de 757 testes. |
 | Análise estática | Ruff aprovado; mypy aprovado em 87 módulos de produto. |
 | Frontend | 56 testes aprovados em 10 arquivos; baseline anterior de 48 testes. |
 | Frontend: lint, tipos e build | Aprovados usando o Dockerfile e lock existentes. |
@@ -166,7 +174,9 @@ horário fictício. D+7 sem V1 elegível mantém ganho contra V1 em null.
 A seleção só é aplicável depois de existir um bundle real aprovado. Não use os
 bundles sintéticos dos testes como autorização. O bundle JSON possui
 `schema=climaprev-accepted-bundle-v1`, `protocol`, `candidate`, `evaluation`,
-`decision` e `forecasts` preparados. Sua normalização deve corresponder ao
+`decision` e `forecasts` preparados. A avaliação deve identificar exatamente os
+algoritmos instalados; fingerprints ausentes, incompletos ou divergentes bloqueiam
+a promoção e o startup. Sua normalização deve corresponder ao
 `normalization_identity()` da versão instalada. As fontes de cada previsão
 possuem SHA256; os registros não certificam autenticidade externa dos dados.
 

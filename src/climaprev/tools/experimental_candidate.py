@@ -13,7 +13,7 @@ from climaprev.tools.experimental_protocol import (
     execute_authorized,
     validate_protocol,
 )
-from climaprev.tools.historical_experiment import canonical_json, digest
+from climaprev.tools.historical_experiment import algorithm_fingerprints, canonical_json, digest
 
 
 def _sha(value: Any) -> bool:
@@ -116,6 +116,8 @@ def record_decision(
         if evaluation is None or evaluation.get("mode") != "confirmatory":
             raise ValueError("promotion needs an independent confirmatory evaluation")
         report = evaluation["report"]
+        if report.get("algorithms_sha256") != algorithm_fingerprints():
+            raise ValueError("promotion evaluation algorithms differ from installed code")
         if (report.get("partition") != "test" or report.get("protocol_sha256") != digest(protocol["protocol"])
                 or evaluation["population"]["eligible_overall_days"] < 1
                 or any(evaluation["population"][key] != report[key] for key in evaluation["population"])

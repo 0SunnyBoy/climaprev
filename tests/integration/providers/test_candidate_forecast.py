@@ -93,3 +93,16 @@ async def test_request_uses_frozen_copy_with_no_network_or_campaign_call(monkeyp
     copy = deepcopy(provider.provenance)
     copy.clear()
     assert len(provider.provenance) == 1
+
+
+@pytest.mark.parametrize("algorithm", ["domain/risk_evaluator.py", "domain/bias_correction.py"])
+def test_startup_rechecks_algorithms_after_the_review_was_recorded(monkeypatch, algorithm):
+    from climaprev.tools import experimental_candidate
+
+    bundle, value = prepared_bundle()
+    assert PreparedCandidateForecast(bundle, now=lambda: value.fetched_at).strategy_identity
+    installed = experimental_candidate.algorithm_fingerprints()
+    installed[algorithm] = "0" * 64
+    monkeypatch.setattr(experimental_candidate, "algorithm_fingerprints", lambda: installed)
+    with pytest.raises(WeatherDataInvalid, match="identity"):
+        PreparedCandidateForecast(bundle, now=lambda: value.fetched_at)
