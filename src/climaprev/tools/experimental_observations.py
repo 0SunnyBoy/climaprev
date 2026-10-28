@@ -25,6 +25,12 @@ _EXTRA_FIELDS = {
                  "observed_previous_hour_max", timedelta(hours=1), 3.6),
     "humidity_pct": ("UMIDADE RELATIVA DO AR, HORARIA (%)", "%",
                      "observed_hourly_humidity", timedelta(hours=1), 1.0),
+    "precipitation_mm": ("PRECIPITAÇÃO TOTAL, HORÁRIO (mm)", "mm",
+                         "observed_previous_hour_sum", timedelta(hours=1), 1.0),
+    "temperature_max_c": ("TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)", "°C",
+                          "observed_previous_hour_max", timedelta(hours=1), 1.0),
+    "temperature_min_c": ("TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)", "°C",
+                          "observed_previous_hour_min", timedelta(hours=1), 1.0),
 }
 
 

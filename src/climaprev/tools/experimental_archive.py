@@ -147,3 +147,33 @@ def load_evidence(path: Path) -> dict[str, Any]:
         if _file_sha256(Path(parent["path"])) != parent["sha256"]:
             raise ValueError("evidence parent differs from its frozen identity")
     return data
+
+
+def load_forecast_capture(
+    path: Path, *, model: str | None = None, location: CanonicalLocation | None = None,
+) -> dict[str, Any]:
+    """Read a content-addressed capture and validate its declared provenance."""
+    capture = read_json(path)
+    if (capture.get("schema") != "climaprev-experimental-archive-v1"
+            or capture.get("payload_sha256") != digest(capture["payload"])
+            or path.stem != digest(capture)):
+        raise ValueError("capture identity differs")
+    metadata = capture["metadata"]
+    if not isinstance(metadata, dict):
+        raise TypeError("capture metadata must be an object")
+    point = CanonicalLocation(**metadata["location"])
+    ForecastCapture(
+        metadata["provider"], metadata["model"], metadata["endpoint"], point,
+        datetime.fromisoformat(metadata["collected_at"]),
+        datetime.fromisoformat(metadata["valid_start"]), datetime.fromisoformat(metadata["valid_end"]),
+        datetime.fromisoformat(metadata["run_at"]) if metadata["run_at"] else None,
+        metadata["selection_mode"],
+    )
+    expected = {"met-norway": "ecmwf-ifs-global-unspecified",
+                "operational-baseline": "unknown"}.get(model, model) if model else None
+    if expected is not None and metadata["model"] != expected:
+        raise ValueError("capture model differs from the declared arm")
+    if location is not None and any(getattr(point, key) != getattr(location, key)
+                                    for key in ("latitude", "longitude", "timezone")):
+        raise ValueError("capture point differs from station")
+    return capture

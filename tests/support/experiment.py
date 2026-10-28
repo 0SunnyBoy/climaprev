@@ -25,14 +25,16 @@ def protocol_fixture() -> dict[str, Any]:
     return {"protocol": protocol, "sha256": digest(protocol)}
 
 
-def station_csv(extra_headers: list[str], extra_rows: list[list[str]]) -> bytes:
+def station_csv(
+    extra_headers: list[str], extra_rows: list[list[str]], *, start: datetime | None = None,
+) -> bytes:
     text = ("ESTACAO:;Synthetic\nCODIGO (WMO):;SYN\nLATITUDE:;0\nLONGITUDE:;0\nALTITUDE:;10\n"
             "Data;Hora UTC;PRECIPITAÇÃO TOTAL, HORÁRIO (mm);VENTO, RAJADA MAXIMA (m/s);"
             "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C);"
             "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)")
     text += (";" + ";".join(extra_headers) if extra_headers else "") + "\n"
     for index, values in enumerate(extra_rows, 1):
-        endpoint = datetime(2030, 1, 1, tzinfo=UTC) + timedelta(hours=index)
+        endpoint = (start or datetime(2030, 1, 1, tzinfo=UTC)) + timedelta(hours=index)
         text += f"{endpoint:%Y/%m/%d};{endpoint:%H%M} UTC;0;10;30;-10"
         text += (";" + ";".join(values) if values else "") + "\n"
     return text.encode()

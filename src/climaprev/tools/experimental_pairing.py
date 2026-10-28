@@ -1,19 +1,33 @@
 """Exploratory rain pairing with an explicitly identified INMET station and day."""
 
 import hashlib
+import sqlite3
+from collections.abc import Mapping
+from contextlib import closing
 from dataclasses import asdict
 from datetime import UTC, date, datetime, time, timedelta
 from math import isfinite
+from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
 from climaprev.domain.models import CanonicalLocation, DatePeriod
+from climaprev.tools.experimental_archive import load_forecast_capture
+from climaprev.tools.experimental_campaign import validate_target_calendar
+from climaprev.tools.experimental_collection import describe_run
 from climaprev.tools.experimental_normalization import (
     Measurement,
+    _number,
     complete_rain_total,
+    met_norway_measurements,
+    open_meteo_measurements,
     validate_measurements,
 )
-from climaprev.tools.experimental_observations import _measurement
+from climaprev.tools.experimental_observations import (
+    _EXTRA_FIELDS,
+    _measurement,
+    parse_observations,
+)
 from climaprev.tools.historical_experiment import digest
 from climaprev.tools.inmet_observations import StationHour, parse_station_csv
 
@@ -127,7 +141,12 @@ def _daily_value(
     cursor, values, weights = start, [], []
     for sample in selected:
         stop = sample.end or sample.start + timedelta(hours=1)
-        if sample.start != cursor or stop > end or sample.value is None:
+        if semantics == "observed_previous_10_minute_mean":
+            complete = (sample.end is not None and sample.end == cursor + timedelta(hours=1)
+                        and sample.start == sample.end - timedelta(minutes=10))
+        else:
+            complete = sample.start == cursor
+        if not complete or stop > end or sample.value is None:
             return None
         values.append(sample.value)
         weights.append((stop - sample.start).total_seconds())
@@ -202,3 +221,102 @@ def pair_variable_days(
             "source_field": observations["source_fields"].get(variable),
             "forecast_samples_sha256": digest([asdict(m) for m in forecast]),
             "equivalence_reference": equivalence_reference, "scientific_approval": False}
+
+
+def pair_capture(
+    path: Path, raw_csv: bytes, location: CanonicalLocation, period: DatePeriod, *,
+    station: str, model: str, contract: dict[str, Any], equivalence_reference: str | None = None,
+) -> dict[str, Any]:
+    """Compose the existing archive, normalization and pairing contracts offline."""
+    capture = load_forecast_capture(path, model=model, location=location)
+    metadata, payload = capture["metadata"], capture["payload"]
+    variable = contract["name"]
+    observations = parse_observations(raw_csv, expected_station=station, variables=[variable])
+    baseline = model == "operational-baseline"
+    samples = ([] if baseline else met_norway_measurements(payload["response"])
+               if metadata["provider"] == "met-norway"
+               else open_meteo_measurements(payload["response"]))
+    field = None
+    if baseline:
+        field = {
+            ("precipitation_mm", "sum"): "precipitation_sum_mm",
+            ("precipitation_mm", "max"): "precipitation_max_hourly_mm",
+            ("temperature_c", "mean"): "temperature_mean_c",
+            ("temperature_max_c", "max"): "temperature_max_c",
+            ("temperature_min_c", "min"): "temperature_min_c",
+            ("gust_kmh", "max"): "wind_gust_max_kmh",
+            ("wind_kmh", "max"): "wind_max_kmh",
+            ("humidity_pct", "mean"): "humidity_mean_pct",
+        }.get((variable, contract["aggregation"]))
+    semantics = f"production_daily_{field or 'unsupported'}" if baseline else contract["semantics"]
+    collected = datetime.fromisoformat(metadata["collected_at"])
+    report = pair_variable_days(
+        samples, observations, location, period, variable=variable, unit=contract["unit"],
+        aggregation=contract["aggregation"], forecast_semantics=semantics,
+        observed_semantics=_EXTRA_FIELDS[variable][2], model=model, collected_at=collected,
+        forecast_variable="temperature_c" if variable in {"temperature_max_c", "temperature_min_c"}
+        else variable, equivalence_reference=equivalence_reference,
+        run_evidence=describe_run(collected, requested_run=datetime.fromisoformat(metadata["run_at"])
+                                  if metadata["run_at"] else None),
+    )
+    report["capture_sha256"] = path.stem
+    if baseline:
+        forecast = payload["forecast"]
+        days = {}
+        for day in forecast["days"]:
+            key = str(day["date"])
+            if key in days:
+                raise ValueError("duplicate baseline target date")
+            days[key] = day
+        for row in report["rows"]:
+            day = days.get(row["date"])
+            value = _number(day.get(field), variable) if day is not None and field else None
+            row["forecast"] = value
+            if value is not None:
+                row["exclusions"].remove("incomplete_forecast_interval")
+            elif day is None:
+                row["exclusions"].append("baseline_target_absent")
+            elif field is None:
+                row["exclusions"].append("baseline_aggregation_not_supported")
+            if (variable == "precipitation_mm"
+                    and f"{row['date']}.precipitation.coverage" in forecast["missing_fields"]):
+                row["exclusions"].append("baseline_hourly_rain_coverage")
+            row["eligible_exploratory"] = not row["exclusions"]
+            row["eligible_confirmatory"] = (not row["exclusions"]
+                and row["comparable_as_identical_measurement"]
+                and collected < datetime.fromisoformat(row["start_utc"]))
+        del report["forecast_samples_sha256"]
+        report["baseline_sha256"] = digest(payload)
+        report["forecast_aggregation"] = "production_adapter_daily_value_without_hourly_reconstruction"
+    return report
+
+
+def pair_calendar_captures(
+    calendar: dict[str, Any], ledger: Path, observation_files: Mapping[str, Path],
+) -> list[dict[str, Any]]:
+    """Prepare only the frozen targets, using persisted captures after a restart too."""
+    data = validate_target_calendar(calendar)
+    protocol = data["protocol"]["protocol"]
+    with closing(sqlite3.connect(ledger.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+        paths = {row[0]: Path(row[1]) for row in db.execute(
+            "SELECT job,artifact FROM captures WHERE status='completed' AND artifact IS NOT NULL"
+        )}
+    raw = {code: path.read_bytes() for code, path in observation_files.items()}
+    reports = []
+    for target in data["targets"]:
+        if not target["active"] or target["job"] not in paths or target["station"] not in raw:
+            continue
+        station = next(item for item in protocol["stations"] if item["code"] == target["station"])
+        contract = next(item for item in protocol["variables"] if item["name"] == target["variable"])
+        location = CanonicalLocation(station["name"], station["latitude"], station["longitude"],
+                                     station["timezone"], "explicit-station-registry")
+        day = date.fromisoformat(target["date"])
+        report = pair_capture(
+            paths[target["job"]], raw[target["station"]], location, DatePeriod(day, day),
+            station=target["station"], model=target["model"], contract=contract,
+            equivalence_reference=protocol["criteria"].get("equivalence_references", {}).get(
+                target["variable"]),
+        )
+        report["target_key"] = target["key"]
+        reports.append(report)
+    return reports

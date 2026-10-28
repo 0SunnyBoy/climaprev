@@ -9,10 +9,11 @@ from math import isfinite
 from pathlib import Path
 from typing import Any
 
-from climaprev.tools.experimental_archive import _file_sha256
+from climaprev.domain.models import CanonicalLocation
+from climaprev.tools.experimental_archive import _file_sha256, load_forecast_capture
 from climaprev.tools.experimental_campaign import validate_target_calendar
 from climaprev.tools.experimental_protocol import aware_timestamp
-from climaprev.tools.historical_experiment import digest, read_json
+from climaprev.tools.historical_experiment import digest
 
 
 def audit_calendar(
@@ -87,22 +88,12 @@ def audit_calendar(
 
 
 def _capture_identity(path: Path, identity: dict[str, Any]) -> dict[str, Any]:
-    capture = read_json(path)
-    if (capture.get("schema") != "climaprev-experimental-archive-v1"
-            or capture.get("payload_sha256") != digest(capture["payload"])
-            or path.stem != digest(capture)):
-        raise ValueError("capture identity differs")
+    point = CanonicalLocation("expected-point", identity["latitude"], identity["longitude"],
+                              identity["timezone"], "frozen-job")
+    capture = load_forecast_capture(path, model=identity["model"], location=point)
     metadata = capture["metadata"]
     if not isinstance(metadata, dict):
         raise TypeError("capture metadata must be an object")
-    expected_model = {"met-norway": "ecmwf-ifs-global-unspecified",
-                      "operational-baseline": "unknown"}.get(identity["model"], identity["model"])
-    if metadata["model"] != expected_model:
-        raise ValueError("capture model differs from job")
-    for field in ("latitude", "longitude", "timezone"):
-        if metadata["location"][field] != identity[field]:
-            raise ValueError("capture location differs from job")
-    aware_timestamp(metadata["collected_at"])
     return metadata
 
 
