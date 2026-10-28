@@ -1,5 +1,7 @@
 """Explicit, disabled-by-default campaign batches and a shared local call ledger."""
 
+import argparse
+import asyncio
 import hashlib
 import sqlite3
 from collections.abc import Sequence
@@ -25,7 +27,7 @@ from climaprev.tools.experimental_protocol import (
     execute_authorized,
     validate_protocol,
 )
-from climaprev.tools.historical_experiment import digest
+from climaprev.tools.historical_experiment import canonical_json, digest, read_json
 
 _ORIGINS = MODEL_ORIGINS
 
@@ -139,7 +141,7 @@ async def run_manifest(
             raise ValueError("job location differs from frozen identity")
         model = identity["model"]
         provider = "met-norway" if model == "met-norway" else "open-meteo"
-        if not ledger.reserve(key, provider, datetime.now(UTC), plan["provider_daily_call_limit"]):
+        if not ledger.reserve(key, provider, now, plan["provider_daily_call_limit"]):
             reports.append({"job": key, "status": "already_reserved_no_retry"})
             continue
         try:
@@ -220,3 +222,50 @@ def validate_target_calendar(envelope: dict[str, Any]) -> dict[str, Any]:
     if expected != envelope:
         raise ValueError("calendar differs from the complete frozen targets or pipeline")
     return data
+
+
+async def run_calendar(
+    calendar: dict[str, Any], ledger: CampaignLedger, client: httpx.AsyncClient,
+    directory: Path, *, now: datetime,
+) -> list[dict[str, Any]]:
+    """Run only authorized current slots; restart never retries an existing reservation."""
+    data = validate_target_calendar(calendar)
+    if not data["enabled"]:
+        return []
+    execute_authorized(data["protocol"], "collection", lambda _: None, approvals=data["approvals"])
+    reports = []
+    for manifest in data["manifests"]:
+        reports.extend(await run_manifest(manifest, ledger, client, directory, now=now))
+    return reports
+
+
+async def _run_cli(args: argparse.Namespace) -> dict[str, Any]:
+    calendar = read_json(args.calendar)
+    data = validate_target_calendar(calendar)
+    if not data["enabled"]:
+        return {"calendar_sha256": calendar["sha256"], "enabled": False, "jobs": []}
+    execute_authorized(data["protocol"], "collection", lambda _: None, approvals=data["approvals"])
+    ledger = CampaignLedger(args.ledger)
+    async with httpx.AsyncClient(trust_env=False, follow_redirects=False) as client:
+        reports = await run_calendar(calendar, ledger, client, args.output, now=datetime.now(UTC))
+    return {"calendar_sha256": calendar["sha256"], "enabled": True,
+            "jobs": [{"job": report["job"], "status": report["status"],
+                      "error": report.get("error"),
+                      "archive": report.get("result", {}).get("archive")}
+                     for report in reports], "scientific_approval": False}
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--calendar", type=Path, required=True)
+    parser.add_argument("--ledger", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        print(canonical_json(asyncio.run(_run_cli(args))))
+    except (OSError, ValueError, TypeError, KeyError, OverflowError, CampaignLimitExceeded) as error:
+        parser.exit(2, f"campaign execution failed: {error}\n")
+
+
+if __name__ == "__main__":
+    main()
