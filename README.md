@@ -16,6 +16,8 @@ nem instruções de Defesa Civil, INMET ou autoridades locais.
 
 ## Documentação do projeto
 
+[Integração da Frente 2 — etapas 1 a 5](docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md): relatórios offline ligam arquivos, CSV e horizontes/cobertura; contratos oficiais corrigidos para média térmica horária e agregação de umidade não resolvida, sem comparações instantâneas artificiais. 858 testes backend e mypy 89 módulos/Ruff aprovados localmente. Falta de observações atuais mantém o piloto desativado. Lote anterior baa3465 qualificado remotamente; conferir checks próprios da nova publicação.
+
 [Continuidade da Frente 2 em 28/10](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md): CSVs públicos até setembro/2026, reconciliação de Belém, preflight 15/15 e comparação multivariável/cobertura experimental. 845 testes backend, mypy 88 módulos e Ruff aprovados localmente. Dados atuais/equivalência instrumental ainda condicionam o piloto; sem fitting ou ganho comprovado. [Benefícios esperados e condições da candidata](docs/planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md). Incremento sem push.
 
 [Preparação da Frente 2 em 28/10](docs/operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md): estações, calendário desativado, partições e critérios conservadores preparados; 826 testes backend, mypy 86 módulos e Ruff aprovados localmente. Qualidade observacional atual, reconciliação de Belém e suporte/inferência continuam condicionantes. Sem coleta recorrente, fitting, promoção ou push deste incremento. Checkpoints numéricos abaixo são anteriores.

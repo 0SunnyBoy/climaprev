@@ -42,6 +42,8 @@ def check_equivalence(
                                           "observed_previous_hour_max"),
         "temperature_previous_hour_min": ("temperature_c", "°C", "previous_hour_min",
                                           "observed_previous_hour_min"),
+        "temperature_previous_hour_mean": ("temperature_c", "°C", "previous_hour_mean",
+                                           "observed_previous_hour_mean"),
         "temperature_instant": ("temperature_c", "°C", "instant", "observed_instant"),
         "humidity_instant": ("humidity_pct", "%", "instant", "observed_instant"),
     }

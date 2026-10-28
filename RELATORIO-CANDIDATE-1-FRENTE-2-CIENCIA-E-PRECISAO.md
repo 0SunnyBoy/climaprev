@@ -1,5 +1,13 @@
 # Candidate-1 — Frente 2: Ciência, precisão e integração
 
+## Integração das etapas 1 a 5 — 28/10/2026
+
+Lote anterior publicado em `baa3465`, com CI e Security aprovados. Nova revisão corrige contratos a partir do glossário oficial: temperatura horária é média da hora anterior, não instantânea; umidade mantém agregação não resolvida; vento observado é média de dez minutos. Comparações incompatíveis ficam bloqueadas; a afirmação antiga de pareamento instantâneo de temperatura/umidade é superada por esta correção.
+
+Implementado `experimental_evaluation.py` (função e CLI offline): verifica integridade dos arquivos/CSV, modelo/rodada, ponto/slot, integra chuva e diagnósticos multivariáveis por D+1/D+3/D+7, preserva ausência da baseline horária e não fabrica pares. Avaliação real das quinze capturas/3 estações: previsões D+1 disponíveis, observações recentes com cobertura zero; métricas indefinidas, sem ganho calculado. Nova qualificação de piloto primário retorna bloqueios de observações de A201/A001/A801 e não ativa rotina. Calendário v2 desativado preservado.
+
+**858 testes backend completos**, mypy Linux em **89 módulos**, Ruff aprovados. Incremento preparado para envio autorizado à develop nesta rodada; consultar CI/Security do SHA publicado para seu resultado próprio. Sem alteração da API pública/frontend/reference-v1, fitting, incerteza nova, confirmação, promoção ou main. Fonte anual oficial revalidada ainda termina em setembro; acesso recente legítimo e equivalência instrumental completa seguem pendentes. Relatório: `docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md`; contratos: `docs/planejamento/reference-candidate-1/contratos-instrumentais-verificados-2026-10-28.md` (raiz). Checkpoints abaixo são históricos onde conflitarem.
+
 ## Continuidade vigente — observações e comparação em 28/10/2026
 
 [Relatório da rodada](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md) · [qualificação do piloto](docs/planejamento/reference-candidate-1/evidence/qualificacao-observacoes-piloto-2026-10-28.json) · [benefícios esperados](docs/planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md).

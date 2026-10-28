@@ -3,6 +3,7 @@ from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 
 import pytest
+from tests.support.station_csv import station_variables_csv as csv_data
 
 from climaprev.domain.models import CanonicalLocation, DatePeriod
 from climaprev.tools.experimental_multivariable import (
@@ -20,31 +21,13 @@ START = datetime(2024, 1, 2, tzinfo=UTC)
 LOCATION = CanonicalLocation("Synthetic", 0, 0, "UTC", "test")
 
 
-def csv_data(*, humidity=True, missing=False):
-    header = ("REGIAO:;N\nUF:;PA\nESTACAO:;Synthetic\nCODIGO (WMO):;A201\n"
-              "LATITUDE:;0\nLONGITUDE:;0\nALTITUDE:;10\nDATA DE FUNDACAO:;2003-01-01\n"
-              "Data;Hora UTC;PRECIPITAÇÃO TOTAL, HORÁRIO (mm);VENTO, RAJADA MAXIMA (m/s);"
-              "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C);"
-              "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C);"
-              "TEMPERATURA DO AR - BULBO SECO, HORARIA (°C);")
-    if humidity:
-        header += "UMIDADE RELATIVA DO AR, HORARIA (%);"
-    header += "\n"
-    for i in range(25):
-        stamp = START + timedelta(hours=i)
-        header += f"{stamp:%Y/%m/%d};{stamp:%H%M} UTC;1;2;22;18;20;"
-        if humidity:
-            header += ("-9999" if missing and i == 4 else "50") + ";"
-        header += "\n"
-    return header.encode()
-
-
-def report(model="baseline", value=22, *, target="temperature_instant", raw=None):
+def report(model="baseline", value=9.2, *, target="gust_previous_hour_max", raw=None):
     variable, unit, semantics = {
         "temperature_instant": ("temperature_c", "°C", "instant"),
         "humidity_instant": ("humidity_pct", "%", "instant"),
         "gust_previous_hour_max": ("gust_kmh", "km/h", "previous_hour_max"),
         "temperature_previous_hour_max": ("temperature_c", "°C", "instant"),
+        "temperature_previous_hour_mean": ("temperature_c", "°C", "previous_hour_mean"),
     }[target]
     samples = [Measurement(variable, START + timedelta(hours=i),
                             START + timedelta(hours=i+1) if semantics != "instant" else None,
@@ -62,11 +45,11 @@ def test_instant_fields_and_gust_units_without_changing_historical_importer():
 
 
 def test_common_sample_metrics_and_explicit_full_planned_coverage():
-    result = compare_variable_reports([report(), report("candidate", 21)], "baseline")
+    result = compare_variable_reports([report(), report("candidate", 8.2)], "baseline")
     assert result["planned_cases"] == result["common_cases"] == 24
     assert result["common_coverage"] == 1
-    assert result["models"]["baseline"]["numerical"]["mae"] == 2
-    assert result["models"]["candidate"]["numerical"]["mae"] == 1
+    assert result["models"]["baseline"]["numerical"]["mae"] == pytest.approx(2)
+    assert result["models"]["candidate"]["numerical"]["mae"] == pytest.approx(1)
     assert not result["scientific_approval"] and not result["promotion_allowed"]
 
 
@@ -83,7 +66,10 @@ def test_missing_optional_column_or_sentinel_does_not_become_zero():
     missing = report(target="humidity_instant", raw=csv_data(humidity=False))
     assert all(row["observed_value"] is None for row in missing["rows"])
     partial = report(target="humidity_instant", raw=csv_data(missing=True))
-    assert sum(row["eligible_exploratory"] for row in partial["rows"]) == 23
+    assert not any(row["eligible_exploratory"] for row in partial["rows"])
+    assert "observation_semantics_not_equivalent" in partial["rows"][0]["exclusions"]
+    _, samples = station_variable_measurements(csv_data(missing=True), station="A201")
+    assert sum(m.value is None for m in samples if m.variable == "humidity_pct") == 1
 
 
 def test_instantaneous_forecast_is_not_an_hourly_maximum():
@@ -126,12 +112,22 @@ def test_freshness_window_rejects_stale_data_and_missing_humidity():
     metadata, samples = station_variable_measurements(csv_data(), station="A201")
     args = {"start": START, "end": START + timedelta(days=1), "checked_at": START + timedelta(days=2),
             "min_coverage": 0.9}
-    assert qualify_observation_window(metadata, samples, LOCATION, **args)["technical_pairing_ready"]
+    fresh = qualify_observation_window(metadata, samples, LOCATION, **args)
+    assert fresh["measurement_coverage_ready"]
+    assert not fresh["technical_pairing_ready"]  # Coverage is not semantic equivalence.
     args.update(start=START + timedelta(days=30), end=START + timedelta(days=31),
                 checked_at=START + timedelta(days=32))
     stale = qualify_observation_window(metadata, samples, LOCATION, **args)
     assert not stale["technical_pairing_ready"]
     assert stale["variables"]["humidity_pct"]["coverage"] == 0
+
+
+def test_source_hourly_mean_cannot_be_labeled_an_instantaneous_temperature():
+    result = report(target="temperature_instant")
+    assert not any(row["eligible_exploratory"] for row in result["rows"])
+    assert "observation_semantics_not_equivalent" in result["rows"][0]["exclusions"]
+    mean = report(value=21, target="temperature_previous_hour_mean")
+    assert sum(row["eligible_exploratory"] for row in mean["rows"]) == 24
 
 
 @pytest.mark.parametrize("day,expected", [(date(2024, 3, 10), 23), (date(2024, 11, 3), 25)])

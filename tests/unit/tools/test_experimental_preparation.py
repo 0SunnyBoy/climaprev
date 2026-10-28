@@ -1,11 +1,15 @@
+from dataclasses import asdict
 from datetime import UTC, date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 
 from climaprev.domain.models import CanonicalLocation
+from climaprev.tools.experimental_campaign import pipeline_versions
 from climaprev.tools.experimental_preparation import (
     TemporalPartition,
     prepare_pilot,
+    qualify_primary_pilot,
     reconcile_station,
     validate_partitions,
 )
@@ -87,3 +91,31 @@ def test_target_dates_separated_but_first_test_run_overlaps_embargo_are_rejected
     with pytest.raises(ValueError, match="issuance"):
         validate_partitions(parts, embargo_days=7, max_horizon_days=7,
                             candidate_frozen_at=datetime(2027, 1, 2, tzinfo=UTC))
+
+
+@pytest.mark.parametrize("problem", [None, "observations", "forecast", "pipeline"])
+def test_primary_pilot_requires_fresh_observations_and_all_arms_without_activating(problem):
+    calendar = prepare_pilot([POINT], first_slot=NOW.replace(day=29, hour=18), days=14,
+                             models=["operational-baseline", "gfs_global", "ecmwf_ifs025",
+                                     "icon_global", "met-norway"], campaign="synthetic", now=NOW)
+    zone = ZoneInfo(POINT.timezone)
+    end = datetime.combine(NOW.astimezone(zone).date(), datetime.min.time(), zone).astimezone(UTC)
+    report = {
+        "schema": "climaprev-integrated-slot-evaluation-v1", "station": "synthetic",
+        "station_point": asdict(POINT), "evaluation_pipeline_sha256": pipeline_versions(),
+        "observation_readiness": {"station_version_matches": True, "end_utc": end.isoformat(),
+                                  "variables": {"precipitation_mm": {"coverage": 1}}},
+        "horizons": [{"collection_lead_days": 1, "missing_expected_arms": [],
+                      "forecast_rain_available": {m: True for m in (
+                          "operational-baseline", "gfs_global", "ecmwf_ifs025", "icon_global", "met-norway")}}],
+    }
+    if problem == "observations":
+        report["observation_readiness"]["variables"]["precipitation_mm"]["coverage"] = 0
+    elif problem == "forecast":
+        report["horizons"][0]["forecast_rain_available"]["gfs_global"] = False
+    elif problem == "pipeline":
+        report["evaluation_pipeline_sha256"] = {}
+    result = qualify_primary_pilot(calendar, [report], operational_stations={"synthetic"},
+                                    now=NOW, min_coverage=0.9)
+    assert result["ready"] == (problem is None)
+    assert not result["pilot_activated"] and not result["promotion_allowed"]

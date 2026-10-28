@@ -23,6 +23,8 @@ _TARGETS = {
                                       "observed_previous_hour_max"),
     "temperature_previous_hour_min": ("temperature_c", "°C", "previous_hour_min",
                                       "observed_previous_hour_min"),
+    "temperature_previous_hour_mean": ("temperature_c", "°C", "previous_hour_mean",
+                                       "observed_previous_hour_mean"),
 }
 CaseWindow = tuple[str, str | None]
 
@@ -81,6 +83,8 @@ def pair_station_variable(
         day = start.astimezone(zone).date()
         day_start = datetime.combine(day, time.min, zone).astimezone(UTC)
         reasons = list(check.exclusions)
+        if target in {"temperature_instant", "humidity_instant"}:
+            reasons.append("observation_semantics_not_equivalent")
         if collected_at.astimezone(UTC) >= day_start:
             reasons.append("collected_not_before_target_day")
         rows.append({"start_utc": start.isoformat(), "end_utc": end.isoformat() if end else None,

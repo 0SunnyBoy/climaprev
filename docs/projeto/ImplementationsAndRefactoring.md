@@ -42,3 +42,7 @@ A estrutura preserva independência de frontend/backend no monorepo. Extrações
 ## Continuidade multivariável da Frente 2 — 28/10/2026
 
 `tools/experimental_observations.py` acrescenta temperatura/umidade horárias declaradas e prontidão por janela, sem alterar o importador histórico congelado. `tools/experimental_multivariable.py` pareia janelas exatas por alvo e compara casos comuns contra denominador planejado, com exclusões e sem promoção. Ambos têm identidade congelada no pipeline experimental. 845 testes backend/mypy 88 módulos/Ruff aprovados; ver [relatório](../operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md).
+
+## Integração offline e contratos verificados — 28/10/2026
+
+`experimental_evaluation.py` integra arquivos explícitos verificados, CSV e relatórios por horizonte, com escrita exclusiva, identidades de pipeline e sem baseline horária fabricada. `qualify_primary_pilot` em `experimental_preparation.py` verifica prontidão da chuva sem ativar calendários. Correção oficial em `experimental_observations.py`: temperatura média horária; umidade sem agregação instantânea comprovada. 858 testes backend/mypy 89 módulos/Ruff aprovados. [Relatório](../operacoes/frente-2-etapas-1-a-5-2026-10-28.md).

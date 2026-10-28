@@ -20,8 +20,9 @@ def station_variable_measurements(
     """Read declared CSV fields; instrument/height equivalence is not certified.
 
     The preceding-hour convention is inherited from the existing importer.
-    Hourly air-temperature/humidity fields are exposed as declared endpoint
-    samples; sustained wind is withheld until averaging semantics are verified.
+    INMET's glossary identifies air temperature as a preceding-hour mean.
+    Humidity aggregation is not explicit enough to assert an instantaneous
+    sample. Wind is withheld: the source's 10-minute mean is not model instant.
     """
     metadata, hours = parse_station_csv(raw, expected_station=station)
     measurements = []
@@ -64,10 +65,15 @@ def station_variable_measurements(
             value = _number(row[index])
             if variable == "humidity_pct" and value is not None and not 0 <= value <= 100:
                 raise ValueError("observed humidity outside zero to 100")
-            measurements.append(Measurement(variable, stamp, None, value, unit, "observed_instant"))
+            semantics = ("observed_previous_hour_mean" if variable == "temperature_c"
+                         else "observed_previous_hour_unspecified")
+            measurements.append(Measurement(variable, stamp - timedelta(hours=1), stamp,
+                                              value, unit, semantics))
     return {**metadata, "optional_fields_missing": missing,
-            "instant_semantics_basis": "declared_hourly_endpoint_not_instrument_certification",
-            "sustained_wind": "withheld_pending_averaging_equivalence"}, measurements
+            "semantics_source": "https://portal.inmet.gov.br/glossario/nublado",
+            "instantaneous_temperature_observation_available": False,
+            "instantaneous_humidity_observation_verified": False,
+            "sustained_wind": "withheld_model_instant_vs_observed_10min_mean"}, measurements
 
 
 def qualify_observation_window(
@@ -102,8 +108,8 @@ def qualify_observation_window(
     for variable, semantics, interval in (
         ("precipitation_mm", "observed_previous_hour_sum", True),
         ("gust_kmh", "observed_previous_hour_max", True),
-        ("temperature_c", "observed_instant", False),
-        ("humidity_pct", "observed_instant", False),
+        ("temperature_c", "observed_previous_hour_mean", True),
+        ("humidity_pct", "observed_previous_hour_unspecified", True),
     ):
         valid = 0
         cursor = start.astimezone(UTC)
@@ -118,8 +124,12 @@ def qualify_observation_window(
         "schema": "climaprev-observation-window-readiness-v1", "station": metadata["code"],
         "start_utc": start.astimezone(UTC).isoformat(), "end_utc": end.astimezone(UTC).isoformat(),
         "station_version_matches": matching, "variables": coverage,
-        "technical_pairing_ready": matching and all(
+        "measurement_coverage_ready": matching and all(
             row["coverage"] >= min_coverage for row in coverage.values()),
+        "technical_pairing_ready": False,
+        "semantic_blockers": ["temperature_hourly_mean_is_not_model_instant",
+                              "humidity_sampling_aggregation_unverified",
+                              "wind_10min_mean_is_not_model_instant"],
         "minimum_coverage": min_coverage, "scientific_approval": False,
         "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness.",
     }

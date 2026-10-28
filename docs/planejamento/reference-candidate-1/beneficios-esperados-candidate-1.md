@@ -25,3 +25,7 @@ Atualizado em 28/10/2026. Os benefícios abaixo descrevem a finalidade da candid
 Infraestrutura experimental de coleta, proveniência, controles locais, pareamento de chuva, comparação numérica e cobertura está disponível. A continuidade de 28/10 acrescentou importação e pareamento experimental de temperatura/umidade/rajada, controle por janela planejada e reconciliação de Belém por versão. O preflight dos cinco braços nos três locais concluiu 15/15 consultas; os limites de cobertura por horizonte continuam explícitos.
 
 Isso demonstra funcionamento desses componentes no escopo testado. Ainda faltam observações atuais verificadas, equivalência instrumental completa, avaliação de incerteza, refinamento e teste independente. Não há redução real de erro ou de falsos alarmes comprovada nesta entrega. Alertas oficiais continuam distintos dos indicadores calculados.
+
+## Revisão de elegibilidade em 28/10/2026
+
+A integração e os contratos foram revistos em fonte oficial: temperatura observacional média horária e agregação de umidade não resolvida não viram observações instantâneas. O pipeline bloqueia a comparação quando falta equivalência; este bloqueio é uma melhoria de integridade científica, não evidência de aumento da precisão. A verificação real continua sem pares contemporâneos para os alvos atuais. Ver [contratos](contratos-instrumentais-verificados-2026-10-28.md) e [relatório integrado](../../operacoes/frente-2-etapas-1-a-5-2026-10-28.md).

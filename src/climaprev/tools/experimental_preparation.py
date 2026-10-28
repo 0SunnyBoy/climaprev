@@ -5,9 +5,10 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from math import isfinite
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from climaprev.domain.models import CanonicalLocation
-from climaprev.tools.experimental_campaign import build_manifest
+from climaprev.tools.experimental_campaign import build_manifest, pipeline_versions
 from climaprev.tools.historical_experiment import digest
 
 
@@ -115,3 +116,74 @@ def validate_partitions(
         "prospective_independence_verified": False, "confirmation_enabled": False,
         "limitation": "Schedule validity does not establish data provenance or actual freezing.",
     }
+
+
+def qualify_primary_pilot(
+    calendar: dict[str, Any], reports: Sequence[dict[str, Any]], *,
+    operational_stations: set[str], now: datetime, min_coverage: float,
+) -> dict[str, Any]:
+    """Readiness gate for primary rain, without changing or running a calendar.
+
+    Secondary-variable incompatibility remains explicit but does not invent a
+    requirement that forecast observations from tomorrow already be available.
+    Recent completed observation windows and D1 forecast availability are used.
+    """
+    if (now.utcoffset() is None or isinstance(min_coverage, bool) or not 0 < min_coverage <= 1
+            or calendar.get("schema") != "climaprev-disabled-pilot-calendar-v1"
+            or calendar["calendar_sha256"] != digest(calendar["manifests"])):
+        raise ValueError("valid calendar, aware clock and coverage required")
+    reasons = []
+    expected_points = set()
+    required_models = {"operational-baseline", "gfs_global", "ecmwf_ifs025", "icon_global", "met-norway"}
+    for manifest in calendar["manifests"]:
+        plan = manifest["plan"]
+        if manifest["plan_sha256"] != digest(plan):
+            raise ValueError("invalid manifest integrity")
+        if plan["pipeline_versions"] != pipeline_versions():
+            reasons.append("calendar_pipeline_outdated")
+        if datetime.fromisoformat(plan["slot"]) <= now:
+            reasons.append("calendar_contains_elapsed_slots")
+        models_by_point: dict[tuple[Any, ...], set[str]] = {}
+        for job in plan["jobs"]:
+            if job["key"] != digest(job["identity"]):
+                raise ValueError("invalid job identity")
+            point = (job["identity"]["latitude"], job["identity"]["longitude"],
+                     job["identity"]["timezone"])
+            expected_points.add(point)
+            models_by_point.setdefault(point, set()).add(job["identity"]["model"])
+        if any(models != required_models for models in models_by_point.values()):
+            reasons.append("calendar_forecast_arms_incomplete")
+    seen = set()
+    for report in reports:
+        if report.get("schema") != "climaprev-integrated-slot-evaluation-v1":
+            raise ValueError("integrated evaluation reports required")
+        station = report["station"]
+        if station in seen:
+            raise ValueError("duplicate station evaluation")
+        seen.add(station)
+        if report.get("evaluation_pipeline_sha256") != pipeline_versions():
+            reasons.append(f"{station}:evaluation_pipeline_outdated")
+        readiness = report["observation_readiness"]
+        point = tuple(report["station_point"][field] for field in ("latitude", "longitude", "timezone"))
+        if point not in expected_points:
+            raise ValueError("station evaluation does not belong to the calendar")
+        expected_points.remove(point)
+        if station not in operational_stations or not readiness["station_version_matches"]:
+            reasons.append(f"{station}:station_metadata_not_ready")
+        if readiness["variables"]["precipitation_mm"]["coverage"] < min_coverage:
+            reasons.append(f"{station}:recent_rain_observations_incomplete")
+        expected_end = datetime.combine(now.astimezone(ZoneInfo(point[2])).date(), time.min,
+                                        ZoneInfo(point[2])).astimezone(UTC)
+        if datetime.fromisoformat(readiness["end_utc"]) != expected_end:
+            reasons.append(f"{station}:observation_window_outdated")
+        day1 = next((row for row in report["horizons"] if row["collection_lead_days"] == 1), None)
+        if (day1 is None or day1["missing_expected_arms"]
+                or set(day1["forecast_rain_available"]) != required_models
+                or not all(day1["forecast_rain_available"].values())):
+            reasons.append(f"{station}:primary_forecast_arms_not_ready")
+    if expected_points or not reports:
+        reasons.append("station_evaluations_missing")
+    return {"schema": "climaprev-primary-pilot-readiness-v1", "ready": not reasons,
+            "blockers": sorted(set(reasons)), "pilot_activated": False,
+            "scientific_approval": False, "promotion_allowed": False,
+            "scope": "primary_rain_technical_pilot_not_secondary_variable_certification"}
