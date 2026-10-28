@@ -34,6 +34,28 @@ _FIELDS = "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,wind
 _USER_AGENT = "ClimaPrev/0.1.0 https://github.com/0SunnyBoy/climaprev"
 
 
+def describe_run(
+    collected_at: datetime, *, requested_run: datetime | None = None,
+    verified_run: datetime | None = None, verification_reference: str | None = None,
+    updated_at: datetime | None = None,
+) -> dict[str, Any]:
+    """Record the basis of initialization claims; a request is not provider evidence."""
+    for stamp in (collected_at, requested_run, verified_run, updated_at):
+        if stamp is not None and stamp.utcoffset() is None:
+            raise ValueError("run evidence timestamps need UTC offsets")
+    if any(stamp is not None and stamp > collected_at for stamp in (requested_run, verified_run)):
+        raise ValueError("initialization cannot follow collection")
+    if verified_run is not None and (not verification_reference
+                                     or not verification_reference.strip()):
+        raise ValueError("verified initialization needs an evidence reference")
+    return {"collected_at": collected_at.astimezone(UTC).isoformat(),
+            "requested_run_at": requested_run.astimezone(UTC).isoformat() if requested_run else None,
+            "run_at": verified_run.astimezone(UTC).isoformat() if verified_run else None,
+            "updated_at": updated_at.astimezone(UTC).isoformat() if updated_at else None,
+            "basis": "verified" if verified_run else "requested_only" if requested_run else "unknown",
+            "verification_reference": verification_reference if verified_run else None}
+
+
 def assess_capability(
     model: str, samples: list[Measurement], *, variable: str, unit: str,
     semantics: str, start: datetime, end: datetime,
@@ -131,6 +153,7 @@ async def collect_once(
         }
     return {"model": model, "archive": str(archived),
             "run_at": run_at.isoformat() if run_at else None,
+            "run_evidence": describe_run(collected, requested_run=run_at),
             "run_identity_basis": "requested_single_run" if run_at else "unknown",
             "availability": "available_by_collection_not_first_publication_time",
             "interpretation": "coverage_labels_are_days_after_collection",

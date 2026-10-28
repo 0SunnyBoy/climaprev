@@ -215,3 +215,39 @@ def test_unsupported_gust_is_not_invented_for_met_adapter():
     assert result["declared_supported"] is False
     assert result["eligible"] is False
     assert "variable_not_supported_by_adapter" in result["reasons"]
+
+
+@pytest.mark.parametrize("kind,expected", [
+    ("unknown", "unknown"), ("requested", "requested_only"),
+    ("verified", "verified"), ("updated", "unknown"),
+])
+def test_run_evidence_never_confuses_collection_update_and_initialization(kind, expected):
+    from climaprev.tools.experimental_collection import describe_run
+
+    now = datetime(2030, 1, 1, 6, tzinfo=UTC)
+    run = now - timedelta(hours=6)
+    kwargs = {}
+    if kind == "requested":
+        kwargs["requested_run"] = run
+    elif kind == "verified":
+        kwargs.update(verified_run=run, verification_reference="synthetic-provider-record")
+    elif kind == "updated":
+        kwargs["updated_at"] = now - timedelta(minutes=10)
+    result = describe_run(now, **kwargs)
+    assert result["basis"] == expected
+    assert result["run_at"] == (run.isoformat() if kind == "verified" else None)
+    assert result["collected_at"] == now.isoformat()
+    if kind == "requested":
+        assert result["requested_run_at"] == run.isoformat()
+    if kind == "updated":
+        assert result["updated_at"] == (now - timedelta(minutes=10)).isoformat()
+
+
+def test_initialization_after_collection_and_unreferenced_verification_are_rejected():
+    from climaprev.tools.experimental_collection import describe_run
+
+    now = datetime(2030, 1, 1, tzinfo=UTC)
+    with pytest.raises(ValueError, match="collection"):
+        describe_run(now, requested_run=now + timedelta(seconds=1))
+    with pytest.raises(ValueError, match="reference"):
+        describe_run(now, verified_run=now)
