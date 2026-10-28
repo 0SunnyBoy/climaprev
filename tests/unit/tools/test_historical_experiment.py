@@ -175,3 +175,91 @@ def test_missing_day_is_reported_and_negative_rain_is_rejected() -> None:
     raw["hourly"]["precipitation"][0] = -1
     with pytest.raises(WeatherDataInvalid, match="negative"):
         normalize_hourly(raw, period)
+
+
+def development_fixture():
+    from dataclasses import asdict
+
+    from tests.support.experiment import protocol_fixture
+
+    from climaprev.tools.experimental_candidate import register_candidate
+    from climaprev.tools.historical_experiment import digest
+
+    protocol = protocol_fixture()
+    protocol["protocol"]["splits"] = {
+        "adjustment": {"start": "2025-01-01", "end": "2025-06-30"},
+        "validation": {"start": "2026-01-01", "end": "2026-01-31"},
+        "test": {"start": "2027-01-01", "end": "2027-01-31"}}
+    configurations = []
+    for multiplier in (1, 1.75):
+        configurations.append({"policy": asdict(ExperimentalRiskPolicy()),
+                               "calibration": asdict(ForecastCalibration(profile_version=f"fixture-{multiplier}",
+                                                                         enabled=True, wind_multiplier=multiplier)),
+                               "normalization": {"version": "fixture", "sha256": "a" * 64},
+                               "models": {"gfs_global": "b" * 64}})
+    protocol["protocol"]["criteria"]["development"] = {
+        "configurations": sorted(digest(c) for c in configurations), "event": "wind_gust",
+        "metric": "mae", "direction": "min", "tie_break": "configuration_sha256_ascending"}
+    protocol["sha256"] = digest(protocol["protocol"])
+    candidates = [register_candidate(protocol=protocol, code_version="fixture", **c) for c in configurations]
+    adjustment = dataset()
+    adjustment["configuration"].update(start="2025-01-01", end="2025-01-01")
+    adjustment["forecast"] = payload(suffix="_previous_day1", day=date(2025, 1, 1), gust=40)
+    adjustment["observed"] = payload(day=date(2025, 1, 1), gust=70)
+    return protocol, candidates, adjustment
+
+
+def test_development_selects_known_validation_optimum_without_test_access():
+    from climaprev.tools.compare_historical import select_development
+
+    protocol, candidates, adjustment = development_fixture()
+    accesses = []
+    def canary():
+        accesses.append("test")
+        pytest.fail("independent test was accessed")
+    result = select_development(protocol, candidates, loaders={"adjustment": lambda: [adjustment],
+                                "validation": lambda: [dataset()], "test": canary}, mode="diagnostic")
+    assert result["selected_candidate_sha256"] == candidates[1]["sha256"]
+    assert next(s for s in result["scores"] if s["candidate_sha256"] == candidates[1]["sha256"])["validation_score"] == 0
+    assert result["test_accesses"] == 0
+    assert accesses == []
+    assert result["promotion_allowed"] is False
+
+
+def test_predeclared_tie_rule_is_stable_under_option_order():
+    from climaprev.tools.compare_historical import configuration_fingerprint, select_development
+
+    protocol, candidates, adjustment = development_fixture()
+    zero = dataset()
+    zero["forecast"]["hourly"]["wind_gusts_10m_previous_day1"] = [0] * 24
+    loaders = {"adjustment": lambda: [adjustment], "validation": lambda: [zero]}
+    expected = min(candidates, key=configuration_fingerprint)["sha256"]
+    result = select_development(protocol, list(reversed(candidates)), loaders=loaders, mode="diagnostic")
+    assert result["selected_candidate_sha256"] == expected
+
+
+def test_undeclared_option_is_refused_before_loading_any_partition():
+    from climaprev.tools.compare_historical import select_development
+    from climaprev.tools.historical_experiment import digest
+
+    protocol, candidates, _ = development_fixture()
+    candidates[0]["candidate"]["models"]["gfs_global"] = "c" * 64
+    candidates[0]["sha256"] = digest(candidates[0]["candidate"])
+    with pytest.raises(ValueError, match="declared"):
+        select_development(protocol, candidates, loaders={}, mode="diagnostic")
+
+
+def test_real_development_without_e2_has_zero_partition_reads():
+    from climaprev.tools.compare_historical import select_development
+
+    protocol, candidates, _ = development_fixture()
+    with pytest.raises(ValueError, match="E2"):
+        select_development(protocol, candidates, loaders={})
+
+
+def test_missing_partition_or_rule_cannot_fall_back_to_test():
+    from climaprev.tools.compare_historical import select_development
+
+    protocol, candidates, _ = development_fixture()
+    with pytest.raises(ValueError, match="loaders"):
+        select_development(protocol, candidates, loaders={"test": lambda: [dataset()]}, mode="diagnostic")
