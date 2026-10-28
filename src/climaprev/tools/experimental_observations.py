@@ -8,6 +8,7 @@ It must not silently become a model's instantaneous temperature.
 import csv
 import hashlib
 import io
+from collections.abc import Sequence
 from dataclasses import asdict
 from datetime import UTC, date, datetime, time, timedelta
 from typing import Any
@@ -18,10 +19,18 @@ from climaprev.tools.inmet_observations import _label, _number, parse_station_cs
 _EXTRA_FIELDS = {
     "temperature_c": ("TEMPERATURA DO AR - BULBO SECO, HORARIA (°C)", "°C",
                       "observed_previous_hour_mean", timedelta(hours=1), 1.0),
+    "wind_kmh": ("VENTO, VELOCIDADE HORARIA (m/s)", "km/h",
+                 "observed_previous_10_minute_mean", timedelta(minutes=10), 3.6),
+    "gust_kmh": ("VENTO, RAJADA MAXIMA (m/s)", "km/h",
+                 "observed_previous_hour_max", timedelta(hours=1), 3.6),
 }
 
 
-def parse_observations(raw: bytes, *, expected_station: str) -> dict[str, Any]:
+def parse_observations(
+    raw: bytes, *, expected_station: str, variables: Sequence[str] = ("temperature_c",),
+) -> dict[str, Any]:
+    if any(variable not in _EXTRA_FIELDS for variable in variables):
+        raise ValueError("unsupported observational variable")
     station, _ = parse_station_csv(raw, expected_station=expected_station)
     reader = csv.reader(io.StringIO(raw.decode(station["encoding"])), delimiter=";")
     for header in reader:
@@ -31,7 +40,8 @@ def parse_observations(raw: bytes, *, expected_station: str) -> dict[str, Any]:
     indexes = {}
     source_fields = {}
     missing = []
-    for variable, (label, unit, semantics, duration, factor) in _EXTRA_FIELDS.items():
+    for variable in dict.fromkeys(variables):
+        label, unit, semantics, duration, factor = _EXTRA_FIELDS[variable]
         matches = [i for i, name in enumerate(labels) if name == _label(label)]
         if len(matches) > 1:
             raise ValueError("duplicate observational field")
@@ -51,6 +61,7 @@ def parse_observations(raw: bytes, *, expected_station: str) -> dict[str, Any]:
             value = _number(row[index])
             sample = Measurement(variable, endpoint - duration, endpoint,
                                  None if value is None else value * factor, unit, semantics)
+            validate_measurements([sample], unit=unit, semantics=semantics)
             measurements.append(asdict(sample))
     measurements.sort(key=lambda sample: (sample["start"], sample["variable"]))
     return {"schema": "climaprev-station-measurements-v1", "station": station,
