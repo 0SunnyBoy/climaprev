@@ -190,6 +190,7 @@ class VariableCase:
     start_utc: str
     end_utc: str
     slot_utc: str
+    run_utc: str | None = None
 
 
 def _variable_event(variable: str, aggregation: str) -> str | None:
@@ -213,13 +214,17 @@ def _case_day(case: VariableCase) -> date:
 
 
 def _case_lead(case: VariableCase) -> int:
-    return (_case_day(case) - aware_timestamp(case.slot_utc).astimezone(ZoneInfo(case.timezone)).date()).days
+    return (_case_day(case) - aware_timestamp(case.run_utc or case.slot_utc).astimezone(ZoneInfo(case.timezone)).date()).days
 
 
 def compare_variable_models(
     reports: Sequence[dict[str, Any]], baseline: str, *, models: Sequence[str] | None = None,
+    cohort: str = "collection_slot", allow_retrospective: bool = False,
+    secondary_models: Sequence[str] = (),
 ) -> dict[str, Any]:
     """Compare declared arms on identical units, observations, slots and target intervals."""
+    if cohort not in {"collection_slot", "verified_run"}:
+        raise ValueError("unknown temporal cohort")
     declared = sorted({report["model"] for report in reports} if models is None else set(models))
     if baseline not in declared or len(declared) < 2 or any(not isinstance(m, str) or not m.strip()
                                                           for m in declared):
@@ -266,6 +271,14 @@ def compare_variable_models(
         collected = aware_timestamp(report["collected_at"])
         if slot >= deadline:
             raise ValueError("collection slot must precede its deadline")
+        evidence = report.get("run_evidence") or {}
+        run = None
+        if evidence.get("basis") == "verified":
+            if not evidence.get("verification_reference") or not evidence.get("run_at"):
+                raise ValueError("verified run needs its timestamp and reference")
+            run = aware_timestamp(evidence["run_at"])
+            if run > collected:
+                raise ValueError("verified run follows collection")
         for row in report["rows"]:
             start, end = aware_timestamp(row["start_utc"]), aware_timestamp(row["end_utc"])
             day = date.fromisoformat(row["date"])
@@ -274,7 +287,8 @@ def compare_variable_models(
                 raise ValueError("comparison target differs from its local day")
             key = VariableCase(station["code"], float(location["latitude"]), float(location["longitude"]),
                                location["timezone"], variable, unit, aggregation,
-                               start.isoformat(), end.isoformat(), slot.isoformat())
+                               start.isoformat(), end.isoformat(), slot.isoformat(),
+                               run.isoformat() if cohort == "verified_run" and run else None)
             if key in seen[axis][model]:
                 raise ValueError("duplicate comparison case within a model")
             seen[axis][model].add(key)
@@ -293,8 +307,10 @@ def compare_variable_models(
                 reasons.append("upstream_quality_exclusion")
             if collected < slot or collected >= deadline:
                 reasons.append("collection_outside_slot")
-            if collected >= start:
+            if collected >= start and not allow_retrospective:
                 reasons.append("collected_not_before_target")
+            if cohort == "verified_run" and (run is None or run >= start):
+                reasons.append("run_not_verified")
             excluded[axis][model][key] = reasons
             if not reasons and observed is not None and forecast is not None:
                 arms[axis][model][key] = (observed, forecast)
@@ -338,6 +354,9 @@ def compare_variable_models(
                        "models": scores(universe),
                        "paired_cases": [{"identity": asdict(case), "date": _case_day(case).isoformat(),
                                          "lead_days": _case_lead(case),
+                                         "verified_run_lead_hours": ((aware_timestamp(case.start_utc)
+                                             - aware_timestamp(case.run_utc)).total_seconds() / 3600
+                                             if case.run_utc else None),
                                          "observed": arms[axis][baseline][case][0],
                                          "forecasts": {m: arms[axis][m][case][1] for m in declared}}
                                         for case in sorted(common)],
@@ -345,9 +364,21 @@ def compare_variable_models(
                                    "common_cases": len(keys & common),
                                    "reported_union_cases": len(keys), "models": scores(keys)}
                                   for (station, lead), keys in sorted(strata.items())]})
+    secondary = None
+    if secondary_models:
+        if (len(set(secondary_models)) < 2 or baseline in secondary_models
+                or not set(secondary_models) <= set(declared)):
+            raise ValueError("secondary comparison requires two declared non-baseline arms")
+        secondary = compare_variable_models([r for r in reports if r["model"] in secondary_models],
+                                             min(secondary_models), models=secondary_models,
+                                             cohort=cohort, allow_retrospective=allow_retrospective)
+        secondary["comparison_role"] = "secondary_no_v1_control"
     return {"schema": "climaprev-variable-comparison-v1", "baseline": baseline, "models": declared,
             "groups": output, "input_reports_sha256": sorted(digest(report) for report in reports),
-            "cohort": "collection_slot", "classification_policy": "reference-v1-diagnostic",
+            "cohort": cohort, "secondary_comparison": secondary,
+            "timing_mode": "retrospective_diagnostic" if allow_retrospective else "prospective",
+            "lead_basis": "verified_run_calendar_day" if cohort == "verified_run" else "collection_slot_day",
+            "classification_policy": "reference-v1-diagnostic",
             "scientific_approval": False, "promotion_allowed": False,
             "limitations": ["Slot/collection timing is not verified model-run lead time.",
                             "The reported union omits targets absent from every arm; read calendar coverage.",
