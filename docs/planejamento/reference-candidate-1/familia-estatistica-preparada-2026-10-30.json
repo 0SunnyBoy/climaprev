@@ -1,0 +1,23 @@
+{
+  "schema": "climaprev-confidence-family-plan-v1",
+  "plan": {
+    "method": "bonferroni-confidence-allocation",
+    "claims": [
+      "A001.D1.false_alarm",
+      "A001.D1.recall",
+      "A201.D1.false_alarm",
+      "A201.D1.recall",
+      "A801.D1.false_alarm",
+      "A801.D1.recall",
+      "pooled.D1.mae"
+    ],
+    "family_confidence": 0.95,
+    "interval_confidence": 0.9928571428571429,
+    "marginal_alpha": 0.00714285714285715
+  },
+  "implementation_sha256": "c120c1dcc33678391357e30582af98676e41f2cad628bdca6a886ed1c9165965",
+  "plan_sha256": "7518239bdc414d6924008450782c80371a04b5d1fd2b52d5ca932a906402bf9b",
+  "marginal_method_validated": false,
+  "scientific_approval": false,
+  "promotion_allowed": false
+}

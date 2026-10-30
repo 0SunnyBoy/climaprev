@@ -1,0 +1,30 @@
+{
+  "schema": "climaprev-analysis-priorities-delivery-v1",
+  "order": [
+    4,
+    1,
+    2,
+    3
+  ],
+  "collection_pipeline_unchanged_and_calendar_valid": true,
+  "pilot_report": {
+    "accepted_captures": 0,
+    "target": 210,
+    "operational_status_counts": {
+      "future": 210
+    },
+    "technical_pilot_complete": false,
+    "analysis_module_sha256": "00737d2289d450cfe30f705aad32508187a1e616b6dee6a588e5941eeb38a128",
+    "closure_status": "collecting_forecasts"
+  },
+  "family_claims": 7,
+  "allocated_interval_confidence": 0.9928571428571429,
+  "block_selected": null,
+  "variants_fitted": false,
+  "real_skill_gain_calculated": false,
+  "reserved_outcomes_opened": false,
+  "reference_v1_unchanged": true,
+  "scientific_approval": false,
+  "promotion_allowed": false,
+  "targeted_tests_passed": 29
+}

@@ -50,6 +50,16 @@ O relógio de uma tentativa nova pertence a ela. Falha na terça e captura na qu
 
 ## Calendário científico
 
+### Relatório automático de acompanhamento e encerramento
+
+O módulo de análise `experimental_pilot_report` pode ser usado pela rotina diária e no fechamento, sem modificar o pipeline de coleta. Exemplo, definindo `PYTHONPATH=src` e usando um nome novo para cada saída:
+
+```powershell
+.venv/Scripts/python.exe -m climaprev.tools.experimental_pilot_report --protocol .report-work/inmet-browser-2026-10-30/protocol-v5-adaptive.json --calendar .report-work/inmet-browser-2026-10-30/calendar-v5-seed.enabled.json --ledger .report-work/inmet-browser-2026-10-30/pilot-ledger.sqlite --observations A201=CAMINHO_CSV_A201 --observations A001=CAMINHO_CSV_A001 --observations A801=CAMINHO_CSV_A801 --output CAMINHO_NOVO_RELATORIO.json
+```
+
+Acrescentar `--manifest CAMINHO_MANIFESTO_EXTENSAO.json` para **cada** manifesto adicional já planejado, inclusive falhas. O relatório não descobre extensões omitidas sem registro no ledger. `technical_pilot_complete` só fica verdadeiro após a cota e a observação dos alvos reais completos; não significa aprovação científica. A automação pode usar esse resultado para compor o relatório final e verificar sua condição de pausa.
+
 As reposições são motivadas exclusivamente por disponibilidade, nunca por chuva observada ou desempenho. Cada extensão declara novos alvos antes de coletar. `requires_partition_replan` sinaliza quando D+7 ultrapassa o fim condicional de desenvolvimento. Nesse caso o calendário científico de seleção/confirmação antigo deve ser considerado indisponível para uso: revisar e registrar novos embargos/congelamentos antes de qualquer pesquisa confirmatória. Não mover dados reservados nem alterar protocolos históricos. A reposição técnica autorizada não é uma ampliação oportunista da confirmação científica.
 
 ## Qualificação

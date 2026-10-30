@@ -1,5 +1,12 @@
 # STATE — ClimaPrev
 
+## Entregas analíticas 4 → 1 → 2 → 3 — 30/10/2026
+
+Implementados relatório automático de encerramento/cobertura do piloto, revisão declarada de contratos/altura/representatividade das variáveis secundárias, planejamento estatístico com alocação de confiança e sensibilidade de blocos e alternativas fixas de combinação/correção. São quatro módulos novos de análise; os arquivos congelados da coleta não foram alterados e o calendário ativo continua válido. 29 testes direcionados, Ruff integral e mypy dos quatro módulos aprovados; conferir CI próprio do incremento.
+
+Relatório atual: zero capturas de piloto, 210 jobs futuros, sem encerramento ou ganho real. Contexto instrumental e cobertura simultânea não são certificados automaticamente; bloco final e suporte continuam pendentes de dados. Alternativas não ajustadas, selecionadas ou ativadas. Nenhum novo resultado reservado aberto. Reference-v1 e automação diária até a cota preservadas. Estado/limites e comandos em `docs/operacoes/frente-2-prioridades-4-1-2-3-2026-10-30.md`; evidência em `docs/planejamento/reference-candidate-1/evidence/entrega-prioridades-2026-10-30.json`. Este checkpoint supera a ausência dessas ferramentas, sem encerrar a validação científica.
+
+
 ## Piloto técnico adaptativo — observações restauradas em 30/10/2026
 
 O acesso oficial TEMPO pelo navegador permitiu baixar os CSVs recentes das três estações; a API direta continua 204. Conversão explícita e rastreável entregue sem alterar o importador anual. Janela recente concluída: chuva/rajada 168/168 horas válidas em A201/A001/A801. Preflight renovado 15/15; D+1 disponível nos cinco braços; prontidão técnica de chuva aprovada, sem ganho de precisão calculado.
