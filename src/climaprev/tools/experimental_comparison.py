@@ -27,7 +27,7 @@ def _rain(value: Any) -> float | None:
 
 def compare_rain_models(
     reports: Sequence[dict[str, Any]], baseline: str, *, require_run: bool = True,
-    allow_retrospective: bool = False,
+    allow_retrospective: bool = False, include_cases: bool = False,
 ) -> dict[str, Any]:
     """Use identical station/interval/collection-day-lead pairs, exposing exclusions.
 
@@ -127,7 +127,7 @@ def compare_rain_models(
             "relative_mae_gain": (1 - mae / baseline_mae if baseline_mae not in (None, 0)
                                   and mae is not None else None),
         }
-    return {
+    result = {
         "schema": "climaprev-exploratory-rain-comparison-v1", "baseline": baseline,
         "input_reports_sha256": [digest(report) for report in reports],
         "common_cases": len(common), "reported_union_cases": len(universe),
@@ -161,6 +161,15 @@ def compare_rain_models(
                         "A secondary model reference cannot replace an absent operational baseline.",
                         "Common-case scores must be read with per-model coverage and exclusions."],
     }
+    if include_cases:
+        result["paired_cases"] = [
+            {"station": key[0], "start_utc": key[4], "end_utc": key[5],
+             "collection_lead_days": key[6], "timezone": key[3],
+             "observed_mm": arms[baseline][key][0],
+             "forecasts_mm": {model: arms[model][key][1] for model in sorted(arms)}}
+            for key in sorted(common)
+        ]
+    return result
 
 
 def main() -> None:

@@ -1,5 +1,17 @@
 # STATE — ClimaPrev
 
+## Integração da incerteza aos relatórios — 29/10/2026
+
+Implementada `evaluate_development_reports`: consome relatórios v2, verifica lista de hashes observacionais de desenvolvimento, calendário explícito, partição declarada, braço/modelo, elegibilidade, identidade dos pares e slot de coleta. O comparador passa a expor pares comuns somente por opção explícita, preservando sua saída padrão. A análise entrega sensibilidade por tamanho de bloco, agregada e por estação, incluindo estações/dias sem nenhum par no denominador planejado.
+
+Limites: hashes e partição são declarações do chamador, não autenticação independente; nenhum dado reservado foi aberto. Resultados continuam exploratórios, sem ajuste de multiplicidade, certificação de independência, fitting ou promoção. F2-05/F2-06 avançaram, mas não estão encerradas. O fingerprint de campanha agora inclui incerteza, critérios e bootstrap; calendários antigos exigem nova versão deliberada, sem reescrita silenciosa de hashes. Qualificação desta rodada: 874 testes backend em Linux aprovados, Ruff dos arquivos alterados e mypy local dos dois módulos de análise aprovados; mypy integral Linux aprovado em 90 módulos. Incremento local, sem push. Relatório: `docs/operacoes/frente-2-integracao-incerteza-2026-10-29.md`. Este checkpoint supera as pendências técnicas correspondentes dos registros abaixo.
+
+
+## Preparação do fechamento da frente 2 — 28/10/2026
+
+Implementado `experimental_uncertainty.py`: diferenças pareadas de MAE/detecção/falsos alarmes, blocos de datas agrupando estações, cobertura planejada e ligação ao diagnóstico de critérios. 46 testes específicos, Ruff e mypy aprovados; sem nova qualificação integral ou push. Intervalos exploratórios; independência não certificada, sem promoção. F2-06 avançou, mas não está concluída. Ainda preparar importação auditável dos pares/partições, estratos, multiplicidade e estrutura de refinamento/congelamento; validação real fica condicionada aos dados da frente 1. Frente 2 não encerrada. Relatório: `docs/operacoes/frente-2-fechamento-tecnico-2026-10-28.md`. Este checkpoint prevalece sobre estados históricos incompatíveis abaixo.
+
+
 ## Integração das etapas 1 a 5 — 28/10/2026
 
 Lote anterior publicado em `baa3465`, com CI e Security aprovados. Nova revisão corrige contratos a partir do glossário oficial: temperatura horária é média da hora anterior, não instantânea; umidade mantém agregação não resolvida; vento observado é média de dez minutos. Comparações incompatíveis ficam bloqueadas; a afirmação antiga de pareamento instantâneo de temperatura/umidade é superada por esta correção.
