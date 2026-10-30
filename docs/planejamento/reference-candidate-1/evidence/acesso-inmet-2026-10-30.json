@@ -1,0 +1,75 @@
+[
+  {
+    "name": "catalogue",
+    "url": "https://apitempo.inmet.gov.br/estacoes/T",
+    "checked_at": "2026-10-30T15:33:47.209376+00:00",
+    "status": 200,
+    "bytes": 261396,
+    "sha256": "9341e39ed748cd5e5831a3e1bab0dee6bdb0eec9b405711ea2551384c2e3a527",
+    "stations": [
+      {
+        "code": "A201",
+        "status": "Operante"
+      },
+      {
+        "code": "A001",
+        "status": "Operante"
+      },
+      {
+        "code": "A801",
+        "status": "Operante"
+      }
+    ]
+  },
+  {
+    "name": "annual-index",
+    "url": "https://portal.inmet.gov.br/dadoshistoricos",
+    "checked_at": "2026-10-30T15:33:47.210315+00:00",
+    "status": 200,
+    "bytes": 63922,
+    "sha256": "9a67e32b2622081087a09b7b97b008a8defcb8f1cf165c0d525a9da8adb0e297",
+    "cutoff_matches": [
+      "2026.zip\" >ANO 2026 (AUTOMÁTICA) - Até 30/09/2026"
+    ]
+  },
+  {
+    "name": "instrument-glossary",
+    "url": "https://portal.inmet.gov.br/glossario/nublado",
+    "checked_at": "2026-10-30T15:33:47.210315+00:00",
+    "status": 200,
+    "bytes": 144137,
+    "sha256": "73783b42aac7fab94ebc753eae153f7c9bfc71dc64ba05108208a0d0827cd5f6"
+  },
+  {
+    "name": "recent-ui",
+    "url": "https://tempo.inmet.gov.br/",
+    "checked_at": "2026-10-30T15:33:48.055233+00:00",
+    "status": 200,
+    "bytes": 2793,
+    "sha256": "eb0ea7add98f6fc97d56634e15946a2c0192a27fddbbc496e13f9a5445284bcd"
+  },
+  {
+    "name": "observations-A201",
+    "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A201",
+    "checked_at": "2026-10-30T15:33:48.336445+00:00",
+    "status": 204,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "observations-A001",
+    "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A001",
+    "checked_at": "2026-10-30T15:33:48.538435+00:00",
+    "status": 204,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "observations-A801",
+    "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A801",
+    "checked_at": "2026-10-30T15:33:48.775450+00:00",
+    "status": 204,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -163,6 +163,14 @@ def qualify_primary_pilot(
         seen.add(station)
         if report.get("evaluation_pipeline_sha256") != pipeline_versions():
             reasons.append(f"{station}:evaluation_pipeline_outdated")
+        try:
+            slot = datetime.fromisoformat(report["slot_utc"])
+            checked = datetime.fromisoformat(report["checked_at"])
+            if (slot.utcoffset() is None or checked.utcoffset() is None
+                    or not slot <= checked <= now or now - slot > timedelta(hours=24)):
+                reasons.append(f"{station}:forecast_preflight_not_current")
+        except (KeyError, TypeError, ValueError):
+            reasons.append(f"{station}:forecast_preflight_clock_invalid")
         readiness = report["observation_readiness"]
         point = tuple(report["station_point"][field] for field in ("latitude", "longitude", "timezone"))
         if point not in expected_points:

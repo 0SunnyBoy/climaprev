@@ -93,7 +93,8 @@ def test_target_dates_separated_but_first_test_run_overlaps_embargo_are_rejected
                             candidate_frozen_at=datetime(2027, 1, 2, tzinfo=UTC))
 
 
-@pytest.mark.parametrize("problem", [None, "observations", "forecast", "pipeline"])
+@pytest.mark.parametrize("problem", [None, "observations", "forecast", "pipeline",
+                                     "old_preflight", "future_evaluation", "missing_clock"])
 def test_primary_pilot_requires_fresh_observations_and_all_arms_without_activating(problem):
     calendar = prepare_pilot([POINT], first_slot=NOW.replace(day=29, hour=18), days=14,
                              models=["operational-baseline", "gfs_global", "ecmwf_ifs025",
@@ -103,6 +104,7 @@ def test_primary_pilot_requires_fresh_observations_and_all_arms_without_activati
     report = {
         "schema": "climaprev-integrated-slot-evaluation-v1", "station": "synthetic",
         "station_point": asdict(POINT), "evaluation_pipeline_sha256": pipeline_versions(),
+        "slot_utc": (NOW - timedelta(minutes=10)).isoformat(), "checked_at": NOW.isoformat(),
         "observation_readiness": {"station_version_matches": True, "end_utc": end.isoformat(),
                                   "variables": {"precipitation_mm": {"coverage": 1}}},
         "horizons": [{"collection_lead_days": 1, "missing_expected_arms": [],
@@ -115,6 +117,12 @@ def test_primary_pilot_requires_fresh_observations_and_all_arms_without_activati
         report["horizons"][0]["forecast_rain_available"]["gfs_global"] = False
     elif problem == "pipeline":
         report["evaluation_pipeline_sha256"] = {}
+    elif problem == "old_preflight":
+        report["slot_utc"] = (NOW - timedelta(days=2)).isoformat()
+    elif problem == "future_evaluation":
+        report["checked_at"] = (NOW + timedelta(hours=1)).isoformat()
+    elif problem == "missing_clock":
+        del report["slot_utc"]
     result = qualify_primary_pilot(calendar, [report], operational_stations={"synthetic"},
                                     now=NOW, min_coverage=0.9)
     assert result["ready"] == (problem is None)

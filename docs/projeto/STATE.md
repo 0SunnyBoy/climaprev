@@ -1,5 +1,12 @@
 # STATE — ClimaPrev
 
+## Preparação vigente das etapas 1 a 6 — 30/10/2026
+
+Merge cab7d8c publicado na develop, com CI 41081566586 e Security 41081566583 aprovados. Protocolo/critério/partições conciliados com o runner recebido; catálogo e contratos oficiais revisados; acesso recente INMET repetido (204 nas três estações, índice anual até setembro). Calendário desativado replanejado para 31/10–13/11, 18 UTC/15h Brasília, 210 jobs e 630 alvos até 20/11. Seleção condicional deslocada a 05/12 para preservar embargo de emissões D+7; confirmação não iniciada.
+
+Prontidão executada: **não pronto**, por observações recentes ausentes, janela antiga e preflight de 28/10. Gate reforçado para bloquear preflight com mais de 24h, relógio ausente ou futuro. 34 testes direcionados, Ruff integral e mypy dos dois módulos aprovados; verificar CI próprio do incremento. Nenhuma campanha ativada, registros E1/E2/E3 emitidos, fitting, resultado reservado novo ou promoção. Reference-v1 permanece padrão. Critérios dependentes de suporte e bloco final seguem explicitamente condicionais. Ler `docs/operacoes/preparacao-piloto-etapas-1-a-6-2026-10-30.md` e `docs/planejamento/reference-candidate-1/protocolo-consolidado-2026-10-30.md`. Este estado supera o registro anterior de merge apenas local e os calendários antigos; preserva os demais checkpoints como histórico.
+
+
 ## Integração vigente da develop2 — 30/10/2026
 
 Incorporada a origem `origin/develop2` (`9fd99b7`) à versão local, preservando o incremento da frente 2 (`bd7fbe3`). A origem acrescenta protocolo, partições, observações, campanha/cobertura, comparação/relatórios e infraestrutura de registro, seleção, confirmação técnica e adaptação explícita da candidata. Essas entregas usam ensaios sintéticos: não encerram campanha ou aprovação científica reais. Reference-v1 segue padrão; candidata não selecionada. Calendários antigos precisam de nova versão deliberada antes de execução; sem backfill. Relatório de conciliação e qualificação: `docs/operacoes/merge-develop2-frentes-2026-10-30.md`. Este checkpoint supera afirmações históricas abaixo de ausência dessa infraestrutura. Qualificação combinada: 1.099 testes backend, mypy em 93 módulos, Ruff integral; 56 testes frontend, lint e build com Node.js 22.23.2 aprovados. Merge exclusivamente local, sem push ou alteração da main.
