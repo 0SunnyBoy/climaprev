@@ -1,5 +1,14 @@
 # Candidate-1 — Frente 2: Ciência, precisão e integração
 
+## Piloto técnico adaptativo — observações restauradas em 30/10/2026
+
+O acesso oficial TEMPO pelo navegador permitiu baixar os CSVs recentes das três estações; a API direta continua 204. Conversão explícita e rastreável entregue sem alterar o importador anual. Janela recente concluída: chuva/rajada 168/168 horas válidas em A201/A001/A801. Preflight renovado 15/15; D+1 disponível nos cinco braços; prontidão técnica de chuva aprovada, sem ganho de precisão calculado.
+
+Usuário autorizou automação diária às 15h Brasília e depois reposição até completar a cota **sem data-limite**. Automação `piloto-t-cnico-climaprev` ativa; primeira janela 31/10 18 UTC. Regra: 14 capturas D+1 elegíveis por estação/modelo, 210 no total; pares completos deixam de ser consultados. Perdas viram novas datas futuras, sem backfill nem retirada do histórico de falhas. Notebook/Codex indisponíveis podem perder slots; a cauda observacional acompanha o último D+7 real. Calendário científico condicional exige revisão se as reposições ultrapassarem desenvolvimento; nenhuma confirmação/promoção autorizada. Zero slots de piloto executados nesta preparação; diagnóstico não conta na cota.
+
+Código de importação e planejamento/auditoria de cota testado; conferir qualificação remota do novo SHA antes de transferir a aprovação anterior de 0471a98. Estado completo e comandos: `docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md`; protocolo v5: `docs/planejamento/reference-candidate-1/protocolo-piloto-adaptativo-2026-10-30.json`; evidências: `docs/planejamento/reference-candidate-1/evidence/observacoes-tempo-piloto-adaptativo-2026-10-30.json`. Este estado supera o bloqueio de observações e os calendários fixos anteriores, mantendo reference-v1 padrão e demais pendências científicas/auditivas/comerciais.
+
+
 ## Preparação vigente das etapas 1 a 6 — 30/10/2026
 
 Merge cab7d8c publicado na develop, com CI 41081566586 e Security 41081566583 aprovados. Protocolo/critério/partições conciliados com o runner recebido; catálogo e contratos oficiais revisados; acesso recente INMET repetido (204 nas três estações, índice anual até setembro). Calendário desativado replanejado para 31/10–13/11, 18 UTC/15h Brasília, 210 jobs e 630 alvos até 20/11. Seleção condicional deslocada a 05/12 para preservar embargo de emissões D+7; confirmação não iniciada.

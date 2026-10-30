@@ -1,6 +1,6 @@
 # ClimaPrev
 
-Estado de preparação em 30/10/2026: frentes integradas e merge publicado; reference-v1 segue padrão. Piloto da candidate-1 desativado por falta de observações recentes e preflight atual. [Relatório e critérios de prontidão](docs/operacoes/preparacao-piloto-etapas-1-a-6-2026-10-30.md).
+Estado de preparação em 30/10/2026: reference-v1 segue padrão; observações recentes obtidas pelo TEMPO e prontidão técnica de chuva aprovada. Piloto agendado às 15h Brasília a partir de 31/10, com reposições futuras até 14 capturas válidas por estação/modelo. [Estado e limites do piloto adaptativo](docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md).
 
 Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
 

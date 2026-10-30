@@ -47,7 +47,8 @@ def pipeline_versions() -> dict[str, str]:
              "tools/experimental_observations.py", "tools/experimental_multivariable.py",
              "tools/experimental_evaluation.py", "tools/experimental_uncertainty.py",
              "tools/experimental_criteria.py", "domain/bootstrap.py", "tools/experimental_protocol.py",
-             "tools/experimental_preparation.py")
+             "tools/experimental_preparation.py", "tools/inmet_tempo_csv.py",
+             "tools/experimental_pilot_quota.py")
     return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in files}
 
 

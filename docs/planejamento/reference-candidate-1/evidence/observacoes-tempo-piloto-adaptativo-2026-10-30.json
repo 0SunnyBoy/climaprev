@@ -1,0 +1,380 @@
+{
+  "schema": "climaprev-tempo-restoration-adaptive-pilot-v1",
+  "checked_at": "2026-10-30T16:18:24.775256+00:00",
+  "protocol_sha256": "e55c18e1f055b5c8229cee7e609e1dc6bdbcfa0f20c8b01db77344ea05cc1ece",
+  "calendar_sha256": "04c62e45b4babf56183f38c447424779b54083d139806ae257f7c078deb6c101",
+  "pipeline_versions": {
+    "tools/experimental_archive.py": "eef0e404c1bfff9bb2367f7b3a52cc09bcb8f9d17ba143b779575436a6ed11f6",
+    "tools/experimental_baseline.py": "8fb6cfb35d6a8beef4df1887c63cde8d87401665e72f85589676d060c00447fb",
+    "tools/experimental_collection.py": "18fb266e0b3d3255d2e68b25a913425e98b6dedcc1ca8e09706561202a43d7f8",
+    "tools/experimental_normalization.py": "05155a1cb171330e012a43c63299512bfd18a08313a57566e329f66315f7248f",
+    "tools/experimental_campaign.py": "5dd538f8401c1b1c44258c32254d9924f6a021ad202695da9f58744ee019cfff",
+    "tools/experimental_pairing.py": "50b524f622ca0b55cc2d6eeadce873d9d104632746e45a10de4002677496abe6",
+    "tools/inmet_observations.py": "6f84349fc386da23143abf1ca315574d0080917189188c70fd56bcaf112fa4b4",
+    "infrastructure/providers/open_meteo.py": "aadc811743829d74882ce8116ee5c5841f8ed78b7bd10d17212050414e54ee3d",
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "tools/experimental_comparison.py": "72a1b9dc77e2ad489357b93da7efad63aff69507bd702bd3e4b3b6745e28b1b6",
+    "tools/experimental_equivalence.py": "4aca2071a6716d3be9ebf45032412f56619463d8b64d4e2fbb95e844ab42bc3f",
+    "tools/experimental_observations.py": "92fc83ed7e50c34fda6a0c8be289961c02288c4c4f3136159769246c057eb766",
+    "tools/experimental_multivariable.py": "ed0df6d3d9e3f7a1c665bda9c60593f2243a3254477a56baa00c39364fbc6f0b",
+    "tools/experimental_evaluation.py": "b41fb157b836a17c124d8a850830bca10272abfbc092728c8769c9e71156f1cf",
+    "tools/experimental_uncertainty.py": "273b1b541bc13567b0cba8b645f276b682671b9254f215d24d655739540c7c96",
+    "tools/experimental_criteria.py": "b6102ad8ac63135361be3aa5c9634f49ea20787f01c3f0a520675cc23ec7fbc7",
+    "domain/bootstrap.py": "b5d536bde2b6ed9d4c5642ec0b87b934302569f1a1bfcf1e3f61424aec7df045",
+    "tools/experimental_protocol.py": "9541dcff8ccfe1c2960c50893888688253a73a57439a243d1ef874ca35931a1c",
+    "tools/experimental_preparation.py": "52060cd6eb8f98af806d0781dfda0290bba58fc2f96e37d94413917b441621f8",
+    "tools/inmet_tempo_csv.py": "47014d50938b218ac0af488be9fabfca80a8ee7fcb64b0957d58f40441d8f2c2",
+    "tools/experimental_pilot_quota.py": "e9c5b3a9cccc9d6faf9368f01398de58e28ac04ceefe55e9030a16746c2f5fcb"
+  },
+  "source": "Official TEMPO browser UI and Baixar CSV, no bypass or token replay",
+  "direct_api_recheck": [
+    {
+      "station": "A201",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A201",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-30T15:59:29.561970+00:00"
+    },
+    {
+      "station": "A001",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A001",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-30T15:59:29.556439+00:00"
+    },
+    {
+      "station": "A801",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-23/2026-10-29/A801",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-30T15:59:29.563709+00:00"
+    }
+  ],
+  "observations": [
+    {
+      "station": "A001",
+      "provenance": {
+        "schema": "climaprev-tempo-csv-conversion-v1",
+        "station": "A001",
+        "source_url": "https://tempo.inmet.gov.br/TabelaEstacoes/A001",
+        "displayed_station": "Estação: BRASILIA A001",
+        "retrieved_at": "2026-10-30T15:55:29.162717+00:00",
+        "source_sha256": "f276b261536e807d8cc0f288114ebe19d93bec59963b8569a0454fb8ddaf34eb",
+        "normalized_sha256": "cb4ed60ef937ba87abca32c4b4cc221210e98fbe2e88889ae38d2640e0ab9aea",
+        "catalogue_station_sha256": "c195b1fcd228385b335241244e89d1bc417d9727769f64a3a8f1a319cd4e4c66",
+        "rows_imported": 184,
+        "blank_future_rows_omitted": 8,
+        "field_mapping": {
+          "Chuva (mm)": "PRECIPITAÇÃO TOTAL, HORÁRIO (mm)",
+          "Raj. Vento (m/s)": "VENTO, RAJADA MAXIMA (m/s)",
+          "Temp. Max. (C)": "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)",
+          "Temp. Min. (C)": "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)",
+          "Umi. Ins. (%)": "UMIDADE RELATIVA DO AR, HORARIA (%)"
+        },
+        "identity_basis": "explicit_UI_and_catalogue_binding_not_embedded_in_export",
+        "temperature_instant_imported": false,
+        "scientific_approval": false,
+        "promotion_allowed": false
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A001",
+        "start_utc": "2026-10-23T03:00:00+00:00",
+        "end_utc": "2026-10-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "collection_lead_days": 1,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true
+          }
+        },
+        {
+          "collection_lead_days": 3,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false
+          }
+        },
+        {
+          "collection_lead_days": 7,
+          "forecast_rain_available": {
+            "operational-baseline": false,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false
+          }
+        }
+      ]
+    },
+    {
+      "station": "A201",
+      "provenance": {
+        "schema": "climaprev-tempo-csv-conversion-v1",
+        "station": "A201",
+        "source_url": "https://tempo.inmet.gov.br/TabelaEstacoes/A201",
+        "displayed_station": "Estação: BELEM A201",
+        "retrieved_at": "2026-10-30T15:55:29.162717+00:00",
+        "source_sha256": "e9dbb9ed190b8417daaf72d26fd803d11a650bec364a0ff23b05dab02c5539ff",
+        "normalized_sha256": "d8c96a8fcacf6ac236563ea559853fc2446c7d8dc36dabf8461b13568891d559",
+        "catalogue_station_sha256": "db8de9298425d9343b74bf91eae370f42012aa548eb1fec9afd95d5f7e78eb16",
+        "rows_imported": 184,
+        "blank_future_rows_omitted": 8,
+        "field_mapping": {
+          "Chuva (mm)": "PRECIPITAÇÃO TOTAL, HORÁRIO (mm)",
+          "Raj. Vento (m/s)": "VENTO, RAJADA MAXIMA (m/s)",
+          "Temp. Max. (C)": "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)",
+          "Temp. Min. (C)": "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)",
+          "Umi. Ins. (%)": "UMIDADE RELATIVA DO AR, HORARIA (%)"
+        },
+        "identity_basis": "explicit_UI_and_catalogue_binding_not_embedded_in_export",
+        "temperature_instant_imported": false,
+        "scientific_approval": false,
+        "promotion_allowed": false
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A201",
+        "start_utc": "2026-10-23T03:00:00+00:00",
+        "end_utc": "2026-10-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "collection_lead_days": 1,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true
+          }
+        },
+        {
+          "collection_lead_days": 3,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false
+          }
+        },
+        {
+          "collection_lead_days": 7,
+          "forecast_rain_available": {
+            "operational-baseline": false,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false
+          }
+        }
+      ]
+    },
+    {
+      "station": "A801",
+      "provenance": {
+        "schema": "climaprev-tempo-csv-conversion-v1",
+        "station": "A801",
+        "source_url": "https://tempo.inmet.gov.br/TabelaEstacoes/A801",
+        "displayed_station": "Estação: PORTO ALEGRE - JARDIM BOTANICO A801",
+        "retrieved_at": "2026-10-30T15:55:29.162717+00:00",
+        "source_sha256": "7f7e57df6662d153b939088f60bfce2d877c5e228533f1d36d35bfa9cceccac9",
+        "normalized_sha256": "f15e40cbdbe74f3e41d37a56013d4060564ad45b7351b7ffc45e7d29369637a0",
+        "catalogue_station_sha256": "bed7a0bbcfc028498031f61b41f6082a605f7e8c749299d120b77dff8b513132",
+        "rows_imported": 184,
+        "blank_future_rows_omitted": 8,
+        "field_mapping": {
+          "Chuva (mm)": "PRECIPITAÇÃO TOTAL, HORÁRIO (mm)",
+          "Raj. Vento (m/s)": "VENTO, RAJADA MAXIMA (m/s)",
+          "Temp. Max. (C)": "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)",
+          "Temp. Min. (C)": "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)",
+          "Umi. Ins. (%)": "UMIDADE RELATIVA DO AR, HORARIA (%)"
+        },
+        "identity_basis": "explicit_UI_and_catalogue_binding_not_embedded_in_export",
+        "temperature_instant_imported": false,
+        "scientific_approval": false,
+        "promotion_allowed": false
+      },
+      "recent_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A801",
+        "start_utc": "2026-10-23T03:00:00+00:00",
+        "end_utc": "2026-10-30T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 168,
+            "coverage": 1.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "collection_lead_days": 1,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true
+          }
+        },
+        {
+          "collection_lead_days": 3,
+          "forecast_rain_available": {
+            "operational-baseline": true,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false
+          }
+        },
+        {
+          "collection_lead_days": 7,
+          "forecast_rain_available": {
+            "operational-baseline": false,
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false
+          }
+        }
+      ]
+    }
+  ],
+  "preflight": {
+    "completed": 15,
+    "slot": "2026-10-30T15:56:18.290363+00:00",
+    "eligible_D1_all_arms_all_stations": true,
+    "counts_toward_pilot_quota": false
+  },
+  "readiness": {
+    "schema": "climaprev-primary-pilot-readiness-v1",
+    "ready": true,
+    "blockers": [],
+    "pilot_activated": false,
+    "scientific_approval": false,
+    "promotion_allowed": false,
+    "scope": "primary_rain_technical_pilot_not_secondary_variable_certification"
+  },
+  "automation": {
+    "id": "piloto-t-cnico-climaprev",
+    "status": "ACTIVE",
+    "local_time": "15:00 America/Sao_Paulo",
+    "first_slot": "2026-10-31T18:00:00+00:00",
+    "fixed_end_date": null,
+    "quota_per_station_model": 14,
+    "accepted_capture_quota": 210,
+    "missed_slots_replaced_by_new_future_dates": true,
+    "notebook_or_Codex_unavailable_can_miss_slots": true,
+    "stop_rule": "quota plus actual final D7 observation tail, then pause"
+  },
+  "pilot_slots_executed": 0,
+  "calendar_enabled": true,
+  "new_reserved_outcomes_opened": false,
+  "scientific_approval": false,
+  "promotion_allowed": false
+}
