@@ -288,3 +288,75 @@ def test_daily_baseline_pairs_without_inventing_hourly_values(missing):
     assert result["rows"][0]["eligible_exploratory"] is (not missing)
     assert "forecast_samples_sha256" not in result
     assert not result["scientific_approval"]
+
+
+def test_target_calendar_expands_complete_cartesian_product_including_unreported_slots():
+    from tests.support.experiment import protocol_fixture
+
+    from climaprev.tools.experimental_campaign import (
+        build_target_calendar,
+        validate_target_calendar,
+    )
+    from climaprev.tools.historical_experiment import digest
+
+    envelope = protocol_fixture()
+    protocol = envelope["protocol"]
+    protocol["stations"].append({"code": "SYN2", "name": "Synthetic2", "latitude": 1,
+                                  "longitude": 1, "timezone": "UTC"})
+    protocol["slots"].append("2030-01-02T00:00:00+00:00")
+    protocol["variables"].append({"name": "humidity_pct", "unit": "%", "semantics": "instant",
+                                   "aggregation": "mean"})
+    protocol["horizons"] = [1]
+    envelope["sha256"] = digest(protocol)
+    calendar = build_target_calendar(envelope)
+    targets = calendar["calendar"]["targets"]
+    assert len(targets) == 16
+    assert len({target["key"] for target in targets}) == 16
+    assert {target["date"] for target in targets} == {"2030-01-02", "2030-01-03"}
+    assert all(target["active"] is False for target in targets)
+    assert validate_target_calendar(calendar) == calendar["calendar"]
+
+
+def test_target_calendar_records_future_active_plan_only_with_bound_collection_approval():
+    from tests.support.experiment import approval_fixture, protocol_fixture
+
+    from climaprev.tools.experimental_campaign import build_target_calendar
+
+    envelope = protocol_fixture()
+    with pytest.raises(ValueError, match="approval"):
+        build_target_calendar(envelope, enabled=True)
+    result = build_target_calendar(envelope, enabled=True, approvals=[approval_fixture(envelope)])
+    assert all(target["active"] for target in result["calendar"]["targets"])
+    assert result["calendar"]["manifests"][0]["plan"]["enabled"] is True
+    assert result["calendar"]["manifests"][0]["plan"]["collection_authorized"] is True
+
+
+@pytest.mark.parametrize("rehash", [False, True])
+def test_truncated_calendar_is_rejected_even_if_its_own_checksum_is_recomputed(rehash):
+    from tests.support.experiment import protocol_fixture
+
+    from climaprev.tools.experimental_campaign import (
+        build_target_calendar,
+        validate_target_calendar,
+    )
+    from climaprev.tools.historical_experiment import digest
+
+    calendar = build_target_calendar(protocol_fixture())
+    calendar["calendar"]["targets"].pop()
+    if rehash:
+        calendar["sha256"] = digest(calendar["calendar"])
+    with pytest.raises(ValueError, match="calendar"):
+        validate_target_calendar(calendar)
+
+
+def test_calendar_rejects_duplicate_slots_expressed_with_different_offsets():
+    from tests.support.experiment import protocol_fixture
+
+    from climaprev.tools.experimental_campaign import build_target_calendar
+    from climaprev.tools.historical_experiment import digest
+
+    envelope = protocol_fixture()
+    envelope["protocol"]["slots"].append("2029-12-31T21:00:00-03:00")
+    envelope["sha256"] = digest(envelope["protocol"])
+    with pytest.raises(ValueError, match="duplicate"):
+        build_target_calendar(envelope)

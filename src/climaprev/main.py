@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
+from datetime import UTC, datetime
+from typing import Any
 
 import httpx
 from fastapi import FastAPI
@@ -16,13 +18,24 @@ from climaprev.api.routes import risk_router
 from climaprev.api.routes.health import register_health_routes
 from climaprev.api.routes.locations import router as locations_router
 from climaprev.api.routes.metrics import router as metrics_router
+from climaprev.application.ports import (
+    CachePort,
+    GeocodingPort,
+    LockPort,
+    MetricsPort,
+    OfficialAlertPort,
+    WeatherProviderPort,
+)
 from climaprev.application.services.forecast_query import ForecastQueryService
 from climaprev.config import Settings
+from climaprev.domain.bias_correction import ForecastCalibration
+from climaprev.domain.models import NormalizedForecast
 from climaprev.domain.risk_evaluator import RiskEvaluator
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.infrastructure.cache.redis_cache import RedisCache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
 from climaprev.infrastructure.metrics_store import MetricsStore
+from climaprev.infrastructure.providers.candidate_forecast import PreparedCandidateForecast
 from climaprev.infrastructure.providers.inmet_alerts import InmetOfficialAlertsProvider
 from climaprev.infrastructure.providers.open_meteo import (
     OpenMeteoForecastClient,
@@ -31,6 +44,31 @@ from climaprev.infrastructure.providers.open_meteo import (
 from climaprev.infrastructure.rate_limit.provider_budget import ProviderBudget
 from climaprev.infrastructure.rate_limit.redis_rate_limiter import RedisRateLimiter
 from climaprev.infrastructure.redis_delay import DelayedRedis, RedisConnection
+from climaprev.tools.experimental_candidate import _components
+from climaprev.tools.historical_experiment import read_json
+
+
+def compose_forecast_query(
+    settings: Settings, *, geocoder: GeocodingPort, weather_provider: WeatherProviderPort,
+    cache: CachePort, lock: LockPort, official_alert_provider: OfficialAlertPort,
+    candidate_provider: PreparedCandidateForecast | None = None, metrics: MetricsPort | None = None,
+    now: Callable[[], datetime] = lambda: datetime.now(UTC),
+) -> ForecastQueryService:
+    policy, calibration = RiskPolicy(), ForecastCalibration.disabled()
+    identity = settings.forecast_base_url
+    validity: Callable[[NormalizedForecast], None] | None = None
+    if candidate_provider is not None:
+        policy, calibration = _components(candidate_provider.candidate["policy"],
+                                           candidate_provider.candidate["calibration"])
+        weather_provider = candidate_provider
+        identity = candidate_provider.strategy_identity
+        validity = lambda forecast: candidate_provider.assert_current(forecast.location, forecast.period)
+    return ForecastQueryService(
+        geocoder=geocoder, weather_provider=weather_provider, cache=cache, lock=lock,
+        risk_evaluator=RiskEvaluator(), risk_policy=policy, calibration=calibration,
+        official_alert_provider=official_alert_provider, metrics=metrics, provider_identity=identity,
+        forecast_validity=validity, now=now,
+    )
 
 
 @asynccontextmanager
@@ -78,8 +116,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             before_send=provider_budget.consume,
         )
         app.state.location_search = geocoder
-        app.state.forecast_query_service = ForecastQueryService(
-            geocoder=geocoder,
+        app.state.forecast_query_service = compose_forecast_query(
+            settings, candidate_provider=app.state.candidate_provider, geocoder=geocoder,
             weather_provider=OpenMeteoForecastClient(
                 http_client,
                 settings,
@@ -92,8 +130,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 on_corruption=app.state.metrics.record_cache_corruption,
             ),
             lock=RedisLock(redis, environment=settings.environment),
-            risk_evaluator=RiskEvaluator(),
-            risk_policy=RiskPolicy(),
             official_alert_provider=InmetOfficialAlertsProvider(
                 http_client,
                 settings,
@@ -101,7 +137,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 before_send=provider_budget.consume,
             ),
             metrics=app.state.metrics,
-            provider_identity=settings.forecast_base_url,
         )
         app.state.metrics_store = MetricsStore(raw_redis, settings.environment)
         publisher = None
@@ -116,8 +151,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                     await publisher
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None, *, strategy_bundle: dict[str, Any] | None = None,
+) -> FastAPI:
     runtime_settings = settings or Settings()
+    if runtime_settings.candidate_bundle_file is not None:
+        if strategy_bundle is not None:
+            raise ValueError("select a single candidate bundle source")
+        strategy_bundle = read_json(runtime_settings.candidate_bundle_file)
+    candidate_provider = PreparedCandidateForecast(strategy_bundle) if strategy_bundle is not None else None
     documentation = runtime_settings.environment == "development"
     app = FastAPI(
         lifespan=lifespan,
@@ -126,6 +168,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/openapi.json" if documentation else None,
     )
     app.state.settings = runtime_settings
+    app.state.candidate_provider = candidate_provider
     app.state.metrics = RequestMetrics()
     app.add_middleware(
         TrustedHostMiddleware, allowed_hosts=list(runtime_settings.allowed_hosts), www_redirect=False

@@ -90,3 +90,50 @@ def test_invalid_or_oversized_payload_creates_no_archive(tmp_path, payload):
     with pytest.raises(ValueError):
         archive_forecast(tmp_path, capture(), payload)
     assert not list(tmp_path.iterdir())
+
+
+def test_evidence_roundtrip_binds_protocol_inputs_and_code_without_overwrite(tmp_path):
+    from climaprev.tools.experimental_archive import load_evidence, save_evidence
+    from climaprev.tools.historical_experiment import digest
+
+    parent = tmp_path / "input.json"
+    parent.write_text('{"fixture":42}')
+    path = tmp_path / "result.json"
+    protocol_hash = digest({"fixture": "protocol"})
+    report = save_evidence(path, protocol_sha256=protocol_hash, parents={"source": parent},
+                           code_version="synthetic-revision", payload={"mae": 1.5})
+    assert report["payload"] == {"mae": 1.5}
+    assert report["protocol_sha256"] == protocol_hash
+    assert report["code_version"] == "synthetic-revision"
+    assert load_evidence(path) == report
+    assert save_evidence(path, protocol_sha256=protocol_hash, parents={"source": parent},
+                         code_version="synthetic-revision", payload={"mae": 1.5}) == report
+    before = path.read_bytes()
+    with pytest.raises(ValueError, match="overwrite"):
+        save_evidence(path, protocol_sha256=protocol_hash, parents={"source": parent},
+                      code_version="synthetic-revision", payload={"mae": 0})
+    assert path.read_bytes() == before
+
+
+def test_evidence_rejects_changed_parent(tmp_path):
+    from climaprev.tools.experimental_archive import load_evidence, save_evidence
+    from climaprev.tools.historical_experiment import digest
+
+    parent = tmp_path / "input.csv"
+    parent.write_text("synthetic-original")
+    path = tmp_path / "result.json"
+    save_evidence(path, protocol_sha256=digest({}), parents={"source": parent},
+                  code_version="synthetic", payload={})
+    parent.write_text("synthetic-changed")
+    with pytest.raises(ValueError, match="parent"):
+        load_evidence(path)
+
+
+def test_evidence_rejects_missing_code_version_without_writing(tmp_path):
+    from climaprev.tools.experimental_archive import save_evidence
+    from climaprev.tools.historical_experiment import digest
+
+    path = tmp_path / "absent.json"
+    with pytest.raises(ValueError, match="code"):
+        save_evidence(path, protocol_sha256=digest({}), parents={}, code_version="", payload={})
+    assert not path.exists()

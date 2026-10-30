@@ -6,7 +6,7 @@ No function in this module performs network requests or promotes a configuration
 
 import hashlib
 import json
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import asdict
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -334,3 +334,53 @@ def _score_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
             (row["observed_value"], row["predicted_value"]) for row in rows
         ])),
     }
+
+
+def evaluate_frozen_test(
+    protocol: dict[str, Any], candidate: dict[str, Any], *,
+    loader: Callable[[], Sequence[dict[str, Any]]], frozen_protocol_sha256: str,
+    frozen_candidate_sha256: str, mode: str = "confirmatory",
+    approvals: Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Evaluate a frozen strategy once on independent inputs; no fitting interface."""
+    # Local imports keep the historical hashing primitives usable by the new contracts.
+    from climaprev.tools.experimental_candidate import _components, validate_candidate
+    from climaprev.tools.experimental_protocol import (
+        execute_authorized,
+        partition_for,
+        validate_protocol,
+    )
+
+    def unchanged() -> dict[str, Any]:
+        validate_protocol(protocol)
+        value = validate_candidate(candidate)
+        if (protocol["sha256"] != frozen_protocol_sha256
+                or candidate["sha256"] != frozen_candidate_sha256
+                or value["protocol_sha256"] != frozen_protocol_sha256):
+            raise ValueError("frozen protocol or candidate identity changed")
+        return value
+
+    unchanged()
+    if mode not in {"confirmatory", "diagnostic"}:
+        raise ValueError("test requires confirmatory or explicit synthetic diagnostic mode")
+
+    def evaluate(frozen: dict[str, Any]) -> dict[str, Any]:
+        datasets = list(loader())
+        value = unchanged()
+        for data in datasets:
+            config = data["configuration"]
+            if any(partition_for(protocol, date.fromisoformat(config[key])) != "test" for key in ("start", "end")):
+                raise ValueError("independent input must be wholly inside the test partition")
+        policy, calibration = _components(value["policy"], value["calibration"])
+        report = evaluate_snapshots(datasets,
+                                    candidate=policy if isinstance(policy, ExperimentalRiskPolicy) else None,
+                                    calibration=calibration if calibration.enabled else None,
+                                    partition="test", protocol=frozen)
+        unchanged()
+        return {"schema": "climaprev-independent-evaluation-v1", "mode": mode,
+                "protocol_sha256": frozen_protocol_sha256, "candidate_sha256": frozen_candidate_sha256,
+                "population": {key: report[key] for key in ("requested_unique_days", "eligible_overall_days",
+                                                            "outside_partition_days", "dataset_sha256")},
+                "report": report, "scientific_approval": False, "promotion_allowed": False}
+
+    return execute_authorized(protocol, mode, evaluate, approvals=approvals)

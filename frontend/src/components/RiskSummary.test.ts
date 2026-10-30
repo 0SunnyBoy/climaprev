@@ -84,3 +84,51 @@ describe('entrega de todas as condições de risco à tela', () => {
     } finally { wrapper.unmount() }
   })
 })
+
+describe('apresentação da estratégia candidata aceita', () => {
+  for (const locale of ['pt-BR', 'en'] as const) {
+    it.each([
+      { unit: 'celsius', value: 40, label: '40 °C' },
+      { unit: 'fahrenheit', value: 104, label: '104 °F' },
+    ])(`preserva $label e texto de risco em ${locale}`, ({ unit, value, label }) => {
+      const { setLocale, t } = useLocale()
+      setLocale(locale)
+      const candidate = { ...risk([{ ...conditions[3]!, unit, value }]), policy_version: 'reference-candidate-1' }
+      const wrapper = mount(RiskSummary, { props: { risk: candidate,
+        overview: { level: 'high', source: 'forecast_heuristic', peak_days: [] }, completeness: 'complete' } })
+      try {
+        expect(wrapper.get('.conditions strong').text()).toContain(label)
+        expect(wrapper.get('.risk-level').text()).toBe(t('riskHigh'))
+        expect(wrapper.get('.quality-line').text()).toBe(t('completeData'))
+        expect(wrapper.text()).not.toMatch(/confidence|confiança|MAE|bootstrap|95%/i)
+      } finally { wrapper.unmount() }
+    })
+
+    it(`mantém alerta oficial prioritário e avisa sobre dados parciais em ${locale}`, () => {
+      const { setLocale, t } = useLocale()
+      setLocale(locale)
+      const candidate = { ...risk([]), level: 'low' as const, policy_version: 'reference-candidate-1' }
+      const wrapper = mount(RiskSummary, { props: { risk: candidate,
+        overview: { level: 'high', source: 'official_alert', peak_days: [] }, completeness: 'partial' } })
+      try {
+        expect(wrapper.get('.risk-level').text()).toBe(t('riskHigh'))
+        expect(wrapper.get('.official-priority').text()).toBe(t('officialRiskPriority'))
+        expect(wrapper.get('.quality-warning').text()).toBe(t('incompleteData'))
+      } finally { wrapper.unmount() }
+    })
+
+    it(`preserva ausência de dados sem inventar confiança em ${locale}`, () => {
+      const { setLocale, t } = useLocale()
+      setLocale(locale)
+      const candidate = { ...risk([]), policy_version: 'reference-candidate-1' }
+      const wrapper = mount(RiskSummary, { props: { risk: candidate,
+        overview: { level: 'low', source: 'forecast_heuristic', peak_days: [] }, completeness: 'unavailable' } })
+      try {
+        expect(wrapper.get('.quality-warning').text()).toBe(t('insufficientData'))
+        expect(wrapper.find('.risk-level').exists()).toBe(false)
+        expect(wrapper.find('.conditions').exists()).toBe(false)
+        expect(wrapper.text()).not.toMatch(/confidence|confiança|MAE|bootstrap|95%/i)
+      } finally { wrapper.unmount() }
+    })
+  }
+})

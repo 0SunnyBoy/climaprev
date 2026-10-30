@@ -1,12 +1,16 @@
 """Explicit, disabled-by-default campaign batches and a shared local call ledger."""
 
+import argparse
+import asyncio
 import hashlib
 import sqlite3
+from collections.abc import Sequence
 from contextlib import closing
 from dataclasses import asdict
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -17,12 +21,15 @@ from climaprev.application.errors import (
 )
 from climaprev.domain.models import CanonicalLocation, DatePeriod
 from climaprev.tools.experimental_baseline import collect_baseline
-from climaprev.tools.experimental_collection import MODELS, collect_once
-from climaprev.tools.historical_experiment import digest
+from climaprev.tools.experimental_collection import MODEL_ORIGINS, MODELS, collect_once
+from climaprev.tools.experimental_protocol import (
+    aware_timestamp,
+    execute_authorized,
+    validate_protocol,
+)
+from climaprev.tools.historical_experiment import canonical_json, digest, read_json
 
-_ORIGINS = {"gfs_global": "NOAA-GFS", "ecmwf_ifs025": "ECMWF-IFS",
-            "icon_global": "DWD-ICON", "met-norway": "ECMWF-IFS",
-            "operational-baseline": "automatic-unknown"}
+_ORIGINS = MODEL_ORIGINS
 
 
 class CampaignLimitExceeded(RuntimeError):
@@ -39,7 +46,7 @@ def pipeline_versions() -> dict[str, str]:
              "tools/experimental_comparison.py", "tools/experimental_equivalence.py",
              "tools/experimental_observations.py", "tools/experimental_multivariable.py",
              "tools/experimental_evaluation.py", "tools/experimental_uncertainty.py",
-             "tools/experimental_criteria.py", "domain/bootstrap.py")
+             "tools/experimental_criteria.py", "domain/bootstrap.py", "tools/experimental_protocol.py")
     return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in files}
 
 
@@ -81,13 +88,15 @@ class CampaignLedger:
 def build_manifest(
     campaign: str, locations: list[CanonicalLocation], models: list[str], slot: datetime,
     *, enabled: bool = False, collection_authorized: bool = False, call_limit: int = 30,
-    run_at: datetime | None = None,
+    run_at: datetime | None = None, window_minutes: int = 30,
 ) -> dict[str, Any]:
     if (not campaign.strip() or slot.utcoffset() is None or not locations or not models
             or isinstance(call_limit, bool) or not isinstance(call_limit, int) or call_limit < 1):
         raise ValueError("campaign, points, models, aware slot and positive budget required")
     if any(model not in {*MODELS, "operational-baseline"} for model in models):
         raise ValueError("unsupported campaign model")
+    if isinstance(window_minutes, bool) or not isinstance(window_minutes, int) or window_minutes < 1:
+        raise ValueError("positive slot window required")
     slot = slot.astimezone(UTC)
     if run_at is not None:
         if run_at.utcoffset() is None:
@@ -108,7 +117,7 @@ def build_manifest(
             jobs.setdefault(key, {"key": key, "identity": identity,
                                   "location": asdict(location), "origin_family": _ORIGINS[model]})
     plan = {"schema": "climaprev-campaign-manifest-v1", "jobs": list(jobs.values()),
-            "slot": slot.isoformat(), "expires": (slot + timedelta(minutes=30)).isoformat(),
+            "slot": slot.isoformat(), "expires": (slot + timedelta(minutes=window_minutes)).isoformat(),
             "enabled": enabled, "collection_authorized": collection_authorized,
             "provider_daily_call_limit": call_limit, "scientific_approval": False,
             "pipeline_versions": pipeline_versions()}
@@ -143,7 +152,7 @@ async def run_manifest(
             raise ValueError("job location differs from frozen identity")
         model = identity["model"]
         provider = "met-norway" if model == "met-norway" else "open-meteo"
-        if not ledger.reserve(key, provider, datetime.now(UTC), plan["provider_daily_call_limit"]):
+        if not ledger.reserve(key, provider, now, plan["provider_daily_call_limit"]):
             reports.append({"job": key, "status": "already_reserved_no_retry"})
             continue
         try:
@@ -162,3 +171,113 @@ async def run_manifest(
             ledger.finish(key, result["archive"], None)
             reports.append({"job": key, "status": "completed", "result": result})
     return reports
+
+
+def build_target_calendar(
+    envelope: dict[str, Any], *, enabled: bool = False,
+    approvals: Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Expand the complete protocol universe without collecting data or reading outcomes."""
+    protocol = validate_protocol(envelope)
+    if not isinstance(enabled, bool):
+        raise TypeError("calendar enabled must be boolean")
+    if enabled:
+        execute_authorized(envelope, "collection", lambda _: None, approvals=approvals)
+    slots = [aware_timestamp(value) for value in protocol["slots"]]
+    if len(set(slots)) != len(slots):
+        raise ValueError("duplicate calendar slots")
+    locations = [CanonicalLocation(station["name"], station["latitude"], station["longitude"],
+                                   station["timezone"], "explicit-station-registry")
+                 for station in protocol["stations"]]
+    manifests, targets = [], []
+    for slot in sorted(slots):
+        manifest = build_manifest(
+            protocol["id"], locations, protocol["models"], slot, enabled=enabled,
+            collection_authorized=enabled, call_limit=protocol["provider_daily_call_limit"],
+            window_minutes=protocol["slot_window_minutes"],
+        )
+        manifests.append(manifest)
+        for station, location in zip(protocol["stations"], locations, strict=True):
+            zone = ZoneInfo(location.timezone)
+            for model in protocol["models"]:
+                job = next(job for job in manifest["plan"]["jobs"]
+                           if job["identity"]["model"] == model
+                           and job["identity"]["latitude"] == location.latitude
+                           and job["identity"]["longitude"] == location.longitude
+                           and job["identity"]["timezone"] == location.timezone)
+                for variable in protocol["variables"]:
+                    for lead in protocol["horizons"]:
+                        day = slot.astimezone(zone).date() + timedelta(days=lead)
+                        start = datetime.combine(day, time.min, zone).astimezone(UTC)
+                        end = datetime.combine(day + timedelta(days=1), time.min, zone).astimezone(UTC)
+                        identity = {"protocol_sha256": envelope["sha256"], "job": job["key"],
+                                    "station": station["code"], "variable": variable["name"],
+                                    "unit": variable["unit"], "semantics": variable["semantics"],
+                                    "aggregation": variable["aggregation"],
+                                    "start_utc": start.isoformat(), "end_utc": end.isoformat()}
+                        targets.append({"key": digest(identity), **identity, "model": model,
+                                        "slot": slot.isoformat(), "date": day.isoformat(),
+                                        "collection_lead_days": lead, "active": enabled})
+    data = {"schema": "climaprev-target-calendar-v1", "protocol": envelope,
+            "enabled": enabled, "approvals": list(approvals),
+            "manifests": manifests, "targets": targets}
+    return {"calendar": data, "sha256": digest(data)}
+
+
+def validate_target_calendar(envelope: dict[str, Any]) -> dict[str, Any]:
+    data = envelope.get("calendar")
+    if (not isinstance(data, dict) or data.get("schema") != "climaprev-target-calendar-v1"
+            or envelope.get("sha256") != digest(data)):
+        raise ValueError("invalid calendar schema or hash")
+    expected = build_target_calendar(data["protocol"], enabled=data["enabled"],
+                                     approvals=data["approvals"])
+    if expected != envelope:
+        raise ValueError("calendar differs from the complete frozen targets or pipeline")
+    return data
+
+
+async def run_calendar(
+    calendar: dict[str, Any], ledger: CampaignLedger, client: httpx.AsyncClient,
+    directory: Path, *, now: datetime,
+) -> list[dict[str, Any]]:
+    """Run only authorized current slots; restart never retries an existing reservation."""
+    data = validate_target_calendar(calendar)
+    if not data["enabled"]:
+        return []
+    execute_authorized(data["protocol"], "collection", lambda _: None, approvals=data["approvals"])
+    reports = []
+    for manifest in data["manifests"]:
+        reports.extend(await run_manifest(manifest, ledger, client, directory, now=now))
+    return reports
+
+
+async def _run_cli(args: argparse.Namespace) -> dict[str, Any]:
+    calendar = read_json(args.calendar)
+    data = validate_target_calendar(calendar)
+    if not data["enabled"]:
+        return {"calendar_sha256": calendar["sha256"], "enabled": False, "jobs": []}
+    execute_authorized(data["protocol"], "collection", lambda _: None, approvals=data["approvals"])
+    ledger = CampaignLedger(args.ledger)
+    async with httpx.AsyncClient(trust_env=False, follow_redirects=False) as client:
+        reports = await run_calendar(calendar, ledger, client, args.output, now=datetime.now(UTC))
+    return {"calendar_sha256": calendar["sha256"], "enabled": True,
+            "jobs": [{"job": report["job"], "status": report["status"],
+                      "error": report.get("error"),
+                      "archive": report.get("result", {}).get("archive")}
+                     for report in reports], "scientific_approval": False}
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--calendar", type=Path, required=True)
+    parser.add_argument("--ledger", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        print(canonical_json(asyncio.run(_run_cli(args))))
+    except (OSError, ValueError, TypeError, KeyError, OverflowError, CampaignLimitExceeded) as error:
+        parser.exit(2, f"campaign execution failed: {error}\n")
+
+
+if __name__ == "__main__":
+    main()

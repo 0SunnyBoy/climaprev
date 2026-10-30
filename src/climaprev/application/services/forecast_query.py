@@ -28,7 +28,7 @@ from climaprev.application.services.forecast_cache import CachedForecastProvider
 from climaprev.application.services.location_resolver import CachedLocationResolver
 from climaprev.domain.bias_correction import ForecastCalibration
 from climaprev.domain.data_quality import completeness
-from climaprev.domain.models import DatePeriod
+from climaprev.domain.models import DatePeriod, NormalizedForecast
 from climaprev.domain.risk_policy import RiskPolicy
 
 _DISCLAIMER = (
@@ -51,6 +51,7 @@ class ForecastQueryService:
         calibration: ForecastCalibration | None = None,
         metrics: MetricsPort | None = None,
         provider_identity: str = "https://api.open-meteo.com",
+        forecast_validity: Callable[[NormalizedForecast], None] | None = None,
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._locations = CachedLocationResolver(geocoder, cache)
@@ -63,11 +64,14 @@ class ForecastQueryService:
         self._risk_policy = risk_policy
         self._metrics = metrics
         self._now = now
+        self._forecast_validity = forecast_validity
 
     async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult:
         period = DatePeriod(start=query.start_date, end=query.end_date)
         location = await self._locations.resolve(query)
         forecast, cache_status, fallback_expires_at = await self._forecasts.get(location, period)
+        if self._forecast_validity is not None:
+            self._forecast_validity(forecast)
         forecast_risk = self._risk_evaluator.evaluate(forecast, self._risk_policy)
         if self._metrics is not None:
             self._metrics.record_risk_evaluation(forecast_risk)
@@ -81,6 +85,9 @@ class ForecastQueryService:
         )
         if fallback_expires_at is not None and self._now() >= fallback_expires_at:
             raise WeatherProviderUnavailable("cached forecast expired before delivery")
+
+        if self._forecast_validity is not None:
+            self._forecast_validity(forecast)
 
         return RiskQueryResult(
             location=replace(location, timezone=forecast.location.timezone),

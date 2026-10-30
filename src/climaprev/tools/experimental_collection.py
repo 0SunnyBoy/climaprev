@@ -22,15 +22,98 @@ from climaprev.domain.models import CanonicalLocation
 from climaprev.infrastructure.http.client import AsyncJsonHttpClient
 from climaprev.tools.experimental_archive import ForecastCapture, archive_forecast
 from climaprev.tools.experimental_normalization import (
+    Measurement,
     complete_rain_total,
     met_norway_measurements,
     open_meteo_measurements,
+    validate_measurements,
 )
 from climaprev.tools.historical_experiment import canonical_json
 
 MODELS = ("gfs_global", "ecmwf_ifs025", "icon_global", "met-norway")
+MODEL_ORIGINS = {"gfs_global": "NOAA-GFS", "ecmwf_ifs025": "ECMWF-IFS",
+                 "icon_global": "DWD-ICON", "met-norway": "ECMWF-IFS",
+                 "operational-baseline": "automatic-unknown"}
 _FIELDS = "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,wind_gusts_10m"
 _USER_AGENT = "ClimaPrev/0.1.0 https://github.com/0SunnyBoy/climaprev"
+
+
+def source_catalog(models: list[str]) -> dict[str, Any]:
+    if any(model not in MODEL_ORIGINS for model in models):
+        raise ValueError("unsupported source catalog model")
+    entries = [{"model": model, "origin_family": MODEL_ORIGINS[model]}
+               for model in dict.fromkeys(models)]
+    return {"models": entries,
+            "known_family_count": len({entry["origin_family"] for entry in entries
+                                       if entry["origin_family"] != "automatic-unknown"}),
+            "unknown_origin_models": [entry["model"] for entry in entries
+                                      if entry["origin_family"] == "automatic-unknown"],
+            "independence_proven": False}
+
+
+def describe_run(
+    collected_at: datetime, *, requested_run: datetime | None = None,
+    verified_run: datetime | None = None, verification_reference: str | None = None,
+    updated_at: datetime | None = None,
+) -> dict[str, Any]:
+    """Record the basis of initialization claims; a request is not provider evidence."""
+    for stamp in (collected_at, requested_run, verified_run, updated_at):
+        if stamp is not None and stamp.utcoffset() is None:
+            raise ValueError("run evidence timestamps need UTC offsets")
+    if any(stamp is not None and stamp > collected_at for stamp in (requested_run, verified_run)):
+        raise ValueError("initialization cannot follow collection")
+    if verified_run is not None and (not verification_reference
+                                     or not verification_reference.strip()):
+        raise ValueError("verified initialization needs an evidence reference")
+    return {"collected_at": collected_at.astimezone(UTC).isoformat(),
+            "requested_run_at": requested_run.astimezone(UTC).isoformat() if requested_run else None,
+            "run_at": verified_run.astimezone(UTC).isoformat() if verified_run else None,
+            "updated_at": updated_at.astimezone(UTC).isoformat() if updated_at else None,
+            "basis": "verified" if verified_run else "requested_only" if requested_run else "unknown",
+            "verification_reference": verification_reference if verified_run else None}
+
+
+def assess_capability(
+    model: str, samples: list[Measurement], *, variable: str, unit: str,
+    semantics: str, start: datetime, end: datetime,
+) -> dict[str, Any]:
+    """Audit adapter support and actual coverage; never infer missing measurements."""
+    if model not in {*MODELS, "operational-baseline"}:
+        raise ValueError("unsupported capability model")
+    if start.utcoffset() is None or end.utcoffset() is None or start >= end:
+        raise ValueError("capability requires an aware nonempty interval")
+    supported = {"precipitation_mm", "temperature_c", "humidity_pct", "wind_kmh", "gust_kmh"}
+    declared = variable in supported and not (model == "met-norway" and variable == "gust_kmh")
+    relevant = sorted((sample for sample in samples if sample.variable == variable
+                       and (sample.end is None and start <= sample.start < end
+                            or sample.end is not None and sample.start < end
+                            and sample.end > start)), key=lambda sample: sample.start)
+    reasons = []
+    if not declared:
+        reasons.append("variable_not_supported_by_adapter")
+    if not relevant:
+        reasons.append("variable_absent")
+    if any(sample.unit != unit for sample in relevant):
+        reasons.append("unit_mismatch")
+    if any(sample.semantics != semantics for sample in relevant):
+        reasons.append("semantics_mismatch")
+    try:
+        validate_measurements(relevant, unit=unit, semantics=semantics)
+    except ValueError:
+        reasons.append("invalid_measurement_contract")
+    cursor = start.astimezone(UTC)
+    complete = bool(relevant)
+    for sample in relevant:
+        point = sample.start.astimezone(UTC)
+        stop = sample.end.astimezone(UTC) if sample.end else point + timedelta(hours=1)
+        if point != cursor or stop <= point or stop > end or sample.value is None:
+            complete = False
+        cursor = stop
+    if not complete or cursor != end.astimezone(UTC):
+        reasons.append("interval_incomplete")
+    return {"model": model, "variable": variable, "start_utc": start.astimezone(UTC).isoformat(),
+            "end_utc": end.astimezone(UTC).isoformat(), "declared_supported": declared,
+            "observed_samples": len(relevant), "eligible": not reasons, "reasons": reasons}
 
 
 async def collect_once(
@@ -91,6 +174,7 @@ async def collect_once(
         }
     return {"model": model, "archive": str(archived),
             "run_at": run_at.isoformat() if run_at else None,
+            "run_evidence": describe_run(collected, requested_run=run_at),
             "run_identity_basis": "requested_single_run" if run_at else "unknown",
             "availability": "available_by_collection_not_first_publication_time",
             "interpretation": "coverage_labels_are_days_after_collection",

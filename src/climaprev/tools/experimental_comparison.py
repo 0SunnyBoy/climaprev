@@ -3,16 +3,22 @@
 import argparse
 from collections import Counter, defaultdict
 from collections.abc import Sequence
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from math import isfinite
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from climaprev.domain.bootstrap import bootstrap_dates
 from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.verification import classify_pairs, numerical_pairs
+from climaprev.tools.experimental_archive import save_evidence
+from climaprev.tools.experimental_campaign import validate_target_calendar
+from climaprev.tools.experimental_normalization import _number
+from climaprev.tools.experimental_protocol import aware_timestamp, validate_protocol
 from climaprev.tools.historical_experiment import canonical_json, digest, read_json
+from climaprev.tools.station_baseline import event_level
 
 Case = tuple[str, float, float, str, str, str, int]
 
@@ -190,6 +196,314 @@ def main() -> None:
             output.write(encoded + "\n")
     except (ValueError, TypeError, KeyError, OSError, OverflowError) as error:
         parser.exit(2, f"experimental comparison failed: {error}\n")
+
+
+
+@dataclass(frozen=True, slots=True, order=True)
+class VariableCase:
+    station: str
+    latitude: float
+    longitude: float
+    timezone: str
+    variable: str
+    unit: str
+    aggregation: str
+    start_utc: str
+    end_utc: str
+    slot_utc: str
+    run_utc: str | None = None
+
+
+def _variable_event(variable: str, aggregation: str) -> str | None:
+    return {("precipitation_mm", "sum"): "daily_rain", ("precipitation_mm", "max"): "hourly_rain",
+            ("gust_kmh", "max"): "gust", ("temperature_max_c", "max"): "heat",
+            ("temperature_min_c", "min"): "cold"}.get((variable, aggregation))
+
+
+def _variable_score(
+    pairs: list[tuple[float, float]], variable: str, aggregation: str,
+) -> dict[str, Any]:
+    event = _variable_event(variable, aggregation)
+    classification = (asdict(classify_pairs([(event_level(event, obs), event_level(event, pred))
+                                            for obs, pred in pairs])) if event else None)
+    return {"numerical": asdict(numerical_pairs(pairs)), "classification": classification,
+            "diagnostic_event": event}
+
+
+def _case_day(case: VariableCase) -> date:
+    return aware_timestamp(case.start_utc).astimezone(ZoneInfo(case.timezone)).date()
+
+
+def _case_lead(case: VariableCase) -> int:
+    return (_case_day(case) - aware_timestamp(case.run_utc or case.slot_utc).astimezone(ZoneInfo(case.timezone)).date()).days
+
+
+def compare_variable_models(
+    reports: Sequence[dict[str, Any]], baseline: str, *, models: Sequence[str] | None = None,
+    cohort: str = "collection_slot", allow_retrospective: bool = False,
+    secondary_models: Sequence[str] = (),
+) -> dict[str, Any]:
+    """Compare declared arms on identical units, observations, slots and target intervals."""
+    if cohort not in {"collection_slot", "verified_run"}:
+        raise ValueError("unknown temporal cohort")
+    declared = sorted({report["model"] for report in reports} if models is None else set(models))
+    if baseline not in declared or len(declared) < 2 or any(not isinstance(m, str) or not m.strip()
+                                                          for m in declared):
+        raise ValueError("baseline and at least one declared comparator are required")
+    axes: set[tuple[str, str, str]] = set()
+    arms: dict[tuple[str, str, str], dict[str, dict[VariableCase, tuple[float, float]]]] = defaultdict(
+        lambda: defaultdict(dict))
+    seen: dict[tuple[str, str, str], dict[str, set[VariableCase]]] = defaultdict(
+        lambda: defaultdict(set))
+    excluded: dict[tuple[str, str, str], dict[str, dict[VariableCase, list[str]]]] = defaultdict(
+        lambda: defaultdict(dict))
+    reference: dict[VariableCase, tuple[float | None, str, str, str | None]] = {}
+    units: dict[tuple[str, str], str] = {}
+    for report in reports:
+        if report.get("schema") != "climaprev-variable-pairs-v1" or report["model"] not in declared:
+            raise ValueError("comparison requires versioned pairs for declared models")
+        model, variable, unit, aggregation = (report[key] for key in ("model", "variable", "unit", "aggregation"))
+        if not all(isinstance(value, str) and value.strip() for value in (variable, unit, aggregation)):
+            raise ValueError("comparison requires explicit variable, unit and aggregation")
+        canonical_units = {"precipitation_mm": "mm", "temperature_c": "°C",
+                           "temperature_min_c": "°C", "temperature_max_c": "°C",
+                           "wind_kmh": "km/h", "gust_kmh": "km/h", "humidity_pct": "%"}
+        if variable not in canonical_units or unit != canonical_units[variable]:
+            raise ValueError("variable unit is not the canonical measurement unit")
+        if not all(isinstance(report.get(key), str) and report[key].strip()
+                   for key in ("source_sha256", "observed_semantics")):
+            raise ValueError("observed reference provenance is required")
+        axis = (variable, unit, aggregation)
+        axes.add(axis)
+        if (variable, aggregation) in units and units[variable, aggregation] != unit:
+            raise ValueError("variable unit contracts differ across models")
+        units[variable, aggregation] = unit
+        location, station = report["location"], report["station"]
+        zone = ZoneInfo(location["timezone"])
+        for field, bound in (("latitude", 90), ("longitude", 180)):
+            for value in (location[field], station[field]):
+                if (isinstance(value, bool) or not isinstance(value, (int, float))
+                        or not isfinite(value) or abs(value) > bound):
+                    raise ValueError("invalid comparison coordinates")
+            if abs(location[field] - station[field]) > 0.0001:
+                raise ValueError("comparison point differs from station")
+        slot = aware_timestamp(report["collection_slot"])
+        deadline = aware_timestamp(report["collection_deadline"])
+        collected = aware_timestamp(report["collected_at"])
+        if slot >= deadline:
+            raise ValueError("collection slot must precede its deadline")
+        evidence = report.get("run_evidence") or {}
+        run = None
+        if evidence.get("basis") == "verified":
+            if not evidence.get("verification_reference") or not evidence.get("run_at"):
+                raise ValueError("verified run needs its timestamp and reference")
+            run = aware_timestamp(evidence["run_at"])
+            if run > collected:
+                raise ValueError("verified run follows collection")
+        for row in report["rows"]:
+            start, end = aware_timestamp(row["start_utc"]), aware_timestamp(row["end_utc"])
+            day = date.fromisoformat(row["date"])
+            if (start != datetime.combine(day, time.min, zone).astimezone(UTC)
+                    or end != datetime.combine(day + timedelta(days=1), time.min, zone).astimezone(UTC)):
+                raise ValueError("comparison target differs from its local day")
+            key = VariableCase(station["code"], float(location["latitude"]), float(location["longitude"]),
+                               location["timezone"], variable, unit, aggregation,
+                               start.isoformat(), end.isoformat(), slot.isoformat(),
+                               run.isoformat() if cohort == "verified_run" and run else None)
+            if key in seen[axis][model]:
+                raise ValueError("duplicate comparison case within a model")
+            seen[axis][model].add(key)
+            observed, forecast = _number(row["observed"], variable), _number(row["forecast"], variable)
+            identity = (observed, report["source_sha256"], report["observed_semantics"],
+                        report.get("source_field"))
+            if key in reference and reference[key] != identity:
+                raise ValueError("models do not share the same observed reference")
+            reference[key] = identity
+            reasons = []
+            if observed is None:
+                reasons.append("observation_missing_or_incomplete")
+            if forecast is None:
+                reasons.append("forecast_missing_or_incomplete")
+            if row.get("eligible_exploratory") is not True or row.get("exclusions") != []:
+                reasons.append("upstream_quality_exclusion")
+            if collected < slot or collected >= deadline:
+                reasons.append("collection_outside_slot")
+            if collected >= start and not allow_retrospective:
+                reasons.append("collected_not_before_target")
+            if cohort == "verified_run" and (run is None or run >= start):
+                reasons.append("run_not_verified")
+            excluded[axis][model][key] = reasons
+            if not reasons and observed is not None and forecast is not None:
+                arms[axis][model][key] = (observed, forecast)
+    output = []
+    for axis in sorted(axes):
+        variable, unit, aggregation = axis
+        for model in declared:
+            arms[axis].setdefault(model, {})
+            seen[axis].setdefault(model, set())
+        common = set.intersection(*(set(arms[axis][m]) for m in declared))
+        universe = set.union(*(seen[axis][m] for m in declared))
+
+        def scores(
+            keys: set[VariableCase], common: set[VariableCase] = common,
+            axis: tuple[str, str, str] = axis, variable: str = variable,
+            aggregation: str = aggregation,
+        ) -> dict[str, Any]:
+            shared = sorted(keys & common)
+            result = {m: _variable_score([arms[axis][m][key] for key in shared], variable, aggregation)
+                      for m in declared}
+            baseline_mae = result[baseline]["numerical"]["mae"]
+            for m in declared:
+                mae = result[m]["numerical"]["mae"]
+                reported = seen[axis][m] & keys
+                eligible = set(arms[axis][m]) & keys
+                result[m].update({"relative_mae_gain": 1 - mae / baseline_mae
+                                  if baseline_mae not in (None, 0) and mae is not None else None,
+                                  "reported_cases": len(reported), "eligible_cases": len(eligible),
+                                  "excluded_unique_cases": len(reported - eligible),
+                                  "excluded_reasons": dict(Counter(reason for key in reported
+                                      for reason in excluded[axis][m].get(key, []))),
+                                  "absent_from_reported_union": len(keys - seen[axis][m]),
+                                  "eligible_outside_common": len(eligible - common)})
+            return result
+
+        strata: dict[tuple[str, int], set[VariableCase]] = defaultdict(set)
+        for case in universe:
+            strata[case.station, _case_lead(case)].add(case)
+        output.append({"variable": variable, "unit": unit, "aggregation": aggregation,
+                       "common_cases": len(common), "reported_union_cases": len(universe),
+                       "models": scores(universe),
+                       "paired_cases": [{"identity": asdict(case), "date": _case_day(case).isoformat(),
+                                         "lead_days": _case_lead(case),
+                                         "verified_run_lead_hours": ((aware_timestamp(case.start_utc)
+                                             - aware_timestamp(case.run_utc)).total_seconds() / 3600
+                                             if case.run_utc else None),
+                                         "observed": arms[axis][baseline][case][0],
+                                         "forecasts": {m: arms[axis][m][case][1] for m in declared}}
+                                        for case in sorted(common)],
+                       "strata": [{"station": station, "slot_lead_days": lead,
+                                   "common_cases": len(keys & common),
+                                   "reported_union_cases": len(keys), "models": scores(keys)}
+                                  for (station, lead), keys in sorted(strata.items())]})
+    secondary = None
+    if secondary_models:
+        if (len(set(secondary_models)) < 2 or baseline in secondary_models
+                or not set(secondary_models) <= set(declared)):
+            raise ValueError("secondary comparison requires two declared non-baseline arms")
+        secondary = compare_variable_models([r for r in reports if r["model"] in secondary_models],
+                                             min(secondary_models), models=secondary_models,
+                                             cohort=cohort, allow_retrospective=allow_retrospective)
+        secondary["comparison_role"] = "secondary_no_v1_control"
+    return {"schema": "climaprev-variable-comparison-v1", "baseline": baseline, "models": declared,
+            "groups": output, "input_reports_sha256": sorted(digest(report) for report in reports),
+            "cohort": cohort, "secondary_comparison": secondary,
+            "timing_mode": "retrospective_diagnostic" if allow_retrospective else "prospective",
+            "lead_basis": "verified_run_calendar_day" if cohort == "verified_run" else "collection_slot_day",
+            "classification_policy": "reference-v1-diagnostic",
+            "scientific_approval": False, "promotion_allowed": False,
+            "limitations": ["Slot/collection timing is not verified model-run lead time.",
+                            "The reported union omits targets absent from every arm; read calendar coverage.",
+                            "Point estimates are diagnostic, not independent scientific acceptance."]}
+
+
+def paired_uncertainty(
+    comparison: dict[str, Any], *, block_days: int, repetitions: int, seed: int, confidence: float,
+) -> dict[str, Any]:
+    """Resample whole dates within each variable/slot-lead cohort; never approve a study."""
+    if comparison.get("schema") != "climaprev-variable-comparison-v1":
+        raise ValueError("uncertainty requires a versioned comparison")
+    if (any(isinstance(v, bool) or not isinstance(v, int) for v in (block_days, repetitions, seed))
+            or block_days < 1 or repetitions < 2 or not 0 < confidence < 1):
+        raise ValueError("invalid explicit uncertainty parameters")
+    groups = []
+    baseline = comparison["baseline"]
+    for group in comparison["groups"]:
+        for lead in sorted({s["slot_lead_days"] for s in group["strata"]}):
+            cases = [c for c in group["paired_cases"] if c["lead_days"] == lead]
+            results = {}
+            for model in comparison["models"]:
+                def gain(sample: Sequence[dict[str, Any]], model: str = model) -> float | None:
+                    base = numerical_pairs([(c["observed"], c["forecasts"][baseline]) for c in sample]).mae
+                    candidate = numerical_pairs([(c["observed"], c["forecasts"][model]) for c in sample]).mae
+                    return 1 - candidate / base if base not in (None, 0) and candidate is not None else None
+
+                if not cases:
+                    results[model] = {"estimate": None, "interval": None,
+                                      "interval_reasons": ["no_common_cases"], "calendar_dates": 0}
+                    continue
+                score = asdict(bootstrap_dates(cases, day=lambda c: date.fromisoformat(c["date"]),
+                                               statistic=gain, block_days=block_days,
+                                               repetitions=repetitions, seed=seed, confidence=confidence))
+                reasons = []
+                if score["estimate"] is None:
+                    reasons.append("undefined_point_estimate")
+                if score["undefined_repetitions"]:
+                    reasons.append("undefined_repetitions")
+                if any(size < block_days for size in score["effective_block_days"]):
+                    reasons.append("short_calendar_segment")
+                if score["interval"] is None and not reasons:
+                    reasons.append("degenerate_sampling_distribution")
+                score.update(interval_reasons=reasons,
+                             segment_lengths=list(score["segment_lengths"]),
+                             effective_block_days=list(score["effective_block_days"]))
+                results[model] = score
+            groups.append({"variable": group["variable"], "unit": group["unit"],
+                           "aggregation": group["aggregation"], "slot_lead_days": lead,
+                           "paired_cases": len(cases), "models": results})
+    return {"schema": "climaprev-paired-uncertainty-v1", "comparison_sha256": digest(comparison),
+            "parameters": {"block_days": block_days, "repetitions": repetitions,
+                           "seed": seed, "confidence": confidence},
+            "groups": groups, "scientific_approval": False, "promotion_allowed": False}
+
+
+def export_study_report(
+    path: Path, *, protocol_path: Path, calendar_path: Path, coverage_path: Path,
+    comparison_path: Path, uncertainty_path: Path, pair_paths: Sequence[Path], code_version: str,
+) -> dict[str, Any]:
+    """Export existing results with a complete calendar denominator and frozen parents."""
+    protocol, calendar = read_json(protocol_path), read_json(calendar_path)
+    validate_protocol(protocol)
+    data = validate_target_calendar(calendar)
+    coverage, comparison = read_json(coverage_path), read_json(comparison_path)
+    uncertainty = read_json(uncertainty_path)
+    pair_hashes = sorted(digest(read_json(parent)) for parent in pair_paths)
+    if (data["protocol"] != protocol
+            or coverage.get("schema") != "climaprev-target-coverage-v1"
+            or comparison.get("schema") != "climaprev-variable-comparison-v1"
+            or uncertainty.get("schema") != "climaprev-paired-uncertainty-v1"
+            or coverage["calendar_sha256"] != calendar["sha256"]
+            or coverage["protocol_sha256"] != protocol["sha256"]
+            or sorted(coverage["input_reports_sha256"]) != pair_hashes
+            or comparison["input_reports_sha256"] != pair_hashes
+            or uncertainty["comparison_sha256"] != digest(comparison)):
+        raise ValueError("consolidated input identity differs")
+    targets = {target["key"]: target for target in data["targets"]}
+    rows = coverage["rows"]
+    if (len(rows) != len(targets) or {row["key"] for row in rows} != set(targets)
+            or any(row["target"] != targets[row["key"]] for row in rows)):
+        raise ValueError("coverage identity omits or changes frozen targets")
+    due = [row for row in rows if row["target"]["active"]
+           and "target_not_due" not in row["reasons"]]
+    eligible = [row for row in due if row["eligible_exploratory"] is True]
+    population = {"planned_targets": len(rows), "due_targets": len(due),
+                  "eligible_targets": len(eligible),
+                  "excluded_unique_targets": len(due) - len(eligible),
+                  "not_due_targets": len(rows) - len(due),
+                  "overlapping_reason_counts": dict(sorted(Counter(
+                      reason for row in due for reason in row["reasons"]).items()))}
+    parents = {"protocol": protocol_path, "calendar": calendar_path, "coverage": coverage_path,
+               "comparison": comparison_path, "uncertainty": uncertainty_path}
+    for parent in pair_paths:
+        name = "pair-" + digest(read_json(parent))
+        if name in parents:
+            raise ValueError("duplicate pair parent")
+        parents[name] = parent
+    return save_evidence(path, protocol_sha256=protocol["sha256"], parents=parents,
+                         code_version=code_version,
+                         payload={"schema": "climaprev-study-report-v1", "population": population,
+                                  "comparison": comparison, "uncertainty": uncertainty,
+                                  "coverage": coverage, "scientific_approval": False,
+                                  "promotion_allowed": False})
 
 
 if __name__ == "__main__":

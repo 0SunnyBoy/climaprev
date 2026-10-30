@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -139,6 +140,38 @@ def _check_locale_toggle(page: Page) -> None:
     page.evaluate("localStorage.clear()")
 
 
+def _check_candidate_presentation(page: Page) -> None:
+    """Candidate responses retain units, nulls, official priority and diagnostic wording."""
+    for locale in ("pt-BR", "en"):
+        if page.locator("html").get_attribute("lang") != locale:
+            page.locator(".locale-toggle").click()
+        for unit, value, label in (("celsius", 40, "40 °C"), ("fahrenheit", 104, "104 °F")):
+            payload = _result_payload()
+            payload["temperature_unit"] = unit
+            payload["forecast_risk"].update(policy_version="reference-candidate-1", conditions=[{
+                "type": "temperature_extreme_proxy", "severity": "high", "value": value,
+                "unit": unit, "reason": "Indicador sintético de temperatura."}])
+            payload["risk_overview"].update(level="high", source="official_alert")
+            payload["data_quality"].update(completeness="partial", missing_fields=["humidity_mean_pct"])
+            payload["days"][0]["humidity_mean_pct"] = None
+            payload["days"][0]["temperature_max"] = value
+            page.unroute("**/api/v1/risk")
+            page.route("**/api/v1/risk", lambda route, _request, data=payload: route.fulfill(
+                status=200, content_type="application/json", body=json.dumps(data)))
+            page.select_option("#temperature_unit", unit)
+            with page.expect_response("**/api/v1/risk"):
+                page.click("button[type='submit']")
+            expect(page.locator(".conditions strong")).to_contain_text(label)
+            expect(page.locator(".official-priority")).to_be_visible()
+            expect(page.locator(".risk-assessment .quality-warning")).to_be_visible()
+            if page.locator(".day-details").get_attribute("open") is None:
+                page.locator(".day-details summary").click()
+            expect(page.locator(".all-measurements")).to_contain_text(
+                "Not available" if locale == "en" else "Não disponível")
+            assert not re.search(r"confidence|confiança|MAE|bootstrap|95%", page.locator("#result").inner_text(), re.IGNORECASE)
+    page.evaluate("localStorage.clear()")
+
+
 def _install_ca(ca_file: Path, profile: Path) -> None:
     if os.name == "nt":
         raise RuntimeError("HTTPS browser validation requires NSS certutil on a Linux test runner")
@@ -244,6 +277,7 @@ def check(base_url: str, ca_file: Path | None, executable_path: Path | None) -> 
             assert page.locator("#result img").count() == 0
             assert page.locator("#result script").count() == 0
             assert page.locator("#result [onerror]").count() == 0
+            _check_candidate_presentation(page)
             assert any(urlparse(url).path == "/api/v1/risk" for url in network_urls)
             http_origins = {
                 _origin(url)

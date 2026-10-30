@@ -169,3 +169,151 @@ def test_met_rejects_malformed_measurements(kind):
         props["timeseries"][1]["time"] = props["timeseries"][0]["time"]
     with pytest.raises(ValueError):
         met_norway_measurements(payload)
+
+
+@pytest.mark.parametrize("problem,reason", [
+    ("none", None), ("missing", "variable_absent"),
+    ("d7", "interval_incomplete"), ("partial", "interval_incomplete"),
+    ("unit", "unit_mismatch"),
+])
+def test_capability_is_per_variable_and_complete_target_interval(problem, reason):
+    from climaprev.tools.experimental_collection import assess_capability
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    samples = [Measurement("precipitation_mm", start + timedelta(hours=i),
+                           start + timedelta(hours=i + 1), 1, "mm", "previous_hour_sum")
+               for i in range(24)]
+    target = start
+    if problem == "missing":
+        samples = []
+    elif problem == "d7":
+        target += timedelta(days=7)
+    elif problem == "partial":
+        samples.pop()
+    elif problem == "unit":
+        samples[0] = Measurement(samples[0].variable, samples[0].start, samples[0].end,
+                                 1, "inch", samples[0].semantics)
+    result = assess_capability("gfs_global", samples, variable="precipitation_mm", unit="mm",
+                               semantics="previous_hour_sum", start=target,
+                               end=target + timedelta(days=1))
+    assert result["declared_supported"] is True
+    assert result["eligible"] is (reason is None)
+    assert result["variable"] == "precipitation_mm"
+    if reason:
+        assert reason in result["reasons"]
+    else:
+        assert result["reasons"] == []
+
+
+def test_unsupported_gust_is_not_invented_for_met_adapter():
+    from climaprev.tools.experimental_collection import assess_capability
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    result = assess_capability("met-norway", [], variable="gust_kmh", unit="km/h",
+                               semantics="previous_hour_max", start=start,
+                               end=start + timedelta(days=1))
+    assert result["declared_supported"] is False
+    assert result["eligible"] is False
+    assert "variable_not_supported_by_adapter" in result["reasons"]
+
+
+@pytest.mark.parametrize("kind,expected", [
+    ("unknown", "unknown"), ("requested", "requested_only"),
+    ("verified", "verified"), ("updated", "unknown"),
+])
+def test_run_evidence_never_confuses_collection_update_and_initialization(kind, expected):
+    from climaprev.tools.experimental_collection import describe_run
+
+    now = datetime(2030, 1, 1, 6, tzinfo=UTC)
+    run = now - timedelta(hours=6)
+    kwargs = {}
+    if kind == "requested":
+        kwargs["requested_run"] = run
+    elif kind == "verified":
+        kwargs.update(verified_run=run, verification_reference="synthetic-provider-record")
+    elif kind == "updated":
+        kwargs["updated_at"] = now - timedelta(minutes=10)
+    result = describe_run(now, **kwargs)
+    assert result["basis"] == expected
+    assert result["run_at"] == (run.isoformat() if kind == "verified" else None)
+    assert result["collected_at"] == now.isoformat()
+    if kind == "requested":
+        assert result["requested_run_at"] == run.isoformat()
+    if kind == "updated":
+        assert result["updated_at"] == (now - timedelta(minutes=10)).isoformat()
+
+
+def test_initialization_after_collection_and_unreferenced_verification_are_rejected():
+    from climaprev.tools.experimental_collection import describe_run
+
+    now = datetime(2030, 1, 1, tzinfo=UTC)
+    with pytest.raises(ValueError, match="collection"):
+        describe_run(now, requested_run=now + timedelta(seconds=1))
+    with pytest.raises(ValueError, match="reference"):
+        describe_run(now, verified_run=now)
+
+
+@pytest.mark.parametrize("model,family", [
+    ("gfs_global", "NOAA-GFS"), ("icon_global", "DWD-ICON"),
+    ("ecmwf_ifs025", "ECMWF-IFS"), ("met-norway", "ECMWF-IFS"),
+    ("operational-baseline", "automatic-unknown"),
+])
+def test_catalog_preserves_source_family_per_adapter(model, family):
+    from climaprev.tools.experimental_collection import source_catalog
+
+    result = source_catalog([model])
+    assert result["models"] == [{"model": model, "origin_family": family}]
+
+
+def test_catalog_does_not_count_shared_or_unknown_origin_as_independent_models():
+    from climaprev.tools.experimental_collection import source_catalog
+
+    result = source_catalog(["ecmwf_ifs025", "met-norway", "operational-baseline", "met-norway"])
+    assert len(result["models"]) == 3
+    assert result["known_family_count"] == 1
+    assert result["unknown_origin_models"] == ["operational-baseline"]
+    assert result["independence_proven"] is False
+
+
+@pytest.mark.parametrize("kind", ["instant", "interval", "null", "empty", "gap"])
+def test_measurement_contract_preserves_instants_intervals_and_missing_values(kind):
+    from climaprev.tools.experimental_normalization import validate_measurements
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    if kind == "instant":
+        samples = [Measurement("temperature_c", start, None, 25, "°C", "instant")]
+        unit, semantics = "°C", "instant"
+    else:
+        samples = [Measurement("precipitation_mm", start, start + timedelta(hours=1),
+                               None if kind == "null" else 1, "mm", "previous_hour_sum")]
+        unit, semantics = "mm", "previous_hour_sum"
+    if kind == "empty":
+        samples = []
+    assert validate_measurements(samples, unit=unit, semantics=semantics) == samples
+    if kind == "null":
+        assert samples[0].value is None
+    if kind == "gap":
+        assert complete_rain_total(samples, start, start + timedelta(hours=2)) is None
+
+
+@pytest.mark.parametrize("kind", ["unit", "semantics", "naive", "instant_interval", "nan", "duplicate"])
+def test_measurement_contract_rejects_false_equivalence(kind):
+    from climaprev.tools.experimental_normalization import validate_measurements
+
+    start = datetime(2030, 1, 1, tzinfo=UTC)
+    sample = Measurement("temperature_c", start, None, 25, "°C", "instant")
+    from dataclasses import replace
+
+    if kind == "unit":
+        sample = replace(sample, unit="°F")
+    elif kind == "semantics":
+        sample = replace(sample, semantics="previous_hour_max")
+    elif kind == "naive":
+        sample = replace(sample, start=datetime(2030, 1, 1))
+    elif kind == "instant_interval":
+        sample = replace(sample, end=start + timedelta(hours=1))
+    elif kind == "nan":
+        sample = replace(sample, value=float("nan"))
+    with pytest.raises(ValueError, match="measurement|contract"):
+        validate_measurements([sample, sample] if kind == "duplicate" else [sample],
+                              unit="°C", semantics="instant")

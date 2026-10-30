@@ -1,5 +1,10 @@
 # Candidate-1 — Frente 1: Dados e integrações
 
+## Integração vigente da develop2 — 30/10/2026
+
+Incorporada a origem `origin/develop2` (`9fd99b7`) à versão local, preservando o incremento da frente 2 (`bd7fbe3`). A origem acrescenta protocolo, partições, observações, campanha/cobertura, comparação/relatórios e infraestrutura de registro, seleção, confirmação técnica e adaptação explícita da candidata. Essas entregas usam ensaios sintéticos: não encerram campanha ou aprovação científica reais. Reference-v1 segue padrão; candidata não selecionada. Calendários antigos precisam de nova versão deliberada antes de execução; sem backfill. Relatório de conciliação e qualificação: `docs/operacoes/merge-develop2-frentes-2026-10-30.md`. Este checkpoint supera afirmações históricas abaixo de ausência dessa infraestrutura. Qualificação combinada: 1.099 testes backend, mypy em 93 módulos, Ruff integral; 56 testes frontend, lint e build com Node.js 22.23.2 aprovados. Merge exclusivamente local, sem push ou alteração da main.
+
+
 Atualizado em 27/10/2026. Este relatório distribui responsabilidades de implementação; não autoriza início da campanha científica nem promoção da candidata.
 
 ## Handoff da Frente 2 em 28/10/2026
