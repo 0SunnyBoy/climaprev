@@ -1,6 +1,8 @@
 # Arquivo histórico — handoff
 
-Este arquivo preserva registros de lotes anteriores, inclusive resultados e pendências superadas. **Não é o estado atual da aplicação.** Consulte [handoff](handoff.md) e [RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md). Os caminhos relativos históricos foram mantidos.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Este arquivo preserva registros de lotes anteriores, inclusive resultados e pendências superadas. **Não é o estado atual da aplicação.** Consulte [handoff](handoff.md) e [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Os caminhos relativos históricos foram mantidos.
 
 ## Histórico anterior — não usar como status vigente
 
@@ -11,7 +13,7 @@ experimentais e correções locais sem commit; preservar o diff. A aplicação l
 foi atualizada e a stack de homologação foi provisionada separadamente, com
 credenciais sintéticas rotacionadas em `.homolog/next/`. Não versionar esse diretório.
 
-Ler [STATE](STATE.md), [RDP](../../RELATORIO-PENDENCIAS-2026-10-19.md) e
+Ler [STATE](STATE.md), [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-19.md) e
 [execução científica/técnica](../planejamento/reference-candidate-1/execucao-2026-10-19.md).
 Priorizar as pendências científicas, contratos funcionais e gates ainda abertos.
 Na continuação, o dia encerrado às 12 UTC e a fronteira de dezembro reconciliaram

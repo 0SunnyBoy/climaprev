@@ -1,7 +1,9 @@
 # Relatório de Pendências (RDP) — ClimaPrev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Data: 19/10/2026. Branch local: develop. Referência: commit 23bf4ce e alterações locais ainda sem commit.
 
@@ -9,29 +11,29 @@ Data: 19/10/2026. Branch local: develop. Referência: commit 23bf4ce e alteraç�
 
 ### Estado vigente após catálogo espacial
 
-Atualização seguinte: diagnóstico horário dos 37 registros altos relevantes concluído e valores reconciliados; inventário local registra 114 snapshots conhecidos, 14 artefatos de testes e nenhuma correspondência conhecida com reservas. Não certifica ausência de acesso anterior/externo. 88 testes direcionados aprovados, Ruff e mypy do módulo novo aprovados. Restam revisão científica/proveniência das reservas, decisões de aceite e protocolo prospectivo final. [Detalhes atuais](docs/planejamento/reference-candidate-1/diagnostico-horario-e-reservas-2026-10-19.md).
+Atualização seguinte: diagnóstico horário dos 37 registros altos relevantes concluído e valores reconciliados; inventário local registra 114 snapshots conhecidos, 14 artefatos de testes e nenhuma correspondência conhecida com reservas. Não certifica ausência de acesso anterior/externo. 88 testes direcionados aprovados, Ruff e mypy do módulo novo aprovados. Restam revisão científica/proveniência das reservas, decisões de aceite e protocolo prospectivo final. [Detalhes atuais](../planejamento/reference-candidate-1/diagnostico-horario-e-reservas-2026-10-19.md).
 
 Coleta espacial concluída: 72 snapshots, 180 estratos e 30 agregações. Catálogo novo reconstruiu 3.747 casos, reconciliou todos os 180 estratos e verificou conjunto/parametrização dos snapshots. Os altos observados concentram-se em seis unidades local/data; nenhum braço recuperou sua detecção. Calor moderado tem mais detecções e também mais falsos alarmes na consulta da estação. Não há base para promover essa configuração automaticamente.
 
 Regressão deste incremento: 85 testes direcionados aprovados, Ruff e mypy do módulo novo aprovados. A suíte completa anterior de 574 testes não foi repetida. As seções cronológicas abaixo preservam estados anteriores; pendências antigas de implementação do bootstrap/coleta espacial foram superadas tecnicamente, mas aprovação científica continua pendente.
 
-Próximos itens: diagnóstico horário dos casos existentes de 2024; auditoria de proveniência das reservas sem abrir outcomes; definição científica dos critérios e responsável; eventual nova versão prospectiva do protocolo. Etapa 6/fitting/calibração/promoção permanecem bloqueados. [Diagnóstico e adendo vigente](docs/planejamento/reference-candidate-1/diagnostico-e-adendo-2026-10-19.md).
+Próximos itens: diagnóstico horário dos casos existentes de 2024; auditoria de proveniência das reservas sem abrir outcomes; definição científica dos critérios e responsável; eventual nova versão prospectiva do protocolo. Etapa 6/fitting/calibração/promoção permanecem bloqueados. [Diagnóstico e adendo vigente](../planejamento/reference-candidate-1/diagnostico-e-adendo-2026-10-19.md).
 
 A aplicação funciona localmente com Docker, API, interface e Redis. A última regressão completa aprovada registrou 574 testes de back-end e os 10 testes de front-end anteriormente aprovados, build/typecheck, ESLint, Ruff (com EXE002 ignorado) e mypy. O último lote alterou somente ferramentas offline, testes e documentos; não repetiu checks de frontend sem mudanças. A primeira tentativa teve um timeout Redis, preservado no registro operacional; a repetição na imagem construída passou sem exclusões. Isso não equivale a homologação completa ou aprovação científica de uma nova política.
 
 ### Avanços da execução deste RDP
 
 - Obtidos CSVs oficiais de 2024 para A201/A001/A801 e executados 72 relatórios nos 36 snapshots. A síntese usa os mesmos dias D+1/D+3/D+7: 252 unidades local/data de chuva, 249 de rajada e 248 de cada extremo térmico. Aceite científico continua pendente.
-- Implementados auditor mensal, fronteira anual, suporte observacional e bootstrap. A continuação reconciliou numericamente os três valores de chuva publicados para Belém pelo dia encerrado às 12 UTC. Não houve inferência aprovada ou ajuste de candidata. Detalhes em [reconciliação e suporte](docs/planejamento/reference-candidate-1/reconciliacao-e-suporte-2026-10-19.md).
+- Implementados auditor mensal, fronteira anual, suporte observacional e bootstrap. A continuação reconciliou numericamente os três valores de chuva publicados para Belém pelo dia encerrado às 12 UTC. Não houve inferência aprovada ou ajuste de candidata. Detalhes em [reconciliação e suporte](../planejamento/reference-candidate-1/reconciliacao-e-suporte-2026-10-19.md).
 - Corrigidos idioma da mensagem de sucesso, erro/repetição da busca e reconsulta de cache de alertas stale/expirado. Esses incrementos não encerram acessibilidade ou a validade/cobertura completa dos alertas.
 - Configurados ESLint, Vitest e auditoria Node na CI; verificações locais aprovadas. Execução remota e checks obrigatórios ainda pendentes.
 - Homologação local: topologia, hardening, fronteira HTTPS, CA/logs, Redis e rotação sintética aprovados. Scanner fixado pelo projeto sem achados no limiar HIGH/CRITICAL; ressalva sobre metadados EOL do Alpine registrada na evidência.
 - Teste de tema passou a aguardar condição observável do DOM, preservando as asserções. Gate de navegador ainda não executado: duas obtenções do runner fixado falharam com `unexpected EOF` na camada de 841.952.792 bytes. Não declarar esse gate aprovado.
 - README, estado, roadmap, handoff e catálogo técnico atualizados. O PDF acadêmico permanece inalterado.
 - Estágio de carga construído e cinco smokes no mock aprovados após aguardar readiness. A tentativa inicial com falhas de startup foi preservada. Ainda falta medir capacidade sustentada em ambiente dedicado; os smokes não encerram F10.
-- Baseline descritiva completada para os cinco eventos: 15 agregações e 180 estratos. Chuva horária pareada em 36 relatórios e 252 unidades local/data por horizonte, sem detecção GFS dos dois dias altos observados. Mantêm-se os diagnósticos de chuva diária e rajada. É avaliação de limiares sobre agregados experimentais, não reprodução integral da API. [Pareamento e evidências atuais](docs/planejamento/reference-candidate-1/chuva-horaria-2026-10-19.md); critérios e aprovação científica continuam pendentes.
+- Baseline descritiva completada para os cinco eventos: 15 agregações e 180 estratos. Chuva horária pareada em 36 relatórios e 252 unidades local/data por horizonte, sem detecção GFS dos dois dias altos observados. Mantêm-se os diagnósticos de chuva diária e rajada. É avaliação de limiares sobre agregados experimentais, não reprodução integral da API. [Pareamento e evidências atuais](../planejamento/reference-candidate-1/chuva-horaria-2026-10-19.md); critérios e aprovação científica continuam pendentes.
 
-Detalhes e proveniência em [execução técnica de 19/10](docs/planejamento/reference-candidate-1/execucao-2026-10-19.md) e [validação operacional](docs/operacoes/validacao-local-2026-10-19.md). A ordem abaixo é preservada; itens já implementados dependem apenas dos aceites ainda descritos.
+Detalhes e proveniência em [execução técnica de 19/10](../planejamento/reference-candidate-1/execucao-2026-10-19.md) e [validação operacional](../operacoes/validacao-local-2026-10-19.md). A ordem abaixo é preservada; itens já implementados dependem apenas dos aceites ainda descritos.
 
 A prioridade para evoluir a previsão continua sendo concluir a preparação da reference-candidate-1 com observações confiáveis. A reference-v1 permanece ativa. Ajustar classificação, calibrar coeficientes e promover candidata são atividades futuras, fora da autorização atual das etapas 1 a 5.
 

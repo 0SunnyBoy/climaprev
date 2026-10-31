@@ -1,7 +1,9 @@
 # Tasks — implementação da segurança do ClimaPrev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Estado em 2026-09-23: T1–T19 concluídas com evidências locais e remotas;
 decisão final **condicional — não pronto para produção**.
@@ -16,8 +18,8 @@ por fingerprint e fixtures de detecção; T17 passou também no runner GitHub;
 T18 passou no ensaio sintético de rotação e
 tem runbook. Consulte [contexto](context.md) e [evidências](evidence.md).
 
-[Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
-[Design](../../../docs/planejamento/seguranca-configuracao-segredos/design.md).
+[Spec](spec.md) ·
+[Design](design.md).
 
 ## Execution Plan
 
@@ -82,7 +84,7 @@ T18 -> T19
 Gerada a partir do código, da spec, do
 [pyproject](../../../pyproject.toml),
 do [CI](../../../.github/workflows/ci.yml)
-e do [guia de homologação](../../../docs/operacoes/homologacao.md).
+e do [guia de homologação](../../operacoes/homologacao.md).
 Não foi encontrado CONTRIBUTING ou AGENTS próprio no worktree. Não há
 percentual mínimo configurado nesses arquivos; usar cobertura por critério
 e caso-limite, sem inventar uma meta de cobertura já existente.

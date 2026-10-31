@@ -1,3 +1,7 @@
+# Registros históricos até 30/10/2026
+
+Este arquivo preserva checkpoints anteriores, inclusive afirmações posteriormente superadas. Consulte [estado vigente](../projeto/STATE.md).
+
 # RDP — 20/10/2026
 
 ## Janela pública 14/7 implementada — 30/10/2026
@@ -93,13 +97,13 @@ Permanecem pendentes: teste auditivo real PT/EN; aceite dos parâmetros/calendá
 
 ## Comparação e elegibilidade em 26/10/2026
 
-Comparador exploratório de chuva e entrada da baseline diária implementados, com cobertura, exclusões, identidade temporal, métricas e detecção diagnóstica por estação/horizonte de coleta. D+7 sem baseline aparece sem score; a definição do controle científico ainda precisa de decisão. [Entrega](docs/operacoes/comparacao-experimental-2026-10-26.md). 75 testes direcionados, tipagem e lint aprovados. Sem cálculo de novo ganho real ou campanha iniciada.
+Comparador exploratório de chuva e entrada da baseline diária implementados, com cobertura, exclusões, identidade temporal, métricas e detecção diagnóstica por estação/horizonte de coleta. D+7 sem baseline aparece sem score; a definição do controle científico ainda precisa de decisão. [Entrega](../operacoes/comparacao-experimental-2026-10-26.md). 75 testes direcionados, tipagem e lint aprovados. Sem cálculo de novo ganho real ou campanha iniciada.
 
 Continuam pendentes: parâmetros finais e controle científico de D+7; equivalência e pareamento das demais variáveis; cobertura global ligada ao calendário; intervalos de incerteza e avaliação independente; acionador recorrente após aceite; refinamento/promoção; teste auditivo; commit/push e CI do lote. Afirmações anteriores de ausência total de comparador foram superadas por este modo exploratório, não por um teste confirmatório completo.
 
 ## Verificação de avisos em 26/10/2026
 
-Entrega das condições de chuva, vento, calor e frio verificada por cenários controlados da rota e componentes PT/EN; unidades do resumo corrigidas para °C/°F. 32 testes backend selecionados e 48 frontend, lint, tipagem e build aprovados. [Relatório](docs/operacoes/verificacao-avisos-2026-10-26.md). Não surgiu restrição que habilite apenas vento; causa da consulta original depende de cidade/período/dados. Teste auditivo, publicação do lote e pendências científicas permanecem. Sem alteração de limiares ou novo aviso de umidade.
+Entrega das condições de chuva, vento, calor e frio verificada por cenários controlados da rota e componentes PT/EN; unidades do resumo corrigidas para °C/°F. 32 testes backend selecionados e 48 frontend, lint, tipagem e build aprovados. [Relatório](../operacoes/verificacao-avisos-2026-10-26.md). Não surgiu restrição que habilite apenas vento; causa da consulta original depende de cidade/período/dados. Teste auditivo, publicação do lote e pendências científicas permanecem. Sem alteração de limiares ou novo aviso de umidade.
 
 ## Atualização vigente de 26/10/2026
 
@@ -109,21 +113,21 @@ Pendências atuais: fechar e aprovar parâmetros/calendário e controle de D+7; 
 
 ## Coletores experimentais e preflight em 23/10/2026
 
-- **Preflight pontual realizado:** GFS/IFS/ICON e MET Norway em Belém, Brasília e Porto Alegre; 11/12 combinações normalizadas. IFS/Porto Alegre rejeitado por chuva negativa, sem correção silenciosa. [Relatório](docs/operacoes/coleta-experimental-2026-10-23.md).
+- **Preflight pontual realizado:** GFS/IFS/ICON e MET Norway em Belém, Brasília e Porto Alegre; 11/12 combinações normalizadas. IFS/Porto Alegre rejeitado por chuva negativa, sem correção silenciosa. [Relatório](../operacoes/coleta-experimental-2026-10-23.md).
 - **Coleta experimental implementada como CLI pontual**, com normalização de unidades/instantes e intervalos de chuva, escrita de arquivo bruto e rejeição de contratos inválidos. Não é agendador nem campanha confirmatória; rodada ainda desconhecida e nem todo horizonte possui dia local completo. Sem mudanças no endpoint público.
 - **Validação:** 57 testes selecionados Docker, mypy de três módulos e Ruff aprovados. Sem suíte integral, commit/push ou CI remoto deste lote.
 - **Próximos:** capturar baseline automática, comprovar rodada/disponibilidade, manifestos e orçamento de campanha, pareamento com observações e fechamento dos parâmetros propostos. Acessibilidade auditiva permanece pendente. Registros de ausência de HTTP/normalização abaixo são checkpoints anteriores.
 
 ## Incremento técnico de coleta em 23/10/2026
 
-- **Etapa 3 avançada documentalmente:** catálogo GFS/IFS/ICON e MET Norway, restrições de acesso comercial, duplicação de origem e antecedência. Falta preflight dos campos/rodadas no endpoint; seleção final não foi inferida de desempenho. [Catálogo](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md).
+- **Etapa 3 avançada documentalmente:** catálogo GFS/IFS/ICON e MET Norway, restrições de acesso comercial, duplicação de origem e antecedência. Falta preflight dos campos/rodadas no endpoint; seleção final não foi inferida de desempenho. [Catálogo](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md).
 - **Etapa 4 iniciada:** arquivo experimental imutável de JSON/proveniência, separado por identidade e conteúdo, com proteção a sobrescrita, tempos UTC e sinalização de coleta tardia/rodada desconhecida. 34 testes selecionados Docker, mypy do módulo e Ruff aprovados. Ainda faltam adaptadores HTTP, envelope da baseline automática, normalização, agendamento e ligação às observações; não é coletor completo.
-- **Parâmetros preparados para aceite:** [campanha proposta](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md), sem iniciar coleta ou abrir outcomes reservados. Datas, duração, margens e critérios pendentes permanecem propostas.
+- **Parâmetros preparados para aceite:** [campanha proposta](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md), sem iniciar coleta ou abrir outcomes reservados. Datas, duração, margens e critérios pendentes permanecem propostas.
 - Incrementos locais, sem novo commit/push ou CI remoto. Reference-v1 e janela pública de sete dias preservadas. Acessibilidade auditiva continua pendente.
 
 ## Atualização de 23/10/2026
 
-**Direção científica aprovada pelo usuário**, após esclarecimento de que o protocolo inclui outras variáveis além da chuva. Objetivo inicial: chuva diária D+1; meta inicial: redução de MAE de pelo menos 5% com evidência favorável; avaliações complementares multivariáveis e D+3/D+7, teste independente e proteção dos extremos. [Registro e limites](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md).
+**Direção científica aprovada pelo usuário**, após esclarecimento de que o protocolo inclui outras variáveis além da chuva. Objetivo inicial: chuva diária D+1; meta inicial: redução de MAE de pelo menos 5% com evidência favorável; avaliações complementares multivariáveis e D+3/D+7, teste independente e proteção dos extremos. [Registro e limites](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md).
 
 A pendência passa de revisão da direção para **fechamento dos parâmetros do experimento**: localidades/calendário/duração, semântica e qualidade das observações, diferença física relevante, margens dos extremos, suporte e plano estatístico. Segue seleção de fontes/modelos e preparação da coleta. Sem promoção, fitting ou leitura nova de outcomes reservados neste registro. Os checkpoints abaixo que dizem que a direção aguarda aprovação foram superados por esta decisão; demais pendências permanecem.
 
@@ -131,18 +135,18 @@ A pendência passa de revisão da direção para **fechamento dos parâmetros do
 
 Base publicada `5a6fc9c` aprovada no CI e Security gates. Registros abaixo que dizem "local sem push" ou citam `451d845` descrevem checkpoints superados dessa base, não a publicação atual. Incremento posterior permanece local, sem nova qualificação remota.
 
-1. **Acessibilidade em andamento:** corrigida atualização a cada segundo da mensagem 429 na região de alerta; contador visual continua separado. Regressão no fluxo App e 33 testes frontend, lint, tipagem e build aprovados. Ensaio auditivo real continua pendente. [Detalhes e roteiro](docs/operacoes/acessibilidade-continuacao-2026-10-21.md).
-2. **Protocolo científico aguardando revisão do usuário:** ele pediu a proposta detalhada antes de aprovar. [Documento preparado](docs/planejamento/reference-candidate-1/proposta-cientifica-para-revisao-2026-10-21.md), com alternativas de alvo, comparadores, cobertura, partição temporal, métricas e decisões quantitativas ainda pendentes. Não presumir aprovação de 5%, objetivo, reservas ou promoção.
+1. **Acessibilidade em andamento:** corrigida atualização a cada segundo da mensagem 429 na região de alerta; contador visual continua separado. Regressão no fluxo App e 33 testes frontend, lint, tipagem e build aprovados. Ensaio auditivo real continua pendente. [Detalhes e roteiro](../operacoes/acessibilidade-continuacao-2026-10-21.md).
+2. **Protocolo científico aguardando revisão do usuário:** ele pediu a proposta detalhada antes de aprovar. [Documento preparado](../planejamento/reference-candidate-1/proposta-cientifica-para-revisao-2026-10-21.md), com alternativas de alvo, comparadores, cobertura, partição temporal, métricas e decisões quantitativas ainda pendentes. Não presumir aprovação de 5%, objetivo, reservas ou promoção.
 3. **Próximos:** seleção de fontes/modelos, coleta experimental, comparação observacional, refinamento e integração condicionada. Desenho da campanha depende das escolhas do item 2; pesquisa de fornecedores e preparação técnica independentes podem avançar sem abrir outcomes de teste.
 
 ## Revisão vigente — aplicação e análise com múltiplas fontes
 
-Revisão posterior de linhas concluída: 109 linhas retiradas sem excluir testes; 18.299 no escopo contado, ainda +195 contra o commit (+168 testes/gates, +27 executável). Mapeamento e wrappers simplificados; 659 testes backend, 32 frontend, checks estáticos/build e equivalência de contrato aprovados. [Detalhamento](docs/operacoes/reducao-linhas-2026-10-20.md).
+Revisão posterior de linhas concluída: 109 linhas retiradas sem excluir testes; 18.299 no escopo contado, ainda +195 contra o commit (+168 testes/gates, +27 executável). Mapeamento e wrappers simplificados; 659 testes backend, 32 frontend, checks estáticos/build e equivalência de contrato aprovados. [Detalhamento](../operacoes/reducao-linhas-2026-10-20.md).
 
-Refatoração estrutural implementada: prazos/cancelamento compartilhados, DTOs/conversões e codecs fora do serviço, schemas fora da rota, tipagem concreta e imports limpos. Contrato OpenAPI preservado; 651 testes da suíte principal, oito adicionais de hardening, 32 frontend, build/lint/tipagem e gates locais aprovados na refatoração transversal. [Execução e limites](docs/operacoes/refatoracao-2026-10-20.md). A avaliação arquitetural anterior permanece como diagnóstico histórico; cache/locks/avisos também foram separados em serviços próprios neste lote transversal; main, testes, frontend, configuração e documentação corrente foram revisados.
+Refatoração estrutural implementada: prazos/cancelamento compartilhados, DTOs/conversões e codecs fora do serviço, schemas fora da rota, tipagem concreta e imports limpos. Contrato OpenAPI preservado; 651 testes da suíte principal, oito adicionais de hardening, 32 frontend, build/lint/tipagem e gates locais aprovados na refatoração transversal. [Execução e limites](../operacoes/refatoracao-2026-10-20.md). A avaliação arquitetural anterior permanece como diagnóstico histórico; cache/locks/avisos também foram separados em serviços próprios neste lote transversal; main, testes, frontend, configuração e documentação corrente foram revisados.
 
 
-**Etapa 1 concluída no escopo local:** busca com prazo de cinco segundos e consulta principal com encerramento independente do abort em dez segundos; regressão de transporte travado/cancelamento/resposta tardia, medição controlada fria/repetida em três cidades e falhas injetadas, revisão no navegador de 320–1280 px e consulta real de sete dias. 31 testes frontend e 34 testes backend selecionados aprovados. Não é certificação de produção ou disponibilidade dos provedores. [Relatório e limitações](docs/operacoes/responsividade-2026-10-20.md). Leitor de tela é etapa 2 ainda pendente; segue preparação da etapa 3. Novas mudanças locais, sem commit/push. Este estado substitui o primeiro incremento abaixo.
+**Etapa 1 concluída no escopo local:** busca com prazo de cinco segundos e consulta principal com encerramento independente do abort em dez segundos; regressão de transporte travado/cancelamento/resposta tardia, medição controlada fria/repetida em três cidades e falhas injetadas, revisão no navegador de 320–1280 px e consulta real de sete dias. 31 testes frontend e 34 testes backend selecionados aprovados. Não é certificação de produção ou disponibilidade dos provedores. [Relatório e limitações](../operacoes/responsividade-2026-10-20.md). Leitor de tela é etapa 2 ainda pendente; segue preparação da etapa 3. Novas mudanças locais, sem commit/push. Este estado substitui o primeiro incremento abaixo.
 
 
 Esta seção substitui a ordem e as afirmações conflitantes do checkpoint abaixo. O usuário retomou a candidate-1 e definiu foco em responsividade, qualidade e velocidade, priorizando a aplicação. O objetivo futuro é código aberto com possibilidade de serviços empresariais pagos e apoio da comunidade. Novas integrações são planejamento; nenhum provedor ou combinação foi implementado nesta revisão.
@@ -174,4 +178,4 @@ Continuam adiados: horizonte de 14 dias (apenas planejado), hospedagem/monitoram
 
 ## Operação futura e histórico
 
-Monitoramento: exporter e templates existentes; instalar serviços, alertas, retenção e SLOs no ambiente futuro. Capacidade/uptime exigem ensaio nesse ambiente. develop permanece sem proteção obrigatória registrada; revisar checks do HEAD antes de merge, sem alterar regras administrativas neste lote. Relatórios anteriores e protocolos preservados: [frentes 1–4](docs/operacoes/frentes-1-a-4-2026-10-20.md), [frentes 1–7](docs/operacoes/execucao-frentes-1-a-7-2026-10-20.md), [RDP anterior](RELATORIO-PENDENCIAS-2026-10-19.md). Resumos repetidos e desatualizados do documento vigente foram consolidados; evidências não foram removidas.
+Monitoramento: exporter e templates existentes; instalar serviços, alertas, retenção e SLOs no ambiente futuro. Capacidade/uptime exigem ensaio nesse ambiente. develop permanece sem proteção obrigatória registrada; revisar checks do HEAD antes de merge, sem alterar regras administrativas neste lote. Relatórios anteriores e protocolos preservados: [frentes 1–4](../operacoes/frentes-1-a-4-2026-10-20.md), [frentes 1–7](../operacoes/execucao-frentes-1-a-7-2026-10-20.md), [RDP anterior](RELATORIO-PENDENCIAS-2026-10-19.md). Resumos repetidos e desatualizados do documento vigente foram consolidados; evidências não foram removidas.

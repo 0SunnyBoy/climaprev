@@ -1,5 +1,7 @@
 # Responsividade — primeiro incremento de 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Conclusão da etapa 1 no escopo local
 
 Medição controlada, recuperação e revisão responsiva concluídas neste lote. A etapa 1 fica concluída como qualificação local de responsividade/recuperação, não como certificação de capacidade, disponibilidade ou desempenho de produção. Sem mudança de timeout/backend ou concorrência especulativa. Permanecem acompanhamento dos provedores e medição no futuro ambiente, além da etapa 2 de acessibilidade auditiva.

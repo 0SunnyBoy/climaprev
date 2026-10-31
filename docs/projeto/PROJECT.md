@@ -1,6 +1,8 @@
 # PROJECT — ClimaPrev
 
-Documento de visão e navegação. Estado observado em [STATE](STATE.md), fila no [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) e responsabilidades no [catálogo](ImplementationsAndRefactoring.md). Não duplica contagens/execuções; relatórios datados registram checkpoints históricos.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Documento de visão e navegação. Estado observado em [STATE](STATE.md), fila no [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) e responsabilidades no [catálogo](ImplementationsAndRefactoring.md). Não duplica contagens/execuções; relatórios datados registram checkpoints históricos.
 
 ## Visão
 
@@ -16,11 +18,11 @@ ciclo.
 
 ## Documentação do projeto
 
-[Relatório de implementação de 26/10](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline, rodada, manifesto/ledger local, pareamento exploratório e validações. Não representa campanha confirmatória ou implantação.
+[Relatório de implementação de 26/10](../contexto/RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline, rodada, manifesto/ledger local, pareamento exploratório e validações. Não representa campanha confirmatória ou implantação.
 
 Continuação científica de 23/10: [direção aprovada](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes e arquivo experimental](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md) e [parâmetros propostos para revisão](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
 
-Estado consolidado: [STATE](STATE.md). Pendências atuais: [RDP 20/10](../../RELATORIO-PENDENCIAS-2026-10-20.md). Cobertura da revisão: [sincronização documental](SINCRONIZACAO-DOCUMENTAL-2026-10-20.md).
+Estado consolidado: [STATE](STATE.md). Pendências atuais: [RDP 20/10](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Cobertura da revisão: [sincronização documental](SINCRONIZACAO-DOCUMENTAL-2026-10-20.md).
 
 
 | Arquivo                                                          | Conteúdo                                                    |

@@ -1,5 +1,7 @@
 # Roteiro Browser reproduzível — B01–B10
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../../projeto/STATE.md) · [RDP vigente](../../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 > Evidência histórica do frontend anterior à migração Vue/TypeScript. Os
 > exemplos que importam `frontend/api.js` representam o contrato de teste da
 > implementação antiga e não devem ser executados contra o frontend atual.

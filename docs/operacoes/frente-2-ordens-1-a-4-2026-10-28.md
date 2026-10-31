@@ -1,5 +1,7 @@
 # Frente 2 — Execução das ordens 1 a 4
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Data: 28/10/2026. Escopo autorizado: continuar protocolo, equivalência, controle D+7 e critérios. Não inclui executar campanha, refinar pesos, ler novos resultados reservados ou integrar/promover a candidata.
 
 ## Ordem 1 — Protocolo

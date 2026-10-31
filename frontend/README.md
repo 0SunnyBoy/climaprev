@@ -1,6 +1,8 @@
 # ClimaPrev — frontend
 
-Versão 0.1.0 em desenvolvimento. Estado e validações no [STATE](../docs/projeto/STATE.md), pendências no [RDP](../RELATORIO-PENDENCIAS-2026-10-20.md). Transporte e validação runtime separados; prazo/cancelamento compartilhado entre busca e consulta. Acessibilidade auditiva continua pendente.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../docs/projeto/STATE.md) · [RDP vigente](../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../docs/contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Versão 0.1.0 em desenvolvimento. Estado e validações no [STATE](../docs/projeto/STATE.md), pendências no [RDP](../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Transporte e validação runtime separados; prazo/cancelamento compartilhado entre busca e consulta. Acessibilidade auditiva continua pendente.
 
 Aplicação Vue/TypeScript independente, que consome a API HTTP/JSON `/api/v1`. Esta pasta contém dependências, testes, build, Dockerfile, configuração Nginx e Compose próprios. O código Python não é necessário para construir a interface.
 

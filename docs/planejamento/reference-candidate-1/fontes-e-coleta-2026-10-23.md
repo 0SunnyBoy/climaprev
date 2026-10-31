@@ -1,5 +1,7 @@
 # Fontes e coleta experimental
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Continuação:** [coletores e normalização implementados e preflight pontual executado](../../operacoes/coleta-experimental-2026-10-23.md) depois desta seleção documental. Onze de doze combinações local/fonte normalizadas, sem comprovação de rodada ou precisão; os gates e limitações são registrados no relatório. As afirmações abaixo de ausência de HTTP/preflight descrevem o primeiro incremento, preservado como histórico da seleção.
 
 Revisão documental em 23/10/2026, após [aprovação da direção](aprovacao-direcao-2026-10-23.md). Não é preflight ao vivo dos modelos nem implantação de novos provedores. Seleção técnica inicial; versão/identificador exato e campos precisam ser confirmados no endpoint antes da campanha.

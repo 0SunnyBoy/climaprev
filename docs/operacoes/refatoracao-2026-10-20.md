@@ -1,5 +1,7 @@
 # Refatoração transversal e limpeza — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Revisão posterior das linhas e abstrações
 
 A medição foi separada entre implementação e testes. Nova simplificação removeu mapeamento repetitivo, encaminhamento intermediário do cache, wrappers triviais e tipo duplicado. **109 linhas físicas retiradas nesta revisão: 18.408 → 18.299**. Contra o commit original 18.104, o saldo ainda é +195: +168 testes/gates e +27 código executável. Não se usa a redução de um módulo como prova de redução global.

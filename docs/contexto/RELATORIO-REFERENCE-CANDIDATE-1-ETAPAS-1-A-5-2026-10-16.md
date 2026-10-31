@@ -1,5 +1,7 @@
 # Reference-candidate-1 — relatório das etapas 1 a 5
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Encerramento das pendências históricas — 20/10/2026
 
 Além das entregas originais, foram concluídos comparações dos CSVs de três estações, suporte/bootstrapping técnico, baseline de cinco eventos, 72 snapshots espaciais, catálogo de 3.747 casos e diagnóstico horário. Restam revisão científica/proveniência/critério de aceite. Sem fitting/calibração/promoção; evolução de qualidade/precisão adiada para o final.
@@ -7,7 +9,7 @@ Além das entregas originais, foram concluídos comparações dos CSVs de três 
 O restante preserva o registro do lote original. O RDP e o STATE vigentes definem a ordem atual.
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 > Estado consolidado mais recente: [revisão das implementações com CSV oficial](RELATORIO-REVISAO-IMPLEMENTACOES-COM-CSV-2026-10-16.md). As pendências de obtenção, compatibilidade do importador e execução observacional no piloto foram encerradas tecnicamente; as limitações científicas estão atualizadas nesse relatório.
 
@@ -117,17 +119,17 @@ Contagem sobre o ERA5 das 261 unidades local/data pareadas, aplicando os limiare
 
 Evidências:
 
-- [Primeira execução](docs/planejamento/reference-candidate-1/evidence/campanha-2024-etapas-1-a-5.json).
-- [Execução completada e métricas por local/mês/horizonte](docs/planejamento/reference-candidate-1/evidence/campanha-2024-etapas-1-a-5-reexecucao.json).
-- [Cobertura e suporte por evento](docs/planejamento/reference-candidate-1/evidence/suficiencia-diagnostica-2024.json).
+- [Primeira execução](../planejamento/reference-candidate-1/evidence/campanha-2024-etapas-1-a-5.json).
+- [Execução completada e métricas por local/mês/horizonte](../planejamento/reference-candidate-1/evidence/campanha-2024-etapas-1-a-5-reexecucao.json).
+- [Cobertura e suporte por evento](../planejamento/reference-candidate-1/evidence/suficiencia-diagnostica-2024.json).
 - Entradas brutas preservadas em `.historical-reports/candidate-1-expansion-2024/`, ignorado pelo Git.
 
 ## 5 — congelamento técnico e protocolo
 
 Documentos criados:
 
-- [Protocolo legível](docs/planejamento/reference-candidate-1/protocolo-etapas-1-a-5.md).
-- [Protocolo estruturado](docs/planejamento/reference-candidate-1/protocolo-etapas-1-a-5.json).
+- [Protocolo legível](../planejamento/reference-candidate-1/protocolo-etapas-1-a-5.md).
+- [Protocolo estruturado](../planejamento/reference-candidate-1/protocolo-etapas-1-a-5.json).
 
 Partições documentadas: ajuste em 2024; validação julho–dezembro/2025; teste janeiro–junho/2026. O piloto Belém janeiro/2025 já inspecionado é apenas diagnóstico. A fronteira de 01/02/2025 também já foi acessada como dado auxiliar e não deve ser tratada como inteiramente inédita.
 
@@ -135,9 +137,9 @@ O protocolo especifica comparação pareada, estratos, métricas, tratamento de 
 
 O novo módulo `climaprev.tools.freeze_preparation` verificou os 36 pais, identidade do protocolo e unicidade do hash da política de referência. Registrou hashes dos dados e dos 56 arquivos de código de origem. A saída mantém `stage_6_authorized=false` e lista as pendências; não transforma congelamento técnico em aprovação científica.
 
-O [manifesto de congelamento](docs/planejamento/reference-candidate-1/evidence/congelamento-preparacao-etapas-1-a-5.json) contém os hashes canônicos usados pelos verificadores. O hash canônico de um objeto JSON e o hash dos bytes do arquivo são conceitos diferentes e aparecem com nomes distintos.
+O [manifesto de congelamento](../planejamento/reference-candidate-1/evidence/congelamento-preparacao-etapas-1-a-5.json) contém os hashes canônicos usados pelos verificadores. O hash canônico de um objeto JSON e o hash dos bytes do arquivo são conceitos diferentes e aparecem com nomes distintos.
 
-A [auditoria dos períodos locais](docs/planejamento/reference-candidate-1/evidence/auditoria-periodos-locais.json) examinou 42 snapshots em `.historical-reports/` e não encontrou entradas sobrepostas aos períodos reservados. Essa conclusão se limita aos arquivos atualmente presentes; não prova ausência de acessos antigos ou em outros sistemas.
+A [auditoria dos períodos locais](../planejamento/reference-candidate-1/evidence/auditoria-periodos-locais.json) examinou 42 snapshots em `.historical-reports/` e não encontrou entradas sobrepostas aos períodos reservados. Essa conclusão se limita aos arquivos atualmente presentes; não prova ausência de acessos antigos ou em outros sistemas.
 
 Ainda faltam para aceite científico: revisor identificado, evento/métrica principal previamente definido, ganho mínimo e tradeoffs aprovados, requisitos de suporte/precisão e observações oficiais validadas. Esses campos não foram preenchidos com metas arbitrárias para aparentar conclusão. A autorização de executar preparação não substitui a revisão científica.
 

@@ -1,6 +1,8 @@
 # Arquivo histórico — ROADMAP
 
-Este arquivo preserva registros de lotes anteriores, inclusive resultados e pendências superadas. **Não é o estado atual da aplicação.** Consulte [ROADMAP](ROADMAP.md) e [RDP vigente](../../RELATORIO-PENDENCIAS-2026-10-20.md). Os caminhos relativos históricos foram mantidos.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Este arquivo preserva registros de lotes anteriores, inclusive resultados e pendências superadas. **Não é o estado atual da aplicação.** Consulte [ROADMAP](ROADMAP.md) e [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Os caminhos relativos históricos foram mantidos.
 
 ## Histórico anterior — não usar como status vigente
 
@@ -18,7 +20,7 @@ Este arquivo preserva registros de lotes anteriores, inclusive resultados e pend
 5. Avaliar candidata somente depois de revisão e nova autorização para ajuste.
 
 As entregas de 19/10 estão no [estado atual](STATE.md) e no
-[RDP](../../RELATORIO-PENDENCIAS-2026-10-19.md). O plano datado abaixo é histórico.
+[RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-19.md). O plano datado abaixo é histórico.
 
 **Data:** 23 de setembro de 2026.
 **Estado:** implementação local até P2.6 concluída; branch conectada ao Git;
@@ -93,7 +95,7 @@ escopo](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de
 
 O arquivo [tasks.md](../planejamento/evolucao-climaprev/tasks.md) mantém as
 25 tarefas do ciclo base, seus gates e a matriz de testes. O arquivo
-[Possível Plano de Evolução](PossivelPlanoDeEvolução.md) mantém o backlog
+[Possível Plano de Evolução](PossivelPlanoDeEvolu%C3%A7%C3%A3o.md) mantém o backlog
 ampliado e as ideias de evolução do produto.
 
 ### Incremento espacial — 19/10/2026

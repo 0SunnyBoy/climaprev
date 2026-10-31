@@ -1,5 +1,7 @@
 # Frente 2 — preparação do fechamento técnico
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Escopo autorizado
 
 Em 28/10/2026, o usuário pediu avançar na frente 2 antes da disponibilidade dos dados necessários. A interpretação adotada é concluir ferramentas e preparação primeiro e realizar a validação empírica depois, com as entregas da frente 1. Não equivale a comprovar qualidade, encerrar a confirmação ou promover a candidata.

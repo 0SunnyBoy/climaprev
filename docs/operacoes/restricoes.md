@@ -1,5 +1,7 @@
 # Restrições funcionais, técnicas e de informação
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Prazo do serviço público: padrão 7 s e máximo configurável 8 s; cliente 10 s. Cleanup é cooperativo; parsing/transporte/rate limit anteriores ao serviço ficam fora. Horizonte de 14 dias não ativado. [Estado](../projeto/STATE.md).
 
 **Revisão vigente:** 20/10/2026. Regras implementadas e lacunas estão identificadas

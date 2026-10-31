@@ -1,5 +1,7 @@
 # Continuação de acessibilidade em 21 de outubro de 2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Correção do alerta de limite de consultas
 
 Na revisão de App.vue, o contador estava fora da região viva em QueryStatus, mas o texto recebido por ela ainda interpolava cooldownSeconds. Consequentemente, o role=alert mudava a cada segundo. O teste isolado de QueryStatus não cobria o texto produzido pelo componente pai.
@@ -30,4 +32,4 @@ Registrar sistema, navegador/versão, leitor/versão, idioma, cenário, anúncio
 
 Status da etapa 1: **correção técnica e regressão concluídas; homologação auditiva pendente**. O usuário informou anteriormente não poder testar naquele momento; não há nova evidência de teste realizado.
 
-[Revisão Edge anterior](acessibilidade-edge-2026-10-20.md) · [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md).
+[Revisão Edge anterior](acessibilidade-edge-2026-10-20.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md).

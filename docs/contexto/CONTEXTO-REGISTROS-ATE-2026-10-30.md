@@ -1,3 +1,7 @@
+# Registros históricos até 30/10/2026
+
+Este arquivo preserva checkpoints anteriores, inclusive afirmações posteriormente superadas. Consulte [estado vigente](../projeto/STATE.md).
+
 # Contexto de retomada — ClimaPrev
 
 Retomada vigente — 28/10: integração das etapas 1 a 5 concluída tecnicamente onde há dados. Ler `docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md` (raiz). Correção oficial: temperatura observada é média horária, não instantânea; umidade e vento instantâneos não equivalentes permanecem bloqueados. CLI offline integra arquivos, CSV, horizontes e cobertura; verificação primária do piloto identifica falta de observações recentes nas três estações. Piloto desativado, sem fitting/promoção. 858 testes backend/mypy 89 módulos/Ruff aprovados; lote anterior baa3465 já passou CI/Security, incremento seguinte exige checks próprios. Preservar plano local de extração de API fora deste escopo e reservas históricas.
@@ -14,17 +18,17 @@ Atualização consolidada de 27/10: complemento de cobertura operacional qualifi
 
 Lote consolidado publicado na develop em `4525202`: 748 testes backend, mypy 82 módulos, 48 frontend, lint/build/hardening aprovados localmente. Vitest corrigido, auditoria sem vulnerabilidades; Gitleaks em 56 commits sem achados. CI e Security em acompanhamento. Complemento: auditoria somente leitura contra calendário explícito e revisão dos parâmetros solicitada pelo usuário. Ver relatório `docs/operacoes/consolidacao-2026-10-27.md` e revisão `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md` (raiz do projeto). Campanha segue desativada, reference-v1 ativa. Parágrafos abaixo de ausência de push ou de qualificações antigas são checkpoints históricos.
 
-Continuação de 26/10: [comparador exploratório de chuva e elegibilidade](docs/operacoes/comparacao-experimental-2026-10-26.md) implementados, 75 testes direcionados e tipagem/lint aprovados. Sem nova avaliação de ganho real ou campanha; última suíte integral backend de 714 é checkpoint anterior. Consultar STATE/RDP para o estado vigente.
+Continuação de 26/10: [comparador exploratório de chuva e elegibilidade](../operacoes/comparacao-experimental-2026-10-26.md) implementados, 75 testes direcionados e tipagem/lint aprovados. Sem nova avaliação de ganho real ou campanha; última suíte integral backend de 714 é checkpoint anterior. Consultar STATE/RDP para o estado vigente.
 
 Atualizado em 26/10/2026. Monorepo, develop, backend/frontend 0.1.0. Base publicada `5a6fc9c` qualificada remotamente; incrementos posteriores locais, sem novo push. Baseline por adaptador/política, rodadas explícitas, manifesto/ledger local e pareamento exploratório de chuva implementados. 714 testes backend, 33 frontend, mypy Linux, Ruff, build e hardening aprovados localmente. Campanha desativada, parâmetros finais pendentes, reference-v1 preservada. Sem merge/deploy. [Relatório vigente](RELATORIO-IMPLEMENTACAO-2026-10-26.md). Checkpoints antigos abaixo não substituem o STATE atual.
 
 ## Fontes de referência
 
-- [STATE](docs/projeto/STATE.md): estado observado e validações.
+- [STATE](../projeto/STATE.md): estado observado e validações.
 - [RDP](RELATORIO-PENDENCIAS-2026-10-20.md): fila e decisões vigentes.
-- [Handoff](docs/projeto/handoff.md): retomada operacional.
-- [Catálogo técnico](docs/projeto/ImplementationsAndRefactoring.md): responsabilidades e caminhos atuais.
-- [Refatoração](docs/operacoes/refatoracao-2026-10-20.md): mudanças, limpeza e limites.
+- [Handoff](../projeto/handoff.md): retomada operacional.
+- [Catálogo técnico](../projeto/ImplementationsAndRefactoring.md): responsabilidades e caminhos atuais.
+- [Refatoração](../operacoes/refatoracao-2026-10-20.md): mudanças, limpeza e limites.
 
 Prioridade do usuário: responsividade, qualidade e velocidade da aplicação, com evolução da candidata por comparação entre modelos/fontes. Reference-v1 permanece ativa; candidata sem superioridade comprovada ou promoção. Protocolo e critérios aguardam aceite. Horizonte de 14 dias e hospedagem continuam adiados; sem separar repositórios ou atualizar PDF acadêmico.
 

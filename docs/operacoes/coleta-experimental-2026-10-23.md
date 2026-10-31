@@ -1,5 +1,7 @@
 # Coleta experimental e preflight de fontes
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Data: 23/10/2026. Implementação local posterior à base publicada `5a6fc9c`, sem commit/push. Reference-v1, rotas públicas, janela de sete dias e infraestrutura operacional preservadas. Não houve fitting, acesso a novos outcomes reservados ou avaliação de precisão.
 
 ## Entregas

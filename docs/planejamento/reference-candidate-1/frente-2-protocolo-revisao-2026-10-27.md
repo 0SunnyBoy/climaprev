@@ -1,5 +1,7 @@
 # Frente 2 — Protocolo para revisão
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Estado em 28/10:** [aceite delegado registrado](aceite-delegado-parametros-2026-10-28.md). Escolhas de desenho aceitas com condições; margens e suporte dependentes dos dados não foram declarados validados. As referências a espera de aceite abaixo descrevem a proposta anterior e são superadas nos limites do novo registro.
 
 Data: 27/10/2026. **Proposta em revisão; sem aprovação dos parâmetros finais ou início de campanha.** O usuário aprovou a direção científica e depois solicitou revisar os parâmetros antes de aceitá-los. Este documento organiza essa revisão, sem substituir protocolos ou resultados históricos congelados.

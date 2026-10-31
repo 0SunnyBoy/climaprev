@@ -1,7 +1,9 @@
 # Pendências após cruzamento com a pasta de contexto
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Data: 15/10/2026, America/Sao_Paulo. Branch de trabalho definida pelo usuário: `develop`.
 
@@ -169,4 +171,4 @@ Contas, favoritos, histórico pessoal, notificações, horizonte maior, regras r
 
 Esta revisão leu contexto, manifestos, workflows e implementação relevante às pendências e comparou integralmente os registros dos manifestos. Não houve testes da aplicação, acesso meteorológico, medição de carga, auditoria atual de vulnerabilidades, deploy ou alteração de código.
 
-Entregáveis: este relatório, `RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md` e `comparacao-contexto-2026-10-15.csv`. O relatório de compatibilidade detalha método, contagens, integridade, limitações e estado Git.
+Entregáveis: este relatório, `docs/contexto/RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md` e `comparacao-contexto-2026-10-15.csv`. O relatório de compatibilidade detalha método, contagens, integridade, limitações e estado Git.

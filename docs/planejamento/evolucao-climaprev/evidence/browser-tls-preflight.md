@@ -1,5 +1,7 @@
 # Preparação de confiança TLS no navegador
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../../projeto/STATE.md) · [RDP vigente](../../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Data:** 2026-09-13. **Resultado:** PASS para o mecanismo de teste isolado.
 Esta prova usa um servidor HTTPS sintético temporário, não a stack Clima Prev.
 O teste da entrada real permanece necessário em T20/T25.

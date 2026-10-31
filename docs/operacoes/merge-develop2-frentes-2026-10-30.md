@@ -1,8 +1,10 @@
 # Integração local de develop2 — 30/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Origem e preservação
 
-Branch de destino: `develop` local. Origem: `origin/develop2` em `9fd99b7fd40b69a750d65175e26bbd7a4495bd00`. A base publicada da develop era `315dd2b`. O trabalho local da frente 2 foi registrado primeiro em `bd7fbe3`, preservando análise de incerteza, calendário planejado, sensibilidade de blocos e documentos. O arquivo externo `PLANO-EXTRACAO-CLIMAPREV-API.md` permanece fora do lote.
+Branch de destino: `develop` local. Origem: `origin/develop2` em `9fd99b7fd40b69a750d65175e26bbd7a4495bd00`. A base publicada da develop era `315dd2b`. O trabalho local da frente 2 foi registrado primeiro em `bd7fbe3`, preservando análise de incerteza, calendário planejado, sensibilidade de blocos e documentos. O arquivo externo `docs/contexto/PLANO-EXTRACAO-CLIMAPREV-API.md` permanece fora do lote.
 
 ## Resultado da revisão
 

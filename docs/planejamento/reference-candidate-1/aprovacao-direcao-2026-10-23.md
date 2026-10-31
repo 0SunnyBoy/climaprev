@@ -1,5 +1,7 @@
 # Aprovação da direção científica em 23 de outubro de 2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Responsável: usuário solicitante. Registro da manifestação na conversa: **"aprovo a direção tomada"**, após o resumo do protocolo e o esclarecimento de que a avaliação não se limita à chuva.
 
 Status: **direção aprovada; parâmetros finais do experimento pendentes**. Este registro complementa a [proposta de 21/10](proposta-cientifica-para-revisao-2026-10-21.md), preservada como documento submetido à revisão, e não reclassifica como aprovados resultados ou protocolos anteriores.

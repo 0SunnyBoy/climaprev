@@ -1,7 +1,9 @@
 # Revisão da develop atualizada e cruzamento com o relatório anterior
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Data da consulta: 16/10/2026, America/Sao_Paulo.
 
@@ -133,7 +135,7 @@ Não foram identificadas novas alterações na lógica meteorológica ou na inte
 
 ## Entregáveis e limites
 
-- `RELATORIO-REVISAO-DEVELOP-2026-10-16.md`: parecer atual e matriz F01–F12.
+- `docs/contexto/RELATORIO-REVISAO-DEVELOP-2026-10-16.md`: parecer atual e matriz F01–F12.
 - `comparacao-develop-2026-10-16.csv`: comparação dos 253 arquivos remotos com a cópia local.
 - `.report-work/revisao-2026-10-16/evidencias.json`: SHA, alterações, execuções, etapas e trechos relevantes dos logs.
 - `.report-work/revisao-2026-10-16/arvore-remota.json`: árvore versionada usada na comparação.

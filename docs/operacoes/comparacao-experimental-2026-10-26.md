@@ -1,5 +1,7 @@
 # Comparação experimental e elegibilidade
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Continuação local de 26/10/2026. Entregas: comparação exploratória consolidada de chuva, controles de elegibilidade temporal e entrada da baseline diária. Sem coleta recorrente, leitura de novos outcomes reservados, fitting ou promoção. Reference-v1 e janela pública inalteradas.
 
 ## Implementações
@@ -39,4 +41,4 @@ O incremento foi exercitado com fixtures sintéticas; **não foram calculados no
 
 Fechar o controle científico de D+7, tolerâncias/amostra/calendário, integrar o calendário planejado à cobertura global e desenvolver intervalos estatísticos conforme protocolo fechado. Pareamento de temperatura, vento/rajadas e umidade aguarda equivalência instrumental. Acionador recorrente permanece desativado. Teste auditivo e publicação do lote continuam pendentes.
 
-[RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) · [Implementação anterior](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md).
+[RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Implementação anterior](../contexto/RELATORIO-IMPLEMENTACAO-2026-10-26.md).

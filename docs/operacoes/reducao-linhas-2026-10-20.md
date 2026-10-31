@@ -1,5 +1,7 @@
 # Redução de linhas e revisão das abstrações — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Resultado mensurado
 
 Esta revisão reduziu **109 linhas físicas**, de **18.408 para 18.299**, sem apagar testes ou proteções. A comparação anterior com o commit `451d845` misturava responsividade, testes novos e refatoração, além de agrupar os testes do frontend com sua implementação. A tabela abaixo separa esses grupos e inclui arquivos novos e excluídos.

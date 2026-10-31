@@ -1,12 +1,14 @@
 # Contexto histórico
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Registro anterior, sem instruções vigentes. Consulte [contexto atual](CONTEXTO.md).
 
 # Contexto para o próximo Codex
 
 ## Retomada vigente — 20/10/2026
 
-Usar branch develop, base 23bf4ce, pacotes 0.1.0 em desenvolvimento, alterações locais sem commit/push. Começar por [STATE](docs/projeto/STATE.md) e [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md). Priorizar INMET real, CI remota, revisão científica preparatória, critérios de aprovação e acessibilidade manual. Candidate-1 por último com foco em qualidade/precisão; v1 preservada, sem fitting/calibração/promoção. 14 dias só planejado, hospedagem adiada, PDF acadêmico fora do escopo. Informações sobre V3/publicação abaixo são históricas.
+Usar branch develop, base 23bf4ce, pacotes 0.1.0 em desenvolvimento, alterações locais sem commit/push. Começar por [STATE](../projeto/STATE.md) e [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md). Priorizar INMET real, CI remota, revisão científica preparatória, critérios de aprovação e acessibilidade manual. Candidate-1 por último com foco em qualidade/precisão; v1 preservada, sem fitting/calibração/promoção. 14 dias só planejado, hospedagem adiada, PDF acadêmico fora do escopo. Informações sobre V3/publicação abaixo são históricas.
 
 Atualizado em 2026-09-23. Branch: `Atualizacao-Geral-V3`.
 
@@ -24,12 +26,12 @@ passaram no GitHub para o commit `525854ab132e4db37bde9b483468e72ac36cdf10`.
 T19 concluiu com decisão condicional; a revisão independente e a validação
 da borda real ainda faltam. Não houve deploy nem troca de segredos reais.
 
-Comece pelo [contexto de retomada da segurança](docs/planejamento/seguranca-configuracao-segredos/context.md).
+Comece pelo [contexto de retomada da segurança](../planejamento/seguranca-configuracao-segredos/context.md).
 Ele registra alterações, testes, falhas, dependências e ordem de continuação.
-Depois leia [spec](docs/planejamento/seguranca-configuracao-segredos/spec.md),
-[design](docs/planejamento/seguranca-configuracao-segredos/design.md),
-[tasks](docs/planejamento/seguranca-configuracao-segredos/tasks.md) e
-[evidências](docs/planejamento/seguranca-configuracao-segredos/evidence.md).
+Depois leia [spec](../planejamento/seguranca-configuracao-segredos/spec.md),
+[design](../planejamento/seguranca-configuracao-segredos/design.md),
+[tasks](../planejamento/seguranca-configuracao-segredos/tasks.md) e
+[evidências](../planejamento/seguranca-configuracao-segredos/evidence.md).
 
 Não confunda resultados históricos do projeto com validação deste checkpoint.
 Os gates locais foram reexecutados em Redis/containers descartáveis, e os

@@ -1,5 +1,7 @@
 # Arquitetura do Clima Prev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Estado vigente:** 20/10/2026, versão 0.1.0 em desenvolvimento e alterações locais ainda sem commit/push. Builds/Composes independentes para API e frontend; modo integrado mantido. [Estado detalhado](../projeto/STATE.md).
 [Índice](../projeto/PROJECT.md).
 

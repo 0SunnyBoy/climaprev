@@ -1,5 +1,7 @@
 # Acesso INMET — diagnóstico, obtenção e validação real
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Encerramento das pendências históricas — 20/10/2026
 
 Os CSVs históricos oficiais de 2024 de A201/A001/A801 já foram obtidos e comparados. Isso não encerra a conectividade da API de avisos ativos: a nova tentativa em 20/10 teve RemoteProtocolError/conexão resetada. Obtenção de CSV e avisos em tempo real são dependências diferentes.
@@ -7,7 +9,7 @@ Os CSVs históricos oficiais de 2024 de A201/A001/A801 já foram obtidos e compa
 O restante preserva o registro do lote original. O RDP e o STATE vigentes definem a ordem atual.
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 ## Resultado
 
@@ -28,7 +30,7 @@ Foi realizado teste controlado com URL, método, Range e demais cabeçalhos igua
 
 Também houve sucesso usando o cabeçalho de navegador com e sem leitura das configurações de proxy do ambiente. Nenhuma verificação TLS foi desabilitada e nenhuma credencial foi necessária.
 
-Evidências: [diagnóstico DNS/TLS/HTTP](docs/planejamento/reference-candidate-1/evidence/diagnostico-acesso-inmet-retry.json) e [teste controlado de User-Agent](docs/planejamento/reference-candidate-1/evidence/comparacao-user-agent-inmet.json).
+Evidências: [diagnóstico DNS/TLS/HTTP](../planejamento/reference-candidate-1/evidence/diagnostico-acesso-inmet-retry.json) e [teste controlado de User-Agent](../planejamento/reference-candidate-1/evidence/comparacao-user-agent-inmet.json).
 
 ## Obtenção limitada do arquivo oficial
 
@@ -44,7 +46,7 @@ Fonte: [ZIP anual de 2025 publicado pelo INMET](https://portal.inmet.gov.br/uplo
 
 Os metadados do cabeçalho coincidem com os consultados na [API oficial de catálogo](https://apitempo.inmet.gov.br/estacoes/T): código A201, BELEM, latitude -1,41111111, longitude -48,43944444 e altitude 21,17 m. O encoding aceito foi CP1252.
 
-Evidência: [proveniência da obtenção e catálogo](docs/planejamento/reference-candidate-1/evidence/obtencao-inmet-a201.json). O script reproduzível está em `.report-work/fetch_inmet_station.py`; recusa sobrescrever o CSV existente.
+Evidência: [proveniência da obtenção e catálogo](../planejamento/reference-candidate-1/evidence/obtencao-inmet-a201.json). O script reproduzível está em `.report-work/fetch_inmet_station.py`; recusa sobrescrever o CSV existente.
 
 ## Validação com dados reais
 
@@ -65,7 +67,7 @@ Unidade: mm/dia; viés = fonte menos estação; 31 dias pareados em cada horizon
 
 ERA5 usa a mesma série nos três horizontes; sua linha é apresentada uma vez. Esses resultados demonstram que concordância com reanálise e erro frente à estação são avaliações diferentes. Não constituem avaliação de impactos ou da candidata.
 
-Temperatura/rajada também foram comparadas nos três horizontes. Seus relatórios mantêm `calibration_ready=false`, por diferenças de amostragem/semântica e necessidade de revisão científica. Resumo estruturado: [validacao-estacao-real-a201.json](docs/planejamento/reference-candidate-1/evidence/validacao-estacao-real-a201.json). Relatórios completos estão em `.historical-reports/inmet/`.
+Temperatura/rajada também foram comparadas nos três horizontes. Seus relatórios mantêm `calibration_ready=false`, por diferenças de amostragem/semântica e necessidade de revisão científica. Resumo estruturado: [validacao-estacao-real-a201.json](../planejamento/reference-candidate-1/evidence/validacao-estacao-real-a201.json). Relatórios completos estão em `.historical-reports/inmet/`.
 
 ## Divergência ainda não reconciliada
 

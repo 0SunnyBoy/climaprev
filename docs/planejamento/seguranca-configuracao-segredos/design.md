@@ -1,7 +1,9 @@
 # Design — segurança orientada por evidência
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 > Documento de desenho e evidência histórica. Referências a `frontend/api.js`
 > e `frontend/result.js` descrevem a implementação anterior; os gates atuais
@@ -15,8 +17,8 @@ Atualização de 2026-09-23: gates locais e workflows remotos passaram para
 `525854a`. Consulte o [contexto](context.md) para separar essas provas
 da validação ainda necessária no ambiente real.
 
-[Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
-[Tasks](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).
+[Spec](spec.md) ·
+[Tasks](tasks.md).
 
 ## Escopo e método da análise
 

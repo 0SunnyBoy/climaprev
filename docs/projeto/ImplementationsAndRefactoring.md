@@ -1,6 +1,8 @@
 # Catálogo de implementações e responsabilidades
 
-Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md). Este catálogo descreve caminhos, sem duplicar checkpoints.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Este catálogo descreve caminhos, sem duplicar checkpoints.
 
 | Responsabilidade | Código atual |
 |---|---|

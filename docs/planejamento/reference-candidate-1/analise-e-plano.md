@@ -1,5 +1,7 @@
 # reference-candidate-1 — análise e plano de evolução
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Encerramento das pendências históricas — 20/10/2026
 
 O plano evoluiu para dados oficiais de três estações, bootstrap técnico, baseline de cinco eventos, coleta espacial e catálogo/diagnóstico horário. A evolução da candidata ficou por último, focada em qualidade/precisão; não há demonstração de superioridade sobre v1. Revisão científica e critérios seguem como preparação.
@@ -7,7 +9,7 @@ O plano evoluiu para dados oficiais de três estações, bootstrap técnico, bas
 O restante preserva o registro do lote original. O RDP e o STATE vigentes definem a ordem atual.
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Data: 16/10/2026, America/Sao_Paulo. Baseline de código: develop@23bf4cee997bc825e76028f99eefd6160f699ee5.
 
@@ -190,6 +192,6 @@ O nome reference-candidate-1 permanece experimental. A versão pública de event
 - `docs/arquitetura/validacao-e-calibracao.md`.
 - `docs/projeto/PossivelPlanoDeEvolução.md`, item 17.
 - `docs/projeto/STATE.md`, relato do piloto e ressalvas.
-- `RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md`, reconstrução histórica e limites.
+- `docs/contexto/RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md`, reconstrução histórica e limites.
 
 Esta entrega contém análise e planejamento. Nenhuma implementação de candidata, coleta nova, mudança de limiar ou promoção foi realizada.

@@ -1,5 +1,7 @@
 # Relatório de implementação de 26 de outubro de 2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Resultado
 
 Concluído o incremento técnico de baseline, identidade de rodada, controle local de campanha e pareamento exploratório de chuva com estação INMET. **714 testes backend, 33 frontend, mypy Linux em 81 módulos, Ruff e hardening local aprovados.** Alterações locais sobre `develop`/`5a6fc9c`, sem commit/push ou CI remoto deste lote. Reference-v1 e janela pública preservadas; nenhuma campanha científica iniciada ou candidata promovida.
@@ -61,7 +63,7 @@ Não executados neste incremento: CI remoto, homologação auditiva, campanha re
 
 ## Pendências após esta entrega
 
-1. Aceitar ou ajustar [parâmetros da campanha](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md): locais, duração, tolerâncias, suporte, critérios estatísticos e calendário.
+1. Aceitar ou ajustar [parâmetros da campanha](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md): locais, duração, tolerâncias, suporte, critérios estatísticos e calendário.
 2. Fechar controle de D+7 e política de rodada/disponibilidade, tratamento de entradas inválidas e dados parciais antes da campanha; não preencher chuva negativa ou períodos MET/ICON incompletos silenciosamente.
 3. Preparar acionador e operação do ledger após aceite, sem iniciar coleta recorrente agora.
 4. Completar pareamento de outras variáveis quando a equivalência observacional estiver definida e avaliar dados independentes conforme protocolo aprovado.

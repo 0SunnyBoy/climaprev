@@ -1,5 +1,7 @@
 # Candidate-1 — Benefícios esperados quando qualificada
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Atualizado em 28/10/2026. Os benefícios abaixo descrevem a finalidade da candidata finalizada e qualificada, não ganhos já comprovados. A reference-v1 continua ativa e não foi demonstrada superioridade suficiente para substituí-la.
 
 | Benefício | Como será obtido | Condição para poder afirmar o resultado |

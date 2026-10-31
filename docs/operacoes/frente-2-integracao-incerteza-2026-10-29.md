@@ -1,5 +1,7 @@
 # Frente 2 — integração da análise de incerteza
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Entrega
 
 Continuidade do incremento local de 28/10. A função `evaluate_development_reports` em `src/climaprev/tools/experimental_uncertainty.py` liga os relatórios v2 do pareamento de chuva à análise por blocos, usando a validação do comparador existente. A nova opção `include_cases` do comparador expõe os pares comuns; o comportamento padrão permanece inalterado.

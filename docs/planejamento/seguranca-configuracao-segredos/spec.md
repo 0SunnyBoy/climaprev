@@ -1,7 +1,9 @@
 # Spec — segurança, segredos e exposição do ClimaPrev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Estado: T1–T19 implementadas/validadas com dados sintéticos; revisão
 independente e validação do ambiente real pendentes. Sem prontidão de produção.
@@ -11,8 +13,8 @@ Atualização de 2026-09-23: CI e Security gates remotos passaram para
 `525854a`, sem aceite de produção. Veja o [contexto](context.md) e
 [evidências](evidence.md).
 
-[Design e análise comparativa](../../../docs/planejamento/seguranca-configuracao-segredos/design.md) ·
-[Tarefas e verificações](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).
+[Design e análise comparativa](design.md) ·
+[Tarefas e verificações](tasks.md).
 
 ## Problem Statement
 

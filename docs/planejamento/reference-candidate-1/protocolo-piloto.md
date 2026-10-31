@@ -1,5 +1,7 @@
 # reference-candidate-1 — protocolo do piloto diagnóstico
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Data: 16/10/2026, America/Sao_Paulo. Estado: proposta de diagnóstico técnico;
 desenho científico e promoção pendentes. O início do trabalho autoriza preparar
 ferramentas e verificar a baseline, sem aprovar limiares ou coeficientes novos.

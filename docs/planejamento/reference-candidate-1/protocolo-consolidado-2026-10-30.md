@@ -1,5 +1,7 @@
 # Protocolo consolidado — preparação técnica de 30/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Estado e escopo
 
 Direção e parâmetros prospectivos registrados por delegação do usuário. Este documento concilia a frente 2 com os contratos executáveis recebidos da develop2. Não declara superioridade, independência demonstrada, congelamento confirmatório ou autorização de promoção. Os protocolos anteriores permanecem preservados.

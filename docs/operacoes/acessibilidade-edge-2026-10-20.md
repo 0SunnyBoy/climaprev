@@ -1,5 +1,7 @@
 # Revisão interativa no Edge — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Ambiente e escopo
 
 Edge conectado pela extensão, aplicação local reconstruída em http://127.0.0.1:8080. Inspeção interativa de árvore de acessibilidade, teclado, foco, mensagens e captura visual; não é ensaio auditivo com NVDA/JAWS/Narrador nem certificação WCAG. As tentativas anteriores sem conexão foram superadas após o usuário adicionar o Edge. Firefox foi interrompido pela limitação de política de URLs da ferramenta; não foi usado como alternativa.

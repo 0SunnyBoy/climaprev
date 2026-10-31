@@ -1,5 +1,7 @@
 # Revisão das implementações após obtenção do CSV oficial
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Encerramento das pendências históricas — 20/10/2026
 
 A revisão com CSV avançou para as três estações de 2024, cinco eventos, comparação espacial e diagnóstico horário. Pendências antigas de importação, coleta espacial e catálogo foram superadas tecnicamente; revisão científica e independência das reservas não foram aprovadas.
@@ -7,7 +9,7 @@ A revisão com CSV avançou para as três estações de 2024, cinco eventos, com
 O restante preserva o registro do lote original. O RDP e o STATE vigentes definem a ordem atual.
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Data: 16/10/2026. Escopo: revisar etapas 1 a 5 com observações INMET disponíveis, preservando a parada antes da etapa 6.
 
@@ -30,7 +32,7 @@ O impedimento de acesso ao CSV foi resolvido. O arquivo oficial A201/Belém de 2
 
 O CSV contém 8.760 registros horários. Identidade e posição no cabeçalho coincidem com o catálogo oficial: A201, BELEM, latitude -1,41111111, longitude -48,43944444 e altitude 21,17 m. Janeiro tem 31 dias completos para as variáveis comparadas.
 
-Foi criado [congelamento-suplementar-estacao-a201.json](docs/planejamento/reference-candidate-1/evidence/congelamento-suplementar-estacao-a201.json), que:
+Foi criado [congelamento-suplementar-estacao-a201.json](../planejamento/reference-candidate-1/evidence/congelamento-suplementar-estacao-a201.json), que:
 
 - Confere o hash do CSV contra a evidência de validação real.
 - Confere os hashes dos seis relatórios de comparação, dois por horizonte.
@@ -39,7 +41,7 @@ Foi criado [congelamento-suplementar-estacao-a201.json](docs/planejamento/refere
 - Acrescenta nove arquivos de evidência, preservando o manifesto anterior.
 - Mantém aprovação científica falsa e etapa 6 sem iniciar.
 
-O resumo dos resultados é [validacao-estacao-real-a201.json](docs/planejamento/reference-candidate-1/evidence/validacao-estacao-real-a201.json). O [relatório de acesso](RELATORIO-ACESSO-INMET-2026-10-16.md) contém a proveniência da obtenção e o teste controlado do User-Agent.
+O resumo dos resultados é [validacao-estacao-real-a201.json](../planejamento/reference-candidate-1/evidence/validacao-estacao-real-a201.json). O [relatório de acesso](RELATORIO-ACESSO-INMET-2026-10-16.md) contém a proveniência da obtenção e o teste controlado do User-Agent.
 
 ## Pendências que precisam ser concluídas antes de ajustar a candidata
 

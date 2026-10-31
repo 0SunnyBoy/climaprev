@@ -1,52 +1,32 @@
 # ClimaPrev
 
-[Janela pública 14/7: comportamento e qualificação](docs/operacoes/horizonte-14-consulta-7-2026-10-30.md).
+## Estado atual — 30/10/2026
 
-Estado de preparação em 30/10/2026: reference-v1 segue padrão; observações recentes obtidas pelo TEMPO e prontidão técnica de chuva aprovada. Piloto agendado às 15h Brasília a partir de 31/10, com reposições futuras até 14 capturas válidas por estação/modelo. [Estado e limites do piloto adaptativo](docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md).
+Backend e frontend **0.1.0**, branch **develop**, monorepo com builds e execução separados. Base funcional publicada: `ffa50f11cf0a4b0e68acdd249f80d0c8f8abca15` (`ffa50f1`); esta revisão documental é posterior a essa base, sem nova release.
 
-Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
+Janela pública **14/7** concluída: consultas de um a sete dias consecutivos entre hoje UTC e +13, inclusive. O calendário da interface e a API GET/POST aplicam os mesmos limites. A agregação meteorológica mantém o fuso da localidade. Disponibilidade pontual na segunda semana verificada; isso não comprova precisão.
 
-## Estado da versão — 27/10/2026
+Qualificação da base: **1.170 testes backend**, mypy em **99 módulos**, **60 testes frontend**, Ruff, tipagem, lint e build aprovados. [CI aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906751) e [Security gates aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906743) no SHA `ffa50f1`. Esses resultados não qualificam automaticamente commits posteriores.
 
-Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`. Lote experimental e correções da interface publicados em `4525202`; CI e Security desse lote em acompanhamento. Regressão local: **748 testes backend**, mypy em 82 módulos, **48 testes frontend**, lint, build e hardening aprovados. Vitest atualizado no lockfile e auditoria sem vulnerabilidades. Complemento de diagnóstico de calendário descrito no [relatório de consolidação](docs/operacoes/consolidacao-2026-10-27.md). Sem merge em main, release ou deploy. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
+**Reference-v1 permanece padrão.** A infraestrutura das duas frentes da candidate-1 está integrada: fontes/coleta/arquivos, normalização, pareamento, cobertura, comparação, incerteza, revisão instrumental, variantes fixas e relatório técnico do piloto. Não há superioridade real demonstrada, fitting concluído, seleção confirmada ou promoção.
 
-Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +13, até sete dias consecutivos por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Responsividade revisada e alerta 429 estabilizado. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
+Observações recentes das estações A201, A001 e A801 foram obtidas pela interface oficial TEMPO, com originais e proveniência preservados; a API direta retornou 204 na última verificação. Preflight diagnóstico de 30/10: 15/15 braços/pontos disponíveis para D+1, sem contar para a cota. Não generalizar esse resultado para todos os horizontes ou variáveis.
 
-Direção científica aprovada; parâmetros finais da campanha ainda pendentes. Baseline, rodadas explícitas, controles locais e pareamento exploratório de chuva implementados, sem campanha iniciada. Leitor de tela, equivalência das outras variáveis e evolução da candidate-1 continuam pendentes. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte 14/7 implementado; hospedagem adiada. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
+Piloto adaptativo v5 autorizado e agendado diariamente às **15h de Brasília**, janela 18:00–18:30 UTC, a partir de 31/10. Meta: **14 capturas elegíveis por estação/modelo, 210 ao todo**, sem data-limite fixa. Perdas são preservadas e repostas em novas datas futuras; sem backfill. Encerrar previsões por par ao atingir a cota e acompanhar a cauda observacional até o último D+7 real. Notebook/Codex indisponíveis podem perder slots. Estado da preparação: zero capturas do piloto; progresso posterior exige auditoria do ledger, não inferência a partir do agendamento.
 
-Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
-estimativa baseada em previsão meteorológica: não substitui alertas oficiais
-nem instruções de Defesa Civil, INMET ou autoridades locais.
+O protocolo e os hashes congelados do piloto foram preservados. A ampliação pública 14/7 não acrescenta D+7 retroativamente ao controle experimental de sete datas. Novo controle ou alteração de partições requer versão metodológica explícita; reposições que invadam partições condicionais exigem replanejamento antes da análise. Sem abertura indevida de reservas, E2/E3, promoção, merge na main ou deploy.
+
+[Contexto e relatórios](docs/contexto/README.md) · [Pendências](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md)
 
 ## Documentação do projeto
 
-[Integração da Frente 2 — etapas 1 a 5](docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md): relatórios offline ligam arquivos, CSV e horizontes/cobertura; contratos oficiais corrigidos para média térmica horária e agregação de umidade não resolvida, sem comparações instantâneas artificiais. 858 testes backend e mypy 89 módulos/Ruff aprovados localmente. Falta de observações atuais mantém o piloto desativado. Lote anterior baa3465 qualificado remotamente; conferir checks próprios da nova publicação.
+- [Índice de contexto e relatórios](docs/contexto/README.md).
+- [Estado atual](docs/projeto/STATE.md), [pendências](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) e [sequência](docs/projeto/ROADMAP.md).
+- [Frente 1: dados e integrações](docs/contexto/RELATORIO-CANDIDATE-1-FRENTE-1-DADOS-E-INTEGRACOES.md) e [Frente 2: ciência e precisão](docs/contexto/RELATORIO-CANDIDATE-1-FRENTE-2-CIENCIA-E-PRECISAO.md).
+- [Arquitetura](docs/arquitetura/arquitetura.md), [frontend](frontend/README.md) e [manual do piloto](docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md).
+- [Janela 14/7](docs/operacoes/horizonte-14-consulta-7-2026-10-30.md) e [sincronização documental](docs/projeto/SINCRONIZACAO-DOCUMENTAL-2026-10-30.md).
 
-[Continuidade da Frente 2 em 28/10](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md): CSVs públicos até setembro/2026, reconciliação de Belém, preflight 15/15 e comparação multivariável/cobertura experimental. 845 testes backend, mypy 88 módulos e Ruff aprovados localmente. Dados atuais/equivalência instrumental ainda condicionam o piloto; sem fitting ou ganho comprovado. [Benefícios esperados e condições da candidata](docs/planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md). Incremento sem push.
-
-[Preparação da Frente 2 em 28/10](docs/operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md): estações, calendário desativado, partições e critérios conservadores preparados; 826 testes backend, mypy 86 módulos e Ruff aprovados localmente. Qualidade observacional atual, reconciliação de Belém e suporte/inferência continuam condicionantes. Sem coleta recorrente, fitting, promoção ou push deste incremento. Checkpoints numéricos abaixo são anteriores.
-
-[Frente 2 — ordens 1 a 4, em 28/10](docs/operacoes/frente-2-ordens-1-a-4-2026-10-28.md): protocolo para revisão, contratos de chuva no pareamento, controle explícito por estrato e critérios diagnósticos. Incremento local com 815 testes backend e tipagem de 85 módulos/Ruff aprovados; parâmetros ainda pendentes, sem campanha ou promoção. A aprovação remota da base publicada não cobre esse novo diff.
-
-[Comparação exploratória de chuva](docs/operacoes/comparacao-experimental-2026-10-26.md): métricas, detecção diagnóstica, cobertura e elegibilidade temporal implementadas e incluídas no lote publicado. Sem campanha ou ganho real novo; parâmetros confirmatórios pendentes.
-
-[Verificação de avisos](docs/operacoes/verificacao-avisos-2026-10-26.md): condições de chuva, vento, calor/frio verificadas em cenários controlados; resumo mostra °C/°F. Última rodada frontend: 48 testes e build aprovados; backend direcionado: 32 testes. Não confundir com o checkpoint integral anterior abaixo.
-
-[Incremento de 26/10 e validação local](RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline por adaptador/política, rodada explícita, controles locais de campanha e pareamento exploratório de chuva. Campanha desativada e parâmetros finais pendentes; sem promoção da candidata; incluído no lote publicado em 27/10.
-
-Evolução científica: [direção aprovada em 23/10](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md), [coletores e normalização experimental](docs/operacoes/coleta-experimental-2026-10-23.md) e [parâmetros ainda propostos](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md). Implementação experimental com preflight pontual; sem novos provedores na consulta pública ou promoção da candidata.
-
-Comece por [PROJECT — visão geral e índice](docs/projeto/PROJECT.md). Os documentos
-detalham [arquitetura](docs/arquitetura/arquitetura.md), [fluxos](docs/arquitetura/fluxos.md),
-[informações transmitidas](docs/arquitetura/fluxos-informacao.md),
-[segurança](docs/seguranca/seguranca.md) e [restrições](docs/operacoes/restricoes.md).
-Consulte também o [estado atual](docs/projeto/STATE.md) e a [evolução proposta](docs/projeto/ROADMAP.md).
-O desacoplamento do frontend está descrito em
-[Frontend-Rework](docs/frontend/Frontend-Rework.md).
-Os campos, limites e limiares da consulta estão em
-[parâmetros de predição](docs/arquitetura/parametros-de-predicao.md). O estudo
-offline para possível ampliação do escopo está em
-[continuação e viabilidade de escopo](docs/planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md).
+Relatórios datados preservam seus resultados históricos; STATE e RDP consolidam o presente.
 
 ## Executar com Docker
 
@@ -284,8 +264,9 @@ não representam uma nova execução remota já aprovada.
 
 O desenvolvimento ocorre na branch `develop`; a branch `main` recebe somente
 alterações estáveis aprovadas para publicação. O checkout atual
-`climaprev-develop` está vinculado ao histórico Git original, com alterações
-experimentais locais ainda sem commit. A pasta `.homolog/` permanece local,
+`climaprev-develop` está vinculado ao histórico Git original. O código funcional
+14/7 foi publicado em `ffa50f1`, com CI e Security aprovados; a reorganização
+documental de 30/10 permanece local até commit/push próprios. A pasta `.homolog/` permanece local,
 ignorada pelo Git, e deve ser provisionada separadamente para validar a
 homologação.
 
@@ -300,6 +281,8 @@ no volume do coletor, sem stdout persistido pelo engine; o documento mostra
 como lê-los e diagnosticar os serviços.
 
 ## Preparação da candidata
+
+Estado vigente nas [duas frentes](docs/contexto/README.md) e no [RDP](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Piloto v5 agendado até a cota; os diagnósticos de 19/10 abaixo são históricos e não representam a cobertura atual ou comprovação de ganho.
 
 Veja a [execução técnica de 19/10/2026](docs/planejamento/reference-candidate-1/execucao-2026-10-19.md)
 para os cruzamentos observacionais ampliados, a auditoria da referência e o
@@ -319,4 +302,4 @@ completa a baseline diagnóstica de cinco eventos, preservando os pais e as mesm
 datas elegíveis. A nova versão da baseline e do preflight está referenciada nesse documento.
 # Execução independente da interface e API
 
-Frontend e backend possuem builds e execução separados. Veja [guia de desacoplamento](docs/arquitetura/desacoplamento-2026-10-20.md), [frontend](frontend/README.md) e [RDP atual de 20/10](RELATORIO-PENDENCIAS-2026-10-20.md). O modo integrado por proxy permanece disponível.
+Frontend e backend possuem builds e execução separados. Veja [guia de desacoplamento](docs/arquitetura/desacoplamento-2026-10-20.md), [frontend](frontend/README.md) e [RDP vigente](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md). O modo integrado por proxy permanece disponível.

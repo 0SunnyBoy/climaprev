@@ -1,5 +1,7 @@
 # Correção dos gates remotos — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Diagnóstico do commit edb81b0
 
 - [Validate application](https://github.com/0SunnyBoy/climaprev/actions/runs/39465912543): aprovado, mas o workflow CI falhou no job independente de HTTPS.

@@ -1,5 +1,7 @@
 # Consolidação da develop — 27/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Entrega
 
 Consolidação dos incrementos locais desde a base 5a6fc9c: arquivo imutável, coletores GFS/IFS/ICON/MET, normalização, baseline operacional, manifesto e ledger local, pareamento observacional e comparador exploratório de chuva. Inclui testes de entrega dos avisos de chuva/vento/calor/frio, unidades °C/°F e mensagem acessível estável para HTTP 429.

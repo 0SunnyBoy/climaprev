@@ -1,5 +1,7 @@
 # Candidate-1 — Frente 1: Dados e integrações
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Piloto técnico adaptativo — observações restauradas em 30/10/2026
 
 O acesso oficial TEMPO pelo navegador permitiu baixar os CSVs recentes das três estações; a API direta continua 204. Conversão explícita e rastreável entregue sem alterar o importador anual. Janela recente concluída: chuva/rajada 168/168 horas válidas em A201/A001/A801. Preflight renovado 15/15; D+1 disponível nos cinco braços; prontidão técnica de chuva aprovada, sem ganho de precisão calculado.
@@ -25,11 +27,11 @@ Atualizado em 27/10/2026. Este relatório distribui responsabilidades de impleme
 
 ## Handoff da Frente 2 em 28/10/2026
 
-Parser e pareamento experimental de temperatura/umidade/rajada, comparação com cobertura planejada e prontidão observacional entregues. Fonte oficial anual de 2026 até setembro obtida para as três estações; Belém coincide com o catálogo nessa versão. Outubro e equivalência instrumental ainda pendentes; piloto desativado, preflight pontual 15/15. Ler [relatório da continuidade](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md). São entregas experimentais, não conclusão científica ou integração pública. Esse estado atualiza os registros de ausência de parser/pareamento adicional abaixo.
+Parser e pareamento experimental de temperatura/umidade/rajada, comparação com cobertura planejada e prontidão observacional entregues. Fonte oficial anual de 2026 até setembro obtida para as três estações; Belém coincide com o catálogo nessa versão. Outubro e equivalência instrumental ainda pendentes; piloto desativado, preflight pontual 15/15. Ler [relatório da continuidade](../operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md). São entregas experimentais, não conclusão científica ou integração pública. Esse estado atualiza os registros de ausência de parser/pareamento adicional abaixo.
 
 ## Atualização de contratos e integração — 28/10/2026
 
-A revisão oficial corrigiu o protótipo: o campo térmico observado é média horária, não instantâneo; umidade tem agregação não resolvida e vento observado é média de dez minutos. Não habilitar pareamento instantâneo apenas pela presença de coluna. Rajada/chuva seguem contratos específicos, sem certificação de altura/calibração por estação. O relatório offline agora integra arquivos, CSV e horizontes/cobertura e devolve bloqueios do piloto; nova fonte observacional atual permanece necessária. Ver [contratos verificados](docs/planejamento/reference-candidate-1/contratos-instrumentais-verificados-2026-10-28.md).
+A revisão oficial corrigiu o protótipo: o campo térmico observado é média horária, não instantâneo; umidade tem agregação não resolvida e vento observado é média de dez minutos. Não habilitar pareamento instantâneo apenas pela presença de coluna. Rajada/chuva seguem contratos específicos, sem certificação de altura/calibração por estação. O relatório offline agora integra arquivos, CSV e horizontes/cobertura e devolve bloqueios do piloto; nova fonte observacional atual permanece necessária. Ver [contratos verificados](../planejamento/reference-candidate-1/contratos-instrumentais-verificados-2026-10-28.md).
 
 ## Objetivo
 
@@ -85,6 +87,6 @@ Fontes selecionadas e documentadas, contratos testados, conjuntos rastreáveis e
 
 - [Frente 2 — Ciência, precisão e integração](RELATORIO-CANDIDATE-1-FRENTE-2-CIENCIA-E-PRECISAO.md).
 - [RDP geral](RELATORIO-PENDENCIAS-2026-10-20.md).
-- [Fontes e coleta](docs/planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md).
-- [Revisão de parâmetros ainda não aprovados](docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md).
-- [Consolidação técnica](docs/operacoes/consolidacao-2026-10-27.md).
+- [Fontes e coleta](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md).
+- [Revisão de parâmetros ainda não aprovados](../planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md).
+- [Consolidação técnica](../operacoes/consolidacao-2026-10-27.md).

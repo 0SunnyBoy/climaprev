@@ -1,5 +1,7 @@
 # Preparação do piloto — etapas 1 a 6, 30/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Resultado
 
 Executada a sequência autorizada até a verificação de prontidão. O resultado é **não pronto**: faltam observações recentes verificadas e preflight atual. O piloto permanece desativado; nenhuma campanha longa, fitting ou promoção foi iniciada. Reference-v1 permanece padrão.

@@ -1,5 +1,7 @@
 # Relatório de preparação do ClimaPrev para publicação no GitHub
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Encerramento das pendências históricas — 20/10/2026
 
 A preparação local inclui frontend/API independentes, gates de runtime/HTTPS, 644 testes backend e 27 frontend. Nenhum envio desta revisão ocorreu. Selecionar código/documentos e excluir segredos/dados brutos/artefatos locais antes de commits. Não confundir esta preparação com publicação de produto ou proteção ativa da develop.
@@ -7,7 +9,7 @@ A preparação local inclui frontend/API independentes, gates de runtime/HTTPS, 
 O restante preserva o registro do lote original. O RDP e o STATE vigentes definem a ordem atual.
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 **Data:** 16/10/2026  
 **Repositório:** [0SunnyBoy/climaprev](https://github.com/0SunnyBoy/climaprev)  

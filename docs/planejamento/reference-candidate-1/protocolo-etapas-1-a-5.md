@@ -1,5 +1,7 @@
 # Protocolo técnico — etapas 1 a 5
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Versão: `reference-candidate-1-stages-1-5-2026-10-16-v1`. Data: 16/10/2026.
 
 O JSON homônimo congela o desenho técnico deste ciclo. Não declara que os dados estão completos, que existe aprovação científica ou que uma candidata pode ser ajustada. A autorização vigente termina na etapa 5: **não iniciar a etapa 6, estimar novos limiares, ajustar calibração ou promover política**. Essa parada depende do escopo autorizado pelo usuário, mesmo que revisões futuras sejam favoráveis.

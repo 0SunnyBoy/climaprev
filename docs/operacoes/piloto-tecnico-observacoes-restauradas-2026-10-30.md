@@ -1,5 +1,7 @@
 # Piloto técnico — observações restauradas e reposição por cota
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Resultado e autorização
 
 Em 30/10/2026, a consulta normal do sistema TEMPO carregou observações e permitiu baixar CSVs de A201, A001 e A801, de 23 a 30/10. A API direta foi repetida e continua retornando 204 nas três. O problema não é ausência demonstrada das medições: o acesso pela interface oficial funcionou nesta sessão. O aviso de cota do reCAPTCHA permaneceu na página, mas não impediu a consulta. Não foram gerados/reutilizados tokens, resolvidos desafios ou contornados controles.

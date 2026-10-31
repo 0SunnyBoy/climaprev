@@ -1,5 +1,7 @@
 # Horizonte público de 14 dias, consultas de até sete — 30/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Comportamento
 
 Implementada a janela pública de **hoje UTC até hoje UTC +13**, inclusive. Cada consulta GET/POST continua limitada a **um a sete dias consecutivos**. A data final omitida continua equivalente à inicial. São aceitas consultas somente na segunda semana, por exemplo D+7 a D+13; oito dias, datas passadas e D+14 são rejeitados antes de chamar o serviço.
@@ -25,6 +27,6 @@ D+7 passa a ser consultável na API pública, mas não é acrescentado retroativ
 - Backend Linux: **1.170 testes aprovados**, warnings como erros; mypy em **99 módulos**.
 - Frontend Node.js 22: **60 testes**, lint e build aprovados; instalação pelo lockfile sem vulnerabilidades reportadas.
 - Testes cobrem UTC, virada do ano/meia-noite, primeira/segunda semana, limite de sete dias, fronteira D+13/D+14 e propagação GET/POST.
-- Gate de navegador HTTPS ajustado para conferir a janela de 14 datas. Conferir CI/Security do commit publicado para qualificação remota própria.
+- Gate de navegador HTTPS ajustado para conferir a janela de 14 datas. Qualificação remota do commit `ffa50f1`: [CI aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906751) e [Security aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906743).
 
 Esta entrega conclui o incremento funcional 14/7. Validação científica da candidata, equivalência instrumental real, acessibilidade auditiva, distribuição/comercial e hospedagem continuam pendências independentes. Janela 16/8 e previsões sazonais não foram implementadas.

@@ -1,5 +1,7 @@
 # Estado dos protocolos — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Os documentos [protocolo-piloto](protocolo-piloto.md) e [protocolo-etapas-1-a-5](protocolo-etapas-1-a-5.md) preservam a versão congelada. As indicações de bootstrap ou coleta ainda não implementados descrevem o momento do congelamento, sem substituir o estado atual.
 
 - Bootstrap técnico implementado/testado; inferência científica não aprovada, dadas as limitações de suporte/janelas.
@@ -9,4 +11,4 @@ Os documentos [protocolo-piloto](protocolo-piloto.md) e [protocolo-etapas-1-a-5]
 - Evento/métrica principal, ganho/suporte mínimo, tradeoffs, revisor e aprovação ainda pendentes. Qualquer nova versão prospectiva deve ser explícita e preservar os originais.
 - A evolução da candidate-1 foi adiada pelo usuário para o final e deverá demonstrar qualidade/precisão da previsão contra v1. Não houve fitting/calibração/promoção; reference-v1 ativa.
 
-[Diagnóstico vigente](diagnostico-horario-e-reservas-2026-10-19.md) · [RDP](../../../RELATORIO-PENDENCIAS-2026-10-20.md) · [STATE](../../projeto/STATE.md).
+[Diagnóstico vigente](diagnostico-horario-e-reservas-2026-10-19.md) · [RDP](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [STATE](../../projeto/STATE.md).

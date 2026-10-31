@@ -1,5 +1,7 @@
 # Frente 2 — entregas na ordem 4 → 1 → 2 → 3
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Resultado de 30/10/2026
 
 Implementadas quatro ferramentas de análise, sem modificar os módulos congelados da coleta ou a API pública. O calendário ativo foi validado novamente: seus fingerprints continuam válidos. A automação diária e a reposição até a cota permanecem com as condições aprovadas pelo usuário. A reference-v1 segue padrão.

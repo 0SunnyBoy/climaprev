@@ -1,5 +1,7 @@
 # Proposta científica para revisão da candidate-1
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Atualização de 23/10/2026:** [direção aprovada pelo usuário](aprovacao-direcao-2026-10-23.md), incluindo objetivo inicial de chuva D+1, meta inicial de 5% e avaliações de outras variáveis. O texto abaixo preserva a proposta submetida em 21/10; suas afirmações de ausência de aprovação descrevem aquele momento. O registro de aprovação delimita o que foi aceito e os parâmetros ainda pendentes.
 
 Data: 21/10/2026. **Status: proposta não aprovada.** Responsável pelo aceite: usuário solicitante. Nesta continuação, o usuário pediu revisar a proposta detalhada antes de aprovar. Não foram escolhidos objetivo primário, margens nem conjunto confirmatório. Não foram lidos novos outcomes reservados, ajustados pesos ou alterada a reference-v1.
@@ -105,6 +107,6 @@ Essas decisões ainda não foram tomadas. É possível revisar em partes; uma ap
 - [Conceitos de verificação determinística ECMWF](https://confluence.ecmwf.int/spaces/FUG/pages/673551834/Section+12.A+Statistical+Concepts+-+Deterministic+Data): distinção entre acurácia, skill e utilidade; métricas de erro. Não prescreve o ganho de 5% deste projeto.
 - [Verificação espacial e de precipitação ECMWF](https://www.ecmwf.int/en/about/media-centre/science-blog/2023/verifying-high-resolution-forecasts): alcance e limitações de comparações pontuais de precipitação.
 - [Representatividade na verificação ECMWF](https://www.ecmwf.int/en/elibrary/81173-accounting-representativeness-verification-ensemble-forecasts): erro de representatividade na comparação de modelos com observações.
-- [Revisão preparatória local](revisao-preparatoria-2026-10-20.md), [critérios anteriores](criterios-para-aceite-2026-10-20.md) e [RDP](../../../RELATORIO-PENDENCIAS-2026-10-20.md).
+- [Revisão preparatória local](revisao-preparatoria-2026-10-20.md), [critérios anteriores](criterios-para-aceite-2026-10-20.md) e [RDP](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md).
 
 A recomendação de sequência e os critérios quantitativos são uma proposta específica para o ClimaPrev. As referências sustentam os conceitos de verificação, não aprovam a amostra, os limiares ou a candidata do projeto.

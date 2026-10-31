@@ -1,7 +1,9 @@
 # Gate de desacoplamento HTTPS
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../../docs/projeto/STATE.md) · [RDP vigente](../../../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../../docs/contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../../../docs/projeto/STATE.md) e o [RDP atualizado](../../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../../../docs/projeto/STATE.md) e o [RDP atualizado](../../../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 Bancada exclusiva de teste: frontend estático, backend FastAPI real, Redis próprio, upstream meteorológico sintético e duas entradas TLS locais. Não usa serviços/dados de produção. Não modifica repositórios remotos ou confiança global de certificados.
 

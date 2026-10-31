@@ -1,11 +1,13 @@
 # Visão geral histórica
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 Conteúdo antigo, inclusive prompts e procedimentos superados. Não constitui instrução vigente. Consulte [visão atual](Visualiza%C3%A7%C3%A3o%20geral%20do%20projeto.md).
 
 # Visualização geral do projeto
 
 <!-- estado-vigente-2026-10-20 -->
-> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](docs/projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 **Projeto:** ClimaPrev  
 **Estado:** P0–P2.6 concluídos; branch conectada ao Git; commit e push pendentes
@@ -362,7 +364,7 @@ docker compose run --rm app ruff check src tests --ignore EXE002
 docker compose run --rm app mypy src
 ```
 
-O workflow de [CI](.github/workflows/ci.yml) repete essas validações no GitHub
+O workflow de [CI](../../.github/workflows/ci.yml) repete essas validações no GitHub
 em cada `push`, Pull Request ou execução manual, além de validar o Nginx e o
 smoke test do frontend.
 

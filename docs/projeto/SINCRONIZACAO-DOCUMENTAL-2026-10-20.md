@@ -1,6 +1,8 @@
 # Sincronização da documentação — 20/10/2026
 
-Esta revisão atualiza a documentação técnica local antes de qualquer envio ao GitHub. Versões declaradas nos manifests: backend 0.1.0 e frontend 0.1.0; desenvolvimento sem nova release/tag. Branch develop, base 23bf4ce, alterações ainda locais. [STATE](STATE.md) é a fonte do estado vigente; [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) consolida pendências.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
+Esta revisão atualiza a documentação técnica local antes de qualquer envio ao GitHub. Versões declaradas nos manifests: backend 0.1.0 e frontend 0.1.0; desenvolvimento sem nova release/tag. Branch develop, base 23bf4ce, alterações ainda locais. [STATE](STATE.md) é a fonte do estado vigente; [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) consolida pendências.
 
 ## Alterações desta revisão
 
@@ -29,8 +31,8 @@ Inventário de todos os Markdown técnicos da raiz, docs, frontend e gate de nav
 
 | Documento | Tratamento |
 |---|---|
-| [CONTEXTO-HISTORICO-ATE-2026-10-20.md](../../CONTEXTO-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
-| [CONTEXTO.md](../../CONTEXTO.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [CONTEXTO-HISTORICO-ATE-2026-10-20.md](../contexto/CONTEXTO-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
+| [CONTEXTO.md](../contexto/CONTEXTO.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/arquitetura/analise-referencias-sigfas.md](../arquitetura/analise-referencias-sigfas.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/arquitetura/arquitetura.md](../arquitetura/arquitetura.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/arquitetura/datas-e-fusos-2026-10-20.md](../arquitetura/datas-e-fusos-2026-10-20.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
@@ -107,7 +109,7 @@ Inventário de todos os Markdown técnicos da raiz, docs, frontend e gate de nav
 | [docs/projeto/handoff.md](handoff.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/projeto/ImplementationsAndRefactoring-HISTORICO-ATE-2026-10-20.md](ImplementationsAndRefactoring-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
 | [docs/projeto/ImplementationsAndRefactoring.md](ImplementationsAndRefactoring.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [docs/projeto/PossivelPlanoDeEvolução.md](PossivelPlanoDeEvolução.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [docs/projeto/PossivelPlanoDeEvolução.md](PossivelPlanoDeEvolu%C3%A7%C3%A3o.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/projeto/PROJECT.md](PROJECT.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [docs/projeto/ROADMAP-HISTORICO-ATE-2026-10-20.md](ROADMAP-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
 | [docs/projeto/ROADMAP.md](ROADMAP.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
@@ -117,17 +119,17 @@ Inventário de todos os Markdown técnicos da raiz, docs, frontend e gate de nav
 | [docs/seguranca/seguranca.md](../seguranca/seguranca.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [frontend/README.md](../../frontend/README.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [README.md](../../README.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-ACESSO-INMET-2026-10-16.md](../../RELATORIO-ACESSO-INMET-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md](../../RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md](../../RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-LICENCIAMENTO-OPEN-SOURCE-2026-10-16.md](../../RELATORIO-LICENCIAMENTO-OPEN-SOURCE-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-PENDENCIAS-2026-10-15.md](../../RELATORIO-PENDENCIAS-2026-10-15.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-PENDENCIAS-2026-10-19.md](../../RELATORIO-PENDENCIAS-2026-10-19.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-PENDENCIAS-2026-10-20.md](../../RELATORIO-PENDENCIAS-2026-10-20.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-PREPARACAO-REPOSITORIO-PUBLICO-2026-10-16.md](../../RELATORIO-PREPARACAO-REPOSITORIO-PUBLICO-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-REFERENCE-CANDIDATE-1-ETAPAS-1-A-5-2026-10-16.md](../../RELATORIO-REFERENCE-CANDIDATE-1-ETAPAS-1-A-5-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-REVISAO-DEVELOP-2026-10-16.md](../../RELATORIO-REVISAO-DEVELOP-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [RELATORIO-REVISAO-IMPLEMENTACOES-COM-CSV-2026-10-16.md](../../RELATORIO-REVISAO-IMPLEMENTACOES-COM-CSV-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-ACESSO-INMET-2026-10-16.md](../contexto/RELATORIO-ACESSO-INMET-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md](../contexto/RELATORIO-COMPATIBILIDADE-CONTEXTO-2026-10-15.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md](../contexto/RELATORIO-HISTORICO-REFERENCE-V2-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-LICENCIAMENTO-OPEN-SOURCE-2026-10-16.md](../contexto/RELATORIO-LICENCIAMENTO-OPEN-SOURCE-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-PENDENCIAS-2026-10-15.md](../contexto/RELATORIO-PENDENCIAS-2026-10-15.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-PENDENCIAS-2026-10-19.md](../contexto/RELATORIO-PENDENCIAS-2026-10-19.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-PENDENCIAS-2026-10-20.md](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-PREPARACAO-REPOSITORIO-PUBLICO-2026-10-16.md](../contexto/RELATORIO-PREPARACAO-REPOSITORIO-PUBLICO-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-REFERENCE-CANDIDATE-1-ETAPAS-1-A-5-2026-10-16.md](../contexto/RELATORIO-REFERENCE-CANDIDATE-1-ETAPAS-1-A-5-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-REVISAO-DEVELOP-2026-10-16.md](../contexto/RELATORIO-REVISAO-DEVELOP-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [RELATORIO-REVISAO-IMPLEMENTACOES-COM-CSV-2026-10-16.md](../contexto/RELATORIO-REVISAO-IMPLEMENTACOES-COM-CSV-2026-10-16.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
 | [tests/docker/decoupling/README.md](../../tests/docker/decoupling/README.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
-| [VISAO-GERAL-HISTORICO-ATE-2026-10-20.md](../../VISAO-GERAL-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
-| [Visualização geral do projeto.md](../../Visualização%20geral%20do%20projeto.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |
+| [VISAO-GERAL-HISTORICO-ATE-2026-10-20.md](../contexto/VISAO-GERAL-HISTORICO-ATE-2026-10-20.md) | Arquivo histórico separado dos documentos vigentes |
+| [Visualização geral do projeto.md](../contexto/Visualiza%C3%A7%C3%A3o%20geral%20do%20projeto.md) | Conteúdo vigente ou encaminhamento atualizado; registros datados identificados |

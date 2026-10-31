@@ -1,8 +1,10 @@
 # reference-candidate-1 — sequência de execução e impactos
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Prioridade revista — 20/10/2026
 
-A evolução da candidate-1 foi adiada pelo usuário para depois de INMET real, CI remota, revisão científica preparatória, critérios de aprovação e acessibilidade manual. Quando retomada, o objetivo explícito será qualidade e precisão da previsão, com comparação meteorológica e de classificação contra v1, extremos/falsos alarmes e incerteza. Preparação de ferramentas não conta como ganho preditivo. A/B/AB abaixo permanecem propostas históricas, sem autorização de fitting/calibração/promoção. [RDP vigente](../../../RELATORIO-PENDENCIAS-2026-10-20.md).
+A evolução da candidate-1 foi adiada pelo usuário para depois de INMET real, CI remota, revisão científica preparatória, critérios de aprovação e acessibilidade manual. Quando retomada, o objetivo explícito será qualidade e precisão da previsão, com comparação meteorológica e de classificação contra v1, extremos/falsos alarmes e incerteza. Preparação de ferramentas não conta como ganho preditivo. A/B/AB abaixo permanecem propostas históricas, sem autorização de fitting/calibração/promoção. [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md).
 
 Data: 16/10/2026, America/Sao_Paulo. Referência: develop@23bf4ce. Estado: planejamento proposto, sem implementação de política/calibração.
 

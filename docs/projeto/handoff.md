@@ -1,50 +1,39 @@
-# Handoff de retomada — ClimaPrev
+# Handoff — retomada operacional
 
-## Janela pública 14/7 implementada — 30/10/2026
+Atualização: 30/10/2026. [Índice contextual](../contexto/README.md) · [Estado](STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md)
 
-API e frontend permitem consultar de um a sete dias consecutivos entre hoje UTC e +13, inclusive. Segunda semana disponível; oito dias e datas fora da janela são rejeitados. Formulário, validações GET/POST, descrições OpenAPI, traduções e gate HTTPS atualizados. Verificação pontual real da segunda semana em Belém retornou sete dias completos. 1.170 testes backend, mypy 99 módulos e 60 testes frontend/lint/build aprovados; consultar CI próprio do incremento.
+## Estado consolidado
 
-Pipeline, automação e baseline congelada do piloto preservados e calendário revalidado. A API pública ampliada não acrescenta D+7 retroativamente ao controle experimental de sete datas; sua ausência no estudo continua explícita até nova versão metodológica. Reference-v1 permanece padrão, sem ganho científico inferido. Horizonte 14/7 deixa de ser pendência; 16/8 e sazonal não implementados. Relatório: `docs/operacoes/horizonte-14-consulta-7-2026-10-30.md`. Este checkpoint supera os registros históricos abaixo de horizonte público de sete datas ou 14 dias apenas adiados.
+Backend e frontend **0.1.0**, branch **develop**, monorepo com builds e execução separados. Base funcional publicada: `ffa50f11cf0a4b0e68acdd249f80d0c8f8abca15` (`ffa50f1`); esta revisão documental é posterior a essa base, sem nova release.
 
+Janela pública **14/7** concluída: consultas de um a sete dias consecutivos entre hoje UTC e +13, inclusive. O calendário da interface e a API GET/POST aplicam os mesmos limites. A agregação meteorológica mantém o fuso da localidade. Disponibilidade pontual na segunda semana verificada; isso não comprova precisão.
 
-Retomada vigente — 28/10: integração das etapas 1 a 5 concluída tecnicamente onde há dados. Ler `docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md` (raiz). Correção oficial: temperatura observada é média horária, não instantânea; umidade e vento instantâneos não equivalentes permanecem bloqueados. CLI offline integra arquivos, CSV, horizontes e cobertura; verificação primária do piloto identifica falta de observações recentes nas três estações. Piloto desativado, sem fitting/promoção. 858 testes backend/mypy 89 módulos/Ruff aprovados; lote anterior baa3465 já passou CI/Security, incremento seguinte exige checks próprios. Preservar plano local de extração de API fora deste escopo e reservas históricas.
+Qualificação da base: **1.170 testes backend**, mypy em **99 módulos**, **60 testes frontend**, Ruff, tipagem, lint e build aprovados. [CI aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906751) e [Security gates aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41150906743) no SHA `ffa50f1`. Esses resultados não qualificam automaticamente commits posteriores.
 
-Retomada mais recente em 28/10: ler `docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md` (raiz). CSVs públicos 2026 até setembro obtidos, Belém reconciliada por versão, preflight 15/15; importação/pareamento/comparação experimental de temperatura/umidade/rajada e cobertura planejada prontos. Fonte atual de outubro segue bloqueada no fluxo verificado (interface reCAPTCHA com cota excedida); piloto desativado. 845 testes backend, mypy 88 módulos e Ruff aprovados localmente. Sem fitting, promoção, push ou CI do diff. Preservar arquivos locais e dados reservados; refazer manifestos deliberadamente antes de habilitar execução após mudança de pipeline. Reference-v1 permanece ativa.
+**Reference-v1 permanece padrão.** A infraestrutura das duas frentes da candidate-1 está integrada: fontes/coleta/arquivos, normalização, pareamento, cobertura, comparação, incerteza, revisão instrumental, variantes fixas e relatório técnico do piloto. Não há superioridade real demonstrada, fitting concluído, seleção confirmada ou promoção.
 
-Última retomada em 28/10: preparação das quatro etapas entregue, com 826 testes backend/mypy 86 módulos/Ruff aprovados. Ver `docs/operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md` (raiz). Bloqueios: observações atuais retornam 204, coordenadas de Belém precisam de reconciliação, suporte efetivo/bloco estatístico ainda dependem de dados. Piloto de 29/10–11/11 às 18 UTC e partições futuras apenas preparados/desativados; não simular execução ou backfill. Materiais existentes fora da allowlist seguem em quarentena lógica. Mudanças locais sem push e reference-v1 ativa. Este estado supera os checkpoints abaixo.
+Observações recentes das estações A201, A001 e A801 foram obtidas pela interface oficial TEMPO, com originais e proveniência preservados; a API direta retornou 204 na última verificação. Preflight diagnóstico de 30/10: 15/15 braços/pontos disponíveis para D+1, sem contar para a cota. Não generalizar esse resultado para todos os horizontes ou variáveis.
 
-Retomada vigente de 28/10: Frente 2 avançada até ordem 4, com parâmetros ainda em revisão. Pareamento de chuva valida contratos; comparador explicita controle por estrato; avaliador de critérios consome evidência sem promover. 815 testes backend e mypy 85 módulos/Ruff aprovados localmente. Incremento sem push, reference-v1 ativa; não iniciar ordens 5 a 9 nesta autorização. Ler relatório `docs/operacoes/frente-2-ordens-1-a-4-2026-10-28.md` (raiz) e RDP antes dos checkpoints históricos abaixo.
+Piloto adaptativo v5 autorizado e agendado diariamente às **15h de Brasília**, janela 18:00–18:30 UTC, a partir de 31/10. Meta: **14 capturas elegíveis por estação/modelo, 210 ao todo**, sem data-limite fixa. Perdas são preservadas e repostas em novas datas futuras; sem backfill. Encerrar previsões por par ao atingir a cota e acompanhar a cauda observacional até o último D+7 real. Notebook/Codex indisponíveis podem perder slots. Estado da preparação: zero capturas do piloto; progresso posterior exige auditoria do ledger, não inferência a partir do agendamento.
 
-Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
+O protocolo e os hashes congelados do piloto foram preservados. A ampliação pública 14/7 não acrescenta D+7 retroativamente ao controle experimental de sete datas. Novo controle ou alteração de partições requer versão metodológica explícita; reposições que invadam partições condicionais exigem replanejamento antes da análise. Sem abertura indevida de reservas, E2/E3, promoção, merge na main ou deploy.
 
-## Retomada vigente — 27/10/2026
+## Pendências e sequência
 
-Lote consolidado publicado na develop em `4525202`: 748 testes backend, mypy 82 módulos, 48 frontend, lint/build/hardening aprovados localmente. Vitest corrigido, auditoria sem vulnerabilidades; Gitleaks em 56 commits sem achados. CI e Security em acompanhamento. Complemento: auditoria somente leitura contra calendário explícito e revisão dos parâmetros solicitada pelo usuário. Ver relatório `docs/operacoes/consolidacao-2026-10-27.md` e revisão `docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md` (raiz do projeto). Campanha segue desativada, reference-v1 ativa. Parágrafos abaixo de ausência de push ou de qualificações antigas são checkpoints históricos.
+1. Executar e acompanhar o piloto autorizado; auditar capturas, perdas, reposições, CSVs, pareamento, cobertura e cauda observacional.
+2. Fechar equivalência instrumental com metadados reais: temperatura, umidade e vento/rajada respeitam janelas, agregações, alturas e representatividade. Diagnóstico automatizado não certifica equivalência.
+3. Consolidar suporte por estação/variável/antecedência, critérios de extremos, tamanho de bloco e validade dos intervalos/multiplicidade com os dados elegíveis. Critérios condicionais não viram critérios confirmatórios por existência de código.
+4. Versionar o controle científico de D+7 e replanejar partições se necessário, preservando o protocolo congelado e sem usar resultados reservados para escolher ajustes.
+5. Refinar e comparar variantes apenas nas partições permitidas; congelar candidata, confirmar fora da amostra e obter aceite final antes de integrar/promover. Melhoria de precisão ainda não demonstrada.
+6. Concluir teste auditivo real com leitor de tela em português e inglês; automação não substitui esse ensaio.
+7. Definir licença, atribuições e condições de distribuição/uso comercial das fontes antes da oferta de serviços. Infraestrutura de hospedagem e monitoramento definitivo permanece adiada pelo usuário.
 
-Última continuação: [comparador de chuva e elegibilidade](../operacoes/comparacao-experimental-2026-10-26.md), com 75 testes direcionados e checks estáticos aprovados. Entradas v2, baseline diária, cobertura/exclusões e D+7 ausente explícitos. Sem novo ganho real, campanha ou publicação; checkpoints integrais abaixo são anteriores.
+16/8, previsão sazonal e extração de repositório não foram implementados nesta entrega. O plano de extração é uma proposta separada. Documentos acadêmicos ficam fora da manutenção do projeto.
 
-## Continuação de 26/10/2026
+## Retomada segura
 
-Ler o [relatório de implementação](../../RELATORIO-IMPLEMENTACAO-2026-10-26.md). Base remota `5a6fc9c`; lote experimental e alerta 429 ainda locais. 714 testes backend, 33 frontend e checks locais aprovados. Baseline/rodadas, manifesto/ledger e pareamento exploratório de chuva prontos no escopo descrito; campanha e promoção desativadas. Parâmetros finais, outras variáveis, acessibilidade auditiva e publicação do lote continuam pendentes. Registros anteriores são históricos.
+Ler [manual do piloto](../operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md) antes de operar a coleta. Usar protocolo-v5, E1 v5, calendário semente, extensões, `pilot-ledger.sqlite` e `pilot-archives/` da pasta `.report-work/inmet-browser-2026-10-30/`. Auditar com `audit_quota_progress`; extensões devem ser futuras, salvas antes da execução, e apenas para pares abaixo da cota. Não contar preflight nem reabrir reservas falhadas. Preservar alterações de outras tarefas e originais observacionais.
 
-## Ler primeiro
+## Evidências e histórico
 
-[STATE](STATE.md) para validações e estado; [RDP](../../RELATORIO-PENDENCIAS-2026-10-20.md) para fila; [catálogo](ImplementationsAndRefactoring.md) para caminhos; [refatoração](../operacoes/refatoracao-2026-10-20.md) para o diff transversal.
-
-## Checkout e execução
-
-Branch develop, HEAD/referência local origin/develop em `451d845`; incrementos de responsividade e refatoração ainda locais. Preservar alterações acumuladas e revisar arquivos antes de staging. Não confundir imagem antiga ou CI antigo com o código local atual. Não houve merge/release/deploy.
-
-API/frontend possuem Dockerfiles e Composes próprios; modo integrado local usa `docker compose up -d --build`. Aguardar readiness real, não apenas containers iniciados. Comandos e ambientes estão no README e documentação operacional. Para regressão com Redis usar ambiente isolado de teste, sem flush no banco da aplicação.
-
-## Retomada funcional
-
-O acesso real INMET já foi verificado; acompanhar disponibilidade não equivale a repetir a investigação como bloqueio atual. Leitor de tela aguarda disponibilidade do usuário. Candidate-1 foi retomada no planejamento, com foco em precisão e múltiplos modelos; ainda depende de critérios/proveniência e avaliação independentes. Usuário responsável pelo aceite; responsabilidade não significa aprovação registrada.
-
-Não abrir reservas para escolher ajuste, não promover automaticamente a candidata e não reescrever evidências congeladas. Horizonte de 14 dias e hospedagem adiados. Sem separação de repositórios ou atualização do PDF acadêmico.
-
-## Próximo envio
-
-Revisar diff e arquivos novos, manter .homolog/segredos/dados brutos locais fora do versionamento e executar os gates pertinentes. Conferir CI e Security gates do commit efetivamente enviado. Sem alterações administrativas remotas neste lote.
-
-[Histórico](handoff-HISTORICO-ATE-2026-10-20.md).
+[Entrega e qualificação 14/7](../operacoes/horizonte-14-consulta-7-2026-10-30.md) · [Ferramentas analíticas](../operacoes/frente-2-prioridades-4-1-2-3-2026-10-30.md) · [Checkpoints anteriores](handoff-REGISTROS-ATE-2026-10-30.md)

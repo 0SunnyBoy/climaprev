@@ -1,5 +1,7 @@
 # Build Node.js 22 e atualização de Actions — 27/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Diagnóstico
 
 O aviso de Node.js 20 refere-se ao runtime interno das ações antigas do GitHub Actions. A versão usada para compilar o frontend é uma configuração separada. A build do frontend foi reexecutada com Node.js 22.23.2, vue-tsc e Vite 6.4.5, com sucesso; saída local em frontend/dist (ignorada pelo Git).

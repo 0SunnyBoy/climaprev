@@ -1,5 +1,7 @@
 # Candidate-1 — Frente 2: Ciência, precisão e integração
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP vigente](RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 ## Entregas analíticas 4 → 1 → 2 → 3 — 30/10/2026
 
 Implementados relatório automático de encerramento/cobertura do piloto, revisão declarada de contratos/altura/representatividade das variáveis secundárias, planejamento estatístico com alocação de confiança e sensibilidade de blocos e alternativas fixas de combinação/correção. São quatro módulos novos de análise; os arquivos congelados da coleta não foram alterados e o calendário ativo continua válido. 29 testes direcionados, Ruff integral e mypy dos quatro módulos aprovados; conferir CI próprio do incremento.
@@ -50,7 +52,7 @@ Implementado `experimental_evaluation.py` (função e CLI offline): verifica int
 
 ## Continuidade vigente — observações e comparação em 28/10/2026
 
-[Relatório da rodada](docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md) · [qualificação do piloto](docs/planejamento/reference-candidate-1/evidence/qualificacao-observacoes-piloto-2026-10-28.json) · [benefícios esperados](docs/planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md).
+[Relatório da rodada](../operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md) · [qualificação do piloto](../planejamento/reference-candidate-1/evidence/qualificacao-observacoes-piloto-2026-10-28.json) · [benefícios esperados](../planejamento/reference-candidate-1/beneficios-esperados-candidate-1.md).
 
 - **Observações:** três CSVs públicos de 2026 obtidos pela versão oficial até setembro, com CRC/hashes; janela publicada conferida com cobertura de 100% nos quatro alvos importados. Não são dados atuais de outubro. A interface oficial de dados recentes exige reCAPTCHA e mostrou cota excedida; nenhum controle foi contornado.
 - **Belém:** coordenadas do CSV 2026 coincidem com o catálogo atual; reconciliação resolvida por versão para essa fonte, preservando o CSV 2024. Ainda não há prova de mudança física ou equivalência instrumental integral.
@@ -63,7 +65,7 @@ Implementado `experimental_evaluation.py` (função e CLI offline): verifica int
 
 ## Retomada vigente — preparação das etapas 1 a 4 em 28/10/2026
 
-[Relatório detalhado](docs/operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md), [evidências](docs/planejamento/reference-candidate-1/evidence/preparacao-frente-2-2026-10-28.json), [partições](docs/planejamento/reference-candidate-1/particoes-temporais-2026-10-28.json) e [critérios preparados](docs/planejamento/reference-candidate-1/criterios-preparados-2026-10-28.json).
+[Relatório detalhado](../operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md), [evidências](../planejamento/reference-candidate-1/evidence/preparacao-frente-2-2026-10-28.json), [partições](../planejamento/reference-candidate-1/particoes-temporais-2026-10-28.json) e [critérios preparados](../planejamento/reference-candidate-1/criterios-preparados-2026-10-28.json).
 
 1. **Estações:** catálogo oficial atual validado; A201/A001/A801 operantes. Diagnóstico dos CSVs de 2024 já conhecidos: chuva completa em 365/342/349 de 366 dias, respectivamente; 8/2/9 dias de pelo menos 50 mm, sem alegar independência. Observações recentes retornaram 204 nos acessos tentados; qualidade atual não comprovada. Belém exige reconciliação entre coordenadas históricas e atuais, sem alterar o CSV congelado.
 2. **Calendário/rodadas:** piloto desativado de 29/10 a 11/11/2026, às 18 UTC (15h Brasília), 210 jobs planejados; rodada 00 UTC para modelos explícitos, baseline/MET com identidade desconhecida preservada. Preflight GFS/IFS/ICON em Belém normalizado; ICON D+7 incompleto. Slot perdido não é preenchido retroativamente.
@@ -80,7 +82,7 @@ Atualizado em 28/10/2026. Este relatório distribui responsabilidades de impleme
 
 ## Execução autorizada até a ordem 4 — 28/10/2026
 
-[Relatório desta rodada](docs/operacoes/frente-2-ordens-1-a-4-2026-10-28.md) e [quadro estruturado de parâmetros para revisão](docs/planejamento/reference-candidate-1/frente-2-protocolo-proposto-2026-10-28.json).
+[Relatório desta rodada](../operacoes/frente-2-ordens-1-a-4-2026-10-28.md) e [quadro estruturado de parâmetros para revisão](../planejamento/reference-candidate-1/frente-2-protocolo-proposto-2026-10-28.json).
 
 - **F2-01:** protocolo organizado em direção aceita, propostas e decisões ausentes. Fechamento científico ainda depende de revisão/aceite; o JSON não inicia coleta.
 - **F2-02:** verificador ligado ao pareamento de chuva; contratos inválidos geram exclusões explícitas. Observações de horas reais podem ser somadas no intervalo exato de uma previsão de seis horas, sem prorrateio. Instrumentação/representatividade/antecedência e demais variáveis continuam pendentes. O fingerprint do pipeline inclui a dependência de equivalência; não alterar manifestos antigos para contornar divergência.
@@ -108,7 +110,7 @@ Este é o ponto de retomada solicitado pelo usuário. A lista abaixo descreve tr
 ### Estado preservado
 
 - Reference-v1 ativa; sem superioridade comprovada, promoção ou integração pública da candidate-1.
-- Protocolo consolidado pronto para revisão: [documento de trabalho](docs/planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md).
+- Protocolo consolidado pronto para revisão: [documento de trabalho](../planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md).
 - Verificador `src/climaprev/tools/experimental_equivalence.py` e testes em `tests/unit/tools/test_experimental_equivalence.py` preparados localmente: **21 testes novos, Ruff e mypy do módulo aprovados em 27/10**; checkpoint superado pela regressão integral de 815 testes na rodada de 28/10 descrita acima.
 - Verificador integrado ao pareamento experimental de chuva nesta rodada; demais alvos ainda isolados, sem pareamento multivariável completo e sem autorização científica.
 - Incremento da Frente 2 e seus documentos ainda locais, sem commit/push. Não descartar arquivos novos ao retomar. A aprovação remota do commit publicado `6576dd6` não cobre esse incremento local.
@@ -120,7 +122,7 @@ Ler este registro e o protocolo consolidado; conferir `git status` para preserva
 
 ## Checkpoint histórico — início da execução em 27/10/2026
 
-Preparado o [protocolo consolidado para revisão](docs/planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md), com etapas separadas, decisões pendentes, recomendação de controle D+7 e contratos de observações para a Frente 1. F2-01 e F2-03 seguem aguardando decisões; a proposta não foi considerada aprovada.
+Preparado o [protocolo consolidado para revisão](../planejamento/reference-candidate-1/frente-2-protocolo-revisao-2026-10-27.md), com etapas separadas, decisões pendentes, recomendação de controle D+7 e contratos de observações para a Frente 1. F2-01 e F2-03 seguem aguardando decisões; a proposta não foi considerada aprovada.
 
 F2-02 avançou com `experimental_equivalence.check_equivalence`: diagnóstico de valores, unidades, intervalo e semântica declarada de pares de chuva, rajada e temperatura/umidade. Não integrado aos coletores/comparador, sem pareamento multivariável completo. Temperatura instantânea contra extrema horária e chuva de seis horas contra observação de uma hora são rejeitadas. Aprovação científica, representatividade, instrumento e antecedência continuam fora do diagnóstico. Verificação local: 21 testes novos, Ruff e mypy do módulo aprovados; não equivale a nova execução da suíte integral.
 
@@ -185,7 +187,7 @@ Protocolo aprovado, avaliação independente reproduzível, desempenho e proteç
 
 - [Frente 1 — Dados e integrações](RELATORIO-CANDIDATE-1-FRENTE-1-DADOS-E-INTEGRACOES.md).
 - [RDP geral](RELATORIO-PENDENCIAS-2026-10-20.md).
-- [Direção aprovada e seus limites](docs/planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md).
-- [Parâmetros propostos](docs/planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
-- [Revisão solicitada pelo usuário](docs/planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md).
-- [Comparador exploratório de chuva](docs/operacoes/comparacao-experimental-2026-10-26.md).
+- [Direção aprovada e seus limites](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md).
+- [Parâmetros propostos](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
+- [Revisão solicitada pelo usuário](../planejamento/reference-candidate-1/revisao-parametros-2026-10-27.md).
+- [Comparador exploratório de chuva](../operacoes/comparacao-experimental-2026-10-26.md).

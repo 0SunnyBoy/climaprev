@@ -1,5 +1,7 @@
 # Critérios para deliberação — 20/10/2026
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP vigente](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+
 **Proposta, não aprovada. Responsável pelo aceite: usuário solicitante (confirmado na conversa).** Não altera protocolos congelados, não autoriza fitting/calibração/promoção e não muda a reference-v1. A evolução de qualidade/precisão fica por último.
 
 ## Condições obrigatórias propostas
@@ -30,4 +32,4 @@ Exemplo de planejamento, sem converter em aceite: para estimar uma proporção i
 
 O usuário deverá aprovar ou ajustar: convenções das fontes, classificação exploratória/reservada, variável/horizonte principal, ganho mínimo, margens de proteção, precisão/suporte e multiplicidade. Até lá, status `proposed_not_approved`. Aprovar este desenho não autoriza automaticamente ajustar a candidata; essa execução continua adiada.
 
-[Revisão técnica](revisao-preparatoria-2026-10-20.md) · [proposta anterior preservada](baseline-e-criterios-propostos-2026-10-19.md) · [RDP](../../../RELATORIO-PENDENCIAS-2026-10-20.md).
+[Revisão técnica](revisao-preparatoria-2026-10-20.md) · [proposta anterior preservada](baseline-e-criterios-propostos-2026-10-19.md) · [RDP](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md).
