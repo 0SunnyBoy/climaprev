@@ -39,7 +39,7 @@ Funções extensas em `historical_experiment`, `experimental_comparison`, `exper
 
 ## Linhas e limites da medição
 
-Escopo: `src/**/*.py` e `frontend/src/**/*.{ts,vue,css}`, excluindo `.test.ts`. Base `355a158`: **13.400 linhas físicas**. Arquivos existentes após limpeza: **13.358**, redução de **42**. Infraestrutura D+7 nova: **463 linhas** em três módulos. Total no escopo: **13.821**, crescimento líquido de **421** por funcionalidade nova. Testes/documentação ficam fora dessa métrica. Não apresentar redução local como redução global.
+Escopo: `src/**/*.py` e `frontend/src/**/*.{ts,vue,css}`, excluindo `.test.ts`. Base `355a158`: **13.400 linhas físicas**. Arquivos existentes após limpeza: **13.358**, redução de **42**. Infraestrutura D+7 nova: **461 linhas** em três módulos. Total no escopo: **13.819**, crescimento líquido de **419** por funcionalidade nova. Testes/documentação ficam fora dessa métrica. Não apresentar redução local como redução global.
 
 ## Qualificação
 
@@ -61,3 +61,9 @@ Ler o [manual D+7](controle-d7-operacao-2026-10-30.md). A infraestrutura está i
 A revisão de [metadados instrumentais](../planejamento/reference-candidate-1/metadados-instrumentais-2026-10-30.md) continua com lacunas: nova busca oficial não encontrou fichas individuais de altura/calibração para A201/A001/A801. Não houve contato externo. Teste auditivo PT/EN, licenciamento/atribuições e confirmação científica continuam independentes. [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md).
 
 [Terceira revisão concluída, achados e verificações](terceira-revisao-refatoracao-2026-10-30.md).
+
+## Publicação conferida — 31/10/2026
++
++Implementação D+7 e refatoração publicadas em `b2894b3`. [CI aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650970) e [Security aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650954) nesse SHA. Complemento posterior inclui os READMEs do frontend/gate e limpa formatação do callback D+7; AST Python idêntica, sem alteração funcional. Métrica ajustada: 461 linhas novas D+7 e redução de 42 nos arquivos existentes. Checks do complemento devem ser conferidos no próprio SHA. Piloto preservado e D+7 desativado.
++
++

@@ -1,6 +1,6 @@
 # ClimaPrev
 
-## Estado atual — 30/10/2026
+## Estado atual — 31/10/2026
 
 [Refatoração revisada e infraestrutura D+7](docs/operacoes/refatoracao-controle-d7-2026-10-30.md): 1.207 testes backend, 61 frontend, Ruff/mypy (102 módulos), tipagem e build aprovados localmente. D+7 implementado e desativado; protocolo/calendário próprios pendentes, piloto preservado. Arquivos existentes simplificados, sem mudança de contrato OpenAPI ou precisão demonstrada da candidata.
 
@@ -19,6 +19,8 @@ Piloto adaptativo v5 autorizado e agendado diariamente às **15h de Brasília**,
 O protocolo e os hashes congelados do piloto foram preservados. A ampliação pública 14/7 não acrescenta D+7 retroativamente ao controle experimental de sete datas. Novo controle ou alteração de partições requer versão metodológica explícita; reposições que invadam partições condicionais exigem replanejamento antes da análise. Sem abertura indevida de reservas, E2/E3, promoção, merge na main ou deploy.
 
 [Contexto e relatórios](docs/contexto/README.md) · [Pendências](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md)
+
+O lote de refatoração/D+7 foi publicado em `b2894b3`, com [CI](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650970) e [Security](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650954) aprovados.
 
 ## Documentação do projeto
 

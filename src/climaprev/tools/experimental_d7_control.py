@@ -123,9 +123,7 @@ async def _capture_job(
     slot = datetime.fromisoformat(job["slot"])
     expiry = slot + timedelta(minutes=30)
     target = date.fromisoformat(job["target_date"])
-    def before_send(
-        
-    ) -> None:
+    def before_send() -> None:
         current = _aware(clock())
         if not slot <= current < expiry:
             raise ValueError("slot expired before HTTP")

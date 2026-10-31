@@ -44,11 +44,11 @@
   "runtime_line_metric": {
     "scope": "src/**/*.py and frontend/src/**/*.{ts,vue,css}, excluding frontend .test.ts",
     "before": 13400,
-    "after": 13821,
+    "after": 13819,
     "existing_files_after": 13358,
     "removed_from_existing_runtime": 42,
-    "new_d7_runtime_lines": 463,
-    "net_change": 421
+    "new_d7_runtime_lines": 461,
+    "net_change": 419
   },
   "second_review": {
     "inventory_entries": 618,
@@ -92,8 +92,26 @@
     "full_post_change_regression": "passed_1207_backend_ruff_mypy_102"
   },
   "d7_implementation_sources": {
-    "src/climaprev/tools/experimental_d7_control.py": "21b0ee89f354fe4cf83f3a303a9a539fff4d5d1f8d833d2a1eb8e855de35bb31",
+    "src/climaprev/tools/experimental_d7_control.py": "2e7ed9a5f2341c4dfd4f27ba714cfd7c426a8368281472021f7ea32eb176200c",
     "src/climaprev/tools/experimental_d7_archive.py": "f55f3a4ee736be69aca04a248c59a7d263980e23b21dec58b75573020a10fe09",
     "src/climaprev/tools/experimental_d7_ledger.py": "8ded219f61a301119a8349c95f18e963cc0e099d47490f01f342e2c00fda674d"
+  },
+  "publication_followup": {
+    "date": "2026-10-31",
+    "initial_commit": "b2894b3b2218f97e3edf4773853af25755969c8c",
+    "changes": "include two omitted README updates and remove blank callback formatting; no behavior change",
+    "python_AST_equal_to_b2894b3": true,
+    "initial_commit_checks": [
+      {
+        "name": "CI",
+        "conclusion": "success",
+        "run_id": 41154650970
+      },
+      {
+        "name": "Security gates",
+        "conclusion": "success",
+        "run_id": 41154650954
+      }
+    ]
   }
 }

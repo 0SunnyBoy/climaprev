@@ -1,6 +1,6 @@
 # ClimaPrev — frontend
 
-> **Revisão contextual — 30/10/2026.** [Estado vigente](../docs/projeto/STATE.md) · [RDP vigente](../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../docs/contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../docs/projeto/STATE.md) · [RDP](../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../docs/operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
 
 Versão 0.1.0 em desenvolvimento. Estado e validações no [STATE](../docs/projeto/STATE.md), pendências no [RDP](../docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Transporte e validação runtime separados; prazo/cancelamento compartilhado entre busca e consulta. Acessibilidade auditiva continua pendente.
 
@@ -27,3 +27,7 @@ Sem `VITE_API_BASE_URL`, a interface usa URLs relativas. O Compose da raiz mant�
 Validação: `npm test`, `npm run lint` e `npm run build`.
 
 Validação end-to-end do desacoplamento: `tests/docker/decoupling/README.md` na raiz. O gate aprovado usa API real em outra origem HTTPS, verifica erros/CORS/cooldown e funcionamento da interface durante parada da API. Não exige separar repositórios.
+
+## Manutenção de 30/10/2026
+
+`App.vue` reutiliza `toRiskQueryPayload`; o formulário compartilha o mesmo limite final entre o campo e a validação. 61 testes frontend, lint, tipagem e build aprovados com Node.js 22. [Relatório transversal](../docs/operacoes/refatoracao-controle-d7-2026-10-30.md).
