@@ -9,9 +9,9 @@ class RiskQueryParams(BaseModel):
     location_text: str | None = Field(default=None, min_length=1, max_length=200)
     latitude: float | None = None
     longitude: float | None = None
-    start_date: date = Field(description="Date within today through UTC today + 6 days, inclusive.")
+    start_date: date = Field(description="Date within today through UTC today + 13 days, inclusive.")
     end_date: date | None = Field(default=None, description=(
-        "Defaults to start_date. Same seven-date UTC eligibility window; at most seven consecutive dates."
+        "Defaults to start_date. Same fourteen-date UTC eligibility window; at most seven consecutive dates per query."
     ))
     temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS
 

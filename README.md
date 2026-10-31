@@ -1,5 +1,7 @@
 # ClimaPrev
 
+[Janela pública 14/7: comportamento e qualificação](docs/operacoes/horizonte-14-consulta-7-2026-10-30.md).
+
 Estado de preparação em 30/10/2026: reference-v1 segue padrão; observações recentes obtidas pelo TEMPO e prontidão técnica de chuva aprovada. Piloto agendado às 15h Brasília a partir de 31/10, com reposições futuras até 14 capturas válidas por estação/modelo. [Estado e limites do piloto adaptativo](docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md).
 
 Atualização consolidada de 27/10: complemento de cobertura operacional qualificado com **757 testes backend**, mypy em **83 módulos** e Ruff; frontend com **48 testes**, lint/build e auditoria sem vulnerabilidades. Lote inicial publicado em `4525202`, Security gates aprovado; resultado remoto do complemento deve ser conferido no seu próprio SHA. Sem campanha ativa, promoção, merge em main ou deploy. Parâmetros continuam em revisão por escolha expressa do usuário. Registros numéricos anteriores são checkpoints históricos.
@@ -8,9 +10,9 @@ Atualização consolidada de 27/10: complemento de cobertura operacional qualifi
 
 Backend/frontend **0.1.0 em desenvolvimento**, branch `develop`. Lote experimental e correções da interface publicados em `4525202`; CI e Security desse lote em acompanhamento. Regressão local: **748 testes backend**, mypy em 82 módulos, **48 testes frontend**, lint, build e hardening aprovados. Vitest atualizado no lockfile e auditoria sem vulnerabilidades. Complemento de diagnóstico de calendário descrito no [relatório de consolidação](docs/operacoes/consolidacao-2026-10-27.md). Sem merge em main, release ou deploy. [Estado atual](docs/projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md).
 
-Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +6, até sete dias por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Responsividade revisada e alerta 429 estabilizado. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
+Frontend e API possuem builds/Composes próprios no monorepo. Janela pública de hoje UTC até +13, até sete dias consecutivos por consulta; prazo cooperativo do serviço 7 s. Acesso real INMET verificado em amostra controlada. Responsividade revisada e alerta 429 estabilizado. A refatoração separou saída da aplicação, codecs e schemas, compartilhando cancelamento no frontend; contrato OpenAPI preservado. [Relatório](docs/operacoes/refatoracao-2026-10-20.md).
 
-Direção científica aprovada; parâmetros finais da campanha ainda pendentes. Baseline, rodadas explícitas, controles locais e pareamento exploratório de chuva implementados, sem campanha iniciada. Leitor de tela, equivalência das outras variáveis e evolução da candidate-1 continuam pendentes. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte de 14 dias e hospedagem adiados. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
+Direção científica aprovada; parâmetros finais da campanha ainda pendentes. Baseline, rodadas explícitas, controles locais e pareamento exploratório de chuva implementados, sem campanha iniciada. Leitor de tela, equivalência das outras variáveis e evolução da candidate-1 continuam pendentes. Reference-v1 ativa, sem ganho superior comprovado ou promoção da candidata. Horizonte 14/7 implementado; hospedagem adiada. Distribuição aberta e serviços empresariais exigem definição de licença e condições de uso dos provedores.
 
 Interface de consulta e API FastAPI para estimar risco climático de curto prazo. A resposta é uma
 estimativa baseada em previsão meteorológica: não substitui alertas oficiais

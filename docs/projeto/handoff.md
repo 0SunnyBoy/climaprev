@@ -1,5 +1,12 @@
 # Handoff de retomada — ClimaPrev
 
+## Janela pública 14/7 implementada — 30/10/2026
+
+API e frontend permitem consultar de um a sete dias consecutivos entre hoje UTC e +13, inclusive. Segunda semana disponível; oito dias e datas fora da janela são rejeitados. Formulário, validações GET/POST, descrições OpenAPI, traduções e gate HTTPS atualizados. Verificação pontual real da segunda semana em Belém retornou sete dias completos. 1.170 testes backend, mypy 99 módulos e 60 testes frontend/lint/build aprovados; consultar CI próprio do incremento.
+
+Pipeline, automação e baseline congelada do piloto preservados e calendário revalidado. A API pública ampliada não acrescenta D+7 retroativamente ao controle experimental de sete datas; sua ausência no estudo continua explícita até nova versão metodológica. Reference-v1 permanece padrão, sem ganho científico inferido. Horizonte 14/7 deixa de ser pendência; 16/8 e sazonal não implementados. Relatório: `docs/operacoes/horizonte-14-consulta-7-2026-10-30.md`. Este checkpoint supera os registros históricos abaixo de horizonte público de sete datas ou 14 dias apenas adiados.
+
+
 Retomada vigente — 28/10: integração das etapas 1 a 5 concluída tecnicamente onde há dados. Ler `docs/operacoes/frente-2-etapas-1-a-5-2026-10-28.md` (raiz). Correção oficial: temperatura observada é média horária, não instantânea; umidade e vento instantâneos não equivalentes permanecem bloqueados. CLI offline integra arquivos, CSV, horizontes e cobertura; verificação primária do piloto identifica falta de observações recentes nas três estações. Piloto desativado, sem fitting/promoção. 858 testes backend/mypy 89 módulos/Ruff aprovados; lote anterior baa3465 já passou CI/Security, incremento seguinte exige checks próprios. Preservar plano local de extração de API fora deste escopo e reservas históricas.
 
 Retomada mais recente em 28/10: ler `docs/operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md` (raiz). CSVs públicos 2026 até setembro obtidos, Belém reconciliada por versão, preflight 15/15; importação/pareamento/comparação experimental de temperatura/umidade/rajada e cobertura planejada prontos. Fonte atual de outubro segue bloqueada no fluxo verificado (interface reCAPTCHA com cota excedida); piloto desativado. 845 testes backend, mypy 88 módulos e Ruff aprovados localmente. Sem fitting, promoção, push ou CI do diff. Preservar arquivos locais e dados reservados; refazer manifestos deliberadamente antes de habilitar execução após mudança de pipeline. Reference-v1 permanece ativa.

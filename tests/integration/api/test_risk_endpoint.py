@@ -199,7 +199,7 @@ def valid_query(**overrides: str) -> dict[str, str]:
 @pytest.mark.asyncio
 @pytest.mark.parametrize("method", ["GET", "POST"])
 @pytest.mark.parametrize("day,allowed", [("2026-08-27", False), ("2026-08-28", True),
-                                        ("2026-09-03", True), ("2026-09-04", False)])
+                                        ("2026-09-03", True), ("2026-09-04", True), ("2026-09-10", True), ("2026-09-11", False)])
 async def test_public_forecast_window_prevents_service_calls_outside_bounds(method, day, allowed):
     async with app_for() as (client, service, _, _):
         data = valid_query(start_date=day)
@@ -209,6 +209,25 @@ async def test_public_forecast_window_prevents_service_calls_outside_bounds(meth
     assert len(service.calls) == int(allowed)
     if not allowed:
         assert response.json()["error"]["code"] == "INVALID_PERIOD"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("method", ["GET", "POST"])
+@pytest.mark.parametrize("start,end,allowed", [
+    ("2026-09-04", "2026-09-10", True),
+    ("2026-08-28", "2026-09-04", False),
+    ("2026-09-05", "2026-09-11", False),
+])
+async def test_second_week_period_is_limited_to_seven_dates_and_propagated(method, start, end, allowed):
+    async with app_for() as (client, service, _, _):
+        data = valid_query(start_date=start, end_date=end)
+        response = await client.request(method, "/api/v1/risk", **(
+            {"params": data} if method == "GET" else {"json": data}))
+    assert response.status_code == (200 if allowed else 422)
+    assert len(service.calls) == int(allowed)
+    if allowed:
+        assert service.calls[0][0].start_date == date.fromisoformat(start)
+        assert service.calls[0][0].end_date == date.fromisoformat(end)
 
 
 @pytest.mark.asyncio

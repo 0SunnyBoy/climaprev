@@ -7,7 +7,10 @@ useDefault = true
 [[allowlists]]
 description = "Verified public canonical OpenAPI SHA256; not an authentication credential"
 regexTarget = "secret"
-regexes = ['''^dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f$''']
+regexes = [
+  '''^dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f$''',
+  '''^474199bf4155eec9bde52b4343e0aaed12888bee7315f9e87460b48efaac62fe$''',
+]
 
 [[allowlists]]
 description = "Verified public metadata value 1; exact value only"

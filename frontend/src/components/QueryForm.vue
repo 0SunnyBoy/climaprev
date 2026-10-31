@@ -28,6 +28,14 @@ const errorSources = reactive<Record<string, string | (() => string)>>({})
 const fieldErrors = computed(() => Object.fromEntries(Object.entries(errorSources)
   .map(([name, message]) => [name, typeof message === 'function' ? message() : message])))
 const windowDates = ref(forecastWindow())
+const maxEndDate = computed(() => {
+  if (!form.startDate) return windowDates.value.last
+  const end = new Date(`${form.startDate}T00:00:00Z`)
+  if (!Number.isFinite(end.getTime())) return windowDates.value.last
+  end.setUTCDate(end.getUTCDate() + 6)
+  const limit = end.toISOString().slice(0, 10)
+  return limit < windowDates.value.last ? limit : windowDates.value.last
+})
 let clockTimer: ReturnType<typeof setInterval> | undefined
 function refreshWindow() { windowDates.value = forecastWindow() }
 onMounted(() => {
@@ -142,13 +150,14 @@ defineExpose({ setFieldError })
     <div class="period-row">
       <div class="field">
         <label for="start_date">{{ t('startDate') }}</label>
-        <input id="start_date" v-model="form.startDate" name="start_date" type="date" :min="windowDates.first" :max="windowDates.last" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'window-hint start-date-error' : 'window-hint'" required />
+        <input id="start_date" v-model="form.startDate" name="start_date" type="date" :min="windowDates.first" :max="windowDates.last" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'window-hint horizon-hint start-date-error' : 'window-hint horizon-hint'" required />
         <span id="window-hint" class="field-hint">{{ t('forecastWindowHint') }} {{ windowDates.first }} – {{ windowDates.last }}.</span>
+        <span id="horizon-hint" class="field-hint">{{ t('forecastHorizonNote') }}</span>
         <span v-if="fieldErrors.start_date" id="start-date-error" class="field-error">{{ fieldErrors.start_date }}</span>
       </div>
       <div class="field">
         <label for="end_date">{{ t('endDate') }} <span class="optional">{{ t('optional') }}</span></label>
-        <input id="end_date" v-model="form.endDate" name="end_date" type="date" :min="form.startDate || windowDates.first" :max="windowDates.last" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
+        <input id="end_date" v-model="form.endDate" name="end_date" type="date" :min="form.startDate || windowDates.first" :max="maxEndDate" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
         <span id="end-hint" class="field-hint">{{ t('endDateHint') }}</span>
         <span v-if="fieldErrors.end_date" id="end-date-error" class="field-error">{{ fieldErrors.end_date }}</span>
       </div>

@@ -5,7 +5,7 @@ Documento de visão e navegação. Estado observado em [STATE](STATE.md), fila n
 ## Visão
 
 O Clima Prev consulta previsões meteorológicas de curto prazo e calcula uma
-estimativa de risco para um local e um período de até sete dias. A resposta
+estimativa de risco para um local e um período de até sete dias consecutivos dentro de uma janela de 14 dias. A resposta
 informa a fonte, a qualidade dos dados, a política usada e a disponibilidade
 de alertas oficiais. A estimativa não substitui alertas das autoridades.
 

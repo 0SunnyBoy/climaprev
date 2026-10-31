@@ -55,7 +55,7 @@ try {
   await prepare()
   const bounds = await page.locator('#start_date').evaluate(input => ({ first: input.min, last: input.max }))
   const expectedLast = new Date(`${bounds.first}T00:00:00Z`)
-  expectedLast.setUTCDate(expectedLast.getUTCDate() + 6)
+  expectedLast.setUTCDate(expectedLast.getUTCDate() + 13)
   assert.equal(bounds.last, expectedLast.toISOString().slice(0, 10))
   const invalid = await page.evaluate(async ({ first, last }) => {
     const dates = [new Date(`${first}T00:00:00Z`), new Date(`${last}T00:00:00Z`)]
@@ -72,7 +72,7 @@ try {
     return statuses
   }, bounds)
   assert.deepEqual(invalid, [{ status: 422, code: 'INVALID_PERIOD' }, { status: 422, code: 'INVALID_PERIOD' }])
-  checks.push('UI date bounds match seven-date UTC window; API rejects past/outside dates as 422')
+  checks.push('UI date bounds match fourteen-date UTC window (seven dates per query); API rejects past/outside dates as 422')
   // Exercise geocoding through the actual FastAPI endpoint too.
   await page.selectOption('#location-mode', 'city')
   await page.fill('#location_text', 'Belem')

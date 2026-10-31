@@ -13,19 +13,26 @@ def test_eligibility_uses_utc_instead_of_host_or_location_date(offset, local_day
     clock = datetime(2026, 10, local_day, hour, tzinfo=timezone(timedelta(hours=offset)))
     first, last = forecast_window(clock)
     assert first == date(2026, 10, utc_day)
-    assert last == first + timedelta(days=6)
+    assert last == first + timedelta(days=13)
 
 
 def test_clock_must_be_aware_and_boundaries_include_year_transition():
     with pytest.raises(ValueError):
         forecast_window(datetime(2026, 1, 1))
-    assert forecast_window(datetime(2026, 12, 31, tzinfo=UTC)) == (date(2026, 12, 31), date(2027, 1, 6))
+    assert forecast_window(datetime(2026, 12, 31, tzinfo=UTC)) == (date(2026, 12, 31), date(2027, 1, 13))
     assert forecast_window(datetime(2026, 12, 31, tzinfo=UTC), horizon_days=14) == (
         date(2026, 12, 31), date(2027, 1, 13))
 
 
+@pytest.mark.parametrize("horizon", [True, 14.5, 0, -1, 17])
+def test_horizon_requires_supported_integer(horizon):
+    with pytest.raises(ValueError):
+        forecast_window(datetime(2026, 12, 31, tzinfo=UTC), horizon_days=horizon)
+
+
 @pytest.mark.parametrize("start,end,allowed", [(0, 0, True), (0, 6, True), (6, 6, True),
-                                             (-1, 0, False), (0, 7, False), (7, 7, False)])
+                                             (-1, 0, False), (0, 7, False), (7, 7, True), (7, 13, True),
+                                             (13, 13, True), (14, 14, False), (8, 14, False)])
 def test_public_window_blocks_past_and_distant_dates(monkeypatch, start, end, allowed):
     today = date(2026, 10, 20)
     monkeypatch.setattr("climaprev.api.forecast_window.utc_today", lambda: today)

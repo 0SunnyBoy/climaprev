@@ -1,5 +1,7 @@
 # Datas e fusos — correção da janela pública em 20/10/2026
 
+Atualização em 30/10/2026: janela pública ampliada para hoje UTC até +13, com até sete dias por consulta. [Contrato vigente e verificações](../operacoes/horizonte-14-consulta-7-2026-10-30.md). O conteúdo abaixo registra o checkpoint histórico de 20/10.
+
 <!-- estado-vigente-2026-10-20 -->
 > **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../../RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 

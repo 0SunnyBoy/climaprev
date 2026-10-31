@@ -1,5 +1,12 @@
 # STATE — ClimaPrev
 
+## Janela pública 14/7 implementada — 30/10/2026
+
+API e frontend permitem consultar de um a sete dias consecutivos entre hoje UTC e +13, inclusive. Segunda semana disponível; oito dias e datas fora da janela são rejeitados. Formulário, validações GET/POST, descrições OpenAPI, traduções e gate HTTPS atualizados. Verificação pontual real da segunda semana em Belém retornou sete dias completos. 1.170 testes backend, mypy 99 módulos e 60 testes frontend/lint/build aprovados; consultar CI próprio do incremento.
+
+Pipeline, automação e baseline congelada do piloto preservados e calendário revalidado. A API pública ampliada não acrescenta D+7 retroativamente ao controle experimental de sete datas; sua ausência no estudo continua explícita até nova versão metodológica. Reference-v1 permanece padrão, sem ganho científico inferido. Horizonte 14/7 deixa de ser pendência; 16/8 e sazonal não implementados. Relatório: `docs/operacoes/horizonte-14-consulta-7-2026-10-30.md`. Este checkpoint supera os registros históricos abaixo de horizonte público de sete datas ou 14 dias apenas adiados.
+
+
 ## Entregas analíticas 4 → 1 → 2 → 3 — 30/10/2026
 
 Implementados relatório automático de encerramento/cobertura do piloto, revisão declarada de contratos/altura/representatividade das variáveis secundárias, planejamento estatístico com alocação de confiança e sensibilidade de blocos e alternativas fixas de combinação/correção. São quatro módulos novos de análise; os arquivos congelados da coleta não foram alterados e o calendário ativo continua válido. 29 testes direcionados, Ruff integral e mypy dos quatro módulos aprovados; conferir CI próprio do incremento.
