@@ -14,6 +14,18 @@ from climaprev.domain.models import (
     OfficialAlert,
 )
 
+_DAY_NUMERIC_FIELDS = (
+    "temperature_min_c",
+    "temperature_max_c",
+    "temperature_mean_c",
+    "humidity_mean_pct",
+    "precipitation_sum_mm",
+    "precipitation_probability_max_pct",
+    "precipitation_max_hourly_mm",
+    "wind_max_kmh",
+    "wind_gust_max_kmh",
+)
+
 
 def encode_alerts(result: OfficialAlertsResult) -> dict[str, object]:
     return {
@@ -120,15 +132,7 @@ def encode_forecast(forecast: NormalizedForecast) -> dict[str, object]:
         "days": [
             {
                 "date": day.date.isoformat(),
-                "temperature_min_c": day.temperature_min_c,
-                "temperature_max_c": day.temperature_max_c,
-                "temperature_mean_c": day.temperature_mean_c,
-                "humidity_mean_pct": day.humidity_mean_pct,
-                "precipitation_sum_mm": day.precipitation_sum_mm,
-                "precipitation_probability_max_pct": day.precipitation_probability_max_pct,
-                "precipitation_max_hourly_mm": day.precipitation_max_hourly_mm,
-                "wind_max_kmh": day.wind_max_kmh,
-                "wind_gust_max_kmh": day.wind_gust_max_kmh,
+                **{field: getattr(day, field) for field in _DAY_NUMERIC_FIELDS},
                 "weather_code": day.weather_code,
             }
             for day in forecast.days
@@ -209,36 +213,14 @@ def _days_from_cache(value: object) -> tuple[DailyForecast, ...] | None:
 
 
 def _day_from_cache(value: Mapping[object, object]) -> DailyForecast | None:
-    required_fields = (
-        "date",
-        "temperature_min_c",
-        "temperature_max_c",
-        "temperature_mean_c",
-        "humidity_mean_pct",
-        "precipitation_sum_mm",
-        "precipitation_probability_max_pct",
-        "precipitation_max_hourly_mm",
-        "wind_max_kmh",
-        "wind_gust_max_kmh",
-        "weather_code",
-    )
+    required_fields = ("date", *_DAY_NUMERIC_FIELDS, "weather_code")
     if any(field not in value for field in required_fields):
         return None
     day_date = _date(value.get("date"))
     weather_code = _integer_or_none(value.get("weather_code"))
     numbers = {
         key: _number_or_none(value.get(key))
-        for key in (
-            "temperature_min_c",
-            "temperature_max_c",
-            "temperature_mean_c",
-            "humidity_mean_pct",
-            "precipitation_sum_mm",
-            "precipitation_probability_max_pct",
-            "precipitation_max_hourly_mm",
-            "wind_max_kmh",
-            "wind_gust_max_kmh",
-        )
+        for key in _DAY_NUMERIC_FIELDS
     }
     if day_date is None or isinstance(weather_code, _InvalidValue):
         return None
@@ -246,17 +228,7 @@ def _day_from_cache(value: Mapping[object, object]) -> DailyForecast | None:
         return None
     return DailyForecast(
         date=day_date,
-        temperature_min_c=cast(float | None, numbers["temperature_min_c"]),
-        temperature_max_c=cast(float | None, numbers["temperature_max_c"]),
-        temperature_mean_c=cast(float | None, numbers["temperature_mean_c"]),
-        humidity_mean_pct=cast(float | None, numbers["humidity_mean_pct"]),
-        precipitation_sum_mm=cast(float | None, numbers["precipitation_sum_mm"]),
-        precipitation_probability_max_pct=cast(
-            float | None, numbers["precipitation_probability_max_pct"]
-        ),
-        precipitation_max_hourly_mm=cast(float | None, numbers["precipitation_max_hourly_mm"]),
-        wind_max_kmh=cast(float | None, numbers["wind_max_kmh"]),
-        wind_gust_max_kmh=cast(float | None, numbers["wind_gust_max_kmh"]),
+        **cast(dict[str, float | None], numbers),
         weather_code=weather_code,
     )
 

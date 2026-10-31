@@ -18,17 +18,10 @@ from climaprev.application.errors import (
 
 def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
+    @app.exception_handler(ValidationError)
     async def validation_error_handler(
         request: Request,
-        error: RequestValidationError,
-    ) -> JSONResponse:
-        code, message = _validation_error(error)
-        return _error_response(request, 422, code, message)
-
-    @app.exception_handler(ValidationError)
-    async def pydantic_validation_error_handler(
-        request: Request,
-        error: ValidationError,
+        error: RequestValidationError | ValidationError,
     ) -> JSONResponse:
         code, message = _validation_error(error)
         return _error_response(request, 422, code, message)
@@ -92,12 +85,13 @@ def register_error_handlers(app: FastAPI) -> None:
 
 
 def _validation_error(error: RequestValidationError | ValidationError) -> tuple[str, str]:
-    locations = [item.get("loc", ()) for item in error.errors()]
+    errors = error.errors()
+    locations = [item.get("loc", ()) for item in errors]
     if any("temperature_unit" in location for location in locations):
         return "INVALID_TEMPERATURE_UNIT", "temperature_unit must be celsius or fahrenheit"
     if any("start_date" in location or "end_date" in location for location in locations):
         return "INVALID_PERIOD", "date period is invalid"
-    messages = [str(item.get("msg", "")) for item in error.errors()]
+    messages = [str(item.get("msg", "")) for item in errors]
     if any("date period" in message or "end_date" in message for message in messages):
         return "INVALID_PERIOD", "date period is invalid"
     return "INVALID_LOCATION_INPUT", "location input is invalid"

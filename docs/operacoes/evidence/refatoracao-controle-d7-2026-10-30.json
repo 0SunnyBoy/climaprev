@@ -1,0 +1,99 @@
+{
+  "schema": "climaprev-refactor-d7-verification-v1",
+  "checked_at_utc": "2026-10-31T01:17:35.881318+00:00",
+  "baseline": "355a158ce91792b3bb8cb777219049b92f833839",
+  "backend_tests_passed": 1207,
+  "frontend_tests_passed": 61,
+  "d7_tests_passed": 37,
+  "mypy_source_files": 102,
+  "ruff_passed": true,
+  "frontend_lint_typecheck_build_passed": true,
+  "openapi_sha256": "474199bf4155eec9bde52b4343e0aaed12888bee7315f9e87460b48efaac62fe",
+  "active_pilot_calendar_valid": true,
+  "frozen_pipeline_versions": {
+    "tools/experimental_archive.py": "eef0e404c1bfff9bb2367f7b3a52cc09bcb8f9d17ba143b779575436a6ed11f6",
+    "tools/experimental_baseline.py": "8fb6cfb35d6a8beef4df1887c63cde8d87401665e72f85589676d060c00447fb",
+    "tools/experimental_collection.py": "18fb266e0b3d3255d2e68b25a913425e98b6dedcc1ca8e09706561202a43d7f8",
+    "tools/experimental_normalization.py": "05155a1cb171330e012a43c63299512bfd18a08313a57566e329f66315f7248f",
+    "tools/experimental_campaign.py": "5dd538f8401c1b1c44258c32254d9924f6a021ad202695da9f58744ee019cfff",
+    "tools/experimental_pairing.py": "50b524f622ca0b55cc2d6eeadce873d9d104632746e45a10de4002677496abe6",
+    "tools/inmet_observations.py": "6f84349fc386da23143abf1ca315574d0080917189188c70fd56bcaf112fa4b4",
+    "infrastructure/providers/open_meteo.py": "aadc811743829d74882ce8116ee5c5841f8ed78b7bd10d17212050414e54ee3d",
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "tools/experimental_comparison.py": "72a1b9dc77e2ad489357b93da7efad63aff69507bd702bd3e4b3b6745e28b1b6",
+    "tools/experimental_equivalence.py": "4aca2071a6716d3be9ebf45032412f56619463d8b64d4e2fbb95e844ab42bc3f",
+    "tools/experimental_observations.py": "92fc83ed7e50c34fda6a0c8be289961c02288c4c4f3136159769246c057eb766",
+    "tools/experimental_multivariable.py": "ed0df6d3d9e3f7a1c665bda9c60593f2243a3254477a56baa00c39364fbc6f0b",
+    "tools/experimental_evaluation.py": "b41fb157b836a17c124d8a850830bca10272abfbc092728c8769c9e71156f1cf",
+    "tools/experimental_uncertainty.py": "273b1b541bc13567b0cba8b645f276b682671b9254f215d24d655739540c7c96",
+    "tools/experimental_criteria.py": "b6102ad8ac63135361be3aa5c9634f49ea20787f01c3f0a520675cc23ec7fbc7",
+    "domain/bootstrap.py": "b5d536bde2b6ed9d4c5642ec0b87b934302569f1a1bfcf1e3f61424aec7df045",
+    "tools/experimental_protocol.py": "9541dcff8ccfe1c2960c50893888688253a73a57439a243d1ef874ca35931a1c",
+    "tools/experimental_preparation.py": "52060cd6eb8f98af806d0781dfda0290bba58fc2f96e37d94413917b441621f8",
+    "tools/inmet_tempo_csv.py": "47014d50938b218ac0af488be9fabfca80a8ee7fcb64b0957d58f40441d8f2c2",
+    "tools/experimental_pilot_quota.py": "e9c5b3a9cccc9d6faf9368f01398de58e28ac04ceefe55e9030a16746c2f5fcb"
+  },
+  "cache_serialization_equal_to_baseline": true,
+  "cache_decode_differential_cases": 7,
+  "new_real_forecast_calls": 0,
+  "d7_execution_enabled": false,
+  "scientific_approval": false,
+  "promotion_allowed": false,
+  "runtime_line_metric": {
+    "scope": "src/**/*.py and frontend/src/**/*.{ts,vue,css}, excluding frontend .test.ts",
+    "before": 13400,
+    "after": 13821,
+    "existing_files_after": 13358,
+    "removed_from_existing_runtime": 42,
+    "new_d7_runtime_lines": 463,
+    "net_change": 421
+  },
+  "second_review": {
+    "inventory_entries": 618,
+    "backend": true,
+    "frontend": true,
+    "tools": true,
+    "tests": true,
+    "configuration_and_ci": true,
+    "documentation_links": {
+      "markdown_reviewed": 158,
+      "links_checked": 1313,
+      "broken": 0
+    },
+    "findings_corrected": [
+      "shared query payload builder now used by App",
+      "shared date end bound in form",
+      "one API validation handler",
+      "single cache numerical field catalog",
+      "separate D7 orchestration archive and ledger"
+    ],
+    "deferred_with_reason": [
+      "large fingerprinted scientific functions require deliberate version after active pilot",
+      "translation catalogs and security validation are required content not dead code"
+    ],
+    "new_instrument_certification_obtained": false
+  },
+  "third_review": {
+    "checked_at_utc": "2026-10-31T01:15:29.820610+00:00",
+    "d7_tests_passed": 37,
+    "findings_corrected": [
+      "duplicate UTC slot instants rejected",
+      "complete seed station/model universe required"
+    ],
+    "additional_cases": [
+      "23-hour civil day capture",
+      "25-hour civil day capture",
+      "independent SQLite budget workers",
+      "runtime E1 before I/O"
+    ],
+    "no_additional_mandatory_refactor_identified": true,
+    "full_post_change_regression": "passed_1207_backend_ruff_mypy_102"
+  },
+  "d7_implementation_sources": {
+    "src/climaprev/tools/experimental_d7_control.py": "21b0ee89f354fe4cf83f3a303a9a539fff4d5d1f8d833d2a1eb8e855de35bb31",
+    "src/climaprev/tools/experimental_d7_archive.py": "f55f3a4ee736be69aca04a248c59a7d263980e23b21dec58b75573020a10fe09",
+    "src/climaprev/tools/experimental_d7_ledger.py": "8ded219f61a301119a8349c95f18e963cc0e099d47490f01f342e2c00fda674d"
+  }
+}

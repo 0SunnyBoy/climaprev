@@ -9,7 +9,7 @@ import { useRiskQuery } from '@/composables/useRiskQuery'
 import { useLocale, type MessageKey } from '@/composables/useLocale'
 import { useTheme } from '@/composables/useTheme'
 import type { LocationCandidate } from '@/types/api'
-import type { QueryFormState } from '@/types/query'
+import { toRiskQueryPayload, type QueryFormState } from '@/types/query'
 
 const formRef = ref<{ setFieldError: (name: string, message: string | (() => string)) => void } | null>(null)
 const statusMessage = ref<string | (() => string)>('')
@@ -124,14 +124,7 @@ async function runQuery(form: QueryFormState) {
   clearCooldown()
   statusRole.value = 'status'
   statusMessage.value = () => t('querying')
-  const response = await submit({
-    start_date: form.startDate,
-    temperature_unit: form.temperatureUnit,
-    ...(form.locationMode === 'city'
-      ? { location_text: form.locationText.trim() }
-      : { latitude: Number(form.latitude), longitude: Number(form.longitude) }),
-    ...(form.endDate ? { end_date: form.endDate } : {}),
-  })
+  const response = await submit(toRiskQueryPayload(form))
   if (response) {
     statusRole.value = 'status'
     statusMessage.value = () => `${t('queryReceived')} ${response.location.name}. ${t('checkDataQuality')}`

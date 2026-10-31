@@ -40,6 +40,15 @@ describe('frontend API contract', () => {
     expect(isRiskResponse({ ...response, request_id: 42 })).toBe(false)
   })
 
+  it('uses coordinates and omits an empty end date in the shared query builder', () => {
+    const form = emptyQueryForm()
+    Object.assign(form, { locationMode: 'coordinates', latitude: '-1.41', longitude: '-48.43',
+      startDate: '2030-01-01', locationText: 'ignored in coordinate mode' })
+    expect(toRiskQueryPayload(form)).toEqual({
+      latitude: -1.41, longitude: -48.43, start_date: '2030-01-01', temperature_unit: 'celsius',
+    })
+  })
+
   it('não apresenta falha HTTP como busca sem resultados', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('unavailable', { status: 503 })))
     await expect(searchLocations('Belém')).rejects.toMatchObject({ status: 503 })

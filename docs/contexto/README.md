@@ -43,3 +43,13 @@ STATE e RDP consolidam o presente. Relatórios datados e arquivos HISTORICO/REGI
 - [RELATORIO-CANDIDATE-1-FRENTE-1-DADOS-E-INTEGRACOES-REGISTROS-ATE-2026-10-30](RELATORIO-CANDIDATE-1-FRENTE-1-DADOS-E-INTEGRACOES-REGISTROS-ATE-2026-10-30.md)
 - [RELATORIO-CANDIDATE-1-FRENTE-2-CIENCIA-E-PRECISAO-REGISTROS-ATE-2026-10-30](RELATORIO-CANDIDATE-1-FRENTE-2-CIENCIA-E-PRECISAO-REGISTROS-ATE-2026-10-30.md)
 - [Visualização geral do projeto](Visualiza%C3%A7%C3%A3o%20geral%20do%20projeto.md)
+
+## Revisão de checks, metadados e D+7
+
+[Entrega e limites](../operacoes/revisao-checks-metadados-d7-2026-10-30.md) · [Inventário instrumental](../planejamento/reference-candidate-1/metadados-instrumentais-2026-10-30.md) · [Desenho prospectivo D+7](../planejamento/reference-candidate-1/controle-d7-prospectivo-2026-10-30.md).
+
+## Refatoração e infraestrutura D+7
+
+[Entrega e segunda revisão](../operacoes/refatoracao-controle-d7-2026-10-30.md) · [Manual de operação D+7](../operacoes/controle-d7-operacao-2026-10-30.md). Infraestrutura implementada e desativada; o desenho original continua como registro anterior.
+
+[Terceira revisão concluída, achados e verificações](../operacoes/terceira-revisao-refatoracao-2026-10-30.md).

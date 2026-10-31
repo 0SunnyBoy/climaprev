@@ -1,6 +1,6 @@
 # Catálogo de implementações e responsabilidades
 
-> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP vigente](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Índice contextual](../contexto/README.md). Versão 0.1.0; janela pública 14/7 implementada; reference-v1 ativa; piloto v5 agendado até a cota, sem ganho científico comprovado. Resultados, bloqueios e decisões datados neste documento descrevem sua época; o estado consolidado prevalece sobre checkpoints superados.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
 
 Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Este catálogo descreve caminhos, sem duplicar checkpoints.
 
@@ -48,3 +48,7 @@ A estrutura preserva independência de frontend/backend no monorepo. Extrações
 ## Integração offline e contratos verificados — 28/10/2026
 
 `experimental_evaluation.py` integra arquivos explícitos verificados, CSV e relatórios por horizonte, com escrita exclusiva, identidades de pipeline e sem baseline horária fabricada. `qualify_primary_pilot` em `experimental_preparation.py` verifica prontidão da chuva sem ativar calendários. Correção oficial em `experimental_observations.py`: temperatura média horária; umidade sem agregação instantânea comprovada. 858 testes backend/mypy 89 módulos/Ruff aprovados. [Relatório](../operacoes/frente-2-etapas-1-a-5-2026-10-28.md).
+
+## Refatoração e controle D+7 — 30/10/2026
+
+`experimental_d7_control.py` coordena protocolo/calendário/execução; `experimental_d7_archive.py` preserva corpo HTTP original e deriva recorte para o adaptador; `experimental_d7_ledger.py` registra reservas e impede concorrência com o piloto ativo. Handler de validação compartilhado, catálogo numérico do cache e construtor de consulta frontend únicos. [Resultado e segunda revisão](../operacoes/refatoracao-controle-d7-2026-10-30.md).

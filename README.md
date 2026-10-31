@@ -2,6 +2,8 @@
 
 ## Estado atual — 30/10/2026
 
+[Refatoração revisada e infraestrutura D+7](docs/operacoes/refatoracao-controle-d7-2026-10-30.md): 1.207 testes backend, 61 frontend, Ruff/mypy (102 módulos), tipagem e build aprovados localmente. D+7 implementado e desativado; protocolo/calendário próprios pendentes, piloto preservado. Arquivos existentes simplificados, sem mudança de contrato OpenAPI ou precisão demonstrada da candidata.
+
 Backend e frontend **0.1.0**, branch **develop**, monorepo com builds e execução separados. Base funcional publicada: `ffa50f11cf0a4b0e68acdd249f80d0c8f8abca15` (`ffa50f1`); esta revisão documental é posterior a essa base, sem nova release.
 
 Janela pública **14/7** concluída: consultas de um a sete dias consecutivos entre hoje UTC e +13, inclusive. O calendário da interface e a API GET/POST aplicam os mesmos limites. A agregação meteorológica mantém o fuso da localidade. Disponibilidade pontual na segunda semana verificada; isso não comprova precisão.
@@ -266,7 +268,8 @@ O desenvolvimento ocorre na branch `develop`; a branch `main` recebe somente
 alterações estáveis aprovadas para publicação. O checkout atual
 `climaprev-develop` está vinculado ao histórico Git original. O código funcional
 14/7 foi publicado em `ffa50f1`, com CI e Security aprovados; a reorganização
-documental de 30/10 permanece local até commit/push próprios. A pasta `.homolog/` permanece local,
+documental foi publicada em `355a158`, também qualificada por CI/Security.
+O incremento de refatoração/D+7 exige seus próprios checks na publicação. A pasta `.homolog/` permanece local,
 ignorada pelo Git, e deve ser provisionada separadamente para validar a
 homologação.
 

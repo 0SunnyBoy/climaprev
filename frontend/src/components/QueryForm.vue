@@ -77,8 +77,7 @@ function submit() {
   const end = formRef.value?.elements.namedItem('end_date') as HTMLInputElement | null
   if (end) {
     end.setCustomValidity('')
-    if (form.endDate && (form.endDate < form.startDate || form.endDate > windowDates.value.last
-      || (Date.parse(form.endDate) - Date.parse(form.startDate)) / 86_400_000 >= 7)) {
+    if (form.endDate && (form.endDate < form.startDate || form.endDate > maxEndDate.value)) {
       end.setCustomValidity(t('invalidPeriod'))
     }
   }

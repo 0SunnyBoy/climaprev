@@ -1,0 +1,25 @@
+{
+  "schema": "climaprev-d7-implementation-status-v1",
+  "checked_at_utc": "2026-10-31T01:11:51.679174+00:00",
+  "status": "implemented_tested_disabled",
+  "enabled": false,
+  "original_design_file": "controle-d7-prospectivo-2026-10-30.json",
+  "original_design_sha256": "e0ae6c15de39bd03168e647ff112a1de7e77262c6f57672182b02ea05e651304",
+  "execution_scope": "secondary_exploratory_development_only",
+  "control_scope": "adapter_policy_d7_epoch_two_day_transport_v1",
+  "modules": {
+    "src/climaprev/tools/experimental_d7_control.py": "21b0ee89f354fe4cf83f3a303a9a539fff4d5d1f8d833d2a1eb8e855de35bb31",
+    "src/climaprev/tools/experimental_d7_archive.py": "f55f3a4ee736be69aca04a248c59a7d263980e23b21dec58b75573020a10fe09",
+    "src/climaprev/tools/experimental_d7_ledger.py": "8ded219f61a301119a8349c95f18e963cc0e099d47490f01f342e2c00fda674d"
+  },
+  "tests_passed": 37,
+  "real_forecast_calls": 0,
+  "pilot_forecast_quota_must_be_complete": true,
+  "pilot_manifest_dates_must_be_past": true,
+  "separate_workspace_required": true,
+  "own_protocol_calendar_E1_required": true,
+  "new_runtime_calendar_created": false,
+  "scientific_approval": false,
+  "promotion_allowed": false,
+  "third_review_complete": true
+}
