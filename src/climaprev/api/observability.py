@@ -26,6 +26,7 @@ _UPSTREAM_ERROR_CODES = {
 _RETRY_COUNT: ContextVar[list[int] | None] = ContextVar("climaprev_retry_count", default=None)
 _REQUEST_EVENTS: ContextVar[set[str] | None] = ContextVar("climaprev_metric_events", default=None)
 _LATENCY_SAMPLE_LIMIT = 2048
+_LATENCY_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 20, 30)
 
 
 def _latency_summary(samples: deque[float]) -> dict[str, float | int]:
@@ -54,6 +55,7 @@ class RequestMetrics:
         self._counters: Counter[str] = Counter()
         self._request_duration_count = 0
         self._request_duration_sum_seconds = 0.0
+        self._request_duration_buckets: Counter[str] = Counter()
         self._provider_duration_count = 0
         self._provider_duration_sum_seconds = 0.0
         self._request_latency_samples: deque[float] = deque(maxlen=_LATENCY_SAMPLE_LIMIT)
@@ -110,6 +112,10 @@ class RequestMetrics:
             return
         self._counters["upstream_errors_total"] += 1
 
+    def record_official_alert_status(self, status: str) -> None:
+        if status in {"available", "unavailable", "not_configured"}:
+            self._counters[f"official_alert_checks_total:{status}"] += 1
+
     def record_risk_evaluation(self, assessment: object) -> None:
         level = getattr(assessment, "level", "unknown")
         policy_version = getattr(assessment, "policy_version", "unknown")
@@ -146,6 +152,10 @@ class RequestMetrics:
         self._counters["requests_total"] += 1
         self._request_duration_count += 1
         self._request_duration_sum_seconds += seconds
+        for boundary in _LATENCY_BUCKETS:
+            if seconds <= boundary:
+                self._request_duration_buckets[str(boundary)] += 1
+        self._request_duration_buckets["+Inf"] += 1
         self._request_latency_samples.append(max(seconds, 0.0) * 1000)
         if status_code in {429, 502, 503}:
             self._counters[f"http_status_{status_code}_total"] += 1
@@ -188,6 +198,10 @@ class RequestMetrics:
                 "sum": self._request_duration_sum_seconds,
             },
             "request_latency_ms": _latency_summary(self._request_latency_samples),
+            "http_request_duration_buckets": {
+                **{str(boundary): self._request_duration_buckets[str(boundary)] for boundary in _LATENCY_BUCKETS},
+                "+Inf": self._request_duration_buckets["+Inf"],
+            },
             "weather_provider_requests_total": provider_requests,
             "weather_provider_duration_seconds": {
                 "count": self._provider_duration_count,
@@ -202,6 +216,8 @@ class RequestMetrics:
                 "sum": self._provider_duration_sum_seconds,
             },
             "requests_total": self._counters["requests_total"],
+            "official_alert_checks_total": {status: self._counters[f"official_alert_checks_total:{status}"]
+                                            for status in ("available", "unavailable", "not_configured")},
             "request_latency_ms_count": self._request_duration_count,
             "cache_corruptions_total": self._counters["cache_corruptions_total"],
             "cache_hits_total": self._counters["cache_hits_total"],

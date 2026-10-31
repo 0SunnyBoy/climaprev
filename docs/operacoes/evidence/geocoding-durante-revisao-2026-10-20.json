@@ -1,0 +1,15 @@
+{
+  "attempts": [
+    {
+      "test": "default",
+      "http_status": 200,
+      "bytes": 1535
+    },
+    {
+      "test": "identified",
+      "http_status": 200,
+      "bytes": 1535
+    }
+  ],
+  "tls_validation_disabled": false
+}

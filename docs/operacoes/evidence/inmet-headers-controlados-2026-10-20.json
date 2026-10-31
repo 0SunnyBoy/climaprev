@@ -1,0 +1,47 @@
+{
+  "checked_utc": "2026-10-20T17:44:29.181579+00:00",
+  "attempts": [
+    {
+      "test": "user_agent_only",
+      "http_status": 200,
+      "bytes": 472194,
+      "sha256": "df0582188c58f338dfdb8ca3cb6252b362d1d465b47ac67285a41d38f6676cb1",
+      "buckets": {
+        "hoje": {
+          "type": "list",
+          "count": 1
+        },
+        "futuro": {
+          "type": "list",
+          "count": 7
+        }
+      }
+    },
+    {
+      "test": "honest_user_agent",
+      "http_status": 200,
+      "bytes": 472194,
+      "sha256": "df0582188c58f338dfdb8ca3cb6252b362d1d465b47ac67285a41d38f6676cb1",
+      "buckets": {
+        "hoje": {
+          "type": "list",
+          "count": 1
+        },
+        "futuro": {
+          "type": "list",
+          "count": 7
+        }
+      }
+    },
+    {
+      "test": "referer_only",
+      "error_type": "RemoteProtocolError"
+    },
+    {
+      "test": "accept_only",
+      "error_type": "RemoteProtocolError"
+    }
+  ],
+  "raw_response_ignored": true,
+  "tls_validation_disabled": false
+}

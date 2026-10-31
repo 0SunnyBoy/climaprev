@@ -25,7 +25,8 @@ def provision(
     acl = directory / "redis.acl"
     acl.write_text("user default off\nuser climaprev on #" + digest +
                    f" ~climaprev:{environment}:* +ping +select +get +set +del +eval +hmget +hset"
-                   " +pexpire +expire +exists +pttl +ttl +client|setinfo\n")
+                   " +pexpire +expire +exists +pttl +ttl +client|setinfo"
+                   " +zadd +zrange +zremrangebyscore\n")
     acl.chmod(0o444)
     (directory / "compose.env").write_text(
         f"CLIMAPREV_HOMOLOG_DIR={directory.resolve()}\n"

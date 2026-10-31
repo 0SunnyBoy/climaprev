@@ -1,0 +1,148 @@
+{
+  "schema": "climaprev-six-step-preparation-v1",
+  "checked_at": "2026-10-30T15:36:58.164882+00:00",
+  "code_base": "cab7d8c79dca8756eedb6fccea27fd8a06796097",
+  "pipeline_versions": {
+    "tools/experimental_archive.py": "eef0e404c1bfff9bb2367f7b3a52cc09bcb8f9d17ba143b779575436a6ed11f6",
+    "tools/experimental_baseline.py": "8fb6cfb35d6a8beef4df1887c63cde8d87401665e72f85589676d060c00447fb",
+    "tools/experimental_collection.py": "18fb266e0b3d3255d2e68b25a913425e98b6dedcc1ca8e09706561202a43d7f8",
+    "tools/experimental_normalization.py": "05155a1cb171330e012a43c63299512bfd18a08313a57566e329f66315f7248f",
+    "tools/experimental_campaign.py": "00b5896a95d0770a1c37cc29795f3f3e5064f60050740676f0d28b914db858bf",
+    "tools/experimental_pairing.py": "50b524f622ca0b55cc2d6eeadce873d9d104632746e45a10de4002677496abe6",
+    "tools/inmet_observations.py": "6f84349fc386da23143abf1ca315574d0080917189188c70fd56bcaf112fa4b4",
+    "infrastructure/providers/open_meteo.py": "aadc811743829d74882ce8116ee5c5841f8ed78b7bd10d17212050414e54ee3d",
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "tools/experimental_comparison.py": "72a1b9dc77e2ad489357b93da7efad63aff69507bd702bd3e4b3b6745e28b1b6",
+    "tools/experimental_equivalence.py": "4aca2071a6716d3be9ebf45032412f56619463d8b64d4e2fbb95e844ab42bc3f",
+    "tools/experimental_observations.py": "92fc83ed7e50c34fda6a0c8be289961c02288c4c4f3136159769246c057eb766",
+    "tools/experimental_multivariable.py": "ed0df6d3d9e3f7a1c665bda9c60593f2243a3254477a56baa00c39364fbc6f0b",
+    "tools/experimental_evaluation.py": "b41fb157b836a17c124d8a850830bca10272abfbc092728c8769c9e71156f1cf",
+    "tools/experimental_uncertainty.py": "273b1b541bc13567b0cba8b645f276b682671b9254f215d24d655739540c7c96",
+    "tools/experimental_criteria.py": "b6102ad8ac63135361be3aa5c9634f49ea20787f01c3f0a520675cc23ec7fbc7",
+    "domain/bootstrap.py": "b5d536bde2b6ed9d4c5642ec0b87b934302569f1a1bfcf1e3f61424aec7df045",
+    "tools/experimental_protocol.py": "9541dcff8ccfe1c2960c50893888688253a73a57439a243d1ef874ca35931a1c",
+    "tools/experimental_preparation.py": "52060cd6eb8f98af806d0781dfda0290bba58fc2f96e37d94413917b441621f8"
+  },
+  "protocol_sha256": "d03c0aa330f9e64da71ea591d92fc26246a58f367446be5dec37e7e27369554c",
+  "target_calendar_sha256": "f7f44a4bde86dd0d09f464901a743a49fc70563d238221d0668aaabb796ea949",
+  "manifest_calendar_sha256": "80a5f106961ceb7f9b85c3148ce2cbb249e0e3105dc3acd50c98e4e442f1f2cc",
+  "calendar_path": ".report-work\\preparacao-piloto-2026-10-30\\target-calendar-v3.disabled.json",
+  "calendar_enabled": false,
+  "first_slot": "2026-10-31T18:00:00+00:00",
+  "last_slot": "2026-11-13T18:00:00+00:00",
+  "slots": 14,
+  "planned_jobs": 210,
+  "planned_targets": 630,
+  "target_date_range": [
+    "2026-11-01",
+    "2026-11-20"
+  ],
+  "run_identity": "latest available, unknown initialization retained; primary compares same decision slot, not equal run age",
+  "recent_observations": [
+    {
+      "station": "A001",
+      "source_sha256": "3610f36b96c71a4ccba276dd18a31fd46bece3bddc67e1b8a74ebc5d98893dc9",
+      "window_start": "2026-10-23T03:00:00+00:00",
+      "window_end": "2026-10-30T03:00:00+00:00",
+      "recent_rain_coverage": 0.0,
+      "station_version_matches": true
+    },
+    {
+      "station": "A201",
+      "source_sha256": "4a3169fbfc9c53cc555448d193be8ae05eeb3d1fc825c04f4d94d389eb22c9ce",
+      "window_start": "2026-10-23T03:00:00+00:00",
+      "window_end": "2026-10-30T03:00:00+00:00",
+      "recent_rain_coverage": 0.0,
+      "station_version_matches": true
+    },
+    {
+      "station": "A801",
+      "source_sha256": "c32be28add78765f2f19d656826242d0d9936c45e6470fca1d395f1b755888b1",
+      "window_start": "2026-10-23T03:00:00+00:00",
+      "window_end": "2026-10-30T03:00:00+00:00",
+      "recent_rain_coverage": 0.0,
+      "station_version_matches": true
+    }
+  ],
+  "station_reconciliation": [
+    {
+      "station": "A001",
+      "location": {
+        "name": "BRASILIA",
+        "latitude": -15.78944444,
+        "longitude": -47.92583332,
+        "timezone": "America/Sao_Paulo",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {},
+      "historical_pairing_requires_reconciliation": false,
+      "historical_metadata_sha256": "4327327cb8c4a45c67124aca98109e1ffa82ca1d899205f6697c06eac1c70978",
+      "current_metadata_sha256": "c195b1fcd228385b335241244e89d1bc417d9727769f64a3a8f1a319cd4e4c66",
+      "current_observation_quality_verified": false,
+      "activation_ready": false
+    },
+    {
+      "station": "A201",
+      "location": {
+        "name": "BELEM",
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "timezone": "America/Belem",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {},
+      "historical_pairing_requires_reconciliation": false,
+      "historical_metadata_sha256": "b9b39515585e97fd1f24801429ca1f1c862453f4a7c884126ef10b929b06b50c",
+      "current_metadata_sha256": "db8de9298425d9343b74bf91eae370f42012aa548eb1fec9afd95d5f7e78eb16",
+      "current_observation_quality_verified": false,
+      "activation_ready": false
+    },
+    {
+      "station": "A801",
+      "location": {
+        "name": "PORTO ALEGRE - JARDIM BOTANICO",
+        "latitude": -30.05361111,
+        "longitude": -51.17472221,
+        "timezone": "America/Sao_Paulo",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {},
+      "historical_pairing_requires_reconciliation": false,
+      "historical_metadata_sha256": "b4bb02841b3dabe11abeda44e56db86620e3fa627778a1cbf2604054f0c87358",
+      "current_metadata_sha256": "bed7a0bbcfc028498031f61b41f6082a605f7e8c749299d120b77dff8b513132",
+      "current_observation_quality_verified": false,
+      "activation_ready": false
+    }
+  ],
+  "forecast_preflight_slot": "2026-10-28T16:57:57.347692+00:00",
+  "new_forecasts_collected": 0,
+  "new_reserved_outcomes_opened": false,
+  "readiness": {
+    "schema": "climaprev-primary-pilot-readiness-v1",
+    "ready": false,
+    "blockers": [
+      "A001:forecast_preflight_not_current",
+      "A001:observation_window_outdated",
+      "A001:recent_rain_observations_incomplete",
+      "A201:forecast_preflight_not_current",
+      "A201:observation_window_outdated",
+      "A201:recent_rain_observations_incomplete",
+      "A801:forecast_preflight_not_current",
+      "A801:observation_window_outdated",
+      "A801:recent_rain_observations_incomplete"
+    ],
+    "pilot_activated": false,
+    "scientific_approval": false,
+    "promotion_allowed": false,
+    "scope": "primary_rain_technical_pilot_not_secondary_variable_certification"
+  },
+  "approval_records_created": [],
+  "scientific_approval": false,
+  "promotion_allowed": false,
+  "scope": "stop_at_readiness_no_pilot_activation"
+}

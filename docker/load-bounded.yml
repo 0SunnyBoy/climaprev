@@ -1,0 +1,21 @@
+# Local synthetic campaign only; independent of production capacity.
+services:
+  app-load:
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+    cpus: 2
+    mem_limit: 512m
+  provider-mock:
+    volumes:
+      - ./tests:/app/tests:ro
+    cpus: 1
+    mem_limit: 256m
+  redis-load:
+    cpus: 0.5
+    mem_limit: 128m
+  load:
+    volumes:
+      - ./tests:/app/tests:ro
+    cpus: 1
+    mem_limit: 512m

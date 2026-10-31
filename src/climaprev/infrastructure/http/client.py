@@ -15,14 +15,6 @@ from climaprev.application.errors import (
 )
 from climaprev.config import Settings
 
-__all__ = [
-    "AsyncJsonHttpClient",
-    "ProviderPermanentError",
-    "ProviderRateLimited",
-    "ProviderTransientError",
-    "WeatherDataInvalid",
-]
-
 _BACKOFF_SECONDS: Final = 0.05
 _MAX_BACKOFF_SECONDS: Final = 0.1
 
@@ -35,8 +27,10 @@ class AsyncJsonHttpClient:
         *,
         on_retry: Callable[[], None] | None = None,
         before_send: Callable[[str], Awaitable[None]] | None = None,
+        headers: Mapping[str, str] | None = None,
     ) -> None:
         self._client = client
+        self._headers = dict(headers) if headers is not None else None
         self._before_send = before_send
         self._additional_retries = settings.additional_retries
         self._on_retry = on_retry
@@ -67,7 +61,8 @@ class AsyncJsonHttpClient:
                 await self._before_send(url)
             try:
                 async with self._client.stream(
-                    "GET", url, params=params, timeout=self._timeout, follow_redirects=False
+                    "GET", url, params=params, headers=self._headers,
+                    timeout=self._timeout, follow_redirects=False
                 ) as response:
                     if response.status_code >= 500:
                         raise ProviderTransientError("provider server error")

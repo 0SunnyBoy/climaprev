@@ -1,0 +1,21 @@
+ Container climaprev-develop-load-run-d9949bf0a586 Creating 
+ Container climaprev-develop-load-run-d9949bf0a586 Created 
+[2026-10-20 16:43:21,466] 1d6236a17bf0/INFO/locust.main: Starting Locust 2.46.7
+[2026-10-20 16:43:21,472] 1d6236a17bf0/INFO/locust.main: Run time limit set to 60 seconds
+[2026-10-20 16:43:21,480] 1d6236a17bf0/INFO/locust.runners: Ramping to 10 users at a rate of 10.00 per second
+[2026-10-20 16:43:21,482] 1d6236a17bf0/INFO/locust.runners: All users spawned: {"RiskApiUser": 10} (10 total users)
+[2026-10-20 16:44:21,002] 1d6236a17bf0/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-20 16:44:21,057] 1d6236a17bf0/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /api/v1/risk [cold_cache]                                                        600     0(0.00%) |    146      58     243    160 |   10.13        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       600     0(0.00%) |    146      58     243    160 |   10.13        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      /api/v1/risk [cold_cache]                                                             160    170    180    190    210    220    230    240    240    240    240    600
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                            160    170    180    190    210    220    230    240    240    240    240    600
+

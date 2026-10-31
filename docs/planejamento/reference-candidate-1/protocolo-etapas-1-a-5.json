@@ -1,0 +1,97 @@
+{
+  "protocol_id": "reference-candidate-1-stages-1-5-2026-10-16-v1",
+  "status": "technical_design_frozen_scientific_review_pending",
+  "authorization": {
+    "allowed_stages": [1, 2, 3, 4, 5],
+    "first_forbidden_stage": 6,
+    "candidate_fitting_allowed": false,
+    "calibration_fitting_allowed": false,
+    "automatic_promotion": false,
+    "reason": "User explicitly requested stopping before stage 6; new explicit authorization is required."
+  },
+  "scientific_reviewer": null,
+  "scientific_approval": null,
+  "splits_status": "prospectively_reserved_after_known_pilot_exclusion_subject_to_provenance_audit",
+  "splits": {
+    "adjustment": {"start": "2024-01-01", "end": "2024-12-31"},
+    "validation": {"start": "2025-07-01", "end": "2025-12-31"},
+    "test": {"start": "2026-01-01", "end": "2026-06-30"}
+  },
+  "diagnostic_only": [{"start": "2025-01-01", "end": "2025-01-31", "reason": "Belém pilot already inspected; cannot be treated as unseen validation or test."}],
+  "unused_gap": {"start": "2025-02-01", "end": "2025-06-30"},
+  "reservation_policy": {
+    "validation_and_test_outcomes_must_not_be_inspected_in_stages_1_to_5": true,
+    "reservation_is_not_proof_of_no_previous_access": true,
+    "audit_all_local_evidence_before_claiming_unseen": true,
+    "if_previously_inspected": "quarantine affected cases; revise protocol version before fitting and reserve new untouched periods",
+    "test_opening": "Only after candidate parameters, code, source hashes and validation decision are frozen under later authorization."
+  },
+  "initial_adjustment_collection": {
+    "locations": ["Belém", "Brasília", "Porto Alegre"],
+    "year": 2024,
+    "months": [1, 4, 7, 10],
+    "days_in_each_month": {"first": 1, "last": 28, "boundary_day": 29},
+    "lead_days": [1, 3, 7],
+    "selection": "Fixed quarterly windows for seasonal coverage; no selection by favorable model results.",
+    "adequacy": "Diagnostic expansion only; no claim of national representativeness or sufficient severe events."
+  },
+  "sources": {
+    "forecast": {"provider": "Open-Meteo Previous Runs API", "model": "gfs_global"},
+    "reanalysis": {"provider": "Open-Meteo Historical Weather API", "model": "era5", "role": "secondary reference and diagnostic comparison"},
+    "station": {"provider": "INMET automatic stations", "role": "meteorological observation; raw official files and station identity must be verified", "not_impact_labels": true}
+  },
+  "temporal_convention": "civil-day-preceding-hour-v1",
+  "quality": {
+    "minimum_coverage_per_variable": 1.0,
+    "missing_is_zero": false,
+    "same_eligible_cases_for_all_variants": true,
+    "reject_conflicting_duplicates": true,
+    "preserve_original_inputs": true,
+    "record_exclusions_by_variable_location_date_and_lead": true,
+    "temperature_station_interval_extremes_not_equivalent_to_forecast_instantaneous_samples": true,
+    "require_next_day_boundary": true
+  },
+  "target": {
+    "meteorological_reference": "Frozen reference-v1 thresholds applied to a separately identified observation source.",
+    "reanalysis_labels_separate_from_station_labels": true,
+    "impact_or_disaster_validation_claims_allowed": false,
+    "events": ["rain_hourly", "rain_daily", "wind_gust", "heat", "cold"],
+    "reference_policy_sha256": "to_be_recorded_with_the_frozen_dataset_manifest_before_any_fitting",
+    "never_relabel_with_candidate": true
+  },
+  "future_experiments": {
+    "R0": "reference-v1, calibration disabled",
+    "A": "experimental thresholds, calibration disabled",
+    "B": "reference-v1, fitted calibration",
+    "AB": "experimental thresholds plus fitted calibration",
+    "current_execution_permission": "R0 diagnostic data preparation only"
+  },
+  "metrics": {
+    "classification": ["confusion_matrix", "high_recall", "at_least_moderate_recall", "false_alarm_ratio", "false_positive_rate", "precision", "macro_f1", "underestimation", "overestimation"],
+    "numeric": ["bias", "mae", "rmse"],
+    "strata": ["event", "location", "lead_days", "month", "source"],
+    "no_support": "null/indeterminate; never count as successful detection or zero error"
+  },
+  "uncertainty_plan": {
+    "status": "specified_not_implemented",
+    "method": "paired moving-block bootstrap on calendar dates, all locations and leads from each sampled date kept together",
+    "primary_block_days": 7,
+    "sensitivity_block_days": [3, 14],
+    "replicates": 2000,
+    "seed": 20261016,
+    "interval": "percentile 95% interval on paired differences",
+    "caveat": "Technical design choices pending scientific review; discontinuous windows must be resampled separately, never bridged; sparse-event or degenerate intervals yield inconclusive results."
+  },
+  "future_acceptance_gates": {
+    "status": "technical_proposal_not_scientific_approval_not_execution_permission",
+    "high_recall": "No negative paired difference versus R0 in the primary estimate; uncertainty must rule out deterioration before declaring gain.",
+    "false_alarm_ratio": "No positive paired difference versus R0 in the primary estimate; uncertainty must rule out deterioration before declaring gain.",
+    "numeric_calibration": "MAE and RMSE must not increase; require a paired interval strictly below zero for at least one prespecified primary metric to claim improvement.",
+    "strata": "Report every prespecified stratum; any harmful or unsupported critical stratum blocks automatic acceptance.",
+    "sample_sufficiency": "Scientific reviewer must prespecify event counts and precision requirements before fitting; absent severe-event support means inconclusive.",
+    "primary_event_and_metric": null,
+    "scientific_minimum_gain": null,
+    "product_tradeoff_approval": null
+  },
+  "freeze_policy": "This version freezes the technical design only. Amendments require a new identifier and reason recorded before outcomes are examined; no silent overwrite after fitting. Dataset, targets and code must be independently frozen before stage 6."
+}

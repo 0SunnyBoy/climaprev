@@ -1,0 +1,1374 @@
+{
+  "executed_on": "2026-10-16",
+  "timezone": "America/Sao_Paulo",
+  "base_commit": "23bf4cee997bc825e76028f99eefd6160f699ee5",
+  "working_tree_changes": true,
+  "python": "3.12.14",
+  "environment_lock": "requirements-windows-dev.lock",
+  "location": {
+    "name": "Belem",
+    "latitude": -1.4558,
+    "longitude": -48.5044,
+    "timezone": "America/Belem"
+  },
+  "period": {
+    "start": "2025-01-01",
+    "end": "2025-01-31"
+  },
+  "models": {
+    "forecast": "gfs_global",
+    "reference": "era5"
+  },
+  "combinations": 93,
+  "unique_valid_dates": 31,
+  "eligible": 93,
+  "excluded_events": 0,
+  "reference_kind": "reference-v1-on-reanalysis",
+  "reference_policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+  "algorithms_sha256": {
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/bias_correction.py": "577295382e57570b66ff9b89ec1d99d4ae97bd2f7c46593a965e2e0dd5e054e5",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "tools/historical_data.py": "00d5ed4716eed58f06a0aaa83c64311180654db20e2e782c4b03b68f02390fa3",
+    "tools/historical_experiment.py": "47e238b2bf3b27d52dd08bdbf5798e698fac08b69ebde5e4b53703ff81b3d25b"
+  },
+  "dataset_sha256": [
+    "056bfa683502042eae187397136578602436b511c4e3384cf6a9011fe4aa7c99",
+    "8695392ef00f2c11ec692f640821f25ac2726b3a833d1bb1ba669f6db5b94ff5",
+    "cfa286d7facece5247cc30baa30c9e98b011aaeaf448f4666ae8a09c76f10e7f"
+  ],
+  "decision": "diagnostic_only_not_approved",
+  "runs": [
+    {
+      "lead_days": 1,
+      "cases": 31,
+      "correct": 30,
+      "directional_over": 0,
+      "directional_under": 1,
+      "matrix": [
+        [
+          30,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "events": {
+        "rain_hourly": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -1.4806451612903226,
+            "mae": 1.9774193548387096,
+            "rmse": 2.730414124326671
+          }
+        },
+        "rain_daily": {
+          "classification": {
+            "cases": 31,
+            "correct": 30,
+            "accuracy": 0.967741935483871,
+            "confusion_matrix": [
+              [
+                30,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 30,
+                "predicted": 31,
+                "precision": 0.967741935483871,
+                "recall": 1.0,
+                "f1": 0.9836065573770492
+              },
+              {
+                "level": "moderate",
+                "support": 1,
+                "predicted": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 0.4918032786885246,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 1,
+                "false_alarms": 0,
+                "correct_negatives": 30,
+                "recall": 0.0,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": 0.0870967741935482,
+            "mae": 6.145161290322581,
+            "rmse": 7.679738738835729
+          }
+        },
+        "wind_gust": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -0.5258064516129034,
+            "mae": 2.1451612903225805,
+            "rmse": 2.8654223355886517
+          }
+        },
+        "heat": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -0.22258064516129028,
+            "mae": 1.1838709677419355,
+            "rmse": 1.4621018895698994
+          }
+        },
+        "cold": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -2.0,
+            "mae": 2.0,
+            "rmse": 2.040398443062436
+          }
+        }
+      }
+    },
+    {
+      "lead_days": 3,
+      "cases": 31,
+      "correct": 30,
+      "directional_over": 0,
+      "directional_under": 1,
+      "matrix": [
+        [
+          30,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "events": {
+        "rain_hourly": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -1.570967741935484,
+            "mae": 2.1,
+            "rmse": 2.861592157771501
+          }
+        },
+        "rain_daily": {
+          "classification": {
+            "cases": 31,
+            "correct": 30,
+            "accuracy": 0.967741935483871,
+            "confusion_matrix": [
+              [
+                30,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 30,
+                "predicted": 31,
+                "precision": 0.967741935483871,
+                "recall": 1.0,
+                "f1": 0.9836065573770492
+              },
+              {
+                "level": "moderate",
+                "support": 1,
+                "predicted": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 0.4918032786885246,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 1,
+                "false_alarms": 0,
+                "correct_negatives": 30,
+                "recall": 0.0,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -1.635483870967742,
+            "mae": 6.680645161290323,
+            "rmse": 9.632555685396168
+          }
+        },
+        "wind_gust": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -0.8741935483870966,
+            "mae": 3.370967741935484,
+            "rmse": 3.961956180246514
+          }
+        },
+        "heat": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -0.46451612903225814,
+            "mae": 1.206451612903226,
+            "rmse": 1.4860642976581444
+          }
+        },
+        "cold": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -2.103225806451613,
+            "mae": 2.103225806451613,
+            "rmse": 2.1252703812805533
+          }
+        }
+      }
+    },
+    {
+      "lead_days": 7,
+      "cases": 31,
+      "correct": 29,
+      "directional_over": 1,
+      "directional_under": 1,
+      "matrix": [
+        [
+          29,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "events": {
+        "rain_hourly": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -2.4064516129032256,
+            "mae": 3.1225806451612903,
+            "rmse": 4.2092831356573095
+          }
+        },
+        "rain_daily": {
+          "classification": {
+            "cases": 31,
+            "correct": 29,
+            "accuracy": 0.9354838709677419,
+            "confusion_matrix": [
+              [
+                29,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 30,
+                "predicted": 30,
+                "precision": 0.9666666666666667,
+                "recall": 0.9666666666666667,
+                "f1": 0.9666666666666667
+              },
+              {
+                "level": "moderate",
+                "support": 1,
+                "predicted": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 1,
+                "precision": 0.0,
+                "recall": null,
+                "f1": 0.0
+              }
+            ],
+            "macro_f1": 0.32222222222222224,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 1,
+                "false_alarms": 1,
+                "correct_negatives": 29,
+                "recall": 0.0,
+                "false_alarm_ratio": 1.0,
+                "false_positive_rate": 0.03333333333333333
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 1,
+                "correct_negatives": 30,
+                "recall": null,
+                "false_alarm_ratio": 1.0,
+                "false_positive_rate": 0.03225806451612903
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -5.9,
+            "mae": 9.448387096774193,
+            "rmse": 13.237666201095
+          }
+        },
+        "wind_gust": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": 0.21290322580645193,
+            "mae": 3.8774193548387093,
+            "rmse": 4.997805970236243
+          }
+        },
+        "heat": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -0.6032258064516127,
+            "mae": 1.2161290322580642,
+            "rmse": 1.4496940722876
+          }
+        },
+        "cold": {
+          "classification": {
+            "cases": 31,
+            "correct": 31,
+            "accuracy": 1.0,
+            "confusion_matrix": [
+              [
+                31,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            "classes": [
+              {
+                "level": "low",
+                "support": 31,
+                "predicted": 31,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              {
+                "level": "moderate",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              },
+              {
+                "level": "high",
+                "support": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null
+              }
+            ],
+            "macro_f1": 1.0,
+            "detection": [
+              {
+                "threshold": "moderate",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              },
+              {
+                "threshold": "high",
+                "hits": 0,
+                "misses": 0,
+                "false_alarms": 0,
+                "correct_negatives": 31,
+                "recall": null,
+                "false_alarm_ratio": null,
+                "false_positive_rate": 0.0
+              }
+            ]
+          },
+          "numerical": {
+            "cases": 31,
+            "bias": -2.1387096774193544,
+            "mae": 2.1387096774193544,
+            "rmse": 2.185952217404166
+          }
+        }
+      }
+    }
+  ],
+  "checks": {
+    "portable_tests_passed": 284,
+    "unix_test_deselected": 1,
+    "ruff": "passed",
+    "mypy_linux_target": "passed_49_source_files",
+    "pip_check": "passed",
+    "replay_byte_identical": true,
+    "identity_R0_A_B_AB_metrics_identical": true,
+    "redis_and_docker_gates": "not_validated_locally"
+  },
+  "files": [
+    {
+      "arquivo": "baseline-comparison.json",
+      "bytes": 541328,
+      "sha256": "6fab087ada9d56cc57c53daf8e7ad26e7e1d4bae61be3de68c2120b26fe81c9c"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-1.inputs.json",
+      "bytes": 60723,
+      "sha256": "6ace732909c989f5e03ab2d410436c57f22cae18eb6f54ee7bfaa3c19ab4b56f"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-1.report.json",
+      "bytes": 203725,
+      "sha256": "7880cae10b4a7015618570cee0c5cbe3034e596c56aedec054e6ca942029893a"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-3.inputs.json",
+      "bytes": 60686,
+      "sha256": "188e0d73df26b4961ed003a138e8aa8c40eb5389e5544af6d66c923a1ff825f9"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-3.report.json",
+      "bytes": 203670,
+      "sha256": "368a26b5a3494e9777301038b6aa116ddf60f9bd832654c043e2a41cae1c0e4a"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-7.inputs.json",
+      "bytes": 60722,
+      "sha256": "d90a90932b889c66d008588b813f37072595ab2004bf3c5bc449a15694ca0613"
+    },
+    {
+      "arquivo": "belem-2025-01-lead-7.report.json",
+      "bytes": 203876,
+      "sha256": "c618f8502723f0399d1aa6d75fdb32fc60aea17a9775bcc6c44775b7bf27e015"
+    },
+    {
+      "arquivo": "identity-calibration.json",
+      "bytes": 160,
+      "sha256": "1743c9379ca3f7078ba2ab4c14fcab7e429995d3aab3abf9d68bc690c91d3821"
+    },
+    {
+      "arquivo": "identity-comparison.json",
+      "bytes": 2159272,
+      "sha256": "7e7f5d56166b52d90821577327dd37fbacce87796a263f2f4b2e395d807a2b8a"
+    },
+    {
+      "arquivo": "identity-policy.json",
+      "bytes": 454,
+      "sha256": "992ac9e9134e932f6bc5994076b6d58926f8fa482ef5fc32d0324780b9eb4b6d"
+    },
+    {
+      "arquivo": "replayed-lead-1.json",
+      "bytes": 203725,
+      "sha256": "7880cae10b4a7015618570cee0c5cbe3034e596c56aedec054e6ca942029893a"
+    }
+  ]
+}

@@ -1,269 +1,54 @@
-# Implementations and refactoring
+# Catálogo de implementações e responsabilidades
 
-**Status:** P0–P2.6 concluídos; revisão independente final pendente.  
-**Última atualização:** 25 de setembro de 2026.
-**Projeto:** ClimaPrev
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
 
-## Objetivo
+Estado de execução/validações em [STATE](STATE.md), pendências em [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Este catálogo descreve caminhos, sem duplicar checkpoints.
 
-Este documento registra as alterações implementadas no ciclo atual, as
-decisões tomadas e o trabalho que permanece no planejamento. Ele serve como
-handoff para retomar o projeto sem depender do histórico da conversa.
+| Responsabilidade | Código atual |
+|---|---|
+| Composição e recursos | `src/climaprev/main.py`, `config.py` |
+| Rotas, erros e saúde | `api/routes/`, `api/exception_handlers.py` |
+| Entrada/saída HTTP | `api/schemas/risk.py`, `risk_response.py` |
+| Caso de uso | `application/services/forecast_query.py` |
+| Resolução de local | `application/services/location_resolver.py` |
+| Cache/recuperação/lock/heartbeat da previsão | `application/services/forecast_cache.py` |
+| Consulta/cache/entrega de avisos | `application/services/alert_query.py` |
+| DTOs, conversões e prioridade do resultado | `application/query_result.py` |
+| Formato validado do cache | `application/cache_codec.py` |
+| Contratos e exceções internas | `application/ports.py`, `application/errors.py` |
+| Regras meteorológicas e avaliação | `domain/` |
+| HTTP, provedores, Redis e métricas | `infrastructure/`, `api/observability.py` |
+| Cliente HTTP frontend | `frontend/src/services/api.ts` |
+| Validação JSON em runtime | `frontend/src/services/responseValidation.ts` |
+| Prazo/cancelamento compartilhado | `frontend/src/utils/requestDeadline.ts` |
+| Interface e estados | `frontend/src/components/`, `frontend/src/composables/` |
+| Doubles/builders de testes reutilizados | `tests/support/forecast.py` |
+| Experimentos offline e reprodução | `src/climaprev/tools/`, `docs/planejamento/reference-candidate-1/scripts/` |
+| Baseline e rodada experimental | `tools/experimental_baseline.py`, `tools/experimental_collection.py` sob `src/climaprev/` |
+| Manifesto, orçamento local e execução por slot | `src/climaprev/tools/experimental_campaign.py` |
+| Comparação consolidada exploratória de chuva | `src/climaprev/tools/experimental_comparison.py` |
+| Arquivo, medições e pareamento exploratório INMET | `src/climaprev/tools/experimental_archive.py`, `experimental_normalization.py`, `experimental_pairing.py` |
 
-O termo correto em inglês para melhoria estrutural de código é
-**refactoring**.
+A estrutura preserva independência de frontend/backend no monorepo. Extrações não alteram automaticamente identidade de cache, critérios científicos ou publicação. Avisos oficiais e risco heurístico continuam distintos. Scripts de reprodução e arquivos fingerprintados não são conteúdo descartável.
 
-## Estado atual
+[Execução da refatoração](../operacoes/refatoracao-2026-10-20.md) · [Catálogo histórico](ImplementationsAndRefactoring-HISTORICO-ATE-2026-10-20.md).
 
-As tarefas autorizadas até **P2.6** foram concluídas. O código atual contém:
+## Frente 2 — preparação científica em 28/10/2026
 
-- frontend estático separado do pacote Python;
-- backend FastAPI orientado a API;
-- entrega local pelo Nginx;
-- controles de segurança, proxy e limites operacionais;
-- cache e coordenação Redis com resiliência;
-- integração de alertas oficiais do INMET em seção separada;
-- busca de localidades com sugestões;
-- cancelamento, timeout e mensagens acessíveis no frontend;
-- documentação dos parâmetros usados na predição.
+`tools/experimental_equivalence.py` valida contratos declarados de medições e é consultado pelo pareamento de chuva. `tools/experimental_criteria.py` recebe critérios explícitos/evidências e retorna diagnóstico, sem cálculo de intervalos ou promoção. `experimental_comparison.py` explicita controles por estrato. Ver [relatório da rodada](../operacoes/frente-2-ordens-1-a-4-2026-10-28.md). Incremento local, 815 testes backend e mypy 85 módulos/Ruff aprovados; ordens científicas 1 a 4 seguem parcialmente dependentes de decisões.
 
-### Rework do frontend com Vue — 23 de setembro de 2026
+## Preparação reproduzível da Frente 2 — 28/10/2026
 
-- Substituiu a manipulação direta do DOM por Vue 3 e Composition API.
-- Adicionou TypeScript `strict`, Vite, Vitest e ESLint.
-- Tipou a consulta, a resposta de risco, erros, qualidade dos dados e alertas.
-- Separou formulário, autocomplete, consulta, risco, previsão diária e alertas
-  em componentes e composables.
-- Preservou POST same-origin, timeout, cancelamento, rate limit, foco, teclado,
-  live region e ausência de persistência da localização.
-- Criou build multi-stage Node → Nginx, com assets hashados e sem `node_modules`
-  na imagem final.
-- Atualizou local e homologação para usar a mesma imagem compilada e manteve
-  suas configurações de proxy independentes.
-- Atualizou os gates estáticos, de segurança, contrato POST e assets dinâmicos.
-- Corrigiu o smoke test da CI para descobrir os assets hashados diretamente do
-  HTML, sem depender do antigo `/assets/styles.css`.
+`tools/experimental_preparation.py` reconcilia catálogo/versão histórica, prepara calendários desativados e verifica partições/embargos/congelamento antes das emissões de confirmação. `experimental_campaign.py` congela e encaminha inicialização explícita aos modelos compatíveis. `experimental_criteria.py` admite condição de precisão para intervalos de extremos e suporte previsto. Nenhum componente ativa campanha ou demonstra independência sozinho. Ver [relatório de preparação](../operacoes/preparacao-frente-2-etapas-1-a-4-2026-10-28.md).
 
-## Alterações implementadas
+## Continuidade multivariável da Frente 2 — 28/10/2026
 
-### P0 — Separação do frontend e do backend
+`tools/experimental_observations.py` acrescenta temperatura/umidade horárias declaradas e prontidão por janela, sem alterar o importador histórico congelado. `tools/experimental_multivariable.py` pareia janelas exatas por alvo e compara casos comuns contra denominador planejado, com exclusões e sem promoção. Ambos têm identidade congelada no pipeline experimental. 845 testes backend/mypy 88 módulos/Ruff aprovados; ver [relatório](../operacoes/continuidade-frente-2-etapas-1-a-4-2026-10-28.md).
 
-- Moveu os arquivos estáticos de `src/climaprev/web/` para `frontend/`.
-- Removeu o serviço de HTML e assets do FastAPI.
-- Removeu o `package-data` que incluía arquivos web no pacote Python.
-- Ajustou os testes para validar a nova fronteira entre API e frontend.
-- Criou `docker/frontend/nginx.conf`.
-- Adicionou o serviço `frontend` ao Compose local.
-- Manteve a interface em `http://127.0.0.1:8080` e a API direta em
-  `http://127.0.0.1:8000` para diagnóstico.
-- Corrigiu a entrega dos assets pelo Nginx, incluindo MIME types e o alias de
-  `/assets/`.
+## Integração offline e contratos verificados — 28/10/2026
 
-### P1.1–P1.2 — Superfície pública e documentação da API
+`experimental_evaluation.py` integra arquivos explícitos verificados, CSV e relatórios por horizonte, com escrita exclusiva, identidades de pipeline e sem baseline horária fabricada. `qualify_primary_pilot` em `experimental_preparation.py` verifica prontidão da chuva sem ativar calendários. Correção oficial em `experimental_observations.py`: temperatura média horária; umidade sem agregação instantânea comprovada. 858 testes backend/mypy 89 módulos/Ruff aprovados. [Relatório](../operacoes/frente-2-etapas-1-a-5-2026-10-28.md).
 
-- Adicionou headers de segurança no Nginx: `nosniff`, `Referrer-Policy`,
-  `Permissions-Policy`, `X-Frame-Options` e `Content-Security-Policy`.
-- Restringiu Swagger, ReDoc e OpenAPI ao ambiente de desenvolvimento.
-- Manteve métricas internas fora da superfície pública.
-- Adicionou testes de fronteira para rotas públicas, internas e desconhecidas.
+## Refatoração e controle D+7 — 30/10/2026
 
-### P1.3 — Proxy confiável e identidade do cliente
-
-- Configurou a confiança explícita no proxy conhecido.
-- Ajustou a leitura de `X-Forwarded-For` e `X-Real-IP`.
-- Configurou o Nginx para encaminhar os headers de forma consistente.
-- Preservou o rate limit contra headers forjados por clientes não confiáveis.
-
-### P1.4 — Consulta por POST
-
-- Adicionou `POST /api/v1/risk` com corpo JSON validado pelo mesmo contrato do
-  endpoint GET.
-- Atualizou o frontend para enviar os dados da consulta no corpo da requisição.
-- Manteve o GET para compatibilidade e diagnóstico.
-- Reduziu a exposição de localização em URLs, históricos e logs de acesso.
-
-### P1.5 — Endurecimento dos containers
-
-- Fixou as imagens por versões explícitas.
-- Aplicou filesystem somente leitura onde compatível.
-- Removeu capabilities desnecessárias e ativou `no-new-privileges`.
-- Restringiu portas e redes conforme o papel de cada serviço.
-- Preservou health checks e o funcionamento do alvo de desenvolvimento.
-
-### P1.6 — Lock Redis com backoff
-
-- Substituiu polling agressivo por backoff exponencial limitado.
-- Adicionou jitter para reduzir sincronização entre concorrentes.
-- Definiu limite de tentativas e deadline de espera.
-- Registrou contenção e timeout do lock nas métricas.
-
-### P1.7 — Observabilidade
-
-- Adicionou métricas de latência e resultado por provedor.
-- Registrou cache hit, stale e miss.
-- Registrou retries, erros upstream, contenção e timeout de lock.
-- Manteve os registros sanitizados e a rota de métricas interna.
-
-### P1.8–P1.9 — Performance do provedor e dos assets
-
-- Removeu campos horários não utilizados pelo domínio.
-- Manteve as séries meteorológicas necessárias para a resposta e o cálculo.
-- Configurou cache controlado para CSS e JavaScript.
-- Configurou revalidação frequente para o HTML.
-- Adicionou verificações estáticas para MIME types, headers e cache.
-
-### P1.10–P1.11 — Alertas opcionais e cliente HTTP compartilhado
-
-- Criou a porta de alertas oficiais sem misturá-la ao risco heurístico.
-- Compartilhou o `httpx.AsyncClient` entre adaptadores.
-- Configurou limites de conexões, keep-alive e timeouts explícitos.
-- Limitou retries a falhas transitórias e evitou retry indiscriminado de 429.
-- Preservou a proteção contra destinos externos não permitidos.
-
-### P2.1 — Alertas oficiais do INMET
-
-- Adicionou o adaptador `InmetOfficialAlertsProvider`.
-- Consultou o endpoint oficial de avisos ativos do INMET.
-- Interpretou alertas de hoje e futuros.
-- Validou polígonos GeoJSON e a localização consultada.
-- Filtrou alertas pelo período solicitado e pelo fuso local.
-- Exibiu origem, evento, severidade, vigência, área e URL de origem.
-- Separou os estados `available` e `unavailable` do cálculo de
-  `forecast_risk`.
-- Adicionou cache de sucesso e cache curto de indisponibilidade.
-
-### P2.2 — Política de risco
-
-- Revisou a política `reference-v1` e seus limiares.
-- Não alterou os limiares por falta de dados históricos rotulados e avaliação
-  especializada.
-- Registrou que a política atual é heurística e orientativa.
-- Manteve a necessidade futura de calibração científica por região e estação.
-
-### P2.3 — Busca de localidades
-
-- Adicionou `GET /api/v1/locations/search`.
-- Limitou a consulta a texto entre 2 e 100 caracteres.
-- Aplicou rate limit à busca.
-- Retornou até cinco candidatos com nome, coordenadas, fuso e fonte.
-- Adicionou sugestões no frontend com seleção por teclado e mouse.
-- Encaminhou a nova rota pelo Nginx local.
-- Manteve a confirmação da localidade antes do envio da previsão.
-
-### P2.4 — Horizonte da previsão
-
-- Manteve o contrato de até sete dias inclusivos.
-- Não inventou um horizonte fixo adicional sem contrato do provedor.
-- Preservou a validação de datas no schema, frontend e testes.
-
-### P2.5 — Estados de consulta
-
-- Adicionou timeout de dez segundos no navegador.
-- Adicionou botão de cancelamento.
-- Aborta requisições substituídas ou canceladas.
-- Impede que uma resposta antiga sobrescreva uma consulta mais recente.
-- Adicionou mensagens específicas para timeout, cancelamento e erro.
-- Aplicou `role="alert"` às mensagens de erro.
-
-### P2.6 — Acessibilidade e usabilidade
-
-- Preservou HTML semântico, labels e navegação por teclado.
-- Adicionou foco visível, skip link e região de status anunciável.
-- Melhorou o tamanho e o estado dos controles interativos.
-- Validou sugestões de localidade, foco e seleção no navegador.
-- Verificou o layout em viewport desktop e móvel.
-- Conferiu headers, MIME types e cache dos assets.
-
-## Documentação criada ou atualizada
-
-- `docs/frontend/Frontend-Rework.md`: separação entre frontend e backend.
-- `docs/projeto/PossivelPlanoDeEvolução.md`: plano amplo de evolução.
-- `docs/projeto/overview.md`: visão geral técnica do projeto.
-- `docs/arquitetura/parametros-de-predicao.md`: parâmetros de entrada,
-  variáveis meteorológicas e limiares do risco.
-- `docs/projeto/PROJECT.md`: índice e mapa da documentação.
-- Este arquivo: catálogo consolidado de implementações e refatorações.
-
-## Validações realizadas
-
-- Backend: **195 testes unitários/contratuais aprovados** nesta auditoria; a
-  suíte de integração completa depende dos serviços Redis/Compose.
-- Ruff aprovado; a verificação foi executada ignorando `EXE002`, que é ruído
-  de permissões/shebang preexistente nos arquivos do repositório.
-- Mypy aprovado em 41 arquivos de origem.
-- Configuração do Docker Compose aprovada.
-- `nginx -t` aprovado dentro do container frontend.
-- Smoke tests do proxy local aprovados.
-- CSS retorna `text/css` e JavaScript retorna `application/javascript`.
-- Cache e headers de segurança dos assets verificados.
-- Busca de localidades validada pela API e pelo navegador.
-- Foco e seleção de sugestão verificados no navegador.
-
-### CI — Validação automática
-
-- Criou `.github/workflows/ci.yml`, acionado por `push`, Pull Request e
-  execução manual.
-- Reutilizou o Docker Compose para build, suíte completa, Ruff, mypy e
-  validação da configuração do Nginx.
-- Adicionou smoke test HTTP para a página, assets hashados e health check da
-  API por meio de `tests/docker/check_frontend_security.py`.
-- Limitou as permissões do workflow a leitura do conteúdo do repositório e
-  encerrou os serviços temporários ao final da execução.
-
-Não foi executada uma certificação formal com Lighthouse ou leitor de tela.
-As verificações de acessibilidade desta etapa foram smoke tests funcionais,
-DOM, foco, teclado, viewport e headers.
-
-## Itens ainda pendentes
-
-### Estado operacional da cópia correta
-
-- O desenvolvimento ocorre na branch `develop`, acompanhando `origin/develop`.
-- A `main` permanece como branch estável; novas alterações devem passar por
-  revisão antes do merge.
-- Os arquivos `.homolog/` não são versionados; devem ser provisionados
-  localmente com secrets e certificados antes de iniciar a homologação.
-- As dependências do frontend foram atualizadas para corrigir as vulnerabilidades
-  encontradas no Vitest/Vite. O `npm audit` atual retorna zero vulnerabilidades;
-  a instalação continua registrada no `package-lock.json`.
-
-### Próximo item técnico
-
-- Executar a revisão independente final com evidência por requisito e testes
-  em uma cópia isolada.
-
-### Evolução do produto
-
-- Calibrar cientificamente a política de risco com dados históricos e revisão
-  especializada.
-- Executar o piloto offline de validação descrito em [possível continuação e
-  viabilidade de aumento de escopo](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md).
-- Completar o contrato operacional de alertas oficiais, incluindo cobertura,
-  expiração, monitoramento e critérios de disponibilidade.
-- Definir contas, autorização, favoritos, histórico e retenção de dados.
-- Definir notificações, consentimento, cancelamento e idempotência.
-- Preparar implantação pública com domínio, TLS real, secrets, cotas,
-  observabilidade e rollback.
-- Configurar checks obrigatórios da CI na branch principal após confirmar a
-  primeira execução no GitHub.
-- Criar ADRs para as decisões arquiteturais principais.
-
-## Como retomar
-
-1. Ler este documento, `STATE.md` e `ROADMAP.md`.
-2. Conferir o estado real do working tree antes de editar arquivos.
-3. Começar pela revisão independente final.
-4. Para qualquer nova alteração de código, descrever processo, ganho,
-   impacto e validação antes da execução.
-5. Executar testes direcionados e depois a suíte relevante.
-6. Atualizar este catálogo quando uma nova etapa for concluída.
-
-## Documentos relacionados
-
-- [Visão geral do projeto](PROJECT.md)
-- [Arquitetura](../arquitetura/arquitetura.md)
-- [Parâmetros de predição](../arquitetura/parametros-de-predicao.md)
-- [Possível continuação e escopo de previsão](../planejamento/possivel-continuacao-viabilidade-de-aumento-de-escopo-de-previsao.md)
-- [Operações](../operacoes/operations.md)
-- [Plano de evolução](PossivelPlanoDeEvolução.md)
-- [Reestruturação do frontend](../frontend/Frontend-Rework.md)
+`experimental_d7_control.py` coordena protocolo/calendário/execução; `experimental_d7_archive.py` preserva corpo HTTP original e deriva recorte para o adaptador; `experimental_d7_ledger.py` registra reservas e impede concorrência com o piloto ativo. Handler de validação compartilhado, catálogo numérico do cache e construtor de consulta frontend únicos. [Resultado e segunda revisão](../operacoes/refatoracao-controle-d7-2026-10-30.md).

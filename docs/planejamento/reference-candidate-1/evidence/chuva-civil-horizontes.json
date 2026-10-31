@@ -1,0 +1,352 @@
+{
+  "schema": "climaprev-civil-rain-horizons-v1",
+  "convention": "civil-day-preceding-hour-v1",
+  "configuration": {
+    "end": "2025-01-31",
+    "forecast_model": "gfs_global",
+    "latitude": -1.4558,
+    "longitude": -48.5044,
+    "minimum_coverage": 1.0,
+    "observed_model": "era5",
+    "start": "2025-01-01",
+    "timezone": "America/Belem"
+  },
+  "lead_days": [
+    1,
+    3,
+    7
+  ],
+  "unique_paired_dates": 31,
+  "cases": [
+    {
+      "date": "2025-01-01",
+      "observed_mm": 2.7,
+      "predicted_mm": {
+        "1": 6.8,
+        "3": 6.2,
+        "7": 2.5
+      }
+    },
+    {
+      "date": "2025-01-02",
+      "observed_mm": 1.9,
+      "predicted_mm": {
+        "1": 3.4,
+        "3": 5.1,
+        "7": 4.1
+      }
+    },
+    {
+      "date": "2025-01-03",
+      "observed_mm": 24.2,
+      "predicted_mm": {
+        "1": 16.9,
+        "3": 6.7,
+        "7": 1.5
+      }
+    },
+    {
+      "date": "2025-01-04",
+      "observed_mm": 7.7,
+      "predicted_mm": {
+        "1": 22.4,
+        "3": 5.8,
+        "7": 2.6
+      }
+    },
+    {
+      "date": "2025-01-05",
+      "observed_mm": 19.4,
+      "predicted_mm": {
+        "1": 11.5,
+        "3": 9.3,
+        "7": 3.6
+      }
+    },
+    {
+      "date": "2025-01-06",
+      "observed_mm": 12.0,
+      "predicted_mm": {
+        "1": 13.5,
+        "3": 7.5,
+        "7": 2.3
+      }
+    },
+    {
+      "date": "2025-01-07",
+      "observed_mm": 4.1,
+      "predicted_mm": {
+        "1": 10.8,
+        "3": 6.5,
+        "7": 3.4
+      }
+    },
+    {
+      "date": "2025-01-08",
+      "observed_mm": 9.2,
+      "predicted_mm": {
+        "1": 9.0,
+        "3": 7.2,
+        "7": 4.0
+      }
+    },
+    {
+      "date": "2025-01-09",
+      "observed_mm": 8.8,
+      "predicted_mm": {
+        "1": 4.9,
+        "3": 7.6,
+        "7": 4.1
+      }
+    },
+    {
+      "date": "2025-01-10",
+      "observed_mm": 11.5,
+      "predicted_mm": {
+        "1": 8.9,
+        "3": 4.2,
+        "7": 3.4
+      }
+    },
+    {
+      "date": "2025-01-11",
+      "observed_mm": 6.1,
+      "predicted_mm": {
+        "1": 7.8,
+        "3": 9.0,
+        "7": 3.6
+      }
+    },
+    {
+      "date": "2025-01-12",
+      "observed_mm": 20.6,
+      "predicted_mm": {
+        "1": 28.3,
+        "3": 21.5,
+        "7": 5.7
+      }
+    },
+    {
+      "date": "2025-01-13",
+      "observed_mm": 7.8,
+      "predicted_mm": {
+        "1": 13.6,
+        "3": 10.2,
+        "7": 7.3
+      }
+    },
+    {
+      "date": "2025-01-14",
+      "observed_mm": 5.6,
+      "predicted_mm": {
+        "1": 6.8,
+        "3": 28.7,
+        "7": 12.3
+      }
+    },
+    {
+      "date": "2025-01-15",
+      "observed_mm": 7.6,
+      "predicted_mm": {
+        "1": 17.3,
+        "3": 2.7,
+        "7": 53.0
+      }
+    },
+    {
+      "date": "2025-01-16",
+      "observed_mm": 21.9,
+      "predicted_mm": {
+        "1": 4.9,
+        "3": 6.5,
+        "7": 6.8
+      }
+    },
+    {
+      "date": "2025-01-17",
+      "observed_mm": 14.5,
+      "predicted_mm": {
+        "1": 17.9,
+        "3": 15.2,
+        "7": 3.0
+      }
+    },
+    {
+      "date": "2025-01-18",
+      "observed_mm": 29.1,
+      "predicted_mm": {
+        "1": 13.7,
+        "3": 1.9,
+        "7": 0.6
+      }
+    },
+    {
+      "date": "2025-01-19",
+      "observed_mm": 11.6,
+      "predicted_mm": {
+        "1": 4.5,
+        "3": 0.1,
+        "7": 5.2
+      }
+    },
+    {
+      "date": "2025-01-20",
+      "observed_mm": 9.5,
+      "predicted_mm": {
+        "1": 5.6,
+        "3": 8.2,
+        "7": 2.6
+      }
+    },
+    {
+      "date": "2025-01-21",
+      "observed_mm": 8.0,
+      "predicted_mm": {
+        "1": 13.3,
+        "3": 18.6,
+        "7": 2.9
+      }
+    },
+    {
+      "date": "2025-01-22",
+      "observed_mm": 17.9,
+      "predicted_mm": {
+        "1": 27.4,
+        "3": 10.7,
+        "7": 3.9
+      }
+    },
+    {
+      "date": "2025-01-23",
+      "observed_mm": 12.0,
+      "predicted_mm": {
+        "1": 6.0,
+        "3": 15.6,
+        "7": 0.5
+      }
+    },
+    {
+      "date": "2025-01-24",
+      "observed_mm": 12.9,
+      "predicted_mm": {
+        "1": 13.7,
+        "3": 12.7,
+        "7": 2.1
+      }
+    },
+    {
+      "date": "2025-01-25",
+      "observed_mm": 20.7,
+      "predicted_mm": {
+        "1": 7.8,
+        "3": 2.5,
+        "7": 5.1
+      }
+    },
+    {
+      "date": "2025-01-26",
+      "observed_mm": 3.9,
+      "predicted_mm": {
+        "1": 7.4,
+        "3": 19.2,
+        "7": 2.2
+      }
+    },
+    {
+      "date": "2025-01-27",
+      "observed_mm": 9.7,
+      "predicted_mm": {
+        "1": 12.8,
+        "3": 9.4,
+        "7": 2.5
+      }
+    },
+    {
+      "date": "2025-01-28",
+      "observed_mm": 2.2,
+      "predicted_mm": {
+        "1": 13.6,
+        "3": 8.0,
+        "7": 4.5
+      }
+    },
+    {
+      "date": "2025-01-29",
+      "observed_mm": 3.0,
+      "predicted_mm": {
+        "1": 8.0,
+        "3": 5.0,
+        "7": 1.3
+      }
+    },
+    {
+      "date": "2025-01-30",
+      "observed_mm": 13.9,
+      "predicted_mm": {
+        "1": 5.7,
+        "3": 13.0,
+        "7": 3.5
+      }
+    },
+    {
+      "date": "2025-01-31",
+      "observed_mm": 11.7,
+      "predicted_mm": {
+        "1": 9.6,
+        "3": 15.7,
+        "7": 8.2
+      }
+    }
+  ],
+  "excluded_dates": [],
+  "provenance": {
+    "1": {
+      "derived_dataset_sha256": "00815338a3e47a7f518b68cf436096266aa0731ed03ab3189cf083437e32974f",
+      "boundary_parents": {
+        "original": "056bfa683502042eae187397136578602436b511c4e3384cf6a9011fe4aa7c99",
+        "boundary": "ed5d6aafabec528b130f10eb64d3d72aacd23f281894409953409783392dbee6"
+      }
+    },
+    "3": {
+      "derived_dataset_sha256": "e94171f5692eb373dbe5143958dd132f58c14ff0362ab41614da5a5ae958ef36",
+      "boundary_parents": {
+        "original": "8695392ef00f2c11ec692f640821f25ac2726b3a833d1bb1ba669f6db5b94ff5",
+        "boundary": "c4b6d11d2e91bf74fc6744a1025f66bfa0fb5cabe16d297b0343ee2db2bf7808"
+      }
+    },
+    "7": {
+      "derived_dataset_sha256": "8102dab1465106347deb548db5fdca1d828ee8d3b97caf18f7f23040ea7d506d",
+      "boundary_parents": {
+        "original": "cfa286d7facece5247cc30baa30c9e98b011aaeaf448f4666ae8a09c76f10e7f",
+        "boundary": "f387eba8cb2c8cdf92bb235a883d49e9d6bce81d5fdffe45c6bf5b673f757e90"
+      }
+    }
+  },
+  "metrics": {
+    "1": {
+      "cases": 31,
+      "bias": 0.067741935483871,
+      "mae": 6.164516129032258,
+      "rmse": 7.587234610334523
+    },
+    "3": {
+      "cases": 31,
+      "bias": -1.6516129032258065,
+      "mae": 6.838709677419355,
+      "rmse": 9.837715444212153
+    },
+    "7": {
+      "cases": 31,
+      "bias": -5.916129032258064,
+      "mae": 9.56774193548387,
+      "rmse": 13.317899669726575
+    }
+  },
+  "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+  "decision": "diagnostic_only_not_approved",
+  "limitations": [
+    "ERA5 is reanalysis, not station truth or an impact label.",
+    "Horizons share dates and are not independent observations.",
+    "No calibration, risk label or promotion is produced."
+  ]
+}

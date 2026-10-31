@@ -1,0 +1,42 @@
+{
+  "checked_utc": "2026-10-20T17:44:01.461001+00:00",
+  "diagnostics": [
+    {
+      "host": "apiprevmet3.inmet.gov.br",
+      "ipv4": [
+        "201.57.198.188"
+      ]
+    },
+    {
+      "host": "avisos.inmet.gov.br",
+      "ipv4": [
+        "201.57.198.188"
+      ]
+    },
+    {
+      "host": "wis2bra.inmet.gov.br",
+      "ipv4": [
+        "200.130.106.56"
+      ]
+    },
+    {
+      "test": "default",
+      "error_type": "RemoteProtocolError",
+      "elapsed_seconds": 0.454
+    },
+    {
+      "test": "without_environment_proxy",
+      "error_type": "RemoteProtocolError",
+      "elapsed_seconds": 0.375
+    },
+    {
+      "test": "browser_headers",
+      "http_status": 200,
+      "bytes": 472194,
+      "content_type": "application/json; charset=utf-8",
+      "elapsed_seconds": 1.5
+    }
+  ],
+  "tls_validation_disabled": false,
+  "live_integration_confirmed": false
+}

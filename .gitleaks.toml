@@ -1,5 +1,43 @@
-# Keep all pinned Gitleaks default detection rules enabled.
-# The sole historical false positive is identified by an exact fingerprint in
-# .gitleaksignore; no path, rule, or future finding is globally exempted.
+# Keep all pinned default detection rules enabled.
+# Exact verified public provider host and public SHA256 metadata values only.
+# No path or rule is excluded; synthetic credentials remain detectable.
 [extend]
 useDefault = true
+
+[[allowlists]]
+description = "Verified public canonical OpenAPI SHA256; not an authentication credential"
+regexTarget = "secret"
+regexes = [
+  '''^dd96650a5d5b5157a1d49f095b21f10fbb7b2b337d74ca4183f30965f81c658f$''',
+  '''^474199bf4155eec9bde52b4343e0aaed12888bee7315f9e87460b48efaac62fe$''',
+]
+
+[[allowlists]]
+description = "Verified public metadata value 1; exact value only"
+regexTarget = "secret"
+regexes = ['''^apiprevmet3\.inmet\.gov\.br$''']
+
+[[allowlists]]
+description = "Verified public metadata value 2; exact value only"
+regexTarget = "secret"
+regexes = ['''^442f74725fac4b611d21a99f42126eebe053c2bea70cbab74758a80c85e7bb4e$''']
+
+[[allowlists]]
+description = "Verified public metadata value 3; exact value only"
+regexTarget = "secret"
+regexes = ['''^477f3571f181abaf408f3df15cada4bda16e9edb986c79fd67401a1e47b3d521$''']
+
+[[allowlists]]
+description = "Verified public metadata value 4; exact value only"
+regexTarget = "secret"
+regexes = ['''^c387b0a7a501469e7673cdd5d0e32b47616991226046bce95f5354e1f974e435$''']
+
+[[allowlists]]
+description = "Verified public metadata value 5; exact value only"
+regexTarget = "secret"
+regexes = ['''^48118656970e534effbb4fbbb9bebb1398c0274bc708e5bce92b965d60ef2b61$''']
+
+[[allowlists]]
+description = "Verified public metadata value 6; exact value only"
+regexTarget = "secret"
+regexes = ['''^1fd6b70e1cfdf702e129bb19098bf9615e1a3e43bddc8c8173837bee547c96c5$''']

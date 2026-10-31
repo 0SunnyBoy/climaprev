@@ -14,22 +14,25 @@ import pytest
 from climaprev.api.deps import get_forecast_query_service, get_rate_limiter
 from climaprev.api.errors import ApplicationError
 from climaprev.api.observability import RequestMetrics
+from climaprev.application.errors import (
+    DependencyUnavailable,
+    LocationNotFound,
+    ProviderTransientError,
+    WeatherDataInvalid,
+    WeatherProviderUnavailable,
+)
 from climaprev.application.ports import RateLimitDecision
 from climaprev.application.query import ForecastQuery
-from climaprev.application.services.forecast_query import (
+from climaprev.application.query_result import (
     DataQuality,
     ForecastDay,
     ForecastSource,
     OfficialAlertsResult,
     RiskQueryResult,
-    WeatherProviderUnavailable,
 )
 from climaprev.config import Settings
 from climaprev.domain.models import CanonicalLocation, DatePeriod, OfficialAlert, RiskAssessment
 from climaprev.domain.units import TemperatureUnit
-from climaprev.infrastructure.errors import DependencyUnavailable
-from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
-from climaprev.infrastructure.providers.open_meteo import LocationNotFound
 from climaprev.main import create_app, lifespan
 from tests.security_fixtures import isolated_settings
 
@@ -191,6 +194,40 @@ def valid_query(**overrides: str) -> dict[str, str]:
         "start_date": "2026-08-28",
         **overrides,
     }
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("method", ["GET", "POST"])
+@pytest.mark.parametrize("day,allowed", [("2026-08-27", False), ("2026-08-28", True),
+                                        ("2026-09-03", True), ("2026-09-04", True), ("2026-09-10", True), ("2026-09-11", False)])
+async def test_public_forecast_window_prevents_service_calls_outside_bounds(method, day, allowed):
+    async with app_for() as (client, service, _, _):
+        data = valid_query(start_date=day)
+        response = await client.request(method, "/api/v1/risk", **(
+            {"params": data} if method == "GET" else {"json": data}))
+    assert response.status_code == (200 if allowed else 422)
+    assert len(service.calls) == int(allowed)
+    if not allowed:
+        assert response.json()["error"]["code"] == "INVALID_PERIOD"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("method", ["GET", "POST"])
+@pytest.mark.parametrize("start,end,allowed", [
+    ("2026-09-04", "2026-09-10", True),
+    ("2026-08-28", "2026-09-04", False),
+    ("2026-09-05", "2026-09-11", False),
+])
+async def test_second_week_period_is_limited_to_seven_dates_and_propagated(method, start, end, allowed):
+    async with app_for() as (client, service, _, _):
+        data = valid_query(start_date=start, end_date=end)
+        response = await client.request(method, "/api/v1/risk", **(
+            {"params": data} if method == "GET" else {"json": data}))
+    assert response.status_code == (200 if allowed else 422)
+    assert len(service.calls) == int(allowed)
+    if allowed:
+        assert service.calls[0][0].start_date == date.fromisoformat(start)
+        assert service.calls[0][0].end_date == date.fromisoformat(end)
 
 
 @pytest.mark.asyncio
@@ -407,6 +444,7 @@ async def test_cors_uses_configured_allowlist() -> None:
             headers={
                 "Origin": "https://console.example",
                 "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type,x-request-id",
             },
         )
         denied = await client.options(
@@ -416,11 +454,14 @@ async def test_cors_uses_configured_allowlist() -> None:
                 "Access-Control-Request-Method": "GET",
             },
         )
+        actual = await client.get("/health/live", headers={"Origin": "https://console.example"})
 
     assert allowed.status_code == 200
     assert allowed.headers["access-control-allow-origin"] == "https://console.example"
     assert allowed_post.status_code == 200
     assert allowed_post.headers["access-control-allow-origin"] == "https://console.example"
+    assert "content-type" in allowed_post.headers["access-control-allow-headers"].lower()
+    assert actual.headers["access-control-expose-headers"] == "X-Request-ID, Retry-After"
     assert denied.status_code == 400
     assert "access-control-allow-origin" not in denied.headers
 

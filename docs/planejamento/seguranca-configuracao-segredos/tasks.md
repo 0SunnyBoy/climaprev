@@ -1,5 +1,10 @@
 # Tasks — implementação da segurança do ClimaPrev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
+
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 Estado em 2026-09-23: T1–T19 concluídas com evidências locais e remotas;
 decisão final **condicional — não pronto para produção**.
 Sem prontidão de produção. Nenhuma
@@ -13,8 +18,8 @@ por fingerprint e fixtures de detecção; T17 passou também no runner GitHub;
 T18 passou no ensaio sintético de rotação e
 tem runbook. Consulte [contexto](context.md) e [evidências](evidence.md).
 
-[Spec](../../../docs/planejamento/seguranca-configuracao-segredos/spec.md) ·
-[Design](../../../docs/planejamento/seguranca-configuracao-segredos/design.md).
+[Spec](spec.md) ·
+[Design](design.md).
 
 ## Execution Plan
 
@@ -79,7 +84,7 @@ T18 -> T19
 Gerada a partir do código, da spec, do
 [pyproject](../../../pyproject.toml),
 do [CI](../../../.github/workflows/ci.yml)
-e do [guia de homologação](../../../docs/operacoes/homologacao.md).
+e do [guia de homologação](../../operacoes/homologacao.md).
 Não foi encontrado CONTRIBUTING ou AGENTS próprio no worktree. Não há
 percentual mínimo configurado nesses arquivos; usar cobertura por critério
 e caso-limite, sem inventar uma meta de cobertura já existente.

@@ -1,0 +1,37 @@
+{
+  "checked_date": "2026-10-20",
+  "runs": [
+    {
+      "id": 38790094549,
+      "name": "Security gates",
+      "sha": "23bf4cee997bc825e76028f99eefd6160f699ee5",
+      "conclusion": "failure",
+      "url": "https://github.com/0SunnyBoy/climaprev/actions/runs/38790094549"
+    },
+    {
+      "id": 38790094833,
+      "name": "CI",
+      "sha": "23bf4cee997bc825e76028f99eefd6160f699ee5",
+      "conclusion": "success",
+      "url": "https://github.com/0SunnyBoy/climaprev/actions/runs/38790094833"
+    },
+    {
+      "id": 37341430204,
+      "name": "CI",
+      "sha": "7190797b8796dbb133d1a920df8a7905a0e55b1d",
+      "conclusion": "success",
+      "url": "https://github.com/0SunnyBoy/climaprev/actions/runs/37341430204"
+    }
+  ],
+  "branch_protection": {
+    "protected": false,
+    "required_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    },
+    "rulesets": [],
+    "administrative_endpoint": "403; alternativa GET branch confirmou ausência de proteção"
+  },
+  "local_changes_published": false
+}

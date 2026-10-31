@@ -1,0 +1,287 @@
+{
+  "schema": "climaprev-front2-preparation-evidence-v1",
+  "checked_at": "2026-10-28T16:28:23.747867+00:00",
+  "catalogue_source": "https://apitempo.inmet.gov.br/estacoes/T",
+  "catalogue_sha256": "33542287dba930bb6fb468482eb38f9193930652bfc166a989897f3bda407359",
+  "stations": [
+    {
+      "station": "A201",
+      "location": {
+        "name": "BELEM",
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "timezone": "America/Belem",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {
+        "latitude": 0.00011688999999992511,
+        "longitude": 6.755999999796813e-05
+      },
+      "historical_pairing_requires_reconciliation": true,
+      "historical_metadata_sha256": "6d5fdda6262bf8a1083c17b5eb6d221c4593e521e9ac03a083f338b27d6f2521",
+      "current_metadata_sha256": "db8de9298425d9343b74bf91eae370f42012aa548eb1fec9afd95d5f7e78eb16",
+      "current_observation_quality_verified": false,
+      "activation_ready": false,
+      "historical_2024_diagnostic": {
+        "planned_days": 366,
+        "complete_days_by_field": {
+          "rain_mm": 365,
+          "gust_kmh": 362,
+          "temperature_max_c": 363,
+          "temperature_min_c": 363
+        },
+        "high_rain_days_at_50mm": 8,
+        "independent_event_count": null,
+        "use": "known_development_only_not_current_quality"
+      }
+    },
+    {
+      "station": "A001",
+      "location": {
+        "name": "BRASILIA",
+        "latitude": -15.78944444,
+        "longitude": -47.92583332,
+        "timezone": "America/Sao_Paulo",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {},
+      "historical_pairing_requires_reconciliation": false,
+      "historical_metadata_sha256": "42692ef1d03ae81f6d6f64b813967f4f762060d137cf4e8023720c7293abad64",
+      "current_metadata_sha256": "c195b1fcd228385b335241244e89d1bc417d9727769f64a3a8f1a319cd4e4c66",
+      "current_observation_quality_verified": false,
+      "activation_ready": false,
+      "historical_2024_diagnostic": {
+        "planned_days": 366,
+        "complete_days_by_field": {
+          "rain_mm": 342,
+          "gust_kmh": 342,
+          "temperature_max_c": 341,
+          "temperature_min_c": 341
+        },
+        "high_rain_days_at_50mm": 2,
+        "independent_event_count": null,
+        "use": "known_development_only_not_current_quality"
+      }
+    },
+    {
+      "station": "A801",
+      "location": {
+        "name": "PORTO ALEGRE - JARDIM BOTANICO",
+        "latitude": -30.05361111,
+        "longitude": -51.17472221,
+        "timezone": "America/Sao_Paulo",
+        "source": "INMET-current-catalogue"
+      },
+      "catalogue_operational": true,
+      "coordinate_deltas_degrees": {},
+      "historical_pairing_requires_reconciliation": false,
+      "historical_metadata_sha256": "1a74406f13c5f4355f7c1c8f08865e1118f91cad9f2e64a08f5a33eb5d6a788e",
+      "current_metadata_sha256": "bed7a0bbcfc028498031f61b41f6082a605f7e8c749299d120b77dff8b513132",
+      "current_observation_quality_verified": false,
+      "activation_ready": false,
+      "historical_2024_diagnostic": {
+        "planned_days": 366,
+        "complete_days_by_field": {
+          "rain_mm": 349,
+          "gust_kmh": 340,
+          "temperature_max_c": 343,
+          "temperature_min_c": 343
+        },
+        "high_rain_days_at_50mm": 9,
+        "independent_event_count": null,
+        "use": "known_development_only_not_current_quality"
+      }
+    }
+  ],
+  "live_preflight": [
+    {
+      "kind": "recent_inmet_observations",
+      "url": "https://apitempo.inmet.gov.br/estacao/dados/2026-10-27/1200",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-28T16:30:19.195659+00:00"
+    },
+    {
+      "kind": "explicit_run_preflight",
+      "model": "gfs_global",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast",
+      "request_parameters": {
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "models": "gfs_global",
+        "hourly": "precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m",
+        "forecast_days": 9,
+        "timezone": "GMT",
+        "timeformat": "unixtime",
+        "run": "2026-10-28T00:00",
+        "wind_speed_unit": "kmh"
+      },
+      "status": 200,
+      "bytes": 7653,
+      "checked_at": "2026-10-28T16:30:20.163350+00:00",
+      "first_epoch": 1793145600,
+      "last_epoch": 1793919600,
+      "samples": 216,
+      "fields": [
+        "time",
+        "precipitation",
+        "temperature_2m",
+        "relative_humidity_2m",
+        "wind_speed_10m",
+        "wind_gusts_10m"
+      ],
+      "sha256": "4afb6dec6aaa100a1f00608340eed7e2055ddaab4bbe2683e8f42cf4ceb7f2a3"
+    },
+    {
+      "kind": "explicit_run_preflight",
+      "model": "ecmwf_ifs025",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast",
+      "request_parameters": {
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "models": "ecmwf_ifs025",
+        "hourly": "precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m",
+        "forecast_days": 9,
+        "timezone": "GMT",
+        "timeformat": "unixtime",
+        "run": "2026-10-28T00:00",
+        "wind_speed_unit": "kmh"
+      },
+      "status": 200,
+      "bytes": 7626,
+      "checked_at": "2026-10-28T16:30:20.438261+00:00",
+      "first_epoch": 1793145600,
+      "last_epoch": 1793919600,
+      "samples": 216,
+      "fields": [
+        "time",
+        "precipitation",
+        "temperature_2m",
+        "relative_humidity_2m",
+        "wind_speed_10m",
+        "wind_gusts_10m"
+      ],
+      "sha256": "e1577e6cd1b335eb94ae94a5a634cd6c16d89d8571bf26529bddc61709d03a55"
+    },
+    {
+      "kind": "explicit_run_preflight",
+      "model": "icon_global",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast",
+      "request_parameters": {
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "models": "icon_global",
+        "hourly": "precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m",
+        "forecast_days": 8,
+        "timezone": "GMT",
+        "timeformat": "unixtime",
+        "run": "2026-10-28T00:00",
+        "wind_speed_unit": "kmh"
+      },
+      "status": 200,
+      "bytes": 6896,
+      "checked_at": "2026-10-28T16:30:20.687355+00:00",
+      "first_epoch": 1793145600,
+      "last_epoch": 1793833200,
+      "samples": 192,
+      "fields": [
+        "time",
+        "precipitation",
+        "temperature_2m",
+        "relative_humidity_2m",
+        "wind_speed_10m",
+        "wind_gusts_10m"
+      ],
+      "sha256": "c2fd8ec4306377326334a731c09eb23ae3f7ce76e9855085ac6001907b658e8d"
+    }
+  ],
+  "pilot": {
+    "first_slot_utc": "2026-10-29T18:00:00+00:00",
+    "last_slot_utc": "2026-11-11T18:00:00+00:00",
+    "planned_days": 14,
+    "planned_jobs": 210,
+    "calendar_sha256": "729c1d54d70c333ca4cdf702162289b180d08487d8100562e41373bed7668eca",
+    "full_calendar_local": ".report-work/front2-readiness-2026-10-28/pilot-calendar.disabled.json",
+    "manifest_hashes": [
+      "cc23c8ae0c5e5dae99754ec3bd87a3f8b4359b6649f77ef6ecd8f67043a0b23a",
+      "d3ab1ee8f8e46a9a12da1546cc74e7020a287373841c94a7fe3a361ac89a5a96",
+      "602236ddbba0df3cb2a8e57e6afe42e0fbb23d97f9d71d35671aa080a0cc8c06",
+      "2503b9d854166c267541c8a213827756d9b0c37ee8366ef9315f8140703a9e2c",
+      "152e7b154750d5c97e5f877b3715c8ce2539642fd9cfce3e981dd9cff63aa06f",
+      "8a6314d826c39c3ad3b5f63def750c90bf1ddeb8a6f64eb942c27e055383de2f",
+      "264a99acdd05c3ca57992eec76b4c0dbe85e7d3f890838455b4b0d559e9fb2cd",
+      "8742703c506180824a4233c874965a0e3426f7f8aed81f287b1fa67dd201ec24",
+      "7ac292ea527db1ee9c6a71c4cd734ddad86e0123eaf5f7a721c580fa512b5cb9",
+      "7c502774a0feea07ae15fe3f493dec5be0bd62c14edb5690a66cb24a978be83b",
+      "2c85e9d63b6417e0a82a5096747620d8dab5d519c43b23c7ee37a2d2b2fca847",
+      "9e4334ad7cd94e16e13696d99def076f162e0c4e907d81e93e914712cad0512b",
+      "49c7ebe5de9b2fc9c09d097d7c08050d571e798c4ae65b839afa17a71405eb71",
+      "5581e2f47c761a7bdb32cbe891aa616752b5fa5992376587b8c097611360f14d"
+    ],
+    "collection_enabled": false,
+    "run_hour_utc": 0,
+    "collection_hour_utc": 18,
+    "fresh_observations_verified": false,
+    "blockers": [
+      "recent_observation_probe_returned_204",
+      "A201_current_and_historical_coordinates_need_version_reconciliation",
+      "no_scheduler_installed"
+    ]
+  },
+  "scientific_approval": false,
+  "promotion_allowed": false,
+  "recent_station_probes": [
+    {
+      "station": "A201",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-21/2026-10-27/A201",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-28T16:39:01.033445+00:00"
+    },
+    {
+      "station": "A001",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-21/2026-10-27/A001",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-28T16:39:01.111825+00:00"
+    },
+    {
+      "station": "A801",
+      "url": "https://apitempo.inmet.gov.br/estacao/2026-10-21/2026-10-27/A801",
+      "status": 204,
+      "bytes": 0,
+      "checked_at": "2026-10-28T16:39:01.183881+00:00"
+    }
+  ],
+  "run_normalization_coverage": [
+    {
+      "model": "gfs_global",
+      "normalized_measurements": 1080,
+      "rain_complete_by_collection_day_lead": {
+        "1": true,
+        "3": true,
+        "7": true
+      }
+    },
+    {
+      "model": "ecmwf_ifs025",
+      "normalized_measurements": 1080,
+      "rain_complete_by_collection_day_lead": {
+        "1": true,
+        "3": true,
+        "7": true
+      }
+    },
+    {
+      "model": "icon_global",
+      "normalized_measurements": 960,
+      "rain_complete_by_collection_day_lead": {
+        "1": true,
+        "3": true,
+        "7": false
+      }
+    }
+  ]
+}

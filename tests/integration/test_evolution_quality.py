@@ -24,7 +24,10 @@ def civil_payload(day: str, hours: list[int], timezone: str = "UTC"):
     ("2026-03-08", [0, 1, *range(3, 24)], "America/New_York", "complete"),
     ("2026-11-01", [0, 1, *range(1, 24)], "America/New_York", "complete"),
 ])
-async def test_civil_hour_coverage_public_contract(day, hours, timezone, expected) -> None:
+async def test_civil_hour_coverage_public_contract(day, hours, timezone, expected, monkeypatch) -> None:
+    from datetime import date
+
+    monkeypatch.setattr("climaprev.api.forecast_window.utc_today", lambda: date.fromisoformat(day))
     payload = civil_payload(day, hours, timezone)
     response = await request_payload(payload, day)
     assert response.status_code == 200

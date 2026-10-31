@@ -1,0 +1,43 @@
+{
+  "schema": "climaprev-experimental-variant-templates-v1",
+  "purpose": "predeclared alternatives only; no fitting, ranking, real-data scoring or approval",
+  "templates": [
+    {
+      "name": "experimental-gfs-identity",
+      "variable": "precipitation_mm",
+      "unit": "mm",
+      "weights": [
+        [
+          "gfs_global",
+          1.0
+        ]
+      ],
+      "scale": 1.0,
+      "offset": 0.0
+    },
+    {
+      "name": "experimental-three-model-equal-blend",
+      "variable": "precipitation_mm",
+      "unit": "mm",
+      "weights": [
+        [
+          "gfs_global",
+          0.3333333333333333
+        ],
+        [
+          "ecmwf_ifs025",
+          0.3333333333333333
+        ],
+        [
+          "icon_global",
+          0.3333333333333333
+        ]
+      ],
+      "scale": 1.0,
+      "offset": 0.0
+    }
+  ],
+  "affine_coefficients": "API available; no empirical scale/offset chosen",
+  "scientific_approval": false,
+  "promotion_allowed": false
+}

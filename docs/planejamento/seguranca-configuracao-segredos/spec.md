@@ -1,5 +1,10 @@
 # Spec — segurança, segredos e exposição do ClimaPrev
 
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../../projeto/STATE.md) · [RDP](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
+
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Registro histórico/plano datado: o [STATE vigente](../../projeto/STATE.md) e o [RDP atualizado](../../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+
 Estado: T1–T19 implementadas/validadas com dados sintéticos; revisão
 independente e validação do ambiente real pendentes. Sem prontidão de produção.
 Data: 2026-09-19. Branch: `Atualizacao-Geral-V3`, checkpoint remoto `7ac70d8`.
@@ -8,8 +13,8 @@ Atualização de 2026-09-23: CI e Security gates remotos passaram para
 `525854a`, sem aceite de produção. Veja o [contexto](context.md) e
 [evidências](evidence.md).
 
-[Design e análise comparativa](../../../docs/planejamento/seguranca-configuracao-segredos/design.md) ·
-[Tarefas e verificações](../../../docs/planejamento/seguranca-configuracao-segredos/tasks.md).
+[Design e análise comparativa](design.md) ·
+[Tarefas e verificações](tasks.md).
 
 ## Problem Statement
 

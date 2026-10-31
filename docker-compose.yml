@@ -31,6 +31,10 @@ services:
     environment:
       REDIS_URL: redis://redis:6379/0
       CLIMAPREV_ENVIRONMENT: ${CLIMAPREV_ENVIRONMENT:-development}
+      CLIMAPREV_METRICS_AGGREGATION_ENABLED: ${CLIMAPREV_METRICS_AGGREGATION_ENABLED:-false}
+      CLIMAPREV_QUERY_TOTAL_TIMEOUT_SECONDS: ${CLIMAPREV_QUERY_TOTAL_TIMEOUT_SECONDS:-7}
+      CLIMAPREV_CORS_ALLOW_ORIGINS: ${CLIMAPREV_CORS_ALLOW_ORIGINS:-}
+      CLIMAPREV_ALLOWED_HOSTS: ${CLIMAPREV_ALLOWED_HOSTS:-localhost,127.0.0.1,app}
       CLIMAPREV_RATE_LIMIT: ${CLIMAPREV_RATE_LIMIT:-60}
       CLIMAPREV_RATE_LIMIT_BURST: ${CLIMAPREV_RATE_LIMIT_BURST:-10}
       CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS: ${CLIMAPREV_RATE_LIMIT_WINDOW_SECONDS:-60}
@@ -51,8 +55,8 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     <<: *hardened-service
     read_only: true
     cap_add:
@@ -76,7 +80,7 @@ services:
     <<: *hardened-service
     build:
       context: .
-      target: dev
+      target: load
     profiles: ["load"]
     environment:
       CLIMAPREV_LOAD_SCENARIO: ${CLIMAPREV_LOAD_SCENARIO:-warm_cache}
@@ -117,6 +121,7 @@ services:
     environment:
       REDIS_URL: redis://redis-load:6379/0
       CLIMAPREV_ENVIRONMENT: load
+      CLIMAPREV_METRICS_AGGREGATION_ENABLED: 'true'
       CLIMAPREV_ALLOWED_HOSTS: app-load,localhost,127.0.0.1
       CLIMAPREV_GEOCODING_BASE_URL: http://provider-mock:8080
       CLIMAPREV_FORECAST_BASE_URL: http://provider-mock:8080

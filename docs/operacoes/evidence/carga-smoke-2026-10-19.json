@@ -1,0 +1,60 @@
+{
+  "kind": "local-harness-smoke-not-capacity-approval",
+  "users": 2,
+  "seconds_per_scenario": 10,
+  "scenarios": [
+    {
+      "scenario": "cold_cache",
+      "requests": 20,
+      "failures": 0,
+      "p95_ms": 62.0,
+      "p99_ms": 62.0,
+      "csv_sha256": "ea398586e5bb0f23c4c857ad8f5b6b4d95eeb8141da3b2b60e4a2fd7f13b4585"
+    },
+    {
+      "scenario": "lock_contention",
+      "requests": 20,
+      "failures": 0,
+      "p95_ms": 550.0,
+      "p99_ms": 550.0,
+      "csv_sha256": "399a502cf998f2f55d3d0fc9f772e1748addcab737e15d0f5de819908b76216c"
+    },
+    {
+      "scenario": "redis_latency",
+      "requests": 18,
+      "failures": 0,
+      "p95_ms": 700.0,
+      "p99_ms": 700.0,
+      "csv_sha256": "97f64b8b2b3bbf7f735f0a4eb16974efea676140ce6e01603a6cc8c703e88922"
+    },
+    {
+      "scenario": "slow_upstream",
+      "requests": 18,
+      "failures": 0,
+      "p95_ms": 370.0,
+      "p99_ms": 370.0,
+      "csv_sha256": "251dd8aaf449bd16a058a6e7e93a289e697767b438ee3f92007fbda5592f37a5"
+    },
+    {
+      "scenario": "warm_cache",
+      "requests": 22,
+      "failures": 0,
+      "p95_ms": 51.0,
+      "p99_ms": 53.0,
+      "csv_sha256": "37f144e531bcba2b3a972344c8ccbb48d66fc6e30101ed0c63a6f868dc86e07d"
+    }
+  ],
+  "initial_run_failure": "First warm_cache run began before application health readiness: 4 transport failures among 22 requests; preserved separately. Subsequent runs use compose up --wait.",
+  "environment": {
+    "NCPU": "8",
+    "MemTotal": "12429488128",
+    "ServerVersion": "\"29.8.2\"",
+    "OSType": "\"linux\"",
+    "Architecture": "\"x86_64\""
+  },
+  "limitations": [
+    "Shared local Docker Desktop, not dedicated capacity environment.",
+    "Synthetic mock only; no load sent to public weather providers.",
+    "Short smoke does not validate sustained throughput or production SLO."
+  ]
+}

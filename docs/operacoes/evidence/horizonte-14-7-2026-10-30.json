@@ -1,0 +1,36 @@
+{
+  "schema": "climaprev-public-14-7-qualification-v1",
+  "public_horizon_dates": 14,
+  "max_query_days": 7,
+  "utc_cutoff": true,
+  "provider_check": {
+    "checked_at": "2026-10-31T00:28:40.922192+00:00",
+    "requested_start": "2026-11-07",
+    "requested_end": "2026-11-13",
+    "days_returned": 7,
+    "dates": [
+      "2026-11-07",
+      "2026-11-08",
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+      "2026-11-12",
+      "2026-11-13"
+    ],
+    "missing_fields": [],
+    "complete_rain_days": 7,
+    "complete_temperature_days": 7,
+    "provider": "open-meteo",
+    "scope": "one-point availability check, not accuracy validation or pilot capture"
+  },
+  "collector_pipeline_and_calendar_unchanged": true,
+  "pilot_control_window_dates": 7,
+  "candidate_promotion": false,
+  "openapi_sha256": "474199bf4155eec9bde52b4343e0aaed12888bee7315f9e87460b48efaac62fe",
+  "frontend_tests": 60,
+  "frontend_lint_build": "passed",
+  "backend_full_regression": {
+    "passed": 1170,
+    "mypy_modules": 99
+  }
+}

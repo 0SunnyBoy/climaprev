@@ -1,0 +1,32 @@
+{
+  "schema": "climaprev-temporal-partitions-check-v1",
+  "partitions": [
+    {
+      "name": "development",
+      "start": "2024-01-01",
+      "end": "2026-11-20"
+    },
+    {
+      "name": "selection",
+      "start": "2026-12-05",
+      "end": "2026-12-31"
+    },
+    {
+      "name": "confirmation",
+      "start": "2027-01-15",
+      "end": "2028-01-14"
+    }
+  ],
+  "embargo_days": 7,
+  "max_horizon_days": 7,
+  "candidate_freeze_deadline": "2027-01-07T23:00:00+00:00",
+  "earliest_confirmatory_run": "2027-01-08T00:00:00+00:00",
+  "prospective_independence_verified": false,
+  "confirmation_enabled": false,
+  "limitation": "Schedule validity does not establish data provenance or actual freezing.",
+  "status": "conditional_not_frozen_not_executed",
+  "candidate_pool_freeze_deadline": "2026-11-27T23:00:00+00:00",
+  "first_selection_d7_run": "2026-11-28T00:00:00+00:00",
+  "reason": "14 pilot slots Oct31-Nov13 plus D7 targets through Nov20; shift selection to preserve issuance embargo",
+  "sources": "Previously authorized development allowlists only; all unknown or reserved sources remain unopened"
+}

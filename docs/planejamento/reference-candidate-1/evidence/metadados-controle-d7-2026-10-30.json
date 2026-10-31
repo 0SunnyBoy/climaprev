@@ -1,0 +1,56 @@
+{
+  "schema": "climaprev-metadata-d7-preparation-evidence-v1",
+  "checked_at_utc": "2026-10-31T00:52:59.652109+00:00",
+  "published_commit_checked": "355a158ce91792b3bb8cb777219049b92f833839",
+  "checks": [
+    {
+      "name": "CI",
+      "conclusion": "success",
+      "url": "https://github.com/0SunnyBoy/climaprev/actions/runs/41152086801"
+    },
+    {
+      "name": "Security gates",
+      "conclusion": "success",
+      "url": "https://github.com/0SunnyBoy/climaprev/actions/runs/41152086839"
+    }
+  ],
+  "validation": {
+    "active_pilot_calendar_valid": true,
+    "pilot_ledger_unchanged": true,
+    "active_calendar_unchanged": true,
+    "catalogue_record_hashes_match_tempo_provenance": true,
+    "d7_arithmetic_examples_passed": 3,
+    "existing_measurement_review_tests_passed": 4
+  },
+  "unchanged_collection_pipeline_versions": {
+    "tools/experimental_archive.py": "eef0e404c1bfff9bb2367f7b3a52cc09bcb8f9d17ba143b779575436a6ed11f6",
+    "tools/experimental_baseline.py": "8fb6cfb35d6a8beef4df1887c63cde8d87401665e72f85589676d060c00447fb",
+    "tools/experimental_collection.py": "18fb266e0b3d3255d2e68b25a913425e98b6dedcc1ca8e09706561202a43d7f8",
+    "tools/experimental_normalization.py": "05155a1cb171330e012a43c63299512bfd18a08313a57566e329f66315f7248f",
+    "tools/experimental_campaign.py": "5dd538f8401c1b1c44258c32254d9924f6a021ad202695da9f58744ee019cfff",
+    "tools/experimental_pairing.py": "50b524f622ca0b55cc2d6eeadce873d9d104632746e45a10de4002677496abe6",
+    "tools/inmet_observations.py": "6f84349fc386da23143abf1ca315574d0080917189188c70fd56bcaf112fa4b4",
+    "infrastructure/providers/open_meteo.py": "aadc811743829d74882ce8116ee5c5841f8ed78b7bd10d17212050414e54ee3d",
+    "domain/risk_policy.py": "5a0540049cfe8edb49f74e3d84baf6ca8dea263032704a29cc5b9c3ce4199d82",
+    "domain/risk_evaluator.py": "bbbeed6a3e94a4fa77fd6d5809434324a17971c8940f8ee8cf145540d9b03ebe",
+    "domain/verification.py": "fbb1d6ec52bad1d7334bc456d6b7d5ec0fc1162befa2c43f7c519e0df0a4ae78",
+    "tools/experimental_comparison.py": "72a1b9dc77e2ad489357b93da7efad63aff69507bd702bd3e4b3b6745e28b1b6",
+    "tools/experimental_equivalence.py": "4aca2071a6716d3be9ebf45032412f56619463d8b64d4e2fbb95e844ab42bc3f",
+    "tools/experimental_observations.py": "92fc83ed7e50c34fda6a0c8be289961c02288c4c4f3136159769246c057eb766",
+    "tools/experimental_multivariable.py": "ed0df6d3d9e3f7a1c665bda9c60593f2243a3254477a56baa00c39364fbc6f0b",
+    "tools/experimental_evaluation.py": "b41fb157b836a17c124d8a850830bca10272abfbc092728c8769c9e71156f1cf",
+    "tools/experimental_uncertainty.py": "273b1b541bc13567b0cba8b645f276b682671b9254f215d24d655739540c7c96",
+    "tools/experimental_criteria.py": "b6102ad8ac63135361be3aa5c9634f49ea20787f01c3f0a520675cc23ec7fbc7",
+    "domain/bootstrap.py": "b5d536bde2b6ed9d4c5642ec0b87b934302569f1a1bfcf1e3f61424aec7df045",
+    "tools/experimental_protocol.py": "9541dcff8ccfe1c2960c50893888688253a73a57439a243d1ef874ca35931a1c",
+    "tools/experimental_preparation.py": "52060cd6eb8f98af806d0781dfda0290bba58fc2f96e37d94413917b441621f8",
+    "tools/inmet_tempo_csv.py": "47014d50938b218ac0af488be9fabfca80a8ee7fcb64b0957d58f40441d8f2c2",
+    "tools/experimental_pilot_quota.py": "e9c5b3a9cccc9d6faf9368f01398de58e28ac04ceefe55e9030a16746c2f5fcb"
+  },
+  "new_instrument_registry_sha256": "a76dfc594f792559a5f5fbbebc4b7ed1f1a38b03b0107c1974045a076214cbcf",
+  "new_d7_design_sha256": "e0ae6c15de39bd03168e647ff112a1de7e77262c6f57672182b02ea05e651304",
+  "new_forecast_calls": 0,
+  "new_collection_or_automation_enabled": false,
+  "scientific_approval": false,
+  "promotion_allowed": false
+}

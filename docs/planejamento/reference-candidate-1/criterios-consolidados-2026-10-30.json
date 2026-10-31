@@ -1,0 +1,78 @@
+{
+  "schema": "climaprev-front2-criteria-preparation-v1",
+  "date": "2026-10-30",
+  "status": "delegated_pilot_design_confirmatory_support_pending",
+  "primary_target": "daily_rain_mm_D1",
+  "primary_comparison": "same_planned_decision_slot_available_forecasts_not_equal_model_run_age",
+  "primary_timing": {
+    "require_run": false,
+    "allow_retrospective": false,
+    "must_verify_same_slot": true,
+    "unknown_operational_model_run_must_remain_explicit": true,
+    "max_preflight_age_hours": 24
+  },
+  "controlled_model_comparison": {
+    "require_run": true,
+    "scope": "secondary_exploratory"
+  },
+  "criteria_template": {
+    "min_relative_mae_gain": 0.05,
+    "min_absolute_mae_gain_mm": 0.0,
+    "min_common_coverage": 0.9,
+    "min_pairs_rule": "ceil(0.90 * planned_cases) independently per station and primary horizon",
+    "min_observed_events": 1,
+    "max_recall_loss": 0.0,
+    "max_false_alarm_increase": 0.0,
+    "confidence": 0.95,
+    "max_extreme_interval_width": 0.1
+  },
+  "criterion_interpretation": {
+    "coverage": "Operational completeness choice, not a statistical sufficiency guarantee; do not drop missing days.",
+    "observed_event_floor": "One is only the computability floor; NOT adequate sample size or independent-event support.",
+    "extremes": "Require paired interval lower bound recall difference >= 0 and upper bound FAR difference <= 0.",
+    "precision": "Difference interval width <= 0.10 is a prospective precision requirement, not demonstrated accuracy.",
+    "absolute_gain": "Report mm/day; 0.5 mm/day remains sensitivity analysis only, not an invented validated physical threshold.",
+    "aggregation": "Primary pooled paired D1 cases with per-station coverage and extreme-protection checks; secondary strata exploratory.",
+    "relative_gain": "At least 5% point MAE gain plus paired absolute MAE difference interval upper bound < 0; does not prove a 5% lower confidence bound.",
+    "minimum_pairs": "Coverage denominator is planned station dates, not the union of available predictions."
+  },
+  "example_365_day_station_min_common_pairs": 329,
+  "uncertainty": {
+    "method": "paired temporal date blocks preserving stations and leads together",
+    "confidence": 0.95,
+    "development_sensitivity_block_days": [
+      7,
+      14,
+      28
+    ],
+    "final_block_days": null,
+    "finalize_before_confirmatory_freeze": true,
+    "no_interval_when_support_or_method_is_inadequate": true,
+    "individual_days_not_independent_event_count": true,
+    "limitations": "Moving-block percentile engine is exploratory; validate support and method on eligible development data before confirmation."
+  },
+  "multiplicity": {
+    "single_primary_endpoint": "pooled_D1_rain_MAE",
+    "extreme_guards": "all must hold for any promotion claim",
+    "secondary_comparisons": "exploratory_no_formal_superiority_or_model_ranking_claim",
+    "additional_confirmatory_claim_requires_new_preregistered_plan": true,
+    "primary_claim": "one frozen candidate, pooled D1 rain MAE, all extreme guards must hold",
+    "confirmatory_status": "not_ready_until_block_support_and_dependence_validated"
+  },
+  "required_before_confirmatory_use": [
+    "verified_current_observation_source",
+    "station_metadata_reconciliation",
+    "declared_and_verified_independence_and_source_provenance",
+    "calibrated_block_method_and_effective_event_support",
+    "candidate_and_protocol_frozen_before_first_forecast_run",
+    "full_planned_case_coverage_linked_to_pairs",
+    "single_candidate_and_primary_endpoint_frozen_no_secondary_selection"
+  ],
+  "campaign_enabled": false,
+  "promotion_allowed": false,
+  "basis": {
+    "coverage_and_precision": "Conservative prospective engineering/scientific design choices under user delegation, not external standards.",
+    "uncertainty": "NIST warns against normal approximations with sparse binomial outcomes; forecast verification research requires temporal dependence handling."
+  },
+  "effective_independent_event_minimum": null
+}

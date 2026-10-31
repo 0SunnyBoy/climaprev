@@ -1,0 +1,944 @@
+{
+  "station": {
+    "code": "A201",
+    "name": "BELEM",
+    "encoding": "cp1252",
+    "raw_metadata": {
+      "REGIAO": "N",
+      "UF": "PA",
+      "ESTACAO": "BELEM",
+      "CODIGO (WMO)": "A201",
+      "LATITUDE": "-1,41111111",
+      "LONGITUDE": "-48,43944444",
+      "ALTITUDE": "21,17",
+      "DATA DE FUNDACAO": "20/01/03"
+    },
+    "latitude": -1.41111111,
+    "longitude": -48.43944444,
+    "altitude": 21.17
+  },
+  "month": "2025-01-01",
+  "csv_sha256": "2d2b3bbac55662a9d475c141819c0935401899644b862598560d551607d41621",
+  "published_rain_mm": 417.0,
+  "windows": [
+    {
+      "convention": "utc-timestamp",
+      "start_utc": "2025-01-01T00:00:00+00:00",
+      "end_utc": "2025-02-01T00:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.0,
+      "difference_from_bulletin_mm": 10.0,
+      "daily_windows": [
+        {
+          "window_start_date": "2025-01-01",
+          "start_utc": "2025-01-01T00:00:00+00:00",
+          "end_utc": "2025-01-02T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 24.8
+        },
+        {
+          "window_start_date": "2025-01-02",
+          "start_utc": "2025-01-02T00:00:00+00:00",
+          "end_utc": "2025-01-03T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.2
+        },
+        {
+          "window_start_date": "2025-01-03",
+          "start_utc": "2025-01-03T00:00:00+00:00",
+          "end_utc": "2025-01-04T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 21.4
+        },
+        {
+          "window_start_date": "2025-01-04",
+          "start_utc": "2025-01-04T00:00:00+00:00",
+          "end_utc": "2025-01-05T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.0
+        },
+        {
+          "window_start_date": "2025-01-05",
+          "start_utc": "2025-01-05T00:00:00+00:00",
+          "end_utc": "2025-01-06T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.8
+        },
+        {
+          "window_start_date": "2025-01-06",
+          "start_utc": "2025-01-06T00:00:00+00:00",
+          "end_utc": "2025-01-07T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.4
+        },
+        {
+          "window_start_date": "2025-01-07",
+          "start_utc": "2025-01-07T00:00:00+00:00",
+          "end_utc": "2025-01-08T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.4
+        },
+        {
+          "window_start_date": "2025-01-08",
+          "start_utc": "2025-01-08T00:00:00+00:00",
+          "end_utc": "2025-01-09T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 56.2
+        },
+        {
+          "window_start_date": "2025-01-09",
+          "start_utc": "2025-01-09T00:00:00+00:00",
+          "end_utc": "2025-01-10T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 18.0
+        },
+        {
+          "window_start_date": "2025-01-10",
+          "start_utc": "2025-01-10T00:00:00+00:00",
+          "end_utc": "2025-01-11T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-11",
+          "start_utc": "2025-01-11T00:00:00+00:00",
+          "end_utc": "2025-01-12T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-12",
+          "start_utc": "2025-01-12T00:00:00+00:00",
+          "end_utc": "2025-01-13T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 8.4
+        },
+        {
+          "window_start_date": "2025-01-13",
+          "start_utc": "2025-01-13T00:00:00+00:00",
+          "end_utc": "2025-01-14T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.0
+        },
+        {
+          "window_start_date": "2025-01-14",
+          "start_utc": "2025-01-14T00:00:00+00:00",
+          "end_utc": "2025-01-15T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.4
+        },
+        {
+          "window_start_date": "2025-01-15",
+          "start_utc": "2025-01-15T00:00:00+00:00",
+          "end_utc": "2025-01-16T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-16",
+          "start_utc": "2025-01-16T00:00:00+00:00",
+          "end_utc": "2025-01-17T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-17",
+          "start_utc": "2025-01-17T00:00:00+00:00",
+          "end_utc": "2025-01-18T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 22.0
+        },
+        {
+          "window_start_date": "2025-01-18",
+          "start_utc": "2025-01-18T00:00:00+00:00",
+          "end_utc": "2025-01-19T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 11.0
+        },
+        {
+          "window_start_date": "2025-01-19",
+          "start_utc": "2025-01-19T00:00:00+00:00",
+          "end_utc": "2025-01-20T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 6.4
+        },
+        {
+          "window_start_date": "2025-01-20",
+          "start_utc": "2025-01-20T00:00:00+00:00",
+          "end_utc": "2025-01-21T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.4
+        },
+        {
+          "window_start_date": "2025-01-21",
+          "start_utc": "2025-01-21T00:00:00+00:00",
+          "end_utc": "2025-01-22T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 6.0
+        },
+        {
+          "window_start_date": "2025-01-22",
+          "start_utc": "2025-01-22T00:00:00+00:00",
+          "end_utc": "2025-01-23T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 27.6
+        },
+        {
+          "window_start_date": "2025-01-23",
+          "start_utc": "2025-01-23T00:00:00+00:00",
+          "end_utc": "2025-01-24T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.4
+        },
+        {
+          "window_start_date": "2025-01-24",
+          "start_utc": "2025-01-24T00:00:00+00:00",
+          "end_utc": "2025-01-25T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.2
+        },
+        {
+          "window_start_date": "2025-01-25",
+          "start_utc": "2025-01-25T00:00:00+00:00",
+          "end_utc": "2025-01-26T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.8
+        },
+        {
+          "window_start_date": "2025-01-26",
+          "start_utc": "2025-01-26T00:00:00+00:00",
+          "end_utc": "2025-01-27T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 3.2
+        },
+        {
+          "window_start_date": "2025-01-27",
+          "start_utc": "2025-01-27T00:00:00+00:00",
+          "end_utc": "2025-01-28T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 21.0
+        },
+        {
+          "window_start_date": "2025-01-28",
+          "start_utc": "2025-01-28T00:00:00+00:00",
+          "end_utc": "2025-01-29T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 13.2
+        },
+        {
+          "window_start_date": "2025-01-29",
+          "start_utc": "2025-01-29T00:00:00+00:00",
+          "end_utc": "2025-01-30T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 37.8
+        },
+        {
+          "window_start_date": "2025-01-30",
+          "start_utc": "2025-01-30T00:00:00+00:00",
+          "end_utc": "2025-01-31T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.2
+        },
+        {
+          "window_start_date": "2025-01-31",
+          "start_utc": "2025-01-31T00:00:00+00:00",
+          "end_utc": "2025-02-01T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 13.4
+        }
+      ]
+    },
+    {
+      "convention": "utc-preceding-hour",
+      "start_utc": "2025-01-01T00:00:00+00:00",
+      "end_utc": "2025-02-01T00:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.0,
+      "difference_from_bulletin_mm": 10.0,
+      "daily_windows": [
+        {
+          "window_start_date": "2025-01-01",
+          "start_utc": "2025-01-01T00:00:00+00:00",
+          "end_utc": "2025-01-02T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 25.0
+        },
+        {
+          "window_start_date": "2025-01-02",
+          "start_utc": "2025-01-02T00:00:00+00:00",
+          "end_utc": "2025-01-03T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.0
+        },
+        {
+          "window_start_date": "2025-01-03",
+          "start_utc": "2025-01-03T00:00:00+00:00",
+          "end_utc": "2025-01-04T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 22.2
+        },
+        {
+          "window_start_date": "2025-01-04",
+          "start_utc": "2025-01-04T00:00:00+00:00",
+          "end_utc": "2025-01-05T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 9.2
+        },
+        {
+          "window_start_date": "2025-01-05",
+          "start_utc": "2025-01-05T00:00:00+00:00",
+          "end_utc": "2025-01-06T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.8
+        },
+        {
+          "window_start_date": "2025-01-06",
+          "start_utc": "2025-01-06T00:00:00+00:00",
+          "end_utc": "2025-01-07T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.4
+        },
+        {
+          "window_start_date": "2025-01-07",
+          "start_utc": "2025-01-07T00:00:00+00:00",
+          "end_utc": "2025-01-08T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.4
+        },
+        {
+          "window_start_date": "2025-01-08",
+          "start_utc": "2025-01-08T00:00:00+00:00",
+          "end_utc": "2025-01-09T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 56.2
+        },
+        {
+          "window_start_date": "2025-01-09",
+          "start_utc": "2025-01-09T00:00:00+00:00",
+          "end_utc": "2025-01-10T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 18.0
+        },
+        {
+          "window_start_date": "2025-01-10",
+          "start_utc": "2025-01-10T00:00:00+00:00",
+          "end_utc": "2025-01-11T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-11",
+          "start_utc": "2025-01-11T00:00:00+00:00",
+          "end_utc": "2025-01-12T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-12",
+          "start_utc": "2025-01-12T00:00:00+00:00",
+          "end_utc": "2025-01-13T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 8.4
+        },
+        {
+          "window_start_date": "2025-01-13",
+          "start_utc": "2025-01-13T00:00:00+00:00",
+          "end_utc": "2025-01-14T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.0
+        },
+        {
+          "window_start_date": "2025-01-14",
+          "start_utc": "2025-01-14T00:00:00+00:00",
+          "end_utc": "2025-01-15T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.4
+        },
+        {
+          "window_start_date": "2025-01-15",
+          "start_utc": "2025-01-15T00:00:00+00:00",
+          "end_utc": "2025-01-16T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-16",
+          "start_utc": "2025-01-16T00:00:00+00:00",
+          "end_utc": "2025-01-17T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-17",
+          "start_utc": "2025-01-17T00:00:00+00:00",
+          "end_utc": "2025-01-18T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 22.6
+        },
+        {
+          "window_start_date": "2025-01-18",
+          "start_utc": "2025-01-18T00:00:00+00:00",
+          "end_utc": "2025-01-19T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.4
+        },
+        {
+          "window_start_date": "2025-01-19",
+          "start_utc": "2025-01-19T00:00:00+00:00",
+          "end_utc": "2025-01-20T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.0
+        },
+        {
+          "window_start_date": "2025-01-20",
+          "start_utc": "2025-01-20T00:00:00+00:00",
+          "end_utc": "2025-01-21T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.8
+        },
+        {
+          "window_start_date": "2025-01-21",
+          "start_utc": "2025-01-21T00:00:00+00:00",
+          "end_utc": "2025-01-22T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 6.0
+        },
+        {
+          "window_start_date": "2025-01-22",
+          "start_utc": "2025-01-22T00:00:00+00:00",
+          "end_utc": "2025-01-23T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 27.6
+        },
+        {
+          "window_start_date": "2025-01-23",
+          "start_utc": "2025-01-23T00:00:00+00:00",
+          "end_utc": "2025-01-24T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.4
+        },
+        {
+          "window_start_date": "2025-01-24",
+          "start_utc": "2025-01-24T00:00:00+00:00",
+          "end_utc": "2025-01-25T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.2
+        },
+        {
+          "window_start_date": "2025-01-25",
+          "start_utc": "2025-01-25T00:00:00+00:00",
+          "end_utc": "2025-01-26T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.2
+        },
+        {
+          "window_start_date": "2025-01-26",
+          "start_utc": "2025-01-26T00:00:00+00:00",
+          "end_utc": "2025-01-27T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.8
+        },
+        {
+          "window_start_date": "2025-01-27",
+          "start_utc": "2025-01-27T00:00:00+00:00",
+          "end_utc": "2025-01-28T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 21.0
+        },
+        {
+          "window_start_date": "2025-01-28",
+          "start_utc": "2025-01-28T00:00:00+00:00",
+          "end_utc": "2025-01-29T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.0
+        },
+        {
+          "window_start_date": "2025-01-29",
+          "start_utc": "2025-01-29T00:00:00+00:00",
+          "end_utc": "2025-01-30T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 28.0
+        },
+        {
+          "window_start_date": "2025-01-30",
+          "start_utc": "2025-01-30T00:00:00+00:00",
+          "end_utc": "2025-01-31T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.2
+        },
+        {
+          "window_start_date": "2025-01-31",
+          "start_utc": "2025-01-31T00:00:00+00:00",
+          "end_utc": "2025-02-01T00:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 13.4
+        }
+      ]
+    },
+    {
+      "convention": "belem-civil-preceding-hour",
+      "start_utc": "2025-01-01T03:00:00+00:00",
+      "end_utc": "2025-02-01T03:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.6,
+      "difference_from_bulletin_mm": 10.6,
+      "daily_windows": [
+        {
+          "window_start_date": "2025-01-01",
+          "start_utc": "2025-01-01T03:00:00+00:00",
+          "end_utc": "2025-01-02T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 25.0
+        },
+        {
+          "window_start_date": "2025-01-02",
+          "start_utc": "2025-01-02T03:00:00+00:00",
+          "end_utc": "2025-01-03T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.0
+        },
+        {
+          "window_start_date": "2025-01-03",
+          "start_utc": "2025-01-03T03:00:00+00:00",
+          "end_utc": "2025-01-04T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 22.4
+        },
+        {
+          "window_start_date": "2025-01-04",
+          "start_utc": "2025-01-04T03:00:00+00:00",
+          "end_utc": "2025-01-05T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 9.0
+        },
+        {
+          "window_start_date": "2025-01-05",
+          "start_utc": "2025-01-05T03:00:00+00:00",
+          "end_utc": "2025-01-06T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.8
+        },
+        {
+          "window_start_date": "2025-01-06",
+          "start_utc": "2025-01-06T03:00:00+00:00",
+          "end_utc": "2025-01-07T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.4
+        },
+        {
+          "window_start_date": "2025-01-07",
+          "start_utc": "2025-01-07T03:00:00+00:00",
+          "end_utc": "2025-01-08T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.6
+        },
+        {
+          "window_start_date": "2025-01-08",
+          "start_utc": "2025-01-08T03:00:00+00:00",
+          "end_utc": "2025-01-09T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 56.0
+        },
+        {
+          "window_start_date": "2025-01-09",
+          "start_utc": "2025-01-09T03:00:00+00:00",
+          "end_utc": "2025-01-10T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 18.0
+        },
+        {
+          "window_start_date": "2025-01-10",
+          "start_utc": "2025-01-10T03:00:00+00:00",
+          "end_utc": "2025-01-11T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-11",
+          "start_utc": "2025-01-11T03:00:00+00:00",
+          "end_utc": "2025-01-12T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-12",
+          "start_utc": "2025-01-12T03:00:00+00:00",
+          "end_utc": "2025-01-13T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 8.4
+        },
+        {
+          "window_start_date": "2025-01-13",
+          "start_utc": "2025-01-13T03:00:00+00:00",
+          "end_utc": "2025-01-14T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.0
+        },
+        {
+          "window_start_date": "2025-01-14",
+          "start_utc": "2025-01-14T03:00:00+00:00",
+          "end_utc": "2025-01-15T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.4
+        },
+        {
+          "window_start_date": "2025-01-15",
+          "start_utc": "2025-01-15T03:00:00+00:00",
+          "end_utc": "2025-01-16T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-16",
+          "start_utc": "2025-01-16T03:00:00+00:00",
+          "end_utc": "2025-01-17T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-17",
+          "start_utc": "2025-01-17T03:00:00+00:00",
+          "end_utc": "2025-01-18T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 26.0
+        },
+        {
+          "window_start_date": "2025-01-18",
+          "start_utc": "2025-01-18T03:00:00+00:00",
+          "end_utc": "2025-01-19T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.0
+        },
+        {
+          "window_start_date": "2025-01-19",
+          "start_utc": "2025-01-19T03:00:00+00:00",
+          "end_utc": "2025-01-20T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 7.2
+        },
+        {
+          "window_start_date": "2025-01-20",
+          "start_utc": "2025-01-20T03:00:00+00:00",
+          "end_utc": "2025-01-21T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.6
+        },
+        {
+          "window_start_date": "2025-01-21",
+          "start_utc": "2025-01-21T03:00:00+00:00",
+          "end_utc": "2025-01-22T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 6.0
+        },
+        {
+          "window_start_date": "2025-01-22",
+          "start_utc": "2025-01-22T03:00:00+00:00",
+          "end_utc": "2025-01-23T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 27.6
+        },
+        {
+          "window_start_date": "2025-01-23",
+          "start_utc": "2025-01-23T03:00:00+00:00",
+          "end_utc": "2025-01-24T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.4
+        },
+        {
+          "window_start_date": "2025-01-24",
+          "start_utc": "2025-01-24T03:00:00+00:00",
+          "end_utc": "2025-01-25T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.2
+        },
+        {
+          "window_start_date": "2025-01-25",
+          "start_utc": "2025-01-25T03:00:00+00:00",
+          "end_utc": "2025-01-26T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-26",
+          "start_utc": "2025-01-26T03:00:00+00:00",
+          "end_utc": "2025-01-27T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.2
+        },
+        {
+          "window_start_date": "2025-01-27",
+          "start_utc": "2025-01-27T03:00:00+00:00",
+          "end_utc": "2025-01-28T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 21.0
+        },
+        {
+          "window_start_date": "2025-01-28",
+          "start_utc": "2025-01-28T03:00:00+00:00",
+          "end_utc": "2025-01-29T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.0
+        },
+        {
+          "window_start_date": "2025-01-29",
+          "start_utc": "2025-01-29T03:00:00+00:00",
+          "end_utc": "2025-01-30T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 28.0
+        },
+        {
+          "window_start_date": "2025-01-30",
+          "start_utc": "2025-01-30T03:00:00+00:00",
+          "end_utc": "2025-01-31T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 30.4
+        },
+        {
+          "window_start_date": "2025-01-31",
+          "start_utc": "2025-01-31T03:00:00+00:00",
+          "end_utc": "2025-02-01T03:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 13.8
+        }
+      ]
+    },
+    {
+      "convention": "12utc-preceding-hour-diagnostic",
+      "start_utc": "2025-01-01T12:00:00+00:00",
+      "end_utc": "2025-02-01T12:00:00+00:00",
+      "endpoints_expected": 744,
+      "endpoints_valid": 744,
+      "missing": [],
+      "rain_mm": 427.6,
+      "difference_from_bulletin_mm": 10.6,
+      "daily_windows": [
+        {
+          "window_start_date": "2025-01-01",
+          "start_utc": "2025-01-01T12:00:00+00:00",
+          "end_utc": "2025-01-02T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 24.8
+        },
+        {
+          "window_start_date": "2025-01-02",
+          "start_utc": "2025-01-02T12:00:00+00:00",
+          "end_utc": "2025-01-03T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.0
+        },
+        {
+          "window_start_date": "2025-01-03",
+          "start_utc": "2025-01-03T12:00:00+00:00",
+          "end_utc": "2025-01-04T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 22.4
+        },
+        {
+          "window_start_date": "2025-01-04",
+          "start_utc": "2025-01-04T12:00:00+00:00",
+          "end_utc": "2025-01-05T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.4
+        },
+        {
+          "window_start_date": "2025-01-05",
+          "start_utc": "2025-01-05T12:00:00+00:00",
+          "end_utc": "2025-01-06T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 1.4
+        },
+        {
+          "window_start_date": "2025-01-06",
+          "start_utc": "2025-01-06T12:00:00+00:00",
+          "end_utc": "2025-01-07T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.6
+        },
+        {
+          "window_start_date": "2025-01-07",
+          "start_utc": "2025-01-07T12:00:00+00:00",
+          "end_utc": "2025-01-08T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 4.4
+        },
+        {
+          "window_start_date": "2025-01-08",
+          "start_utc": "2025-01-08T12:00:00+00:00",
+          "end_utc": "2025-01-09T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 56.2
+        },
+        {
+          "window_start_date": "2025-01-09",
+          "start_utc": "2025-01-09T12:00:00+00:00",
+          "end_utc": "2025-01-10T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 18.0
+        },
+        {
+          "window_start_date": "2025-01-10",
+          "start_utc": "2025-01-10T12:00:00+00:00",
+          "end_utc": "2025-01-11T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.0
+        },
+        {
+          "window_start_date": "2025-01-11",
+          "start_utc": "2025-01-11T12:00:00+00:00",
+          "end_utc": "2025-01-12T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-12",
+          "start_utc": "2025-01-12T12:00:00+00:00",
+          "end_utc": "2025-01-13T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 10.6
+        },
+        {
+          "window_start_date": "2025-01-13",
+          "start_utc": "2025-01-13T12:00:00+00:00",
+          "end_utc": "2025-01-14T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 9.2
+        },
+        {
+          "window_start_date": "2025-01-14",
+          "start_utc": "2025-01-14T12:00:00+00:00",
+          "end_utc": "2025-01-15T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-15",
+          "start_utc": "2025-01-15T12:00:00+00:00",
+          "end_utc": "2025-01-16T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-16",
+          "start_utc": "2025-01-16T12:00:00+00:00",
+          "end_utc": "2025-01-17T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.2
+        },
+        {
+          "window_start_date": "2025-01-17",
+          "start_utc": "2025-01-17T12:00:00+00:00",
+          "end_utc": "2025-01-18T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 32.6
+        },
+        {
+          "window_start_date": "2025-01-18",
+          "start_utc": "2025-01-18T12:00:00+00:00",
+          "end_utc": "2025-01-19T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 2.8
+        },
+        {
+          "window_start_date": "2025-01-19",
+          "start_utc": "2025-01-19T12:00:00+00:00",
+          "end_utc": "2025-01-20T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.2
+        },
+        {
+          "window_start_date": "2025-01-20",
+          "start_utc": "2025-01-20T12:00:00+00:00",
+          "end_utc": "2025-01-21T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 0.0
+        },
+        {
+          "window_start_date": "2025-01-21",
+          "start_utc": "2025-01-21T12:00:00+00:00",
+          "end_utc": "2025-01-22T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 6.4
+        },
+        {
+          "window_start_date": "2025-01-22",
+          "start_utc": "2025-01-22T12:00:00+00:00",
+          "end_utc": "2025-01-23T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 27.2
+        },
+        {
+          "window_start_date": "2025-01-23",
+          "start_utc": "2025-01-23T12:00:00+00:00",
+          "end_utc": "2025-01-24T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 25.4
+        },
+        {
+          "window_start_date": "2025-01-24",
+          "start_utc": "2025-01-24T12:00:00+00:00",
+          "end_utc": "2025-01-25T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 15.2
+        },
+        {
+          "window_start_date": "2025-01-25",
+          "start_utc": "2025-01-25T12:00:00+00:00",
+          "end_utc": "2025-01-26T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 5.8
+        },
+        {
+          "window_start_date": "2025-01-26",
+          "start_utc": "2025-01-26T12:00:00+00:00",
+          "end_utc": "2025-01-27T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 3.0
+        },
+        {
+          "window_start_date": "2025-01-27",
+          "start_utc": "2025-01-27T12:00:00+00:00",
+          "end_utc": "2025-01-28T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 20.4
+        },
+        {
+          "window_start_date": "2025-01-28",
+          "start_utc": "2025-01-28T12:00:00+00:00",
+          "end_utc": "2025-01-29T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 23.2
+        },
+        {
+          "window_start_date": "2025-01-29",
+          "start_utc": "2025-01-29T12:00:00+00:00",
+          "end_utc": "2025-01-30T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 27.6
+        },
+        {
+          "window_start_date": "2025-01-30",
+          "start_utc": "2025-01-30T12:00:00+00:00",
+          "end_utc": "2025-01-31T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 32.6
+        },
+        {
+          "window_start_date": "2025-01-31",
+          "start_utc": "2025-01-31T12:00:00+00:00",
+          "end_utc": "2025-02-01T12:00:00+00:00",
+          "valid_hours": 24,
+          "rain_mm": 11.8
+        }
+      ]
+    }
+  ],
+  "scientific_approval": false,
+  "calibration_ready": false,
+  "limitation": "Window diagnostics cannot establish source revisions, sensor quality or the bulletin aggregation convention."
+}

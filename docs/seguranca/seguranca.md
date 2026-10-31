@@ -1,6 +1,13 @@
 # Segurança e fronteiras de confiança
 
-**Escopo:** controles do código e da execução local observados em 2026-09-23;
+> **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
+
+<!-- estado-vigente-2026-10-20 -->
+> **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
+>
+> API e frontend possuem Composes/builds independentes, CSP de origem explícita, CORS e bloqueio público de /internal/. Exporter por worker é opt-in; templates de monitoramento não equivalem a serviços ativos. INMET ainda não confirmado ao vivo. develop está sem proteção/checks obrigatórios; o 403 administrativo não impediu verificar isso pela API de branch. Nenhuma regra remota foi alterada.
+
+**Escopo:** controles do código e da execução local, revisão vigente em 20/10/2026;
 progresso e testes em [tasks](../planejamento/evolucao-climaprev/tasks.md).
 Não representa teste de invasão ou certificação de um ambiente publicado.
 [Índice](../projeto/PROJECT.md).

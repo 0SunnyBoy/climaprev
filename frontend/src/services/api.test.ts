@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest'
-import { isRiskResponse } from './api'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { isRiskResponse, searchLocations } from './api'
 import { emptyQueryForm, toRiskQueryPayload } from '@/types/query'
+
+afterEach(() => vi.unstubAllGlobals())
 
 describe('frontend API contract', () => {
   it('builds a city query without putting the location in a URL', () => {
@@ -28,7 +30,7 @@ describe('frontend API contract', () => {
         humidity_mean_pct: 70, precipitation_sum_mm: 0, precipitation_probability_max_pct: 10,
         precipitation_max_hourly_mm: 0, wind_max_kmh: 15, wind_gust_max_kmh: 20, weather_code: 1,
       }],
-      forecast_risk: { level: 'low', method: 'reference-v1', policy_version: 'reference-v1', conditions: [], peak_days: [], daily: [{ date: '2030-01-01', level: 'low', conditions: [] }] },
+      forecast_risk: { level: 'low', method: 'forecast_heuristic', policy_version: 'reference-v1', conditions: [], peak_days: [], daily: [{ date: '2030-01-01', level: 'low', conditions: [] }] },
       risk_overview: { level: 'low', source: 'forecast_heuristic', peak_days: [] },
       data_quality: { is_stale: false, completeness: 'complete', missing_fields: [] },
       source: { provider: 'open-meteo', fetched_at: '2030-01-01T12:00:00Z' },
@@ -36,5 +38,28 @@ describe('frontend API contract', () => {
     }
     expect(isRiskResponse(response)).toBe(true)
     expect(isRiskResponse({ ...response, request_id: 42 })).toBe(false)
+  })
+
+  it('uses coordinates and omits an empty end date in the shared query builder', () => {
+    const form = emptyQueryForm()
+    Object.assign(form, { locationMode: 'coordinates', latitude: '-1.41', longitude: '-48.43',
+      startDate: '2030-01-01', locationText: 'ignored in coordinate mode' })
+    expect(toRiskQueryPayload(form)).toEqual({
+      latitude: -1.41, longitude: -48.43, start_date: '2030-01-01', temperature_unit: 'celsius',
+    })
+  })
+
+  it('não apresenta falha HTTP como busca sem resultados', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('unavailable', { status: 503 })))
+    await expect(searchLocations('Belém')).rejects.toMatchObject({ status: 503 })
+  })
+
+  it('rejeita resposta inválida e aceita uma lista vazia válida', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ error: true })))
+      .mockResolvedValueOnce(new Response('[]'))
+    vi.stubGlobal('fetch', fetchMock)
+    await expect(searchLocations('Belém')).rejects.toThrow()
+    await expect(searchLocations('Belém')).resolves.toEqual([])
   })
 })

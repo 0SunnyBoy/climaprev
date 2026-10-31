@@ -34,6 +34,6 @@ export function toRiskQueryPayload(form: QueryFormState): RiskQueryPayload {
     payload.latitude = Number(form.latitude)
     payload.longitude = Number(form.longitude)
   }
-  if (form.endDate.trim()) payload.end_date = form.endDate
+  if (form.endDate) payload.end_date = form.endDate
   return payload
 }

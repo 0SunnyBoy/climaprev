@@ -1,0 +1,887 @@
+{
+  "schema": "climaprev-campaign-observation-support-v1",
+  "groups": [
+    {
+      "location": "belem",
+      "month": 1,
+      "station": "A201",
+      "station_csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 2,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "belem",
+      "month": 4,
+      "station": "A201",
+      "station_csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 24,
+            "moderate": 3,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-04-10"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 23,
+            "moderate": 3,
+            "high": 2
+          },
+          "high_dates": [
+            "2024-04-10",
+            "2024-04-25"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 27,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "belem",
+      "month": 7,
+      "station": "A201",
+      "station_csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-07-11"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 21,
+            "moderate": 7,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "belem",
+      "month": 10,
+      "station": "A201",
+      "station_csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 26,
+            "moderate": 2,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 11,
+            "moderate": 17,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "brasilia",
+      "month": 1,
+      "station": "A001",
+      "station_csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 2,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 3,
+          "counts": {
+            "low": 3,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "brasilia",
+      "month": 4,
+      "station": "A001",
+      "station_csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 27,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-04-02"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "brasilia",
+      "month": 7,
+      "station": "A001",
+      "station_csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 25,
+          "counts": {
+            "low": 25,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 25,
+          "counts": {
+            "low": 25,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 25,
+          "counts": {
+            "low": 24,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 24,
+          "counts": {
+            "low": 24,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 24,
+          "counts": {
+            "low": 24,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "brasilia",
+      "month": 10,
+      "station": "A001",
+      "station_csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 24,
+            "moderate": 2,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-10-14"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 22,
+            "moderate": 4,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-10-14"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 23,
+            "moderate": 3,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-10-14"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 22,
+            "moderate": 5,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "porto-alegre",
+      "month": 1,
+      "station": "A801",
+      "station_csv_sha256": "253889721db8af11e24277af43a19ed3f57bcc77eb72c666e9f11f678e4a1f5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 2,
+          "counts": {
+            "low": 2,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 2,
+          "counts": {
+            "low": 2,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 1,
+          "counts": {
+            "low": 1,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 1,
+          "counts": {
+            "low": 1,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 1,
+          "counts": {
+            "low": 1,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "porto-alegre",
+      "month": 4,
+      "station": "A801",
+      "station_csv_sha256": "253889721db8af11e24277af43a19ed3f57bcc77eb72c666e9f11f678e4a1f5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 25,
+          "counts": {
+            "low": 24,
+            "moderate": 1,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 25,
+          "counts": {
+            "low": 23,
+            "moderate": 2,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 23,
+          "counts": {
+            "low": 19,
+            "moderate": 4,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 23,
+          "counts": {
+            "low": 23,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 23,
+          "counts": {
+            "low": 23,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "porto-alegre",
+      "month": 7,
+      "station": "A801",
+      "station_csv_sha256": "253889721db8af11e24277af43a19ed3f57bcc77eb72c666e9f11f678e4a1f5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 28,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 28,
+          "counts": {
+            "low": 26,
+            "moderate": 2,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    },
+    {
+      "location": "porto-alegre",
+      "month": 10,
+      "station": "A801",
+      "station_csv_sha256": "253889721db8af11e24277af43a19ed3f57bcc77eb72c666e9f11f678e4a1f5a",
+      "schema": "climaprev-observation-support-v1",
+      "policy_version": "reference-v1",
+      "policy_sha256": "e1a0acdf053cd20a56018aa54b0cfd9abef7745a919c4d8822a6de55df53f4c3",
+      "events": {
+        "hourly_rain": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "daily_rain": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "gust": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 23,
+            "moderate": 3,
+            "high": 1
+          },
+          "high_dates": [
+            "2024-10-24"
+          ],
+          "high_support_present": true,
+          "sample_sufficiency_approved": false
+        },
+        "heat": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        },
+        "cold": {
+          "eligible_days": 27,
+          "counts": {
+            "low": 27,
+            "moderate": 0,
+            "high": 0
+          },
+          "high_dates": [],
+          "high_support_present": false,
+          "sample_sufficiency_approved": false
+        }
+      },
+      "scientific_approval": false,
+      "calibration_ready": false,
+      "limitation": "Diagnostic threshold support, not frozen scientific targets, independent events or observed disaster impacts."
+    }
+  ],
+  "totals_location_dates": {
+    "hourly_rain": {
+      "low": 243,
+      "moderate": 7,
+      "high": 2
+    },
+    "daily_rain": {
+      "low": 238,
+      "moderate": 10,
+      "high": 4
+    },
+    "gust": {
+      "low": 231,
+      "moderate": 15,
+      "high": 3
+    },
+    "heat": {
+      "low": 219,
+      "moderate": 29,
+      "high": 0
+    },
+    "cold": {
+      "low": 246,
+      "moderate": 2,
+      "high": 0
+    }
+  },
+  "input_summary_sha256": "5c87b64a745691a2dfe824649a6162a5141a3979c5177d830bd73bac4c9fb532",
+  "script_sha256": "445296289e5c7e586ebdefa7efd866081f512042f38e8a2e9fd490a504b11ce4",
+  "algorithm_sha256": "83bfa53e17427d24ec80e2d65b2887c0e755b043342f01be9b444933036bec2b",
+  "scientific_approval": false,
+  "calibration_ready": false,
+  "limitations": [
+    "Counts share calendar dates and must not be treated as independent events.",
+    "Source quality, measurement semantics and event sufficiency require review.",
+    "No classification target freeze, optimization or promotion was performed."
+  ]
+}

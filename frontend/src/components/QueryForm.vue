@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { nextTick, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import LocationAutocomplete from '@/components/LocationAutocomplete.vue'
 import { useLocale } from '@/composables/useLocale'
 import { emptyQueryForm, type QueryFormState } from '@/types/query'
 import type { LocationCandidate } from '@/types/api'
+import { apiUrl } from '@/config/api'
+import { forecastWindow } from '@/utils/forecastWindow'
 
 defineProps<{
   loading: boolean
@@ -22,31 +24,61 @@ const { t } = useLocale()
 const formRef = ref<HTMLFormElement | null>(null)
 const locationRef = ref<{ focus: () => void } | null>(null)
 const form = reactive(emptyQueryForm())
-const fieldErrors = reactive<Record<string, string>>({})
+const errorSources = reactive<Record<string, string | (() => string)>>({})
+const fieldErrors = computed(() => Object.fromEntries(Object.entries(errorSources)
+  .map(([name, message]) => [name, typeof message === 'function' ? message() : message])))
+const windowDates = ref(forecastWindow())
+const maxEndDate = computed(() => {
+  if (!form.startDate) return windowDates.value.last
+  const end = new Date(`${form.startDate}T00:00:00Z`)
+  if (!Number.isFinite(end.getTime())) return windowDates.value.last
+  end.setUTCDate(end.getUTCDate() + 6)
+  const limit = end.toISOString().slice(0, 10)
+  return limit < windowDates.value.last ? limit : windowDates.value.last
+})
+let clockTimer: ReturnType<typeof setInterval> | undefined
+function refreshWindow() { windowDates.value = forecastWindow() }
+onMounted(() => {
+  clockTimer = setInterval(refreshWindow, 30_000)
+  window.addEventListener('focus', refreshWindow)
+  document.addEventListener('visibilitychange', refreshWindow)
+})
+onBeforeUnmount(() => {
+  clearInterval(clockTimer)
+  window.removeEventListener('focus', refreshWindow)
+  document.removeEventListener('visibilitychange', refreshWindow)
+})
 
 function clearValidity(event: Event) {
   const target = event.target
   if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement) {
     target.setCustomValidity('')
-    delete fieldErrors[target.name]
+    delete errorSources[target.name]
   }
 }
 
 function onInvalidField(event: Event) {
   const target = event.target
   if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return
-  fieldErrors[target.name] = target.validationMessage
+  errorSources[target.name] = target.validationMessage
   emit('invalid')
 }
 
 function submit() {
-  Object.keys(fieldErrors).forEach((name) => delete fieldErrors[name])
+  refreshWindow()
+  Object.keys(errorSources).forEach((name) => delete errorSources[name])
+  const start = formRef.value?.elements.namedItem('start_date') as HTMLInputElement | null
+  if (start) {
+    start.setCustomValidity('')
+    if (form.startDate && (form.startDate < windowDates.value.first || form.startDate > windowDates.value.last)) {
+      start.setCustomValidity(t('invalidPeriod'))
+    }
+  }
   const end = formRef.value?.elements.namedItem('end_date') as HTMLInputElement | null
   if (end) {
     end.setCustomValidity('')
-    if (form.endDate && (form.endDate < form.startDate
-      || (Date.parse(form.endDate) - Date.parse(form.startDate)) / 86_400_000 >= 7)) {
-      end.setCustomValidity('Escolha um período de até 7 dias, com a data final igual ou posterior à inicial.')
+    if (form.endDate && (form.endDate < form.startDate || form.endDate > maxEndDate.value)) {
+      end.setCustomValidity(t('invalidPeriod'))
     }
   }
   if (!formRef.value?.reportValidity()) {
@@ -61,8 +93,8 @@ function focusField(name: string) {
   else (formRef.value?.elements.namedItem(name) as HTMLElement | null)?.focus()
 }
 
-function setFieldError(name: string, message: string) {
-  fieldErrors[name] = message
+function setFieldError(name: string, message: string | (() => string)) {
+  errorSources[name] = message
   nextTick(() => focusField(name))
 }
 
@@ -74,7 +106,7 @@ defineExpose({ setFieldError })
     id="query-form"
     ref="formRef"
     autocomplete="off"
-    action="/api/v1/risk"
+    :action="apiUrl('/api/v1/risk')"
     method="post"
     :aria-busy="loading"
     @submit.prevent="submit"
@@ -117,12 +149,14 @@ defineExpose({ setFieldError })
     <div class="period-row">
       <div class="field">
         <label for="start_date">{{ t('startDate') }}</label>
-        <input id="start_date" v-model="form.startDate" name="start_date" type="date" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'start-date-error' : undefined" required />
+        <input id="start_date" v-model="form.startDate" name="start_date" type="date" :min="windowDates.first" :max="windowDates.last" :aria-invalid="Boolean(fieldErrors.start_date)" :aria-describedby="fieldErrors.start_date ? 'window-hint horizon-hint start-date-error' : 'window-hint horizon-hint'" required />
+        <span id="window-hint" class="field-hint">{{ t('forecastWindowHint') }} {{ windowDates.first }} – {{ windowDates.last }}.</span>
+        <span id="horizon-hint" class="field-hint">{{ t('forecastHorizonNote') }}</span>
         <span v-if="fieldErrors.start_date" id="start-date-error" class="field-error">{{ fieldErrors.start_date }}</span>
       </div>
       <div class="field">
         <label for="end_date">{{ t('endDate') }} <span class="optional">{{ t('optional') }}</span></label>
-        <input id="end_date" v-model="form.endDate" name="end_date" type="date" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
+        <input id="end_date" v-model="form.endDate" name="end_date" type="date" :min="form.startDate || windowDates.first" :max="maxEndDate" :aria-invalid="Boolean(fieldErrors.end_date)" :aria-describedby="fieldErrors.end_date ? 'end-hint end-date-error' : 'end-hint'" />
         <span id="end-hint" class="field-hint">{{ t('endDateHint') }}</span>
         <span v-if="fieldErrors.end_date" id="end-date-error" class="field-error">{{ fieldErrors.end_date }}</span>
       </div>

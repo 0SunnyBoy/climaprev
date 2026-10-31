@@ -9,9 +9,9 @@ from uuid import uuid4
 import pytest
 from redis.asyncio import Redis
 
+from climaprev.application.errors import DependencyUnavailable
 from climaprev.application.ports import CacheEntry
 from climaprev.infrastructure.cache.redis_cache import RedisCache
-from climaprev.infrastructure.errors import DependencyUnavailable
 
 
 @pytest.fixture

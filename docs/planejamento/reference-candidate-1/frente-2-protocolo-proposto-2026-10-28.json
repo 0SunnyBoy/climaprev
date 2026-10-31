@@ -1,0 +1,59 @@
+{
+  "schema": "climaprev-front2-review-proposal-v1",
+  "date": "2026-10-28",
+  "status": "proposed_for_user_review",
+  "direction_approved": true,
+  "campaign_approved": false,
+  "promotion_allowed": false,
+  "primary": {
+    "target": "civil_day_rain_mm",
+    "collection_day_lead": 1,
+    "run_lead_hours": null,
+    "relative_mae_gain_direction": 0.05
+  },
+  "proposed": {
+    "stations": [
+      "A201",
+      "A001",
+      "A801"
+    ],
+    "pilot_days": 14,
+    "confirmatory_months_after_freeze": 12,
+    "absolute_mae_gain_mm": 0.5,
+    "max_recall_loss_fraction": 0.05,
+    "max_false_alarm_ratio_increase_fraction": 0.05,
+    "confidence": 0.95,
+    "initial_bootstrap_block_days": 7
+  },
+  "unresolved": {
+    "pilot_start": null,
+    "confirmation_start": null,
+    "station_metadata_verified": null,
+    "daily_run_and_availability": null,
+    "min_common_coverage": null,
+    "min_pairs": null,
+    "min_observed_events": null,
+    "independent_partitions": null,
+    "instrumental_equivalence": null,
+    "secondary_variable_margins": null,
+    "final_block_length": null,
+    "multiplicity_plan": null
+  },
+  "d7_proposal": {
+    "scope": "secondary_exploratory_between_eligible_models",
+    "public_baseline_available_by_default": false,
+    "can_claim_gain_over_absent_public_baseline": false,
+    "approved": false
+  },
+  "execution": {
+    "schedule_installed": false,
+    "collection_enabled_by_this_file": false,
+    "fit_enabled": false,
+    "opens_reserved_outcomes": false
+  },
+  "notes": [
+    "Proposals are not accepted criteria; this JSON is not consumed by the campaign runner.",
+    "Collection-day lead is not verified model-run lead.",
+    "Synthetic criteria used in unit tests are not proposed or approved campaign parameters."
+  ]
+}

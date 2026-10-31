@@ -1,0 +1,38 @@
+{
+  "schema": "climaprev-preparation-station-addendum-v1",
+  "previous_freeze_sha256": "6abbebc6e41372b34dbae8c19257d9e7c022ff5e35fcf20dc7d3d640552c4213",
+  "original_snapshot_files_verified": 36,
+  "original_source_files_verified": 56,
+  "attachments_sha256": {
+    ".historical-reports/inmet/A201-2025.csv": "2d2b3bbac55662a9d475c141819c0935401899644b862598560d551607d41621",
+    "docs/planejamento/reference-candidate-1/evidence/validacao-estacao-real-a201.json": "0a95e2be9fa70f09e2eedc93608c9f5159873355a0312079b8cbabf8385537c0",
+    ".historical-reports/inmet/belem-2025-01-station-comparison-d1.json": "7cccf7e16ef0dad1caafc47d1e35c4d08238c093cadf0de65604b633d69cff19",
+    ".historical-reports/inmet/belem-2025-01-variables-d1.json": "f5d24337c165d032e26776fb3b138de4833e4bea4cc8794be8efba7f886dbb96",
+    ".historical-reports/inmet/belem-2025-01-station-comparison-d3.json": "083f8ad271d391b6d6821decc6a489af87e474e8cd3941c8ff5ddf8d0c447e1e",
+    ".historical-reports/inmet/belem-2025-01-variables-d3.json": "531b335857dac97ece699d861e7976fdf1def7ad0cea4847a34f87ae5237c377",
+    ".historical-reports/inmet/belem-2025-01-station-comparison-d7.json": "6736efce9f2aa5c62f9481660e6a68f7eae9225bf50613908d967b736d859c8f",
+    ".historical-reports/inmet/belem-2025-01-variables-d7.json": "c184c8d3c2d2a1ca2770320b481c8efbecdc96012be5f44913a5cb604efba3f8",
+    ".historical-reports/inmet/A201-2025-01-observations-v1.json": "ab3b1bd0936431b5c54348d760b7a099372a24e2b9df738325814ddcb0777c9f"
+  },
+  "status_updates": {
+    "official_csv_obtained": true,
+    "official_csv_layout_and_station_identity_verified": true,
+    "rain_temperature_gust_real_diagnostics_executed": [
+      1,
+      3,
+      7
+    ],
+    "sample_expansion": "unchanged_261_paired_location_dates",
+    "scientific_approval": false,
+    "stage_6_started": false
+  },
+  "outstanding_gates": [
+    "Reconcile 427.6 mm CSV civil total and 417.0 mm bulletin total.",
+    "Review station sensor quality and station-grid spatial representativeness.",
+    "Resolve suitability of instantaneous model samples versus interval extrema.",
+    "Extend real observation coverage beyond one station and one month.",
+    "Approve primary event/metric, sample support, relevant gain and scientific review.",
+    "Audit holdout handling: annual raw CSV includes reserved validation months.",
+    "Explicit user instruction still forbids starting stage 6 in this scope."
+  ]
+}

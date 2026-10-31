@@ -6,15 +6,17 @@ import httpx
 import pytest
 import respx
 
-from climaprev.config import Settings
-from climaprev.domain.models import CanonicalLocation, DatePeriod
-from climaprev.infrastructure.providers.open_meteo import (
+from climaprev.application.errors import (
     LocationNotFound,
-    OpenMeteoForecastClient,
-    OpenMeteoGeocodingClient,
     ProviderPermanentError,
     ProviderTransientError,
     WeatherDataInvalid,
+)
+from climaprev.config import Settings
+from climaprev.domain.models import CanonicalLocation, DatePeriod
+from climaprev.infrastructure.providers.open_meteo import (
+    OpenMeteoForecastClient,
+    OpenMeteoGeocodingClient,
 )
 from tests.contract.providers.test_open_meteo_payload import (
     valid_forecast_payload,
@@ -100,6 +102,37 @@ async def test_geocoding_search_returns_context_for_ambiguous_candidates() -> No
 
     assert len(results) == 2
     assert results[1].name == "Rio de Janeiro, Rio de Janeiro, Brasil"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("generation_time", [0, 0.12981892])
+async def test_geocoding_accepts_the_real_omitted_empty_results_shape(
+    generation_time: float,
+) -> None:
+    async with httpx.AsyncClient() as client:
+        adapter = OpenMeteoGeocodingClient(client, settings())
+        with respx.mock:
+            respx.get(f"{GEOCODING_BASE_URL}/v1/search").respond(
+                200, json={"generationtime_ms": generation_time}
+            )
+            assert await adapter.search("Lugar inexistente") == []
+            with pytest.raises(LocationNotFound):
+                await adapter.resolve("Lugar inexistente")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("generation_time", [None, True, -1, "0.1"])
+async def test_geocoding_does_not_hide_invalid_timing_as_empty_results(
+    generation_time: object,
+) -> None:
+    async with httpx.AsyncClient() as client:
+        adapter = OpenMeteoGeocodingClient(client, settings())
+        with respx.mock:
+            respx.get(f"{GEOCODING_BASE_URL}/v1/search").respond(
+                200, json={"generationtime_ms": generation_time}
+            )
+            with pytest.raises(WeatherDataInvalid):
+                await adapter.search("Lugar inexistente")
 
 
 @pytest.mark.asyncio

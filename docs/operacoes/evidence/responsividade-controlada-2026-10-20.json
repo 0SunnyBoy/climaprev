@@ -1,0 +1,142 @@
+{
+  "schema": "climaprev-controlled-latency-v1",
+  "captured_at": "2026-10-20T18:28:52.313254+00:00",
+  "scope": "Isolated ASGI app with real HTTP providers and Redis database 14, unique cache/lock namespace. Three cold/repeat pairs, then injected failure/hang. No flush or mutation of running application. Not browser/network latency or production capacity.",
+  "samples": [
+    {
+      "scenario": "belem-cold",
+      "status": 200,
+      "duration_ms": 2155.66,
+      "phases_ms": {
+        "_resolve_location": 0.14,
+        "_get_forecast": 653.37,
+        "_get_official_alerts": 1467.75
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "belem-repeat",
+      "status": 200,
+      "duration_ms": 3.92,
+      "phases_ms": {
+        "_resolve_location": 0.01,
+        "_get_forecast": 0.44,
+        "_get_official_alerts": 0.46
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "brasilia-cold",
+      "status": 200,
+      "duration_ms": 1203.68,
+      "phases_ms": {
+        "_resolve_location": 0.01,
+        "_get_forecast": 177.21,
+        "_get_official_alerts": 1023.56
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "brasilia-repeat",
+      "status": 200,
+      "duration_ms": 3.57,
+      "phases_ms": {
+        "_resolve_location": 0.01,
+        "_get_forecast": 0.52,
+        "_get_official_alerts": 0.38
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "porto-alegre-cold",
+      "status": 200,
+      "duration_ms": 1413.39,
+      "phases_ms": {
+        "_resolve_location": 0.02,
+        "_get_forecast": 163.27,
+        "_get_official_alerts": 1246.33
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "porto-alegre-repeat",
+      "status": 200,
+      "duration_ms": 4.21,
+      "phases_ms": {
+        "_resolve_location": 0.01,
+        "_get_forecast": 0.4,
+        "_get_official_alerts": 0.7
+      },
+      "cache": null,
+      "quality": {
+        "is_stale": false,
+        "missing_fields": [],
+        "completeness": "complete"
+      },
+      "alerts": "available",
+      "error": null
+    },
+    {
+      "scenario": "injected-provider-failure",
+      "status": 503,
+      "duration_ms": 4.51,
+      "phases_ms": {
+        "_resolve_location": 0.01,
+        "_get_forecast": 1.29
+      },
+      "cache": null,
+      "quality": null,
+      "alerts": null,
+      "error": "WEATHER_PROVIDER_UNAVAILABLE"
+    },
+    {
+      "scenario": "injected-provider-hang",
+      "status": 503,
+      "duration_ms": 7005.73,
+      "phases_ms": {
+        "_resolve_location": 0.06,
+        "_get_forecast": 7003.11
+      },
+      "cache": null,
+      "quality": null,
+      "alerts": null,
+      "error": "WEATHER_PROVIDER_UNAVAILABLE",
+      "provider_cancelled": true
+    }
+  ]
+}

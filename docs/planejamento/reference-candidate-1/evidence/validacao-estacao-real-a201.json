@@ -1,0 +1,312 @@
+{
+  "schema": "climaprev-real-station-validation-v1",
+  "source_sha256": "2d2b3bbac55662a9d475c141819c0935401899644b862598560d551607d41621",
+  "station": {
+    "code": "A201",
+    "name": "BELEM",
+    "encoding": "cp1252",
+    "raw_metadata": {
+      "REGIAO": "N",
+      "UF": "PA",
+      "ESTACAO": "BELEM",
+      "CODIGO (WMO)": "A201",
+      "LATITUDE": "-1,41111111",
+      "LONGITUDE": "-48,43944444",
+      "ALTITUDE": "21,17",
+      "DATA DE FUNDACAO": "20/01/03"
+    },
+    "latitude": -1.41111111,
+    "longitude": -48.43944444,
+    "altitude": 21.17
+  },
+  "source_rows": 8760,
+  "january_civil_rain_total_mm": 427.6,
+  "january_utc_timestamp_date_rain_total_mm": 427.0,
+  "comparisons": [
+    {
+      "lead_days": 1,
+      "rain_paired_days": 31,
+      "rain_metrics": {
+        "forecast": {
+          "cases": 31,
+          "bias": -2.3806451612903223,
+          "mae": 10.051612903225807,
+          "rmse": 13.58887115822498
+        },
+        "observed": {
+          "cases": 31,
+          "bias": -2.448387096774194,
+          "mae": 10.938709677419356,
+          "rmse": 14.821181442612417
+        }
+      },
+      "station_to_grid_distance_km": {
+        "forecast": 10.333,
+        "observed": 11.958
+      },
+      "variables": {
+        "gust_kmh": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -2.3206451612903227,
+              "mae": 4.901290322580645,
+              "rmse": 6.399773181464602
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -1.6303225806451611,
+              "mae": 4.785161290322581,
+              "rmse": 6.022061591054314
+            }
+          },
+          "source_semantics": {
+            "forecast": "preceding_hour_maximum",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_max_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -3.1806451612903226,
+              "mae": 3.3806451612903223,
+              "rmse": 3.6521315031265003
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -2.9580645161290318,
+              "mae": 3.0161290322580645,
+              "rmse": 3.1893471877283863
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_min_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -1.2677419354838708,
+              "mae": 1.3064516129032253,
+              "rmse": 1.3855242399015752
+            },
+            "observed": {
+              "cases": 31,
+              "bias": 0.7322580645161293,
+              "mae": 0.7322580645161293,
+              "rmse": 0.8949680116828107
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        }
+      },
+      "rain_report_sha256": "7cccf7e16ef0dad1caafc47d1e35c4d08238c093cadf0de65604b633d69cff19",
+      "variables_report_sha256": "f5d24337c165d032e26776fb3b138de4833e4bea4cc8794be8efba7f886dbb96"
+    },
+    {
+      "lead_days": 3,
+      "rain_paired_days": 31,
+      "rain_metrics": {
+        "forecast": {
+          "cases": 31,
+          "bias": -4.1,
+          "mae": 11.416129032258064,
+          "rmse": 14.673291514550092
+        },
+        "observed": {
+          "cases": 31,
+          "bias": -2.448387096774194,
+          "mae": 10.938709677419356,
+          "rmse": 14.821181442612417
+        }
+      },
+      "station_to_grid_distance_km": {
+        "forecast": 10.333,
+        "observed": 11.958
+      },
+      "variables": {
+        "gust_kmh": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -2.8206451612903227,
+              "mae": 5.805161290322581,
+              "rmse": 7.23085681801131
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -1.6303225806451611,
+              "mae": 4.785161290322581,
+              "rmse": 6.022061591054314
+            }
+          },
+          "source_semantics": {
+            "forecast": "preceding_hour_maximum",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_max_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -3.42258064516129,
+              "mae": 3.5451612903225804,
+              "rmse": 3.7367831602993467
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -2.9580645161290318,
+              "mae": 3.0161290322580645,
+              "rmse": 3.1893471877283863
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_min_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -1.3709677419354835,
+              "mae": 1.3967741935483868,
+              "rmse": 1.4512508509069215
+            },
+            "observed": {
+              "cases": 31,
+              "bias": 0.7322580645161293,
+              "mae": 0.7322580645161293,
+              "rmse": 0.8949680116828107
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        }
+      },
+      "rain_report_sha256": "083f8ad271d391b6d6821decc6a489af87e474e8cd3941c8ff5ddf8d0c447e1e",
+      "variables_report_sha256": "531b335857dac97ece699d861e7976fdf1def7ad0cea4847a34f87ae5237c377"
+    },
+    {
+      "lead_days": 7,
+      "rain_paired_days": 31,
+      "rain_metrics": {
+        "forecast": {
+          "cases": 31,
+          "bias": -8.364516129032259,
+          "mae": 13.312903225806451,
+          "rmse": 19.190496640012277
+        },
+        "observed": {
+          "cases": 31,
+          "bias": -2.448387096774194,
+          "mae": 10.938709677419356,
+          "rmse": 14.821181442612417
+        }
+      },
+      "station_to_grid_distance_km": {
+        "forecast": 10.333,
+        "observed": 11.958
+      },
+      "variables": {
+        "gust_kmh": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -1.4399999999999995,
+              "mae": 5.459354838709677,
+              "rmse": 6.806145230835571
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -1.6303225806451611,
+              "mae": 4.785161290322581,
+              "rmse": 6.022061591054314
+            }
+          },
+          "source_semantics": {
+            "forecast": "preceding_hour_maximum",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_max_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -3.561290322580645,
+              "mae": 3.8322580645161284,
+              "rmse": 4.031809007253163
+            },
+            "observed": {
+              "cases": 31,
+              "bias": -2.9580645161290318,
+              "mae": 3.0161290322580645,
+              "rmse": 3.1893471877283863
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        },
+        "temperature_min_c": {
+          "paired_days": 31,
+          "metrics": {
+            "forecast": {
+              "cases": 31,
+              "bias": -1.4064516129032252,
+              "mae": 1.4322580645161282,
+              "rmse": 1.5481518638519882
+            },
+            "observed": {
+              "cases": 31,
+              "bias": 0.7322580645161293,
+              "mae": 0.7322580645161293,
+              "rmse": 0.8949680116828107
+            }
+          },
+          "source_semantics": {
+            "forecast": "instantaneous_samples",
+            "observed": "instantaneous_samples",
+            "station": "preceding_hour_extrema"
+          }
+        }
+      },
+      "rain_report_sha256": "6736efce9f2aa5c62f9481660e6a68f7eae9225bf50613908d967b736d859c8f",
+      "variables_report_sha256": "c184c8d3c2d2a1ca2770320b481c8efbecdc96012be5f44913a5cb604efba3f8"
+    }
+  ],
+  "scientific_approval": false,
+  "calibration_fitted": false,
+  "stage_6_started": false,
+  "limitations": [
+    "Real CSV layout and identity verified; sensor quality not scientifically certified.",
+    "Municipal forecast grids differ spatially from station.",
+    "Bulletin total 417.0 mm differs from downloaded CSV civil total; not reconciled.",
+    "Previous technical freeze predates this added observation evidence."
+  ]
+}

@@ -1,0 +1,2608 @@
+{
+  "schema": "climaprev-preparation-campaign-v1",
+  "protocol_sha256": "2859a26e6ec0c86bd576b1fec9f6398268735bb2d7f64c28aabd077793af174c",
+  "locations": {
+    "belem": {
+      "latitude": -1.4558,
+      "longitude": -48.5044,
+      "timezone": "America/Belem",
+      "meaning": "municipal experiment point, not verified station location"
+    },
+    "brasilia": {
+      "latitude": -15.7939,
+      "longitude": -47.8828,
+      "timezone": "America/Sao_Paulo",
+      "meaning": "municipal experiment point, not verified station location"
+    },
+    "porto-alegre": {
+      "latitude": -30.0346,
+      "longitude": -51.2177,
+      "timezone": "America/Sao_Paulo",
+      "meaning": "municipal experiment point, not verified station location"
+    }
+  },
+  "requested_jobs": 36,
+  "collected_jobs": 31,
+  "failures": [
+    {
+      "job": "brasilia-2024-01-d7",
+      "error": "ProviderTransientError",
+      "detail": "provider request timed out"
+    },
+    {
+      "job": "brasilia-2024-04-d1",
+      "error": "ProviderTransientError",
+      "detail": "provider request timed out"
+    },
+    {
+      "job": "brasilia-2024-04-d3",
+      "error": "ProviderTransientError",
+      "detail": "provider request timed out"
+    },
+    {
+      "job": "brasilia-2024-10-d7",
+      "error": "ProviderTransientError",
+      "detail": "provider request timed out"
+    },
+    {
+      "job": "porto-alegre-2024-01-d3",
+      "error": "ProviderTransientError",
+      "detail": "provider request timed out"
+    },
+    {
+      "job": "brasilia-2024-01",
+      "error": "IncompleteGroup",
+      "detail": "missing horizon"
+    },
+    {
+      "job": "brasilia-2024-04",
+      "error": "IncompleteGroup",
+      "detail": "missing horizon"
+    },
+    {
+      "job": "brasilia-2024-10",
+      "error": "IncompleteGroup",
+      "detail": "missing horizon"
+    },
+    {
+      "job": "porto-alegre-2024-01",
+      "error": "IncompleteGroup",
+      "detail": "missing horizon"
+    }
+  ],
+  "parent_snapshots": {
+    "belem-2024-01-d1": "2390969bf60f1dd8652ff473935fe47ef3be34aa3a33760850cebf43df5233af",
+    "belem-2024-01-d3": "7ae30424a1bc7e37f0fba1908c98d3861a5fe4c0ba2a5516eeb14f466790f692",
+    "belem-2024-01-d7": "2f0c9dc18b125c659fd43c57b6673269d7c1231b65d709f70e12696a61817847",
+    "belem-2024-04-d1": "a151af85020e0da9b75088da3046df9758fac79c266335ca56c983c52e81b3b2",
+    "belem-2024-04-d3": "65b2a2bbe07da08e992ad76cdae8542c1bc7df95b7dd6c667d7349232094f1ff",
+    "belem-2024-04-d7": "f7bd4f4697304787f2c1929db3e028c84a075dd7353f6893e9ae7cd9114a755d",
+    "belem-2024-07-d1": "ff1b93dd42ff8fe4cf94edf4309fb81b27a07de8febd06af1b61de7598da1ef6",
+    "belem-2024-07-d3": "c3351b56bea437db960812bd7060864a953c7272e3f3288e9b3ea46c57e9f448",
+    "belem-2024-07-d7": "5970a17cd61f11bde0181ceffb60de52a0005fbcc684599194e4ad57c5f8f6d6",
+    "belem-2024-10-d1": "0b75f70f8c3f629a762804682766562d793df463e7a07a2f51ee2c69fc10ffcb",
+    "belem-2024-10-d3": "891f08c9c456211958fee54d22c91d3ad2179dec1378e7400db7f5f12ec290f5",
+    "belem-2024-10-d7": "f1b24a3b3e62ab912542eb3120ba6d1745f4108e4a895ed932621d7fb7bd8720",
+    "brasilia-2024-01-d1": "3c5dca37b44ce7104b3337ec0408a9dd800c3316bc810390bbf4c8023b2348e6",
+    "brasilia-2024-01-d3": "4b4e8b9d46e81d9677f2bb509f1237c44d1c87ed7e99f86b4f027220672c2c40",
+    "brasilia-2024-04-d7": "275ec46970c7a80453c6b57c2f9560695320af3d7f7ccedfdb923cfcd3b1a5c0",
+    "brasilia-2024-07-d1": "9b1e08706940cafb0efd49c215ba5ce2ed3bb97e0d71859b845e4497ab43078f",
+    "brasilia-2024-07-d3": "365d2b1b45aa2fd2e1d84f891d98a58019231c68f474e64c688af9f44034c6ee",
+    "brasilia-2024-07-d7": "5dd26ae34047433628d7fdae029134360690ded12bc7ab0f2246b429ac9feb79",
+    "brasilia-2024-10-d1": "93fc29593f735e4699632e2d76a46bea8aef3900707f042f653d891d8ef804ed",
+    "brasilia-2024-10-d3": "7acd38832c3da7ec630c86e73b4149a4d93fedba37dad3c12b19c0e3abb61273",
+    "porto-alegre-2024-01-d1": "cd87cd64082d972d2845fdc7945e53c2ef44ceb2e6f7cd9afa55bd35b824b7a5",
+    "porto-alegre-2024-01-d7": "7888e9c8455b7a5c5b95e350d791aacb2c1b0c07b44e6acf13746ad02f1c4ee3",
+    "porto-alegre-2024-04-d1": "d029f3c4a481a5d010e52aa3853113bee87eb52e39080f6918638a9161b7f76b",
+    "porto-alegre-2024-04-d3": "4907ac8f73ca6424c06233711d771058c235dfb4f16fe5a44c4b2930ffc0a783",
+    "porto-alegre-2024-04-d7": "5578388ad56bce51ed8d7ae2a46d9ec44fb9349dafe236d317e422ff66684d85",
+    "porto-alegre-2024-07-d1": "cd4a3f78a5ee3c290237edb889b2bf9bf6924808b02564fd800e58e2b8fc1d34",
+    "porto-alegre-2024-07-d3": "62002941f327f64f501e748ca4904c2bc8971368044d24ed1a65684095aefc1b",
+    "porto-alegre-2024-07-d7": "16a5617c18d1219369e3714c3de47f4264f3683f7edac0856655726044ed9e23",
+    "porto-alegre-2024-10-d1": "e2faa6726244583c1053abfb7c66cc6461a09efed4e0eb14508ea152cb1ef948",
+    "porto-alegre-2024-10-d3": "039b4fed6cbefaeef454a9f4547ea3b9f09a8050bd0a63c36785d90b6a77860d",
+    "porto-alegre-2024-10-d7": "1361c5c5eab5e246da77b292c961263f457ca1a00767694bef45aa2d6ab8b427"
+  },
+  "comparisons": {
+    "belem-2024-01": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -1.4558,
+        "longitude": -48.5044,
+        "start": "2024-01-01",
+        "end": "2024-01-28",
+        "timezone": "America/Belem",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 3,
+      "cases": [
+        {
+          "date": "2024-01-26",
+          "observed_mm": 2.1,
+          "predicted_mm": {
+            "1": 6.5,
+            "3": 10.2,
+            "7": 3.4
+          }
+        },
+        {
+          "date": "2024-01-27",
+          "observed_mm": 3.8,
+          "predicted_mm": {
+            "1": 16.1,
+            "3": 13.2,
+            "7": 10.9
+          }
+        },
+        {
+          "date": "2024-01-28",
+          "observed_mm": 1.5,
+          "predicted_mm": {
+            "1": 5.6,
+            "3": 8.6,
+            "7": 9.6
+          }
+        }
+      ],
+      "excluded_dates": [
+        {
+          "date": "2024-01-01",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-02",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-03",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-04",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-05",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-06",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-07",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-08",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-09",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-10",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-11",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-12",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-13",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-14",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-15",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-16",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-17",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-18",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-19",
+          "incomplete_sources": [
+            "forecast_D1",
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-20",
+          "incomplete_sources": [
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-21",
+          "incomplete_sources": [
+            "forecast_D3",
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-22",
+          "incomplete_sources": [
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-23",
+          "incomplete_sources": [
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-24",
+          "incomplete_sources": [
+            "forecast_D7"
+          ]
+        },
+        {
+          "date": "2024-01-25",
+          "incomplete_sources": [
+            "forecast_D7"
+          ]
+        }
+      ],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "383fb03ca3bbc21abab734fd82afc6b1bc41dfd5db0b9a307d74e37e4446b2b9",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "79a26956674590a1e1cc222f432071d4b53408f00ad8beae80e0413c212f15d1",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "a5265efd4f0213836182087dfdd56a81c4eacb3818412712e236b18ee91a1028",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 3,
+          "bias": 6.933333333333334,
+          "mae": 6.933333333333334,
+          "rmse": 7.904850831398824
+        },
+        "3": {
+          "cases": 3,
+          "bias": 8.2,
+          "mae": 8.2,
+          "rmse": 8.253887972747549
+        },
+        "7": {
+          "cases": 3,
+          "bias": 5.5,
+          "mae": 5.5,
+          "rmse": 6.263917836838752
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "belem-2024-04": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -1.4558,
+        "longitude": -48.5044,
+        "start": "2024-04-01",
+        "end": "2024-04-28",
+        "timezone": "America/Belem",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-04-01",
+          "observed_mm": 9.1,
+          "predicted_mm": {
+            "1": 12.5,
+            "3": 7.8,
+            "7": 1.3
+          }
+        },
+        {
+          "date": "2024-04-02",
+          "observed_mm": 1.9,
+          "predicted_mm": {
+            "1": 20.3,
+            "3": 8.1,
+            "7": 3.1
+          }
+        },
+        {
+          "date": "2024-04-03",
+          "observed_mm": 17.4,
+          "predicted_mm": {
+            "1": 15.9,
+            "3": 7.2,
+            "7": 0.5
+          }
+        },
+        {
+          "date": "2024-04-04",
+          "observed_mm": 6.6,
+          "predicted_mm": {
+            "1": 2.4,
+            "3": 9.3,
+            "7": 1.4
+          }
+        },
+        {
+          "date": "2024-04-05",
+          "observed_mm": 12.1,
+          "predicted_mm": {
+            "1": 18.6,
+            "3": 11.8,
+            "7": 3.9
+          }
+        },
+        {
+          "date": "2024-04-06",
+          "observed_mm": 8.2,
+          "predicted_mm": {
+            "1": 7.7,
+            "3": 22.6,
+            "7": 4.1
+          }
+        },
+        {
+          "date": "2024-04-07",
+          "observed_mm": 13.1,
+          "predicted_mm": {
+            "1": 16.3,
+            "3": 10.2,
+            "7": 1.9
+          }
+        },
+        {
+          "date": "2024-04-08",
+          "observed_mm": 22.0,
+          "predicted_mm": {
+            "1": 19.0,
+            "3": 13.2,
+            "7": 3.2
+          }
+        },
+        {
+          "date": "2024-04-09",
+          "observed_mm": 9.4,
+          "predicted_mm": {
+            "1": 28.2,
+            "3": 5.6,
+            "7": 4.8
+          }
+        },
+        {
+          "date": "2024-04-10",
+          "observed_mm": 9.9,
+          "predicted_mm": {
+            "1": 13.2,
+            "3": 15.9,
+            "7": 3.5
+          }
+        },
+        {
+          "date": "2024-04-11",
+          "observed_mm": 9.6,
+          "predicted_mm": {
+            "1": 16.1,
+            "3": 34.2,
+            "7": 11.8
+          }
+        },
+        {
+          "date": "2024-04-12",
+          "observed_mm": 85.1,
+          "predicted_mm": {
+            "1": 21.3,
+            "3": 5.3,
+            "7": 5.1
+          }
+        },
+        {
+          "date": "2024-04-13",
+          "observed_mm": 27.9,
+          "predicted_mm": {
+            "1": 44.9,
+            "3": 13.2,
+            "7": 4.0
+          }
+        },
+        {
+          "date": "2024-04-14",
+          "observed_mm": 53.2,
+          "predicted_mm": {
+            "1": 17.4,
+            "3": 15.5,
+            "7": 25.5
+          }
+        },
+        {
+          "date": "2024-04-15",
+          "observed_mm": 24.4,
+          "predicted_mm": {
+            "1": 3.5,
+            "3": 11.2,
+            "7": 5.5
+          }
+        },
+        {
+          "date": "2024-04-16",
+          "observed_mm": 1.9,
+          "predicted_mm": {
+            "1": 6.0,
+            "3": 2.9,
+            "7": 0.6
+          }
+        },
+        {
+          "date": "2024-04-17",
+          "observed_mm": 9.8,
+          "predicted_mm": {
+            "1": 16.8,
+            "3": 21.4,
+            "7": 2.5
+          }
+        },
+        {
+          "date": "2024-04-18",
+          "observed_mm": 45.9,
+          "predicted_mm": {
+            "1": 6.7,
+            "3": 1.6,
+            "7": 0.5
+          }
+        },
+        {
+          "date": "2024-04-19",
+          "observed_mm": 4.4,
+          "predicted_mm": {
+            "1": 9.0,
+            "3": 14.0,
+            "7": 1.8
+          }
+        },
+        {
+          "date": "2024-04-20",
+          "observed_mm": 17.3,
+          "predicted_mm": {
+            "1": 15.8,
+            "3": 13.9,
+            "7": 7.1
+          }
+        },
+        {
+          "date": "2024-04-21",
+          "observed_mm": 33.3,
+          "predicted_mm": {
+            "1": 27.3,
+            "3": 2.3,
+            "7": 6.0
+          }
+        },
+        {
+          "date": "2024-04-22",
+          "observed_mm": 14.0,
+          "predicted_mm": {
+            "1": 9.3,
+            "3": 9.5,
+            "7": 11.1
+          }
+        },
+        {
+          "date": "2024-04-23",
+          "observed_mm": 8.7,
+          "predicted_mm": {
+            "1": 11.5,
+            "3": 10.6,
+            "7": 3.3
+          }
+        },
+        {
+          "date": "2024-04-24",
+          "observed_mm": 19.6,
+          "predicted_mm": {
+            "1": 7.1,
+            "3": 10.1,
+            "7": 2.6
+          }
+        },
+        {
+          "date": "2024-04-25",
+          "observed_mm": 31.2,
+          "predicted_mm": {
+            "1": 21.6,
+            "3": 9.0,
+            "7": 4.7
+          }
+        },
+        {
+          "date": "2024-04-26",
+          "observed_mm": 8.8,
+          "predicted_mm": {
+            "1": 20.5,
+            "3": 8.3,
+            "7": 4.9
+          }
+        },
+        {
+          "date": "2024-04-27",
+          "observed_mm": 38.6,
+          "predicted_mm": {
+            "1": 14.5,
+            "3": 15.4,
+            "7": 2.8
+          }
+        },
+        {
+          "date": "2024-04-28",
+          "observed_mm": 19.6,
+          "predicted_mm": {
+            "1": 11.1,
+            "3": 11.3,
+            "7": 4.4
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "6d1ebb3961ef4b6f11cee5cb91b8771499963c159f387492014e2d11c542dd61",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "8f523c37fe227c53c425bc12773741f937ad7a5aff8443b2bdc5aedc311b165a",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "3731f2915b9f9dc283d9d032ccd1099ea97cda2949dc8fbba956b35c035c6dbf",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": -4.589285714285714,
+          "mae": 12.253571428571428,
+          "rmse": 18.561067164517084
+        },
+        "3": {
+          "cases": 28,
+          "bias": -8.628571428571428,
+          "mae": 14.200000000000001,
+          "rmse": 22.08515985258621
+        },
+        "7": {
+          "cases": 28,
+          "bias": -15.396428571428572,
+          "mae": 15.639285714285714,
+          "rmse": 22.857844855291397
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "belem-2024-07": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -1.4558,
+        "longitude": -48.5044,
+        "start": "2024-07-01",
+        "end": "2024-07-28",
+        "timezone": "America/Belem",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-07-01",
+          "observed_mm": 0.9,
+          "predicted_mm": {
+            "1": 5.5,
+            "3": 7.2,
+            "7": 1.3
+          }
+        },
+        {
+          "date": "2024-07-02",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.3,
+            "3": 0.0,
+            "7": 2.2
+          }
+        },
+        {
+          "date": "2024-07-03",
+          "observed_mm": 1.5,
+          "predicted_mm": {
+            "1": 1.2,
+            "3": 0.0,
+            "7": 2.0
+          }
+        },
+        {
+          "date": "2024-07-04",
+          "observed_mm": 2.1,
+          "predicted_mm": {
+            "1": 2.4,
+            "3": 5.9,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-07-05",
+          "observed_mm": 2.4,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 6.3,
+            "7": 0.6
+          }
+        },
+        {
+          "date": "2024-07-06",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.9,
+            "7": 0.4
+          }
+        },
+        {
+          "date": "2024-07-07",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 4.6,
+            "3": 1.9,
+            "7": 0.9
+          }
+        },
+        {
+          "date": "2024-07-08",
+          "observed_mm": 4.5,
+          "predicted_mm": {
+            "1": 8.4,
+            "3": 8.2,
+            "7": 1.9
+          }
+        },
+        {
+          "date": "2024-07-09",
+          "observed_mm": 1.5,
+          "predicted_mm": {
+            "1": 3.0,
+            "3": 4.7,
+            "7": 1.5
+          }
+        },
+        {
+          "date": "2024-07-10",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.7,
+            "7": 1.2
+          }
+        },
+        {
+          "date": "2024-07-11",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-12",
+          "observed_mm": 0.5,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-13",
+          "observed_mm": 0.5,
+          "predicted_mm": {
+            "1": 1.2,
+            "3": 0.2,
+            "7": 1.7
+          }
+        },
+        {
+          "date": "2024-07-14",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.2,
+            "3": 2.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-15",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 1.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-16",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 3.1,
+            "7": 1.7
+          }
+        },
+        {
+          "date": "2024-07-17",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.6
+          }
+        },
+        {
+          "date": "2024-07-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 8.3,
+            "7": 1.0
+          }
+        },
+        {
+          "date": "2024-07-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 2.1,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 1.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-21",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 4.4,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-07-22",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-07-23",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.4,
+            "3": 0.0,
+            "7": 0.6
+          }
+        },
+        {
+          "date": "2024-07-24",
+          "observed_mm": 0.4,
+          "predicted_mm": {
+            "1": 0.3,
+            "3": 2.2,
+            "7": 1.4
+          }
+        },
+        {
+          "date": "2024-07-25",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.1,
+            "7": 0.5
+          }
+        },
+        {
+          "date": "2024-07-26",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 2.8,
+            "7": 2.9
+          }
+        },
+        {
+          "date": "2024-07-27",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-28",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "bd0b1b7bc1b1185a3b5a6b7a59ec5722d6c6039aa0afc32d8fba4b88b627971f",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "5bb24fa222744cd523f49468bebe14850195d17d233eb5dd3ce756f8ba8aac1f",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "96bb1c4f8f6c0e2682fca31affcdc1338e1badc0feacfec857fa526633258f12",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 0.45,
+          "mae": 0.7071428571428572,
+          "rmse": 1.5373911111267127
+        },
+        "3": {
+          "cases": 28,
+          "bias": 1.7464285714285714,
+          "mae": 1.9535714285714287,
+          "rmse": 2.823182095235294
+        },
+        "7": {
+          "cases": 28,
+          "bias": 0.2928571428571428,
+          "mae": 0.7857142857142857,
+          "rmse": 1.1275764148954923
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "belem-2024-10": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -1.4558,
+        "longitude": -48.5044,
+        "start": "2024-10-01",
+        "end": "2024-10-28",
+        "timezone": "America/Belem",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-10-01",
+          "observed_mm": 1.8,
+          "predicted_mm": {
+            "1": 3.2,
+            "3": 2.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-02",
+          "observed_mm": 0.8,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 0.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-03",
+          "observed_mm": 1.1,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.2,
+            "7": 1.8
+          }
+        },
+        {
+          "date": "2024-10-04",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-05",
+          "observed_mm": 0.1,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-06",
+          "observed_mm": 0.3,
+          "predicted_mm": {
+            "1": 2.6,
+            "3": 5.6,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-07",
+          "observed_mm": 0.3,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-08",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.6,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-09",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-10",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-11",
+          "observed_mm": 0.3,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-12",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-13",
+          "observed_mm": 0.1,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-14",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-15",
+          "observed_mm": 0.7,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-16",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.1,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-17",
+          "observed_mm": 0.1,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-10-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-21",
+          "observed_mm": 0.6,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-22",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-23",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-24",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-25",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-26",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.2,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-27",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-28",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "7f8fbe9a1fc4ff8ced1f4567318fee903d915022a184532c08aafa9c48ac5264",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "024aa4392eaceea28ffe5cdec026da0c50aa0279f65f0be7de0ef374eb2862c2",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "154a498c98d093c22c709e02bd7bb1101d42d0eb6cc1a9591096a0ae389695da",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 9.912705577010326e-18,
+          "mae": 0.3285714285714286,
+          "rmse": 0.6135377506140689
+        },
+        "3": {
+          "cases": 28,
+          "bias": 0.08214285714285714,
+          "mae": 0.3464285714285714,
+          "rmse": 1.0428326807307104
+        },
+        "7": {
+          "cases": 28,
+          "bias": -0.16785714285714287,
+          "mae": 0.2392857142857143,
+          "rmse": 0.45237468667340036
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "brasilia-2024-07": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -15.7939,
+        "longitude": -47.8828,
+        "start": "2024-07-01",
+        "end": "2024-07-28",
+        "timezone": "America/Sao_Paulo",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-07-01",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-02",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-03",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-04",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-05",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-06",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-07",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-08",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-09",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-10",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-11",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-12",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-13",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-14",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-15",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-16",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-17",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-21",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-22",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-23",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-24",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-25",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-26",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-27",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-28",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "356290814afb650ee3b184f99fcca61e977203b67097ccb2873ad64c1679ecf0",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "bb91ea82eaacfdcbe90d995ada943f22bce1e2281a2d450fe09e1c2124335403",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "1a5a4ff625f9065ec42188499758a77a535b9192697ac1ed938f02aa1e339809",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 0.0,
+          "mae": 0.0,
+          "rmse": 0.0
+        },
+        "3": {
+          "cases": 28,
+          "bias": 0.0,
+          "mae": 0.0,
+          "rmse": 0.0
+        },
+        "7": {
+          "cases": 28,
+          "bias": 0.0,
+          "mae": 0.0,
+          "rmse": 0.0
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "porto-alegre-2024-04": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -30.0346,
+        "longitude": -51.2177,
+        "start": "2024-04-01",
+        "end": "2024-04-28",
+        "timezone": "America/Sao_Paulo",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-04-01",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.5,
+            "7": 1.0
+          }
+        },
+        {
+          "date": "2024-04-02",
+          "observed_mm": 1.3,
+          "predicted_mm": {
+            "1": 2.7,
+            "3": 3.1,
+            "7": 0.1
+          }
+        },
+        {
+          "date": "2024-04-03",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-04",
+          "observed_mm": 2.1,
+          "predicted_mm": {
+            "1": 8.2,
+            "3": 26.3,
+            "7": 11.4
+          }
+        },
+        {
+          "date": "2024-04-05",
+          "observed_mm": 1.7,
+          "predicted_mm": {
+            "1": 7.5,
+            "3": 6.6,
+            "7": 1.7
+          }
+        },
+        {
+          "date": "2024-04-06",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.6,
+            "7": 1.2
+          }
+        },
+        {
+          "date": "2024-04-07",
+          "observed_mm": 32.9,
+          "predicted_mm": {
+            "1": 29.6,
+            "3": 75.5,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-08",
+          "observed_mm": 1.0,
+          "predicted_mm": {
+            "1": 0.6,
+            "3": 0.0,
+            "7": 0.4
+          }
+        },
+        {
+          "date": "2024-04-09",
+          "observed_mm": 0.5,
+          "predicted_mm": {
+            "1": 0.3,
+            "3": 0.9,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-10",
+          "observed_mm": 0.6,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 7.1,
+            "7": 0.7
+          }
+        },
+        {
+          "date": "2024-04-11",
+          "observed_mm": 15.2,
+          "predicted_mm": {
+            "1": 24.0,
+            "3": 3.1,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-04-12",
+          "observed_mm": 3.4,
+          "predicted_mm": {
+            "1": 31.2,
+            "3": 6.1,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-13",
+          "observed_mm": 9.5,
+          "predicted_mm": {
+            "1": 20.1,
+            "3": 18.8,
+            "7": 0.6
+          }
+        },
+        {
+          "date": "2024-04-14",
+          "observed_mm": 7.8,
+          "predicted_mm": {
+            "1": 3.1,
+            "3": 21.3,
+            "7": 0.1
+          }
+        },
+        {
+          "date": "2024-04-15",
+          "observed_mm": 1.3,
+          "predicted_mm": {
+            "1": 3.0,
+            "3": 4.0,
+            "7": 7.1
+          }
+        },
+        {
+          "date": "2024-04-16",
+          "observed_mm": 20.6,
+          "predicted_mm": {
+            "1": 61.0,
+            "3": 25.0,
+            "7": 2.3
+          }
+        },
+        {
+          "date": "2024-04-17",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 1.1
+          }
+        },
+        {
+          "date": "2024-04-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.2
+          }
+        },
+        {
+          "date": "2024-04-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-21",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.3
+          }
+        },
+        {
+          "date": "2024-04-22",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 1.8,
+            "3": 0.4,
+            "7": 7.8
+          }
+        },
+        {
+          "date": "2024-04-23",
+          "observed_mm": 2.0,
+          "predicted_mm": {
+            "1": 3.6,
+            "3": 0.0,
+            "7": 1.5
+          }
+        },
+        {
+          "date": "2024-04-24",
+          "observed_mm": 0.2,
+          "predicted_mm": {
+            "1": 3.1,
+            "3": 1.5,
+            "7": 0.2
+          }
+        },
+        {
+          "date": "2024-04-25",
+          "observed_mm": 0.3,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 2.5
+          }
+        },
+        {
+          "date": "2024-04-26",
+          "observed_mm": 14.4,
+          "predicted_mm": {
+            "1": 11.2,
+            "3": 6.5,
+            "7": 3.0
+          }
+        },
+        {
+          "date": "2024-04-27",
+          "observed_mm": 29.3,
+          "predicted_mm": {
+            "1": 5.9,
+            "3": 6.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-04-28",
+          "observed_mm": 5.3,
+          "predicted_mm": {
+            "1": 4.2,
+            "3": 6.2,
+            "7": 3.3
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "72a849cb7d4e762c34acbbf88ac86fdb7d42dc72cebb1dd842851e21d0782d52",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "72e893c29dae52263ad9dcba174f28cac386936608ad021079bdfa4839f39bfd",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "ce662c3cfcf7756f6b484445c54bc8d52065ea34affe6a76af00f1ad03febf0d",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 2.5571428571428574,
+          "mae": 5.207142857142856,
+          "rmse": 10.817578287213825
+        },
+        "3": {
+          "cases": 28,
+          "bias": 2.5035714285714286,
+          "mae": 5.817857142857143,
+          "rmse": 11.217667824845387
+        },
+        "7": {
+          "cases": 28,
+          "bias": -3.6714285714285713,
+          "mae": 5.728571428571429,
+          "rmse": 10.300208042281753
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "porto-alegre-2024-07": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -30.0346,
+        "longitude": -51.2177,
+        "start": "2024-07-01",
+        "end": "2024-07-28",
+        "timezone": "America/Sao_Paulo",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-07-01",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-02",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-03",
+          "observed_mm": 2.2,
+          "predicted_mm": {
+            "1": 1.6,
+            "3": 0.2,
+            "7": 0.5
+          }
+        },
+        {
+          "date": "2024-07-04",
+          "observed_mm": 5.5,
+          "predicted_mm": {
+            "1": 1.2,
+            "3": 4.2,
+            "7": 0.2
+          }
+        },
+        {
+          "date": "2024-07-05",
+          "observed_mm": 13.3,
+          "predicted_mm": {
+            "1": 16.7,
+            "3": 22.1,
+            "7": 0.4
+          }
+        },
+        {
+          "date": "2024-07-06",
+          "observed_mm": 1.4,
+          "predicted_mm": {
+            "1": 7.5,
+            "3": 28.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-07",
+          "observed_mm": 2.4,
+          "predicted_mm": {
+            "1": 3.0,
+            "3": 12.1,
+            "7": 5.3
+          }
+        },
+        {
+          "date": "2024-07-08",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.2,
+            "3": 0.1,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-09",
+          "observed_mm": 5.3,
+          "predicted_mm": {
+            "1": 2.2,
+            "3": 0.6,
+            "7": 6.9
+          }
+        },
+        {
+          "date": "2024-07-10",
+          "observed_mm": 13.3,
+          "predicted_mm": {
+            "1": 12.2,
+            "3": 7.6,
+            "7": 3.7
+          }
+        },
+        {
+          "date": "2024-07-11",
+          "observed_mm": 1.0,
+          "predicted_mm": {
+            "1": 2.0,
+            "3": 6.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-12",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 1.0,
+            "3": 0.5,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-13",
+          "observed_mm": 1.1,
+          "predicted_mm": {
+            "1": 8.2,
+            "3": 11.1,
+            "7": 3.1
+          }
+        },
+        {
+          "date": "2024-07-14",
+          "observed_mm": 15.5,
+          "predicted_mm": {
+            "1": 44.0,
+            "3": 26.9,
+            "7": 5.2
+          }
+        },
+        {
+          "date": "2024-07-15",
+          "observed_mm": 0.3,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 4.0,
+            "7": 0.4
+          }
+        },
+        {
+          "date": "2024-07-16",
+          "observed_mm": 1.5,
+          "predicted_mm": {
+            "1": 0.2,
+            "3": 0.0,
+            "7": 1.1
+          }
+        },
+        {
+          "date": "2024-07-17",
+          "observed_mm": 2.6,
+          "predicted_mm": {
+            "1": 0.1,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-21",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-22",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-23",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-24",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-25",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-07-26",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 1.2
+          }
+        },
+        {
+          "date": "2024-07-27",
+          "observed_mm": 0.8,
+          "predicted_mm": {
+            "1": 1.1,
+            "3": 0.2,
+            "7": 2.4
+          }
+        },
+        {
+          "date": "2024-07-28",
+          "observed_mm": 11.6,
+          "predicted_mm": {
+            "1": 11.5,
+            "3": 27.2,
+            "7": 0.9
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "973c27eec2a1443f1ee717c9b580660b3768038dd9cb686558bce69df52567fc",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "db7b88a452c0663dcc7f9c0ea10819999b280875930b6a773fb89af5d171f20b",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "65b865c70cea9affff91c03c194a3c5c2c69b2ad77a3ee3f872daee1fd919a74",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 1.2464285714285714,
+          "mae": 2.1964285714285716,
+          "rmse": 5.829818669074169
+        },
+        "3": {
+          "cases": 28,
+          "bias": 2.6285714285714286,
+          "mae": 3.942857142857143,
+          "rmse": 7.281287170352702
+        },
+        "7": {
+          "cases": 28,
+          "bias": -1.6607142857142858,
+          "mae": 2.332142857142857,
+          "rmse": 4.387441493301404
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    },
+    "porto-alegre-2024-10": {
+      "schema": "climaprev-civil-rain-horizons-v1",
+      "convention": "civil-day-preceding-hour-v1",
+      "configuration": {
+        "latitude": -30.0346,
+        "longitude": -51.2177,
+        "start": "2024-10-01",
+        "end": "2024-10-28",
+        "timezone": "America/Sao_Paulo",
+        "minimum_coverage": 1.0,
+        "forecast_model": "gfs_global",
+        "observed_model": "era5"
+      },
+      "lead_days": [
+        1,
+        3,
+        7
+      ],
+      "unique_paired_dates": 28,
+      "cases": [
+        {
+          "date": "2024-10-01",
+          "observed_mm": 6.6,
+          "predicted_mm": {
+            "1": 4.3,
+            "3": 2.5,
+            "7": 2.4
+          }
+        },
+        {
+          "date": "2024-10-02",
+          "observed_mm": 12.1,
+          "predicted_mm": {
+            "1": 18.7,
+            "3": 1.8,
+            "7": 9.9
+          }
+        },
+        {
+          "date": "2024-10-03",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.1
+          }
+        },
+        {
+          "date": "2024-10-04",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-05",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-06",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 1.9
+          }
+        },
+        {
+          "date": "2024-10-07",
+          "observed_mm": 8.9,
+          "predicted_mm": {
+            "1": 16.3,
+            "3": 4.6,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-08",
+          "observed_mm": 15.1,
+          "predicted_mm": {
+            "1": 16.5,
+            "3": 15.4,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-09",
+          "observed_mm": 1.1,
+          "predicted_mm": {
+            "1": 0.7,
+            "3": 0.7,
+            "7": 6.8
+          }
+        },
+        {
+          "date": "2024-10-10",
+          "observed_mm": 18.3,
+          "predicted_mm": {
+            "1": 8.1,
+            "3": 1.7,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-11",
+          "observed_mm": 24.0,
+          "predicted_mm": {
+            "1": 32.5,
+            "3": 40.9,
+            "7": 12.6
+          }
+        },
+        {
+          "date": "2024-10-12",
+          "observed_mm": 0.1,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-13",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-14",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-15",
+          "observed_mm": 7.7,
+          "predicted_mm": {
+            "1": 38.1,
+            "3": 5.0,
+            "7": 3.9
+          }
+        },
+        {
+          "date": "2024-10-16",
+          "observed_mm": 1.3,
+          "predicted_mm": {
+            "1": 0.3,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-17",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-18",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 1.4,
+            "7": 3.5
+          }
+        },
+        {
+          "date": "2024-10-19",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 2.9
+          }
+        },
+        {
+          "date": "2024-10-20",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.1
+          }
+        },
+        {
+          "date": "2024-10-21",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-22",
+          "observed_mm": 0.4,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.8
+          }
+        },
+        {
+          "date": "2024-10-23",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.6,
+            "3": 0.1,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-24",
+          "observed_mm": 10.1,
+          "predicted_mm": {
+            "1": 23.7,
+            "3": 13.5,
+            "7": 5.8
+          }
+        },
+        {
+          "date": "2024-10-25",
+          "observed_mm": 0.4,
+          "predicted_mm": {
+            "1": 0.4,
+            "3": 0.2,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-26",
+          "observed_mm": 1.5,
+          "predicted_mm": {
+            "1": 0.6,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-27",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        },
+        {
+          "date": "2024-10-28",
+          "observed_mm": 0.0,
+          "predicted_mm": {
+            "1": 0.0,
+            "3": 0.0,
+            "7": 0.0
+          }
+        }
+      ],
+      "excluded_dates": [],
+      "provenance": {
+        "1": {
+          "derived_dataset_sha256": "05c3b1b37ecfaa99b8e82aad74fb9e939495b37f257d2184a9af66e904962759",
+          "boundary_parents": null
+        },
+        "3": {
+          "derived_dataset_sha256": "6ca87e5210fe658ca02890da89758b244a0500586958b53b8c39d17fd36d038b",
+          "boundary_parents": null
+        },
+        "7": {
+          "derived_dataset_sha256": "03d649160aa25c1ff8832822f82caf78031992851ba667b4206e7d005cba978e",
+          "boundary_parents": null
+        }
+      },
+      "metrics": {
+        "1": {
+          "cases": 28,
+          "bias": 1.9000000000000001,
+          "mae": 2.992857142857143,
+          "rmse": 7.054583110088282
+        },
+        "3": {
+          "cases": 28,
+          "bias": -0.7071428571428572,
+          "mae": 2.2857142857142856,
+          "rmse": 5.098248999131256
+        },
+        "7": {
+          "cases": 28,
+          "bias": -2.032142857142857,
+          "mae": 3.0749999999999997,
+          "rmse": 5.6332241465890815
+        }
+      },
+      "tool_sha256": "f69feebd8b36aa78957d0d1d232e663f8f33b5fab6fe1815ed1cbf2c2fc37e0b",
+      "decision": "diagnostic_only_not_approved",
+      "limitations": [
+        "ERA5 is reanalysis, not station truth or an impact label.",
+        "Horizons share dates and are not independent observations.",
+        "No calibration, risk label or promotion is produced."
+      ]
+    }
+  },
+  "unique_location_dates": 199,
+  "stop_before_stage": 6,
+  "candidate_fitting_executed": false,
+  "calibration_fitting_executed": false,
+  "holdout_accessed_by_campaign": false,
+  "decision": "preparation_only_not_scientifically_approved"
+}

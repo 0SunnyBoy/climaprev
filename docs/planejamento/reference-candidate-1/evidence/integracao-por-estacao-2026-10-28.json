@@ -1,0 +1,581 @@
+{
+  "schema": "climaprev-linked-evaluation-summary-v1",
+  "checked_at": "2026-10-28T17:44:49.792560+00:00",
+  "primary_pilot_readiness": {
+    "schema": "climaprev-primary-pilot-readiness-v1",
+    "ready": false,
+    "blockers": [
+      "A001:recent_rain_observations_incomplete",
+      "A201:recent_rain_observations_incomplete",
+      "A801:recent_rain_observations_incomplete"
+    ],
+    "pilot_activated": false,
+    "scientific_approval": false,
+    "promotion_allowed": false,
+    "scope": "primary_rain_technical_pilot_not_secondary_variable_certification"
+  },
+  "calendar_identity": "48074583abc2babf77619b5618920c15cf99cb19d19275a904db38d65e7017ee",
+  "pilot_activated": false,
+  "stations": [
+    {
+      "station": "A201",
+      "input_archives": {
+        "gfs_global": {
+          "archive_identity": "8767b77c5babeca23f513d27d817386532de7e8ad937057029b9342b018abf63",
+          "payload_sha256": "17737ec205335576981b1d5d5e28ed9d3e5e830d00811597b32f3b005398a578",
+          "collected_at": "2026-10-28T16:57:58.361991+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "ecmwf_ifs025": {
+          "archive_identity": "cb91dc1a24e3393ad0e829f018c2e98c020a53f1ab07275da11f1ac9061748b3",
+          "payload_sha256": "aa941d762a381d82e1943636733e8057f75c3ec8b6cdbc4b48c175ebdb20ab4c",
+          "collected_at": "2026-10-28T16:57:58.561986+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "icon_global": {
+          "archive_identity": "0ec6398a2441cab86b15569683b05d6c5ed59c6dc84b4dade8643da9080db810",
+          "payload_sha256": "f84731277b53b993d9b5a54f3faa931edd7666da91596db1272af27152f9277e",
+          "collected_at": "2026-10-28T16:57:58.775202+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "met-norway": {
+          "archive_identity": "33c0e203eafb5f0d6b3860dcd0974218f00fc0814c81df94d88f6c47c6f7cbbd",
+          "payload_sha256": "a491fce35a3923a750cd65e8f8e9f7adb3b41ba1e47d86e9e74decee028439a0",
+          "collected_at": "2026-10-28T16:57:59.661089+00:00",
+          "run_at": null
+        },
+        "operational-baseline": {
+          "archive_identity": "38e2d39cee9a5c075add180d168b5806446b1add2e573824e932731570aaf167",
+          "payload_sha256": "f3cf61d9e227b4583b3d9227ec0cb61608fbbc0248c6c85e484b64d210f4ceaf",
+          "collected_at": "2026-10-28T16:58:00.697529+00:00",
+          "run_at": null
+        }
+      },
+      "source_csv_sha256": "4a3169fbfc9c53cc555448d193be8ae05eeb3d1fc825c04f4d94d389eb22c9ce",
+      "recent_observation_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A201",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "lead": 1,
+          "target_date": "2026-10-29",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 3,
+          "target_date": "2026-10-31",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 7,
+          "target_date": "2026-11-04",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false,
+            "operational-baseline": false
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "station": "A001",
+      "input_archives": {
+        "gfs_global": {
+          "archive_identity": "aa9eaa68ca70a60692fb3ebdd56660f18cd9cf9b149dd2ed805d9b1fa1bac0ac",
+          "payload_sha256": "de1e47b86d78c0cad86c0d415dd289b9c6409cada39a39b2189145945badba6a",
+          "collected_at": "2026-10-28T16:58:00.906109+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "ecmwf_ifs025": {
+          "archive_identity": "873f6ad3fc57798cff8fa11c9b109c3391d0cfc9c47a1ff23ee6c096946650aa",
+          "payload_sha256": "05609d80cf5aea676604a0aaa7f4323062404a16e8ad55c6ceffc486c1947a95",
+          "collected_at": "2026-10-28T16:58:01.171838+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "icon_global": {
+          "archive_identity": "6f24e48b8d65a1938c989f4730266b26f48795953269dc4073f4175513680cb8",
+          "payload_sha256": "0954ecca619cb83d307b1f949b71c50e4e5448f2a12cfe6c635be87cff896100",
+          "collected_at": "2026-10-28T16:58:01.409411+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "met-norway": {
+          "archive_identity": "2c60487911ee534b5f6db27c62c3a6541422fe0d14cffe71bbcca817f82f6647",
+          "payload_sha256": "79882ddf1d57783ebc6e84e2ad1ffd2c0118c9c83a66e1a1ff253082016a422b",
+          "collected_at": "2026-10-28T16:58:01.707957+00:00",
+          "run_at": null
+        },
+        "operational-baseline": {
+          "archive_identity": "2ee686e21b19d335f1081bda37d6ee5a971d1a45a154843493e4cd477454fc10",
+          "payload_sha256": "3e2863abf81a4dac09ca003b67b116b7ad1affcb90cfde22de1c812ea6030d3d",
+          "collected_at": "2026-10-28T16:58:01.942109+00:00",
+          "run_at": null
+        }
+      },
+      "source_csv_sha256": "3610f36b96c71a4ccba276dd18a31fd46bece3bddc67e1b8a74ebc5d98893dc9",
+      "recent_observation_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A001",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "lead": 1,
+          "target_date": "2026-10-29",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 3,
+          "target_date": "2026-10-31",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 7,
+          "target_date": "2026-11-04",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false,
+            "operational-baseline": false
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "station": "A801",
+      "input_archives": {
+        "gfs_global": {
+          "archive_identity": "a9886a87ceb74287e463d0b4ea99e756853a62f85ad7861a194d0fea0fbccd38",
+          "payload_sha256": "e31f8d83a7500260d019609bc4d1fe32335b3fd9ab2f52a6bfcf7544a6a9bd3e",
+          "collected_at": "2026-10-28T16:58:02.127224+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "ecmwf_ifs025": {
+          "archive_identity": "80a225617386e9fb8bc593c7789584c4f54401bc0358d28e198f2ae381f95c9e",
+          "payload_sha256": "0b3950067b5b17eb6594efd3e64cd118ea5cf298b3b31b0248c41de31c94175d",
+          "collected_at": "2026-10-28T16:58:02.322755+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "icon_global": {
+          "archive_identity": "975940d1cdf285fbd67701de532a85f8d4c612ae334925a656d22ab815da4ff6",
+          "payload_sha256": "d7f82b9ab3c3581c76b0c8a9e93e5ddf6490163daa26777654a0ed24c79c4a2c",
+          "collected_at": "2026-10-28T16:58:02.551351+00:00",
+          "run_at": "2026-10-28T00:00:00+00:00"
+        },
+        "met-norway": {
+          "archive_identity": "ff668cd8f80785c4196a20c5a5133882bd266bf2e364b28aa6549f92fc1388a8",
+          "payload_sha256": "001c7f2f6d5fa1201300341cd2a074c6ac60d6a8d137bb10b982a5ecd9ac468f",
+          "collected_at": "2026-10-28T16:58:02.814054+00:00",
+          "run_at": null
+        },
+        "operational-baseline": {
+          "archive_identity": "cd67430802d0f601c6be487ecc9043ee2a708cf106042f7c86cc2ca284ab37dc",
+          "payload_sha256": "95b35d05dbe99946ddae6caeff18b3b6c41a72e6f9191af3a61cdf6d8b691076",
+          "collected_at": "2026-10-28T16:58:03.456272+00:00",
+          "run_at": null
+        }
+      },
+      "source_csv_sha256": "c32be28add78765f2f19d656826242d0d9936c45e6470fca1d395f1b755888b1",
+      "recent_observation_window": {
+        "schema": "climaprev-observation-window-readiness-v1",
+        "station": "A801",
+        "start_utc": "2026-10-21T03:00:00+00:00",
+        "end_utc": "2026-10-28T03:00:00+00:00",
+        "station_version_matches": true,
+        "variables": {
+          "precipitation_mm": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "gust_kmh": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "temperature_c": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          },
+          "humidity_pct": {
+            "expected_hours": 168,
+            "valid_hours": 0,
+            "coverage": 0.0
+          }
+        },
+        "measurement_coverage_ready": false,
+        "technical_pairing_ready": false,
+        "semantic_blockers": [
+          "temperature_hourly_mean_is_not_model_instant",
+          "humidity_sampling_aggregation_unverified",
+          "wind_10min_mean_is_not_model_instant"
+        ],
+        "minimum_coverage": 0.9,
+        "scientific_approval": false,
+        "limitation": "Coverage/metadata are not certification of sensor calibration or representativeness."
+      },
+      "horizons": [
+        {
+          "lead": 1,
+          "target_date": "2026-10-29",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": true,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 3,
+          "target_date": "2026-10-31",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": true,
+            "met-norway": false,
+            "operational-baseline": true
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        },
+        {
+          "lead": 7,
+          "target_date": "2026-11-04",
+          "forecast_rain_available": {
+            "gfs_global": true,
+            "ecmwf_ifs025": true,
+            "icon_global": false,
+            "met-norway": false,
+            "operational-baseline": false
+          },
+          "rain_common_cases": 0,
+          "variables": [
+            {
+              "target": "gust_previous_hour_max",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": true,
+              "common_cases": 0
+            },
+            {
+              "target": "temperature_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            },
+            {
+              "target": "humidity_instant",
+              "reference_kind": "experimental_model_not_public_v1",
+              "planned_hours": 24,
+              "semantics_compatible": false,
+              "common_cases": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "official_sources": [
+    {
+      "source": "https://portal.inmet.gov.br/dadoshistoricos",
+      "checked_at": "2026-10-28T17:43:16.149491+00:00",
+      "sha256": "f97cf1a054228f0cc5ebe0c33218a9e4b0a00b9c2cba53109cd7fb33a3f6bcb4",
+      "bytes": 63922
+    },
+    {
+      "source": "https://portal.inmet.gov.br/glossario/nublado",
+      "checked_at": "2026-10-28T17:43:17.349112+00:00",
+      "sha256": "ff2ef8b45aab06795ff8046e47e0c052c64a673225cb5e775ad02355aa0f73cc",
+      "bytes": 144137
+    }
+  ]
+}

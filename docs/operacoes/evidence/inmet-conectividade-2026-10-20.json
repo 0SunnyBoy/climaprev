@@ -1,0 +1,15 @@
+{
+  "url": "https://apiprevmet3.inmet.gov.br/avisos/ativos",
+  "attempts": [
+    {
+      "error_type": "RemoteProtocolError",
+      "outcomes_retained": false
+    },
+    {
+      "error_type": "RemoteProtocolError",
+      "outcomes_retained": false,
+      "trust_env": false
+    }
+  ],
+  "live_integration_confirmed": false
+}

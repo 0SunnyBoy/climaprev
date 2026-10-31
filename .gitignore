@@ -6,6 +6,8 @@ specs/
 .env
 .env.*
 !/.env.example
+!/frontend/.env.example
+frontend/nginx.generated.conf
 .venv/
 venv/
 __pycache__/
@@ -19,6 +21,7 @@ htmlcov/
 dist/
 build/
 frontend/node_modules/
+tests/docker/decoupling/node_modules/
 frontend/dist/
 *.egg-info/
 
@@ -32,9 +35,12 @@ Desktop.ini
 # Generated local homologation credentials and certificates.
 .homolog/
 
-# Arquivos .md (Removido por hora)
 /tmp/
 
 # Material pessoal de entrega do Sebrae; manter apenas localmente.
 /docs/projeto/BMC-ClimaPrev.md
 /docs/projeto/BMC-ClimaPrev-Sebrae-Entrega.md
+
+/.report-work/
+
+/entregaveis/

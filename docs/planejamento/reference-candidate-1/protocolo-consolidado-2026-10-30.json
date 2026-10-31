@@ -1,0 +1,92 @@
+{
+  "protocol": {
+    "schema": "climaprev-experiment-protocol-v1",
+    "id": "climaprev-technical-pilot-20261030-v3",
+    "code_version": "cab7d8c+readiness-clock-v2",
+    "stations": [
+      {
+        "code": "A001",
+        "name": "BRASILIA",
+        "latitude": -15.78944444,
+        "longitude": -47.92583332,
+        "timezone": "America/Sao_Paulo"
+      },
+      {
+        "code": "A201",
+        "name": "BELEM",
+        "latitude": -1.41111111,
+        "longitude": -48.43944444,
+        "timezone": "America/Belem"
+      },
+      {
+        "code": "A801",
+        "name": "PORTO ALEGRE - JARDIM BOTANICO",
+        "latitude": -30.05361111,
+        "longitude": -51.17472221,
+        "timezone": "America/Sao_Paulo"
+      }
+    ],
+    "variables": [
+      {
+        "name": "precipitation_mm",
+        "unit": "mm",
+        "semantics": "previous_hour_sum",
+        "aggregation": "sum"
+      }
+    ],
+    "models": [
+      "operational-baseline",
+      "gfs_global",
+      "ecmwf_ifs025",
+      "icon_global",
+      "met-norway"
+    ],
+    "slots": [
+      "2026-10-31T18:00:00+00:00",
+      "2026-11-01T18:00:00+00:00",
+      "2026-11-02T18:00:00+00:00",
+      "2026-11-03T18:00:00+00:00",
+      "2026-11-04T18:00:00+00:00",
+      "2026-11-05T18:00:00+00:00",
+      "2026-11-06T18:00:00+00:00",
+      "2026-11-07T18:00:00+00:00",
+      "2026-11-08T18:00:00+00:00",
+      "2026-11-09T18:00:00+00:00",
+      "2026-11-10T18:00:00+00:00",
+      "2026-11-11T18:00:00+00:00",
+      "2026-11-12T18:00:00+00:00",
+      "2026-11-13T18:00:00+00:00"
+    ],
+    "horizons": [
+      1,
+      3,
+      7
+    ],
+    "slot_window_minutes": 30,
+    "provider_daily_call_limit": 30,
+    "splits": {
+      "adjustment": {
+        "start": "2024-01-01",
+        "end": "2026-11-20"
+      },
+      "validation": {
+        "start": "2026-12-05",
+        "end": "2026-12-31"
+      },
+      "test": {
+        "start": "2027-01-15",
+        "end": "2028-01-14"
+      }
+    },
+    "criteria": {
+      "plan_sha256": "8fcc97bd817ec8a9c079c549de7f171b21aa38c288589c02ce63d63b6eb6bdbe",
+      "partition_plan_sha256": "6ef7245bdb4fc694ae4b5e7892aada9cb620f7573e8d70e3f448271d874287ea",
+      "execution_scope": "technical_pilot_only_not_confirmatory",
+      "primary": "daily_rain_D1",
+      "secondary": "D3_D7_exploratory_not_v1_superiority",
+      "confirmatory_ready": false,
+      "collection_slot_comparison_not_equal_model_run_age": true
+    }
+  },
+  "sha256": "d03c0aa330f9e64da71ea591d92fc26246a58f367446be5dec37e7e27369554c"
+}

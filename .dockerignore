@@ -3,6 +3,8 @@
 !pyproject.toml
 !requirements.lock
 !requirements-build.lock
+!requirements-dev.lock
+!requirements-load.lock
 !README.md
 !.env.example
 !src/
@@ -12,13 +14,8 @@
 !docs/
 !docs/**
 !docker/
-!docker/frontend/
-!docker/frontend/**
-!frontend/
-!frontend/**
-frontend/node_modules/
-frontend/dist/
 **/__pycache__
+**/node_modules
 **/*.pyc
 **/.env
 **/.env.*

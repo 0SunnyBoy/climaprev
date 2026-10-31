@@ -1,0 +1,477 @@
+{
+  "schema": "climaprev-interval-audit-v1",
+  "configuration": {
+    "end": "2025-01-31",
+    "forecast_model": "gfs_global",
+    "latitude": -1.4558,
+    "lead_days": 1,
+    "longitude": -48.5044,
+    "minimum_coverage": 1.0,
+    "observed_model": "era5",
+    "start": "2025-01-01",
+    "timezone": "America/Belem"
+  },
+  "sources": {
+    "forecast": {
+      "grid_latitude": -1.4643631,
+      "grid_longitude": -48.515625,
+      "elevation_m": 14.0,
+      "timestamp_date_total_mm": 353.8,
+      "days": [
+        {
+          "date": "2025-01-01",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 6.9,
+          "civil_preceding_hour_total_mm": 6.8
+        },
+        {
+          "date": "2025-01-02",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 3.4,
+          "civil_preceding_hour_total_mm": 3.4
+        },
+        {
+          "date": "2025-01-03",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 16.7,
+          "civil_preceding_hour_total_mm": 16.9
+        },
+        {
+          "date": "2025-01-04",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 22.599999999999998,
+          "civil_preceding_hour_total_mm": 22.4
+        },
+        {
+          "date": "2025-01-05",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.4,
+          "civil_preceding_hour_total_mm": 11.5
+        },
+        {
+          "date": "2025-01-06",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 13.200000000000001,
+          "civil_preceding_hour_total_mm": 13.5
+        },
+        {
+          "date": "2025-01-07",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.2,
+          "civil_preceding_hour_total_mm": 10.8
+        },
+        {
+          "date": "2025-01-08",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 9.0,
+          "civil_preceding_hour_total_mm": 9.0
+        },
+        {
+          "date": "2025-01-09",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 4.8,
+          "civil_preceding_hour_total_mm": 4.9
+        },
+        {
+          "date": "2025-01-10",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 8.9,
+          "civil_preceding_hour_total_mm": 8.9
+        },
+        {
+          "date": "2025-01-11",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.8,
+          "civil_preceding_hour_total_mm": 7.8
+        },
+        {
+          "date": "2025-01-12",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 27.3,
+          "civil_preceding_hour_total_mm": 28.3
+        },
+        {
+          "date": "2025-01-13",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 14.700000000000001,
+          "civil_preceding_hour_total_mm": 13.6
+        },
+        {
+          "date": "2025-01-14",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 6.8,
+          "civil_preceding_hour_total_mm": 6.8
+        },
+        {
+          "date": "2025-01-15",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 16.7,
+          "civil_preceding_hour_total_mm": 17.3
+        },
+        {
+          "date": "2025-01-16",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 5.5,
+          "civil_preceding_hour_total_mm": 4.9
+        },
+        {
+          "date": "2025-01-17",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 17.0,
+          "civil_preceding_hour_total_mm": 17.9
+        },
+        {
+          "date": "2025-01-18",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 14.0,
+          "civil_preceding_hour_total_mm": 13.7
+        },
+        {
+          "date": "2025-01-19",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 5.1,
+          "civil_preceding_hour_total_mm": 4.5
+        },
+        {
+          "date": "2025-01-20",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 5.6,
+          "civil_preceding_hour_total_mm": 5.6
+        },
+        {
+          "date": "2025-01-21",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 13.3,
+          "civil_preceding_hour_total_mm": 13.3
+        },
+        {
+          "date": "2025-01-22",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 27.4,
+          "civil_preceding_hour_total_mm": 27.4
+        },
+        {
+          "date": "2025-01-23",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 5.800000000000001,
+          "civil_preceding_hour_total_mm": 6.0
+        },
+        {
+          "date": "2025-01-24",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 13.7,
+          "civil_preceding_hour_total_mm": 13.7
+        },
+        {
+          "date": "2025-01-25",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 8.0,
+          "civil_preceding_hour_total_mm": 7.8
+        },
+        {
+          "date": "2025-01-26",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.2,
+          "civil_preceding_hour_total_mm": 7.4
+        },
+        {
+          "date": "2025-01-27",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 12.4,
+          "civil_preceding_hour_total_mm": 12.8
+        },
+        {
+          "date": "2025-01-28",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 14.1,
+          "civil_preceding_hour_total_mm": 13.6
+        },
+        {
+          "date": "2025-01-29",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.6,
+          "civil_preceding_hour_total_mm": 8.0
+        },
+        {
+          "date": "2025-01-30",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 6.1000000000000005,
+          "civil_preceding_hour_total_mm": 5.7
+        },
+        {
+          "date": "2025-01-31",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 9.6,
+          "civil_preceding_hour_total_mm": 9.6
+        }
+      ]
+    },
+    "observed": {
+      "grid_latitude": -1.5,
+      "grid_longitude": -48.5,
+      "elevation_m": 14.0,
+      "timestamp_date_total_mm": 351.1,
+      "days": [
+        {
+          "date": "2025-01-01",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 2.7,
+          "civil_preceding_hour_total_mm": 2.7
+        },
+        {
+          "date": "2025-01-02",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 1.9,
+          "civil_preceding_hour_total_mm": 1.9
+        },
+        {
+          "date": "2025-01-03",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 24.1,
+          "civil_preceding_hour_total_mm": 24.2
+        },
+        {
+          "date": "2025-01-04",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.6000000000000005,
+          "civil_preceding_hour_total_mm": 7.7
+        },
+        {
+          "date": "2025-01-05",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 18.7,
+          "civil_preceding_hour_total_mm": 19.4
+        },
+        {
+          "date": "2025-01-06",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 12.9,
+          "civil_preceding_hour_total_mm": 12.0
+        },
+        {
+          "date": "2025-01-07",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 4.1000000000000005,
+          "civil_preceding_hour_total_mm": 4.1
+        },
+        {
+          "date": "2025-01-08",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 9.1,
+          "civil_preceding_hour_total_mm": 9.2
+        },
+        {
+          "date": "2025-01-09",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 8.6,
+          "civil_preceding_hour_total_mm": 8.8
+        },
+        {
+          "date": "2025-01-10",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.7,
+          "civil_preceding_hour_total_mm": 11.5
+        },
+        {
+          "date": "2025-01-11",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 6.1000000000000005,
+          "civil_preceding_hour_total_mm": 6.1
+        },
+        {
+          "date": "2025-01-12",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 20.6,
+          "civil_preceding_hour_total_mm": 20.6
+        },
+        {
+          "date": "2025-01-13",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.6000000000000005,
+          "civil_preceding_hour_total_mm": 7.8
+        },
+        {
+          "date": "2025-01-14",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 5.8999999999999995,
+          "civil_preceding_hour_total_mm": 5.6
+        },
+        {
+          "date": "2025-01-15",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 7.1,
+          "civil_preceding_hour_total_mm": 7.6
+        },
+        {
+          "date": "2025-01-16",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 22.0,
+          "civil_preceding_hour_total_mm": 21.9
+        },
+        {
+          "date": "2025-01-17",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 12.7,
+          "civil_preceding_hour_total_mm": 14.5
+        },
+        {
+          "date": "2025-01-18",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 31.1,
+          "civil_preceding_hour_total_mm": 29.1
+        },
+        {
+          "date": "2025-01-19",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.7,
+          "civil_preceding_hour_total_mm": 11.6
+        },
+        {
+          "date": "2025-01-20",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 9.5,
+          "civil_preceding_hour_total_mm": 9.5
+        },
+        {
+          "date": "2025-01-21",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 8.1,
+          "civil_preceding_hour_total_mm": 8.0
+        },
+        {
+          "date": "2025-01-22",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 17.9,
+          "civil_preceding_hour_total_mm": 17.9
+        },
+        {
+          "date": "2025-01-23",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.5,
+          "civil_preceding_hour_total_mm": 12.0
+        },
+        {
+          "date": "2025-01-24",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 13.4,
+          "civil_preceding_hour_total_mm": 12.9
+        },
+        {
+          "date": "2025-01-25",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 20.7,
+          "civil_preceding_hour_total_mm": 20.7
+        },
+        {
+          "date": "2025-01-26",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 3.9000000000000004,
+          "civil_preceding_hour_total_mm": 3.9
+        },
+        {
+          "date": "2025-01-27",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 9.700000000000001,
+          "civil_preceding_hour_total_mm": 9.7
+        },
+        {
+          "date": "2025-01-28",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 2.2,
+          "civil_preceding_hour_total_mm": 2.2
+        },
+        {
+          "date": "2025-01-29",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 2.3,
+          "civil_preceding_hour_total_mm": 3.0
+        },
+        {
+          "date": "2025-01-30",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 14.3,
+          "civil_preceding_hour_total_mm": 13.9
+        },
+        {
+          "date": "2025-01-31",
+          "expected_interval_hours": 24,
+          "missing_interval_endpoints": [],
+          "timestamp_date_total_mm": 11.4,
+          "civil_preceding_hour_total_mm": 11.7
+        }
+      ]
+    }
+  },
+  "decision": "audit_only_labels_unchanged",
+  "limitations": [
+    "Grid values are not station measurements.",
+    "Elevation metadata does not establish native grid terrain equivalence.",
+    "Civil interval comparison requires next-day midnight endpoint.",
+    "Original experiment labels retain their timestamp-date convention."
+  ],
+  "boundary_parent_sha256": {
+    "original": "056bfa683502042eae187397136578602436b511c4e3384cf6a9011fe4aa7c99",
+    "boundary": "ed5d6aafabec528b130f10eb64d3d72aacd23f281894409953409783392dbee6"
+  }
+}

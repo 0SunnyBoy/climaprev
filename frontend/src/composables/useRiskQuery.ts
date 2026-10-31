@@ -1,32 +1,32 @@
 import { onBeforeUnmount, ref } from 'vue'
 import { queryRisk, QueryTimeoutError } from '@/services/api'
 import type { RiskQueryPayload, RiskResponse } from '@/types/api'
+import { createRequestDeadline } from '@/utils/requestDeadline'
+
+export const CLIENT_QUERY_TIMEOUT_MS = 10_000
 
 export function useRiskQuery() {
   const result = ref<RiskResponse | null>(null)
   const loading = ref(false)
   const timedOut = ref(false)
   const error = ref<unknown>(null)
-  let controller: AbortController | undefined
-  let timeout: ReturnType<typeof setTimeout> | undefined
+  let activeRequest: ReturnType<typeof createRequestDeadline> | undefined
   let sequence = 0
 
   async function submit(payload: RiskQueryPayload): Promise<RiskResponse | null> {
     const requestSequence = ++sequence
-    controller?.abort()
-    if (timeout) clearTimeout(timeout)
-    controller = new AbortController()
+    activeRequest?.cancel()
     loading.value = true
     timedOut.value = false
     error.value = null
     result.value = null
-    const activeController = controller
-    timeout = setTimeout(() => {
+    const request = createRequestDeadline(CLIENT_QUERY_TIMEOUT_MS, () => {
       timedOut.value = true
-      activeController.abort()
-    }, 10_000)
+      return new QueryTimeoutError()
+    })
+    activeRequest = request
     try {
-      const response = await queryRisk(payload, activeController.signal)
+      const response = await request.wait(queryRisk(payload, request.signal))
       if (requestSequence !== sequence) return null
       result.value = response
       return response
@@ -37,15 +37,18 @@ export function useRiskQuery() {
       else error.value = caught
       return null
     } finally {
-      if (timeout) clearTimeout(timeout)
-      if (requestSequence === sequence) loading.value = false
+      request.dispose()
+      if (requestSequence === sequence) {
+        activeRequest = undefined
+        loading.value = false
+      }
     }
   }
 
   function cancel() {
     sequence += 1
-    controller?.abort()
-    if (timeout) clearTimeout(timeout)
+    activeRequest?.cancel()
+    activeRequest = undefined
     loading.value = false
   }
 

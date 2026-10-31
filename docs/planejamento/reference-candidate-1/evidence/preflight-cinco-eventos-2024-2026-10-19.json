@@ -1,0 +1,293 @@
+{
+  "schema": "climaprev-station-readiness-proposal-v1",
+  "status": "technical_preflight_not_scientific_approval",
+  "events": [
+    {
+      "event": "cold",
+      "lead_days": 1,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "cold",
+      "lead_days": 3,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "cold",
+      "lead_days": 7,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "daily_rain",
+      "lead_days": 1,
+      "high_support": 4,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "daily_rain",
+      "lead_days": 3,
+      "high_support": 4,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "daily_rain",
+      "lead_days": 7,
+      "high_support": 4,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "gust",
+      "lead_days": 1,
+      "high_support": 3,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "gust",
+      "lead_days": 3,
+      "high_support": 3,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "gust",
+      "lead_days": 7,
+      "high_support": 3,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "heat",
+      "lead_days": 1,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "heat",
+      "lead_days": 3,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "heat",
+      "lead_days": 7,
+      "high_support": 0,
+      "support_state": "absent",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "hourly_rain",
+      "lead_days": 1,
+      "high_support": 2,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "hourly_rain",
+      "lead_days": 3,
+      "high_support": 2,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    },
+    {
+      "event": "hourly_rain",
+      "lead_days": 7,
+      "high_support": 2,
+      "support_state": "present_sufficiency_not_approved",
+      "calendar_segments": [
+        3,
+        28,
+        28,
+        28
+      ],
+      "shorter_than_primary_block": [
+        3
+      ],
+      "primary_block_days": 7,
+      "confidence_interval_status": "not_computed",
+      "reason": "Primary-metric approval and adequate segments required; no post-hoc exclusions."
+    }
+  ],
+  "unresolved_acceptance": {
+    "status": "technical_proposal_not_scientific_approval_not_execution_permission",
+    "high_recall": "No negative paired difference versus R0 in the primary estimate; uncertainty must rule out deterioration before declaring gain.",
+    "false_alarm_ratio": "No positive paired difference versus R0 in the primary estimate; uncertainty must rule out deterioration before declaring gain.",
+    "numeric_calibration": "MAE and RMSE must not increase; require a paired interval strictly below zero for at least one prespecified primary metric to claim improvement.",
+    "strata": "Report every prespecified stratum; any harmful or unsupported critical stratum blocks automatic acceptance.",
+    "sample_sufficiency": "Scientific reviewer must prespecify event counts and precision requirements before fitting; absent severe-event support means inconclusive.",
+    "primary_event_and_metric": null,
+    "scientific_minimum_gain": null,
+    "product_tradeoff_approval": null
+  },
+  "baseline_sha256": "b40ef538acadc3a0a60a8216793e9c48500a79b30f47748107c3d09a104477b9",
+  "protocol_sha256": "6ea9b592fc14be5890cbff9483e2f4afb5ef84a3a00ca6d19dd5ab189d18c3a3",
+  "script_sha256": "860280e2e74f8a889e8900c9729ab9fd3ef4ca7f39c4b78d8d59c319fbf1f674",
+  "candidate_fitting_authorized": false,
+  "scientific_approval": false,
+  "automatic_promotion_allowed": false
+}

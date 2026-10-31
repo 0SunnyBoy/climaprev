@@ -9,11 +9,13 @@ from climaprev.application.errors import (
     DependencyUnavailable,
     ProviderTransientError,
     WeatherDataInvalid,
+    WeatherProviderUnavailable,
 )
-from climaprev.application.services import forecast_query
-from climaprev.application.services.forecast_query import WeatherProviderUnavailable
+from climaprev.application.services import forecast_cache
 from climaprev.infrastructure.cache.redis_lock import RedisLock
-from tests.integration.application.test_forecast_query import (
+from tests.integration.test_end_to_end import end_to_end_client
+from tests.integration.test_evolution_data import PARAMS
+from tests.support.forecast import (
     FakeProvider,
     InMemoryCache,
     InMemoryLock,
@@ -21,8 +23,6 @@ from tests.integration.application.test_forecast_query import (
     service,
     text_query,
 )
-from tests.integration.test_end_to_end import end_to_end_client
-from tests.integration.test_evolution_data import PARAMS
 
 
 class SlowProvider:
@@ -49,7 +49,7 @@ class FailedRelease(InMemoryLock):
 
 
 async def test_lost_heartbeat_cancels_provider_and_returns_public_503(monkeypatch):
-    monkeypatch.setattr(forecast_query, "_LOCK_HEARTBEAT_SECONDS", 0.001)
+    monkeypatch.setattr(forecast_cache, "_LOCK_HEARTBEAT_SECONDS", 0.001)
     provider = SlowProvider()
     cache = InMemoryCache()
     async with end_to_end_client() as (client, app):
@@ -96,7 +96,7 @@ async def test_client_cancellation_cancels_provider_and_releases_own_lock():
 
 
 async def test_actual_lock_ownership_loss_never_deletes_another_owner(monkeypatch):
-    monkeypatch.setattr(forecast_query, "_LOCK_HEARTBEAT_SECONDS", 0.001)
+    monkeypatch.setattr(forecast_cache, "_LOCK_HEARTBEAT_SECONDS", 0.001)
     redis = Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
     environment = f"ownership-{uuid4().hex}"
     provider = SlowProvider()
@@ -119,7 +119,7 @@ async def test_actual_lock_ownership_loss_never_deletes_another_owner(monkeypatc
 
 
 async def test_ownership_loss_does_not_fall_back_to_valid_stale(monkeypatch):
-    monkeypatch.setattr(forecast_query, "_LOCK_HEARTBEAT_SECONDS", 0.001)
+    monkeypatch.setattr(forecast_cache, "_LOCK_HEARTBEAT_SECONDS", 0.001)
     cache = InMemoryCache()
     await service(cache=cache).execute(text_query(), "warm")
     key = next(key for key in cache.entries if key.startswith("forecast:"))

@@ -9,7 +9,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...vue.configs['flat/recommended'],
   {
-    files: ['**/*.ts'],
+    files: ['**/*.{ts,vue}'],
     languageOptions: { globals: globals.browser },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
@@ -23,19 +23,10 @@ export default tseslint.config(
   {
     files: ['**/*.vue'],
     languageOptions: {
-      globals: globals.browser,
       parserOptions: {
         parser: tseslint.parser,
         extraFileExtensions: ['.vue'],
       },
-    },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'error',
-      'vue/multi-word-component-names': 'off',
-      'vue/no-v-html': 'error',
-      'vue/max-attributes-per-line': 'off',
-      'vue/singleline-html-element-content-newline': 'off',
-      'vue/html-self-closing': 'off',
     },
   },
 )

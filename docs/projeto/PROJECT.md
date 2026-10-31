@@ -1,14 +1,13 @@
-# PROJECT — Clima Prev
+# PROJECT — ClimaPrev
 
-**Data da análise:** 2026-10-05.
-**Estado:** rework Vue, avaliação diária de risco, prioridade de alertas oficiais
-e contrato do maior risco implementados; o pipeline offline de validação histórica
-está disponível, mas a aprovação científica e a calibração permanecem pendentes.
+> **Revisão contextual — 30/10/2026.** [Estado vigente](STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
+
+Documento de visão e navegação. Estado observado em [STATE](STATE.md), fila no [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md) e responsabilidades no [catálogo](ImplementationsAndRefactoring.md). Não duplica contagens/execuções; relatórios datados registram checkpoints históricos.
 
 ## Visão
 
 O Clima Prev consulta previsões meteorológicas de curto prazo e calcula uma
-estimativa de risco para um local e um período de até sete dias. A resposta
+estimativa de risco para um local e um período de até sete dias consecutivos dentro de uma janela de 14 dias. A resposta
 informa a fonte, a qualidade dos dados, a política usada e a disponibilidade
 de alertas oficiais. A estimativa não substitui alertas das autoridades.
 
@@ -18,6 +17,13 @@ INMET. Contas de usuário, notificações e personalização continuam fora dest
 ciclo.
 
 ## Documentação do projeto
+
+[Relatório de implementação de 26/10](../contexto/RELATORIO-IMPLEMENTACAO-2026-10-26.md): baseline, rodada, manifesto/ledger local, pareamento exploratório e validações. Não representa campanha confirmatória ou implantação.
+
+Continuação científica de 23/10: [direção aprovada](../planejamento/reference-candidate-1/aprovacao-direcao-2026-10-23.md), [fontes e arquivo experimental](../planejamento/reference-candidate-1/fontes-e-coleta-2026-10-23.md) e [parâmetros propostos para revisão](../planejamento/reference-candidate-1/parametros-campanha-propostos-2026-10-23.md).
+
+Estado consolidado: [STATE](STATE.md). Pendências atuais: [RDP 20/10](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md). Cobertura da revisão: [sincronização documental](SINCRONIZACAO-DOCUMENTAL-2026-10-20.md).
+
 
 | Arquivo                                                          | Conteúdo                                                    |
 | ---------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -33,8 +39,6 @@ ciclo.
 | [Análise documental inicial](../operacoes/validacao-documentacao.md)                      | Evidências, rastreabilidade e limites da verificação.       |
 | [ROADMAP](ROADMAP.md)                                            | Escopo de evolução e critérios de conclusão.               |
 | [STATE](STATE.md)                                                | Estado observado, decisões e pendências.                    |
-| [Contexto de retomada](context.md)                              | Branch ativa, validações recentes e como continuar.         |
-| [Visão geral](overview.md)                                       | Arquitetura, tecnologias, operação e limites do projeto.    |
 | [Operações](../operacoes/operations.md)                                  | Comandos e configuração já documentados.                    |
 | [CI](../../.github/workflows/ci.yml)                            | Validação automática no GitHub.                             |
 

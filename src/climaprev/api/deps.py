@@ -6,8 +6,7 @@ from typing import Annotated, cast
 from fastapi import Depends, Request
 
 from climaprev.api.errors import RateLimitExceeded
-from climaprev.application.ports import LocationSearchPort, RateLimiterPort
-from climaprev.application.services.forecast_query import ForecastQueryPort
+from climaprev.application.ports import ForecastQueryPort, LocationSearchPort, RateLimiterPort
 from climaprev.config import Settings
 
 _MAX_FORWARDED_FOR_ENTRIES = 20

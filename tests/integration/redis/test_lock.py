@@ -7,8 +7,8 @@ from uuid import uuid4
 import pytest
 from redis.asyncio import Redis
 
+from climaprev.application.errors import DependencyUnavailable
 from climaprev.infrastructure.cache.redis_lock import RedisLock
-from climaprev.infrastructure.errors import DependencyUnavailable
 
 
 @pytest.fixture

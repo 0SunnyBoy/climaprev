@@ -12,6 +12,13 @@ from fastapi import FastAPI, Query, Response
 app = FastAPI(title="ClimaPrev load provider mock")
 
 
+@app.get("/avisos/ativos")
+async def alerts(response: Response) -> dict[str, object]:
+    """Explicit synthetic empty coverage; never infer this from an HTTP error."""
+    await _inject_delay(response)
+    return {"hoje": [], "futuro": []}
+
+
 @app.get("/v1/search")
 async def search(response: Response, name: str = Query(min_length=1)) -> dict[str, object]:
     await _inject_delay(response)

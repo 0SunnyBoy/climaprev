@@ -1,0 +1,13 @@
+{
+  "tool": "Trivy pinned by .github/workflows/security.yml",
+  "image": "climaprev-homolog-app:local",
+  "image_id": "sha256:fa452569c9cc84a88a3680ebbafe8b33c47c5a0494828186a05ab349b84acdb9",
+  "severity_policy": [
+    "HIGH",
+    "CRITICAL"
+  ],
+  "report_sha256": "6bb581bc9a45f7766155c355acdb9cc2cbf6e5a000f58412e98c217edac8e2d6",
+  "vulnerabilities": 0,
+  "secrets": 0,
+  "limitation": "Scanner warned that Alpine 3.24 is absent from its EOL list; no EOL compliance approval is inferred."
+}

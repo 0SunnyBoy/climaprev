@@ -1,0 +1,15 @@
+# API-only local deployment. Does not define or start a frontend service.
+services:
+  app:
+    extends:
+      file: docker-compose.yml
+      service: app
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+
+networks:
+  edge: {}
+  backend:
+    internal: true

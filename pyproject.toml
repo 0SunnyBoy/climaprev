@@ -22,8 +22,8 @@ dev = [
     "respx",
     "ruff",
     "mypy",
-    "locust",
 ]
+load = ["locust"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

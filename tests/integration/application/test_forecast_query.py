@@ -1,259 +1,38 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Awaitable, Callable
 from dataclasses import replace
-from datetime import UTC, date, datetime, timedelta
-from time import monotonic
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from climaprev.api.observability import RequestMetrics
+from climaprev.application.errors import (
+    ProviderTransientError,
+    WeatherDataInvalid,
+    WeatherProviderUnavailable,
+)
 from climaprev.application.official_alerts import OfficialAlertsNotConfiguredProvider
 from climaprev.application.ports import CacheEntry
 from climaprev.application.query import ForecastQuery
-from climaprev.application.services import forecast_query
-from climaprev.application.services.forecast_query import (
-    ForecastQueryService,
-    WeatherProviderUnavailable,
-)
+from climaprev.application.services import forecast_cache
 from climaprev.domain.models import (
-    CanonicalLocation,
-    DailyForecast,
-    DatePeriod,
-    NormalizedForecast,
     OfficialAlert,
 )
-from climaprev.domain.risk_evaluator import RiskEvaluator
-from climaprev.domain.risk_policy import RiskPolicy
 from climaprev.domain.units import TemperatureUnit
-from climaprev.infrastructure.http.client import ProviderTransientError, WeatherDataInvalid
-
-LOCATION = CanonicalLocation(
-    name="Sao Paulo",
-    latitude=-23.5505,
-    longitude=-46.6333,
-    timezone="America/Sao_Paulo",
-    source="fake-geocoding",
+from tests.support.forecast import (
+    LOCATION,
+    PERIOD,
+    FakeAlerts,
+    FakeGeocoder,
+    FakeProvider,
+    InMemoryCache,
+    InMemoryLock,
+    cached_forecast,
+    forecast,
+    service,
+    text_query,
 )
-PERIOD = DatePeriod(start=date(2026, 8, 28), end=date(2026, 8, 28))
-
-
-def forecast(*, missing_fields: tuple[str, ...] = ()) -> NormalizedForecast:
-    return NormalizedForecast(
-        location=LOCATION,
-        period=PERIOD,
-        days=(
-            DailyForecast(
-                date=PERIOD.start,
-                temperature_min_c=20.0,
-                temperature_max_c=40.0,
-                temperature_mean_c=30.0,
-                humidity_mean_pct=70.0,
-                precipitation_sum_mm=5.0,
-                precipitation_probability_max_pct=40.0,
-                precipitation_max_hourly_mm=3.0,
-                wind_max_kmh=25.0,
-                wind_gust_max_kmh=30.0,
-                weather_code=1,
-            ),
-        ),
-        provider="open-meteo",
-        fetched_at=datetime(2026, 8, 28, 12, tzinfo=UTC),
-        is_stale=False,
-        missing_fields=missing_fields,
-    )
-
-
-def cached_forecast() -> dict[str, object]:
-    return {
-        "location": {
-            "name": "Sao Paulo",
-            "latitude": -23.5505,
-            "longitude": -46.6333,
-            "timezone": "America/Sao_Paulo",
-            "source": "fake-geocoding",
-        },
-        "period": {"start": "2026-08-28", "end": "2026-08-28"},
-        "days": [
-            {
-                "date": "2026-08-28",
-                "temperature_min_c": 20.0,
-                "temperature_max_c": 40.0,
-                "temperature_mean_c": 30.0,
-                "humidity_mean_pct": 70.0,
-                "precipitation_sum_mm": 5.0,
-                "precipitation_probability_max_pct": 40.0,
-                "precipitation_max_hourly_mm": 3.0,
-                "wind_max_kmh": 25.0,
-                "wind_gust_max_kmh": 30.0,
-                "weather_code": 1,
-            }
-        ],
-        "provider": "open-meteo",
-        "fetched_at": "2026-08-28T12:00:00+00:00",
-        "is_stale": False,
-        "missing_fields": [],
-    }
-
-
-class InMemoryCache:
-    def __init__(self) -> None:
-        self.entries: dict[str, CacheEntry] = {}
-        self.set_calls: list[tuple[str, CacheEntry, int, int]] = []
-
-    async def get(self, key: str) -> CacheEntry | None:
-        entry = self.entries.get(key)
-        if entry is not None and entry.expires_at is None:
-            entry = replace(entry, expires_at=datetime.now(UTC) + timedelta(seconds=900))
-            self.entries[key] = entry
-        return entry
-
-    async def set(
-        self,
-        key: str,
-        value: CacheEntry,
-        fresh_ttl_seconds: int,
-        stale_ttl_seconds: int,
-    ) -> None:
-        self.entries[key] = replace(value, expires_at=datetime.now(UTC) +
-                                    timedelta(seconds=stale_ttl_seconds))
-        self.set_calls.append((key, value, fresh_ttl_seconds, stale_ttl_seconds))
-
-    def mark_stale(self, key: str) -> None:
-        entry = self.entries[key]
-        self.entries[key] = replace(entry, is_stale=True)
-
-
-class InMemoryLock:
-    def __init__(
-        self,
-        *,
-        expires_after_seconds: float | None = None,
-        release_delay: float = 0.0,
-    ) -> None:
-        self._held = False
-        self._expires_after_seconds = expires_after_seconds
-        self._expires_at = 0.0
-        self._release_delay = release_delay
-        self.acquires: list[tuple[str, int]] = []
-        self.refreshes: list[tuple[str, str, int]] = []
-        self.releases: list[tuple[str, str]] = []
-        self.on_acquire: Callable[[], Awaitable[None]] | None = None
-
-    async def acquire(self, key: str, ttl_seconds: int) -> str | None:
-        self.acquires.append((key, ttl_seconds))
-        if self._held and monotonic() >= self._expires_at:
-            self._held = False
-        if self._held:
-            return None
-        self._held = True
-        self._expires_at = monotonic() + (self._expires_after_seconds or float(ttl_seconds))
-        if self.on_acquire is not None:
-            await self.on_acquire()
-        return "lock-token"
-
-    async def refresh(self, key: str, token: str, ttl_seconds: int) -> bool:
-        self.refreshes.append((key, token, ttl_seconds))
-        if not self._held or token != "lock-token" or monotonic() >= self._expires_at:
-            return False
-        self._expires_at = monotonic() + (self._expires_after_seconds or float(ttl_seconds))
-        return True
-
-    async def release(self, key: str, token: str) -> bool:
-        self.releases.append((key, token))
-        if self._release_delay:
-            await asyncio.sleep(self._release_delay)
-        self._held = False
-        return True
-
-
-class FakeGeocoder:
-    def __init__(self, location: CanonicalLocation = LOCATION) -> None:
-        self.location = location
-        self.texts: list[str] = []
-
-    async def resolve(self, text: str) -> CanonicalLocation:
-        self.texts.append(text)
-        return self.location
-
-
-class FakeProvider:
-    def __init__(
-        self,
-        value: NormalizedForecast | Exception,
-        *,
-        wait: bool = False,
-        wait_seconds: float = 0.0,
-    ) -> None:
-        self.value = value
-        self.wait_seconds = 0.03 if wait else wait_seconds
-        self.calls: list[tuple[CanonicalLocation, DatePeriod]] = []
-
-    async def forecast(self, location: CanonicalLocation, period: DatePeriod) -> NormalizedForecast:
-        self.calls.append((location, period))
-        if self.wait_seconds:
-            await asyncio.sleep(self.wait_seconds)
-        if isinstance(self.value, Exception):
-            raise self.value
-        return replace(self.value, location=location, period=period)
-
-
-class FakeAlerts:
-    def __init__(
-        self,
-        error: Exception | None = None,
-        items: tuple[OfficialAlert, ...] = (),
-    ) -> None:
-        self.error = error
-        self.items = items
-        self.calls = 0
-
-    async def get_alerts(
-        self,
-        location: CanonicalLocation,
-        period: DatePeriod,
-    ) -> list[object]:
-        self.calls += 1
-        if self.error is not None:
-            raise self.error
-        return list(self.items)
-
-
-def service(
-    *,
-    cache: InMemoryCache | None = None,
-    lock: InMemoryLock | None = None,
-    geocoder: FakeGeocoder | None = None,
-    provider: FakeProvider | None = None,
-    alerts: object | None = None,
-    metrics: RequestMetrics | None = None,
-    provider_identity: str = "https://api.open-meteo.com",
-    now: Callable[[], datetime] = lambda: datetime.now(UTC),
-) -> ForecastQueryService:
-    return ForecastQueryService(
-        geocoder=geocoder or FakeGeocoder(),
-        weather_provider=provider or FakeProvider(forecast()),
-        cache=cache or InMemoryCache(),
-        lock=lock or InMemoryLock(),
-        risk_evaluator=RiskEvaluator(),
-        risk_policy=RiskPolicy(),
-        official_alert_provider=alerts or OfficialAlertsNotConfiguredProvider(),
-        metrics=metrics,
-        provider_identity=provider_identity,
-        now=now,
-    )
-
-
-def text_query(*, unit: TemperatureUnit = TemperatureUnit.CELSIUS) -> ForecastQuery:
-    return ForecastQuery(
-        location_text="Sao Paulo",
-        latitude=None,
-        longitude=None,
-        start_date=PERIOD.start,
-        end_date=PERIOD.end,
-        temperature_unit=unit,
-    )
 
 
 @pytest.mark.asyncio
@@ -314,7 +93,7 @@ async def test_refreshes_from_provider_when_cached_day_omits_a_serialized_field(
     cache = InMemoryCache()
     cached = cached_forecast()
     del cached["days"][0]["temperature_max_c"]  # type: ignore[index]
-    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
+    forecast_key = forecast_cache.forecast_cache_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -331,7 +110,7 @@ async def test_refreshes_from_provider_when_cached_forecast_is_bound_to_another_
     cache = InMemoryCache()
     cached = cached_forecast()
     cached["location"] = {**cached["location"], "latitude": -22.90642}  # type: ignore[arg-type]
-    forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
+    forecast_key = forecast_cache.forecast_cache_key(LOCATION, PERIOD)
     cache.entries[forecast_key] = CacheEntry(value=cached, is_stale=False)
     provider_day = replace(forecast().days[0], temperature_max_c=20.0)
     provider = FakeProvider(replace(forecast(), days=(provider_day,)))
@@ -351,7 +130,7 @@ async def test_rechecks_cache_after_acquiring_lock_before_calling_provider() -> 
     query_service = service(cache=cache, lock=lock, provider=provider)
 
     async def publish_forecast() -> None:
-        forecast_key = forecast_query._forecast_key(LOCATION, PERIOD)
+        forecast_key = forecast_cache.forecast_cache_key(LOCATION, PERIOD)
         await cache.set(forecast_key, CacheEntry(value=cached_forecast(), is_stale=False), 600, 900)
 
     lock.on_acquire = publish_forecast
@@ -395,11 +174,11 @@ async def test_lock_wait_uses_bounded_backoff_and_records_contention_timeout(
         sleeps.append(seconds)
 
     monkeypatch.setattr(asyncio, "sleep", fake_sleep)
-    monkeypatch.setattr(forecast_query, "monotonic", lambda: 0.0)
-    monkeypatch.setattr(forecast_query, "uniform", lambda _lower, _upper: 1.0)
-    monkeypatch.setattr(forecast_query, "_LOCK_MAX_ATTEMPTS", 5)
+    monkeypatch.setattr(forecast_cache, "monotonic", lambda: 0.0)
+    monkeypatch.setattr(forecast_cache, "uniform", lambda _lower, _upper: 1.0)
+    monkeypatch.setattr(forecast_cache, "_LOCK_MAX_ATTEMPTS", 5)
 
-    result = await query_service._wait_for_lock("wait-key", LOCATION, PERIOD)
+    result = await query_service._forecasts._wait_for_lock("wait-key", LOCATION, PERIOD)
 
     assert result is None
     assert len(lock.acquires) == 5
@@ -413,7 +192,7 @@ async def test_lock_wait_uses_bounded_backoff_and_records_contention_timeout(
 async def test_renews_ten_second_lock_during_long_provider_call(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(forecast_query, "_LOCK_HEARTBEAT_SECONDS", 0.01)
+    monkeypatch.setattr(forecast_cache, "_LOCK_HEARTBEAT_SECONDS", 0.01)
     cache = InMemoryCache()
     lock = InMemoryLock(expires_after_seconds=0.04)
     provider = FakeProvider(forecast(), wait_seconds=0.12)
@@ -573,7 +352,8 @@ async def test_official_alerts_raise_priority_and_mark_their_active_days() -> No
         )
     )
 
-    result = await service(alerts=alerts).execute(text_query(), "official-alert-request")
+    result = await service(alerts=alerts, now=lambda: datetime(2026, 8, 28, 12, tzinfo=UTC)).execute(
+        text_query(), "official-alert-request")
 
     assert result.risk_overview is not None
     assert result.risk_overview.source == "official_alert"
@@ -593,6 +373,43 @@ async def test_caches_successful_official_alert_lookup() -> None:
     assert alerts.calls == 1
     assert first.official_alerts.status == second.official_alerts.status == "available"
     assert any(key.startswith("official-alerts:v1:") for key in cache.entries)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('stale', [True, False])
+async def test_refreshes_stale_or_expired_official_alert_cache(stale: bool) -> None:
+    cache = InMemoryCache()
+    alerts = FakeAlerts()
+    now = datetime(2026, 8, 28, 12, tzinfo=UTC)
+    query_service = service(cache=cache, alerts=alerts, now=lambda: now)
+    await query_service.execute(text_query(), 'alerts-first')
+    key = next(key for key in cache.entries if key.startswith('official-alerts:v1:'))
+    cache.entries[key] = replace(cache.entries[key], is_stale=stale,
+                                 expires_at=now + timedelta(seconds=60) if stale else now)
+    alerts.error = RuntimeError('source unavailable during refresh')
+    result = await query_service.execute(text_query(), 'alerts-refresh')
+    assert alerts.calls == 2
+    assert result.official_alerts.status == 'unavailable'
+    assert result.official_alerts.items == ()
+
+
+@pytest.mark.asyncio
+async def test_refreshes_alert_expiring_before_cache_entry() -> None:
+    cache = InMemoryCache()
+    clock = [datetime(2026, 8, 28, 12, tzinfo=UTC)]
+    alerts = FakeAlerts(items=(OfficialAlert(
+        source='INMET', event='Synthetic storm', severity='Severe',
+        effective_at=clock[0], expires_at=clock[0]+timedelta(minutes=1),
+        geographic_scope='Sao Paulo', source_url=None,
+    ),))
+    query_service = service(cache=cache, alerts=alerts, now=lambda: clock[0])
+    await query_service.execute(text_query(), 'alerts-before-expiry')
+    clock[0] += timedelta(minutes=2)
+    alerts.items = ()
+    result = await query_service.execute(text_query(), 'alerts-after-expiry')
+    assert alerts.calls == 2
+    assert result.official_alerts.status == 'available'
+    assert result.official_alerts.items == ()
 
 
 @pytest.mark.asyncio

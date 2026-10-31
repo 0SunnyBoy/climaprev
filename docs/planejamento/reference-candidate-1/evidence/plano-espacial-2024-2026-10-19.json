@@ -1,0 +1,2492 @@
+{
+  "schema": "climaprev-spatial-plan-v1",
+  "protocol_sha256": "2859a26e6ec0c86bd576b1fec9f6398268735bb2d7f64c28aabd077793af174c",
+  "stations": {
+    "belem": {
+      "code": "A201",
+      "name": "BELEM",
+      "latitude": -1.411228,
+      "longitude": -48.439512,
+      "altitude": 21.17,
+      "csv_sha256": "865596b306abf777b908f5d7d2c60520b681b34fef01ea5420a09fdd82724b5a"
+    },
+    "brasilia": {
+      "code": "A001",
+      "name": "BRASILIA",
+      "latitude": -15.78944444,
+      "longitude": -47.92583332,
+      "altitude": 1160.96,
+      "csv_sha256": "4752b7919c0d2426af51f5027d96bb425999c26c6971e768886234babc493a6e"
+    },
+    "porto-alegre": {
+      "code": "A801",
+      "name": "PORTO ALEGRE - JARDIM BOTANICO",
+      "latitude": -30.05361111,
+      "longitude": -51.17472221,
+      "altitude": 41.18,
+      "csv_sha256": "253889721db8af11e24277af43a19ed3f57bcc77eb72c666e9f11f678e4a1f5a"
+    }
+  },
+  "requests": [
+    {
+      "pair": "belem-2024-01-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-01-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-01-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-01-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-01-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-01-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-04-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-07-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.4558,
+          "longitude": -48.5044,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "belem-2024-10-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -1.411228,
+          "longitude": -48.439512,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Belem",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 21.17,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-01-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-04-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-07-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.7939,
+          "longitude": -47.8828,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "brasilia-2024-10-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -15.78944444,
+          "longitude": -47.92583332,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 1160.96,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-01-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-01-01",
+          "end_date": "2024-01-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-04-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-04-01",
+          "end_date": "2024-04-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-07-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-07-01",
+          "end_date": "2024-07-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d1",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d1",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day1,relative_humidity_2m_previous_day1,precipitation_previous_day1,wind_gusts_10m_previous_day1,weather_code_previous_day1",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d3",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d3",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day3,relative_humidity_2m_previous_day3,precipitation_previous_day3,wind_gusts_10m_previous_day3,weather_code_previous_day3",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d7",
+      "arm": "municipal-control",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.0346,
+          "longitude": -51.2177,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    },
+    {
+      "pair": "porto-alegre-2024-10-d7",
+      "arm": "station",
+      "parameters": {
+        "forecast": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m_previous_day7,relative_humidity_2m_previous_day7,precipitation_previous_day7,wind_gusts_10m_previous_day7,weather_code_previous_day7",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "gfs_global",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        },
+        "observed": {
+          "latitude": -30.05361111,
+          "longitude": -51.17472221,
+          "start_date": "2024-10-01",
+          "end_date": "2024-10-29",
+          "timezone": "America/Sao_Paulo",
+          "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m,weather_code",
+          "temperature_unit": "celsius",
+          "wind_speed_unit": "kmh",
+          "precipitation_unit": "mm",
+          "models": "era5",
+          "elevation": 41.18,
+          "cell_selection": "nearest"
+        }
+      }
+    }
+  ],
+  "snapshot_count": 72,
+  "maximum_http_calls_without_retries": 144,
+  "evaluation_last_day": 28,
+  "boundary_day": 29,
+  "comparison": "fresh paired arms; old municipal snapshots are historical references only",
+  "eligibility": "intersection of original eligible dates and both fresh arms per variable",
+  "uncertainty": "retain original temporal bootstrap restrictions; no independence by horizon",
+  "provider_preflight_required": true,
+  "collection_executed": false,
+  "candidate_fitting_executed": false,
+  "calibration_fitting_executed": false,
+  "stop_before_stage": 6
+}

@@ -13,9 +13,9 @@ from climaprev.domain.models import (
 )
 
 if TYPE_CHECKING:
-    from typing import Any
-
-    RiskPolicy = Any
+    from climaprev.application.query import ForecastQuery
+    from climaprev.application.query_result import RiskQueryResult
+    from climaprev.domain.risk_policy import RiskPolicy
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,6 +106,9 @@ class RateLimiterPort(Protocol):
 
 
 class MetricsPort(Protocol):
+    def record_official_alert_status(self, status: str) -> None:
+        pass
+
     def record_cache_status(self, status: str) -> None:
         pass
 
@@ -126,3 +129,7 @@ class MetricsPort(Protocol):
 
     def record_lock_timeout(self) -> None:
         pass
+
+
+class ForecastQueryPort(Protocol):
+    async def execute(self, query: ForecastQuery, request_id: str) -> RiskQueryResult: ...

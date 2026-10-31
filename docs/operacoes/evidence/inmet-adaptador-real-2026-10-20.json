@@ -1,0 +1,25 @@
+{
+  "checked_utc": "2026-10-20T17:46:04.955917+00:00",
+  "reference_feed_sha256": "df0582188c58f338dfdb8ca3cb6252b362d1d465b47ac67285a41d38f6676cb1",
+  "reference_records": 8,
+  "live_adapter_checks": [
+    {
+      "scenario": "live-contract-check boundary",
+      "alerts_count": 1,
+      "alert_ids_from_urls": [
+        "56112"
+      ],
+      "aware_validity": true
+    },
+    {
+      "scenario": "live-contract-check outside",
+      "alerts_count": 0,
+      "alert_ids_from_urls": [],
+      "aware_validity": true
+    }
+  ],
+  "shared_client_headers_unchanged": true,
+  "tls_validation_disabled": false,
+  "live_adapter_confirmed": true,
+  "sample_does_not_prove_continuous_availability": true
+}

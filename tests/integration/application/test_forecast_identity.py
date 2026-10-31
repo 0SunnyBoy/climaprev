@@ -2,7 +2,7 @@ from dataclasses import replace
 from datetime import timedelta
 
 from climaprev.domain.units import TemperatureUnit
-from tests.integration.application.test_forecast_query import (
+from tests.support.forecast import (
     LOCATION,
     FakeGeocoder,
     FakeProvider,

@@ -1,0 +1,3 @@
+{"BlockIO":"0B / 0B","CPUPerc":"7.00%","Container":"climaprev-develop-app-load-1","ID":"6395d2818638","MemPerc":"23.11%","MemUsage":"118.3MiB / 512MiB","Name":"climaprev-develop-app-load-1","NetIO":"1.14MB / 2.34MB","PIDs":"21"}
+{"BlockIO":"0B / 0B","CPUPerc":"26.78%","Container":"climaprev-develop-provider-mock-1","ID":"e4d87d99708f","MemPerc":"12.70%","MemUsage":"32.5MiB / 256MiB","Name":"climaprev-develop-provider-mock-1","NetIO":"25.9kB / 25.7kB","PIDs":"1"}
+{"BlockIO":"0B / 0B","CPUPerc":"3.11%","Container":"climaprev-develop-redis-load-1","ID":"91251628e39c","MemPerc":"3.81%","MemUsage":"4.875MiB / 128MiB","Name":"climaprev-develop-redis-load-1","NetIO":"13.3MB / 3.89MB","PIDs":"6"}

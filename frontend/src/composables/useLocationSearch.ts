@@ -1,22 +1,27 @@
 import { onBeforeUnmount, ref } from 'vue'
 import { searchLocations } from '@/services/api'
 import type { LocationCandidate } from '@/types/api'
+import { createRequestDeadline } from '@/utils/requestDeadline'
 
 export function useLocationSearch() {
   const suggestions = ref<LocationCandidate[]>([])
   const searching = ref(false)
+  const failed = ref(false)
+  const completed = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
-  let controller: AbortController | undefined
+  let activeRequest: ReturnType<typeof createRequestDeadline> | undefined
   let sequence = 0
 
-  function clear() {
+  function clear({ preserveFailure = false }: { preserveFailure?: boolean } = {}) {
     sequence += 1
     if (timer) clearTimeout(timer)
-    controller?.abort()
+    activeRequest?.cancel()
+    activeRequest = undefined
     timer = undefined
-    controller = undefined
     searching.value = false
     suggestions.value = []
+    failed.value = preserveFailure && failed.value
+    completed.value = false
   }
 
   function schedule(query: string) {
@@ -26,18 +31,30 @@ export function useLocationSearch() {
     const requestSequence = sequence
     searching.value = true
     timer = setTimeout(async () => {
-      controller = new AbortController()
+      const request = createRequestDeadline(5000, () => new Error('Location search timed out'))
+      activeRequest = request
       try {
-        const result = await searchLocations(normalized, controller.signal)
-        if (requestSequence === sequence) suggestions.value = result
+        const result = await request.wait(searchLocations(normalized, request.signal))
+        if (requestSequence === sequence) {
+          suggestions.value = result
+          completed.value = true
+        }
       } catch (error) {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) suggestions.value = []
+        if (requestSequence === sequence
+          && !(error instanceof DOMException && error.name === 'AbortError')) {
+          suggestions.value = []
+          failed.value = true
+        }
       } finally {
-        if (requestSequence === sequence) searching.value = false
+        request.dispose()
+        if (requestSequence === sequence) {
+          searching.value = false
+          activeRequest = undefined
+        }
       }
     }, 250)
   }
 
   onBeforeUnmount(clear)
-  return { suggestions, searching, schedule, clear }
+  return { suggestions, searching, failed, completed, schedule, clear }
 }

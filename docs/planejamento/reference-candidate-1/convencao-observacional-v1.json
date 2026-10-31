@@ -1,0 +1,27 @@
+{
+  "convention_id": "civil-day-preceding-hour-v1",
+  "status": "implemented_for_station_diagnostics_not_scientifically_approved",
+  "timezone": "explicit_IANA_required",
+  "source_timestamps": "UTC_hour_endpoints",
+  "interval": "preceding_hour",
+  "civil_day_selection": "local_midnight < endpoint <= next_local_midnight",
+  "expected_hours": "elapsed_UTC_hours_between_local_midnights",
+  "minimum_coverage_per_field": 1.0,
+  "missing_values": "empty_or_numeric_minus_9999_are_null_never_zero",
+  "duplicate_endpoints": "reject",
+  "fields": {
+    "rain_mm": {"source_unit": "mm", "daily": "sum", "hourly": "max"},
+    "gust_kmh": {"source_unit": "m/s", "conversion": 3.6, "daily": "max"},
+    "temperature_max_c": {"source_unit": "°C", "source_semantics": "preceding_hour_maximum", "daily": "max"},
+    "temperature_min_c": {"source_unit": "°C", "source_semantics": "preceding_hour_minimum", "daily": "min"}
+  },
+  "pilot_compatibility": "existing_timestamp_date_labels_preserved_separately",
+  "promotion": false,
+  "pending": [
+    "Validate parser against an official raw station file.",
+    "Confirm A201 metadata and spatial representativeness.",
+    "Resolve hourly forecast temperatures versus station interval extrema.",
+    "Align provider timestamps, interval boundaries and lead semantics.",
+    "Review sensor quality and sample sufficiency before fitting any candidate."
+  ]
+}

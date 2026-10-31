@@ -1,0 +1,28 @@
+{
+  "schema": "climaprev-development-observations-allowlist-supplement-v1",
+  "date": "2026-10-28",
+  "sources": [
+    {
+      "path": ".report-work/front2-observations-2026-10-28/A201-2026-public.csv",
+      "sha256": "4a3169fbfc9c53cc555448d193be8ae05eeb3d1fc825c04f4d94d389eb22c9ce",
+      "use": "explicitly_authorized_development_observations_only",
+      "publication_cutoff": "2026-09-30",
+      "independent_confirmation_source": false
+    },
+    {
+      "path": ".report-work/front2-observations-2026-10-28/A001-2026-public.csv",
+      "sha256": "3610f36b96c71a4ccba276dd18a31fd46bece3bddc67e1b8a74ebc5d98893dc9",
+      "use": "explicitly_authorized_development_observations_only",
+      "publication_cutoff": "2026-09-30",
+      "independent_confirmation_source": false
+    },
+    {
+      "path": ".report-work/front2-observations-2026-10-28/A801-2026-public.csv",
+      "sha256": "c32be28add78765f2f19d656826242d0d9936c45e6470fca1d395f1b755888b1",
+      "use": "explicitly_authorized_development_observations_only",
+      "publication_cutoff": "2026-09-30",
+      "independent_confirmation_source": false
+    }
+  ],
+  "all_2025_and_other_reserved_sources_unchanged_and_unopened": true
+}

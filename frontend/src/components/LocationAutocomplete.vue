@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 const input = ref<HTMLInputElement | null>(null)
 const activeIndex = ref(-1)
-const { suggestions, searching, schedule, clear } = useLocationSearch()
+const { suggestions, searching, failed, completed, schedule, clear } = useLocationSearch()
 const { t } = useLocale()
 
 const activeDescendant = computed(() => activeIndex.value >= 0
@@ -28,6 +28,22 @@ const activeDescendant = computed(() => activeIndex.value >= 0
 watch(() => props.modelValue, (value) => {
   if (input.value && input.value.value !== value) input.value.value = value
 })
+watch(suggestions, (values) => {
+  if (activeIndex.value >= values.length) activeIndex.value = -1
+})
+watch(() => props.disabled, (disabled) => {
+  if (disabled) dismiss()
+})
+
+function dismiss(preserveFailure = false) {
+  activeIndex.value = -1
+  clear({ preserveFailure })
+}
+
+function retry() {
+  input.value?.focus()
+  schedule(props.modelValue)
+}
 
 function update(event: Event) {
   const value = (event.target as HTMLInputElement).value
@@ -39,11 +55,16 @@ function update(event: Event) {
 function select(candidate: LocationCandidate) {
   emit('update:modelValue', candidate.name)
   emit('selected', candidate)
-  clear()
+  dismiss()
   input.value?.focus()
 }
 
 function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    dismiss()
+    return
+  }
   if (!suggestions.value.length) return
   if (event.key === 'ArrowDown') {
     event.preventDefault()
@@ -54,10 +75,6 @@ function onKeydown(event: KeyboardEvent) {
   } else if (event.key === 'Enter' && activeIndex.value >= 0) {
     event.preventDefault()
     select(suggestions.value[activeIndex.value])
-  } else if (event.key === 'Escape') {
-    event.preventDefault()
-    activeIndex.value = -1
-    clear()
   }
 }
 
@@ -78,7 +95,7 @@ defineExpose({ focus })
     role="combobox"
     maxlength="200"
     :placeholder="t('cityPlaceholder')"
-    :aria-describedby="error ? 'city-hint city-error' : 'city-hint'"
+    :aria-describedby="`${error ? 'city-hint city-error' : 'city-hint'}${failed || completed && !suggestions.length ? ' city-search-status' : ''}`"
     :aria-invalid="Boolean(error)"
     :aria-expanded="suggestions.length > 0"
     :aria-controls="suggestions.length ? 'location-suggestions' : undefined"
@@ -92,9 +109,14 @@ defineExpose({ focus })
     :required="required"
     @input="update"
     @keydown="onKeydown"
+    @blur="dismiss(true)"
   />
   <span id="city-hint" class="field-hint">{{ t('cityHint') }}</span>
   <span v-if="error" id="city-error" class="field-error">{{ error }}</span>
+  <div v-if="failed || completed && !suggestions.length" id="city-search-status" role="status">
+    <span>{{ failed ? t('locationSearchFailed') : t('locationSearchEmpty') }}</span>
+    <button v-if="failed" type="button" :disabled="disabled" @click="retry">{{ t('retryLocationSearch') }}</button>
+  </div>
   <span class="sr-only" role="status">{{ suggestions.length ? `${suggestions.length} ${t('suggestionsAvailable')}` : '' }}</span>
   <ul
     v-if="suggestions.length"

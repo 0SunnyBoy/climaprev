@@ -1,0 +1,21 @@
+ Container climaprev-develop-load-run-afab06943ef5 Creating 
+ Container climaprev-develop-load-run-afab06943ef5 Created 
+[2026-10-20 16:44:37,778] 3d907090f88f/INFO/locust.main: Starting Locust 2.46.7
+[2026-10-20 16:44:37,786] 3d907090f88f/INFO/locust.main: Run time limit set to 60 seconds
+[2026-10-20 16:44:37,792] 3d907090f88f/INFO/locust.runners: Ramping to 10 users at a rate of 10.00 per second
+[2026-10-20 16:44:37,794] 3d907090f88f/INFO/locust.runners: All users spawned: {"RiskApiUser": 10} (10 total users)
+[2026-10-20 16:45:37,166] 3d907090f88f/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-20 16:45:37,215] 3d907090f88f/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /api/v1/risk [lock_contention]                                                   600     0(0.00%) |     42       8     713     30 |   10.16        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       600     0(0.00%) |     42       8     713     30 |   10.16        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      /api/v1/risk [lock_contention]                                                         30     37     42     44     52     63    120    610    710    710    710    600
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                             30     37     42     44     52     63    120    610    710    710    710    600
+

@@ -1,0 +1,66 @@
+{
+  "schema": "climaprev-project-refactor-inventory-v1",
+  "scope": "Repository-visible files, excluding ignored/private runtime directories. Inventory and reference analysis, not proof that every line is defect-free. Documentation/data bytes not used as instructions.",
+  "visible_files": 492,
+  "areas": {
+    "root": 33,
+    ".github": 2,
+    "docker": 6,
+    "docs": 210,
+    "frontend": 48,
+    "src": 75,
+    "tests": 118
+  },
+  "python_files_parsed": 204,
+  "source_symbols_without_static_references": [
+    {
+      "file": "src\\climaprev\\api\\routes\\locations.py",
+      "name": "search_locations",
+      "decorated": true
+    },
+    {
+      "file": "src\\climaprev\\api\\routes\\metrics.py",
+      "name": "shared_metrics",
+      "decorated": true
+    },
+    {
+      "file": "src\\climaprev\\api\\routes\\risk.py",
+      "name": "get_risk",
+      "decorated": true
+    },
+    {
+      "file": "src\\climaprev\\api\\routes\\risk.py",
+      "name": "post_risk",
+      "decorated": true
+    }
+  ],
+  "retention_decision": "Decorated HTTP handlers retained: framework registers them dynamically. Scientific scripts, fingerprints, CSS dynamic selectors and execution modes retained where referenced.",
+  "current_markdown_broken_local_links": [],
+  "line_counts": [
+    {
+      "file": "src/climaprev/main.py",
+      "head_lines": 288,
+      "working_lines": 151
+    },
+    {
+      "file": "src/climaprev/application/services/forecast_query.py",
+      "head_lines": 914,
+      "working_lines": 102
+    },
+    {
+      "file": "src/climaprev/api/routes/risk.py",
+      "head_lines": 265,
+      "working_lines": 64
+    },
+    {
+      "file": "frontend/src/services/api.ts",
+      "head_lines": 165,
+      "working_lines": 96
+    },
+    {
+      "file": "tests/integration/application/test_forecast_query.py",
+      "head_lines": 647,
+      "working_lines": 426
+    }
+  ]
+}

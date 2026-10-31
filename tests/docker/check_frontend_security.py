@@ -22,9 +22,10 @@ def _request(url: str) -> tuple[int, str, str]:
 
 def check_static() -> None:
     index = (ROOT / "frontend/index.html").read_text(encoding="utf-8")
-    source = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "frontend/src").rglob("*.ts"))
+    source = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "frontend/src").rglob("*.ts")
+                       if not path.name.endswith(".test.ts"))
     source += "\n" + "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "frontend/src").rglob("*.vue"))
-    assert "fetch('/api/v1/risk'" in source
+    assert "fetch(apiUrl('/api/v1/risk')" in source
     assert "/api/v1/locations/search?query=" in source
     assert "innerHTML" not in source
     assert "document.write" not in source
