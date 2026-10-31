@@ -2,7 +2,11 @@
 
 Atualização: 30/10/2026. [Índice contextual](../contexto/README.md) · [Estado](STATE.md) · [RDP](../contexto/RELATORIO-PENDENCIAS-2026-10-20.md)
 
-## Publicação conferida — 31/10/2026
+## Backend independente entregue — 31/10/2026
++
++ClimaPrev-API recebeu somente o backend funcional do snapshot `90c61b5`, com política reference-v1 e janela 14/7. Importação inicial privada `630beba`, 550 testes operacionais, Ruff/mypy em 51 módulos, builds autônomos, HTTP/HTTPS/CORS e segurança locais aprovados. Pesquisa/candidate-1 e piloto permanecem no monorepo. [Entrega, diferenças e checks próprios](../operacoes/extracao-api-backend-2026-10-31.md). Isso conclui a extração operacional inicial; produção, licença e recursos comerciais continuam escopos próprios.
++
++## Publicação conferida — 31/10/2026
 +
 +Implementação D+7 e refatoração publicadas em `b2894b3`. [CI aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650970) e [Security aprovado](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650954) nesse SHA. Complemento posterior inclui os READMEs do frontend/gate e limpa formatação do callback D+7; AST Python idêntica, sem alteração funcional. Métrica ajustada: 461 linhas novas D+7 e redução de 42 nos arquivos existentes. Checks do complemento devem ser conferidos no próprio SHA. Piloto preservado e D+7 desativado.
 +
@@ -38,7 +42,7 @@ O protocolo e os hashes congelados do piloto foram preservados. A ampliação p�
 6. Concluir teste auditivo real com leitor de tela em português e inglês; automação não substitui esse ensaio.
 7. Definir licença, atribuições e condições de distribuição/uso comercial das fontes antes da oferta de serviços. Infraestrutura de hospedagem e monitoramento definitivo permanece adiada pelo usuário.
 
-16/8, previsão sazonal e extração de repositório não foram implementados nesta entrega. O plano de extração é uma proposta separada. Documentos acadêmicos ficam fora da manutenção do projeto.
+16/8 e previsão sazonal continuam fora do escopo. A extração operacional inicial do backend foi entregue no ClimaPrev-API, com proveniência e validação próprias. Documentos acadêmicos ficam fora da manutenção do projeto.
 
 ## Evidências e histórico
 

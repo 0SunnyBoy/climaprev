@@ -1,5 +1,7 @@
 # Planejamento de extração — ClimaPrev-API
 
+> **Execução em 31/10/2026:** [backend independente entregue](../operacoes/extracao-api-backend-2026-10-31.md), originado de `90c61b5`, importação privada `630beba`. O planejamento abaixo é histórico; os escopos futuros comerciais/licenciamento continuam separados.
+
 > **Revisão contextual — 30/10/2026.** [Estado vigente](../projeto/STATE.md) · [RDP](RELATORIO-PENDENCIAS-2026-10-20.md) · [Refatoração e D+7](../operacoes/refatoracao-controle-d7-2026-10-30.md). Versão 0.1.0, janela 14/7, reference-v1 ativa; infraestrutura D+7 separada implementada e desativada. Piloto v5 preservado. Resultados e decisões anteriores neste documento são registros históricos e não qualificam automaticamente novos commits.
 
 Data: 28/10/2026. Destino: `0SunnyBoy/ClimaPrev-API`, inicialmente privado e vazio. Este documento planeja a execução; não cria branch, checkout, commit ou publicação.

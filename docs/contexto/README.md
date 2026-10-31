@@ -53,3 +53,7 @@ STATE e RDP consolidam o presente. Relatórios datados e arquivos HISTORICO/REGI
 [Entrega e segunda revisão](../operacoes/refatoracao-controle-d7-2026-10-30.md) · [Manual de operação D+7](../operacoes/controle-d7-operacao-2026-10-30.md). Infraestrutura implementada e desativada; o desenho original continua como registro anterior.
 
 [Terceira revisão concluída, achados e verificações](../operacoes/terceira-revisao-refatoracao-2026-10-30.md).
+
+## Backend independente
+
+[ClimaPrev-API: extração, validação e manutenção](../operacoes/extracao-api-backend-2026-10-31.md).

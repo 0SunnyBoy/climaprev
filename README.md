@@ -22,6 +22,8 @@ O protocolo e os hashes congelados do piloto foram preservados. A ampliação p�
 
 O lote de refatoração/D+7 foi publicado em `b2894b3`, com [CI](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650970) e [Security](https://github.com/0SunnyBoy/climaprev/actions/runs/41154650954) aprovados.
 
+O backend também possui uma distribuição independente para integração: [ClimaPrev-API](https://github.com/0SunnyBoy/ClimaPrev-API), com [escopo e validação próprios](docs/operacoes/extracao-api-backend-2026-10-31.md). Pesquisa e frontend permanecem neste projeto.
+
 ## Documentação do projeto
 
 - [Índice de contexto e relatórios](docs/contexto/README.md).
