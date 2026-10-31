@@ -10,9 +10,8 @@ Conteúdo antigo, inclusive prompts e procedimentos superados. Não constitui in
 > **Sincronização documental — 20/10/2026.** Documentação de referência: o [STATE vigente](../projeto/STATE.md) e o [RDP atualizado](RELATORIO-PENDENCIAS-2026-10-20.md) definem versão, implementações, prioridades e pendências atuais. Contagens, prioridades e afirmações datadas anteriores permanecem históricas; não comprovam o estado atual nem autorização de ajuste/publicação.
 
 **Projeto:** ClimaPrev  
-**Estado:** P0–P2.6 e o rework Vue concluídos; estado atual publicado em
-`develop`
-**Data da análise:** 24 de setembro de 2026
+**Estado:** P0–P2.6 concluídos; branch conectada ao Git; commit e push pendentes
+**Data da análise:** 23 de setembro de 2026
 
 ## Prompt operacional para produção
 
@@ -371,12 +370,14 @@ smoke test do frontend.
 
 ## 10. Estado e próximas evoluções
 
-P0–P2.6 e o rework do frontend estão concluídos. O estado atual está
-publicado em `origin/develop` no commit `b671d9b`. A `main` permanece como
-branch estável. A revisão independente final e a validação real de homologação
-continuam pendentes antes de qualquer produção.
+P0–P2.6 e o rework do frontend estão concluídos. A branch
+`Atualizacao-Geral-V3` está conectada a `origin/Atualizacao-Geral-V3`, mas as
+alterações atuais ainda não foram commitadas nem enviadas. A próxima etapa
+operacional é revisar o diff e publicar a branch. A revisão independente final
+e a validação real de homologação continuam pendentes antes de qualquer
+produção.
 
-O planejamento contempla:
+Depois da publicação da branch, o planejamento contempla:
 
 1. piloto offline para validar `reference-v1`;
 2. eventual política candidata com fallback e rollback;

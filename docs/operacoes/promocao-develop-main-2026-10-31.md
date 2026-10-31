@@ -17,3 +17,5 @@ Comparação do índice contra origin/develop: nenhuma diferença em `src`, `fro
 ## Preservação e limites
 
 Reference-v1 permanece padrão; D+7 experimental continua desativado, candidata não promovida, piloto v5 inalterado. Não há deploy, mudança de licença, abertura do repositório privado ou promessa de serviço comercial/SLA. O commit do merge no GitHub registra a promoção efetiva e seus pais; este documento registra a preparação e os critérios.
+
+Revisão final da conciliação: arquivo histórico canônico da develop preservado integralmente; antigo `docs/projeto/context.md` da main arquivado em `docs/contexto/CONTEXTO-MAIN-HISTORICO-2026-09-24.md`, com identificação histórica e links recalculados, evitando um segundo contexto desatualizado apresentado como vigente.

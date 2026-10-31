@@ -59,3 +59,5 @@ STATE e RDP consolidam o presente. Relatórios datados e arquivos HISTORICO/REGI
 [ClimaPrev-API: extração, validação e manutenção](../operacoes/extracao-api-backend-2026-10-31.md).
 
 [Promoção develop → main: preparação e critérios](../operacoes/promocao-develop-main-2026-10-31.md).
+
+[Contexto histórico da main de 24/09/2026](CONTEXTO-MAIN-HISTORICO-2026-09-24.md), preservado durante a conciliação.
