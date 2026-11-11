@@ -1,10 +1,10 @@
 # ClimaPrev
 
-## Estado atual — 31/10/2026
+## Estado atual — 11/11/2026
 
 [Refatoração revisada e infraestrutura D+7](docs/operacoes/refatoracao-controle-d7-2026-10-30.md): 1.207 testes backend, 61 frontend, Ruff/mypy (102 módulos), tipagem e build aprovados localmente. D+7 implementado e desativado; protocolo/calendário próprios pendentes, piloto preservado. Arquivos existentes simplificados, sem mudança de contrato OpenAPI ou precisão demonstrada da candidata.
 
-Backend e frontend **0.1.0**, branch **develop**, monorepo com builds e execução separados. Base funcional publicada: `ffa50f11cf0a4b0e68acdd249f80d0c8f8abca15` (`ffa50f1`); esta revisão documental é posterior a essa base, sem nova release.
+Backend e frontend **0.1.0** na branch **develop**, com builds e execução separados. A base funcional da janela pública foi publicada no commit `ffa50f1`.
 
 Janela pública **14/7** concluída: consultas de um a sete dias consecutivos entre hoje UTC e +13, inclusive. O calendário da interface e a API GET/POST aplicam os mesmos limites. A agregação meteorológica mantém o fuso da localidade. Disponibilidade pontual na segunda semana verificada; isso não comprova precisão.
 
@@ -12,11 +12,11 @@ Qualificação da base: **1.170 testes backend**, mypy em **99 módulos**, **60 
 
 **Reference-v1 permanece padrão.** A infraestrutura das duas frentes da candidate-1 está integrada: fontes/coleta/arquivos, normalização, pareamento, cobertura, comparação, incerteza, revisão instrumental, variantes fixas e relatório técnico do piloto. Não há superioridade real demonstrada, fitting concluído, seleção confirmada ou promoção.
 
-Observações recentes das estações A201, A001 e A801 foram obtidas pela interface oficial TEMPO, com originais e proveniência preservados; a API direta retornou 204 na última verificação. Preflight diagnóstico de 30/10: 15/15 braços/pontos disponíveis para D+1, sem contar para a cota. Não generalizar esse resultado para todos os horizontes ou variáveis.
+Os CSVs oficiais do INMET de **04 a 10/11** foram arquivados com os originais e a proveniência. Nos seis dias encerrados, Brasília (A001) e Porto Alegre (A801) tiveram **144 de 144** medições horárias de chuva esperadas cada. Belém (A201) teve **139 de 144**.
 
-Piloto adaptativo v5 autorizado e agendado diariamente às **15h de Brasília**, janela 18:00–18:30 UTC, a partir de 31/10. Meta: **14 capturas elegíveis por estação/modelo, 210 ao todo**, sem data-limite fixa. Perdas são preservadas e repostas em novas datas futuras; sem backfill. Encerrar previsões por par ao atingir a cota e acompanhar a cauda observacional até o último D+7 real. Notebook/Codex indisponíveis podem perder slots. Estado da preparação: zero capturas do piloto; progresso posterior exige auditoria do ledger, não inferência a partir do agendamento.
+A auditoria de **10/11, às 15h03 de Brasília**, registrou **73 de 210 capturas elegíveis** para chuva D+1. Faltam **137** para atingir as 14 capturas de cada par estação/modelo. Naquele momento, havia 90 ausências, duas falhas e 45 capturas previstas no calendário inicial. O piloto coleta diariamente das **15h às 15h30 de Brasília**. Após o calendário inicial, o saldo será reposto em novas datas até completar a cota. A coleta de observações segue até o último alvo D+7 das capturas aceitas. [Diário do piloto](docs/operacoes/piloto-tecnico-observacoes-restauradas-2026-10-30.md)
 
-O protocolo e os hashes congelados do piloto foram preservados. A ampliação pública 14/7 não acrescenta D+7 retroativamente ao controle experimental de sete datas. Novo controle ou alteração de partições requer versão metodológica explícita; reposições que invadam partições condicionais exigem replanejamento antes da análise. Sem abertura indevida de reservas, E2/E3, promoção, merge na main ou deploy.
+O controle experimental D+7 tem protocolo e calendário próprios pendentes. A avaliação científica da candidate-1 depende da conclusão da coleta, da conferência da cobertura observacional e da revisão do planejamento de partições, quando indicada pela auditoria.
 
 [Contexto e relatórios](docs/contexto/README.md) · [Pendências](docs/contexto/RELATORIO-PENDENCIAS-2026-10-20.md)
 
